@@ -6,13 +6,20 @@
  * https://opensource.org/licenses/MIT.
  */
 
+/* for visual studio:
+ *   _USE_MATH_DEFINES: required for M_PI
+ */
+#if defined(_MSC_VER)
+#define _USE_MATH_DEFINES
+#endif
 #include "galaxy.hh"
 #include "util/dotnet35random.hh"
 #include "util/maths.hh"
 #include "star.hh"
 
-#include <cmath>
+#include <algorithm>
 #include <functional>
+#include <cmath>
 
 static float randNormal(float averageValue, float standardDeviation, double r1, double r2) {
     return averageValue + standardDeviation *
