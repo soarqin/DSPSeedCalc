@@ -44,3 +44,12 @@ Dyson Sphere Program Seed Calculator
 12. Optical grating crystal vein (光栅石矿)
 13. Spiniform stalagmite crystal vein (刺笋矿脉)
 14. Unipolar magnet vein (单极磁矿)
+
+# CREDITS
+### 3rd-party libs
+* [fmtlib](https://github.com/fmtlib/fmt)
+* [Json for Modern C++](https://github.com/nlohmann/json)
+* [wingetopt](https://github.com/alex85k/wingetopt)
+### Tools to extract/disassemble DSP game files
+* [AssetStudio](https://github.com/Perfare/AssetStudio)
+* [ILSpy](https://github.com/icsharpcode/ILSpy)
