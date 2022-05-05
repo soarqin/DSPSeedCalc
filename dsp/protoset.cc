@@ -70,6 +70,8 @@ void from_json(const nlohmann::json &j, VeinProto &p) {
 void from_json(const nlohmann::json &j, StringProto &p) {
     JL(Name, name);
     JL(ZHCN, zhcn);
+    JL(ENUS, enus);
+    JL(FRFR, frfr);
 }
 
 #undef JL
@@ -105,10 +107,17 @@ void loadProtoSets() {
     }
 }
 
-const std::string &translate(const std::string &name) {
+const std::string &translate(const std::string &name, int type) {
     const auto *val = stringProtoSet.select(name);
     if (val) {
-        return val->zhcn;
+        switch (type) {
+        case 1:
+            return val->enus;
+        case 2:
+            return val->frfr;
+        default:
+            return val->zhcn;
+        }
     }
     static std::string empty;
     return empty;

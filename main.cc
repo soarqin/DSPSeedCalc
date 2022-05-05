@@ -1,13 +1,15 @@
 #include "dsp/galaxy.hh"
 #include "dsp/protoset.hh"
 
+#include <fmt/ostream.h>
 #include <fmt/format.h>
 #include <getopt.h>
 #include <algorithm>
 #include <chrono>
 #include <mutex>
 #include <thread>
-#include <cstdio>
+#include <fstream>
+#include <iostream>
 #include <cmath>
 
 static std::mutex mutex1, mutex2;
@@ -15,7 +17,7 @@ static std::vector<std::pair<int, int>> seedsToCheck;
 static size_t currIndex = 0, totalSize = 0;
 static int current = -1, currMax = -1;
 
-static FILE *output[2];
+static std::ofstream output[2];
 
 static void calc() {
     while (true) {
@@ -58,11 +60,14 @@ static void calc() {
                     countByStarType[7]++;
                     break;
                 case ESpectrType::G:
-                case ESpectrType::F:countByStarType[8]++;
+                case ESpectrType::F:
+                    countByStarType[8]++;
                     break;
-                case ESpectrType::A:countByStarType[9]++;
+                case ESpectrType::A:
+                    countByStarType[9]++;
                     break;
-                default:countByStarType[10]++;
+                default:
+                    countByStarType[10]++;
                     break;
                 }
                 break;
@@ -126,28 +131,34 @@ static void calc() {
     }
 }
 
-void addSeedByString(const char *buf) {
-    auto *pos = strchr(buf, '-');
-    int from = (int)strtol(buf, nullptr, 0);
-    int to = pos != nullptr ? (int)strtol(pos + 1, nullptr, 0) : from;
+void addSeedByString(const std::string &buf) {
+    auto pos = buf.find('-');
+    int from = (int)std::strtol(buf.c_str(), nullptr, 0);
+    int to = pos != std::string::npos ? (int)std::strtol(buf.c_str() + pos + 1, nullptr, 0) : from;
+    if (from == 0 && to == 0) {
+        return;
+    }
     if (to >= from) {
         seedsToCheck.emplace_back(from, to + 1);
     }
 }
 
-void readFromInputFile(const char *filename) {
-    FILE *fin = fopen(filename, "rt");
-    if (fin == nullptr) {
-        fprintf(stderr, "Unable to open %s!\n", filename);
+void readFromInputFile(const std::string &filename) {
+    std::ifstream ifs(filename);
+    if (!ifs.is_open()) {
+        fmt::print(std::cerr, "Unable to open {}!\n", filename);
         return;
     }
-    char buf[64];
-    while (!feof(fin)) {
-        if (!fgets(buf, 64, fin) || buf[0] == 0) { break; }
-        addSeedByString(buf);
+    while (!ifs.eof()) {
+        std::string buf;
+        std::getline(ifs, buf);
+        if (!buf.empty()) {
+            addSeedByString(buf);
+        }
     }
-    fclose(fin);
+    ifs.close();
 }
+
 void sortSeeds() {
     std::sort(seedsToCheck.begin(), seedsToCheck.end());
     auto sz = seedsToCheck.size();
@@ -182,46 +193,46 @@ int main(int argc, char *argv[]) {
         {nullptr},
     };
     char opt;
-    char inputFilename[512] = "";
-    char file1[512] = "stars.csv";
-    char file2[512] = "birth.csv";
+    std::string inputFilename;
+    std::string file1 = "stars.csv";
+    std::string file2 = "birth.csv";
     while ((opt = getopt_long(argc, argv, ":i:r:s:b:", longOptions, nullptr)) != -1) {
         switch (opt) {
         case ':':
-            fmt::print(stderr, "mssing argument for {}\n", optopt);
+            fmt::print(std::cerr, "mssing argument for {}\n", optopt);
             return -1;
         case '?':
-            fmt::print(stderr, "bad arument: {}\n", optopt);
+            fmt::print(std::cerr, "bad arument: {}\n", optopt);
             return -1;
         case 'i':
-            snprintf(inputFilename, 512, "%s", optarg);
+            inputFilename = fmt::format("{}", optarg);
             break;
         case 's':
-            snprintf(file1, 512, "%s", optarg);
+            file1 = fmt::format("{}", optarg);
             break;
         case 'b':
-            snprintf(file2, 512, "%s", optarg);
+            file2 = fmt::format("{}", optarg);
             break;
         default:
             break;
         }
     }
-    if (optind >= argc && inputFilename[0] == 0) {
-        fprintf(stderr, "Usage: DSPSeedCalc [-i filename] [-s star.csv] [-b birth.csv] [ranges...]\n");
-        fprintf(stderr, "         Ranges format: a-b.   e.g. 0-1000\n");
-        fprintf(stderr, " Note: You need to supply either [filename] or [ranges...]\n");
+    if (optind >= argc && inputFilename.empty()) {
+        fmt::print(std::cerr, "Usage: DSPSeedCalc [-i filename] [-s star.csv] [-b birth.csv] [ranges...]\n");
+        fmt::print(std::cerr, "         Ranges format: a-b.   e.g. 0-1000\n");
+        fmt::print(std::cerr, " Note: You need to supply either [filename] or [ranges...]\n");
         return -1;
     }
     for (auto oind = optind; oind < argc; oind++) {
         addSeedByString(argv[oind]);
     }
-    if (inputFilename[0] != 0) {
+    if (!inputFilename.empty()) {
         readFromInputFile(inputFilename);
     }
     sortSeeds();
     loadProtoSets();
-    output[0] = fopen(file1, "wt");
-    output[1] = fopen(file2, "wt");
+    output[0] = std::ofstream(file1);
+    output[1] = std::ofstream(file2);
     fmt::print(output[0], "Seed,M Stars,K Stars,G Stars,F Stars,A Stars,B Stars,O Stars,Red Giants,Yellow Giants,White Giants,Blue Giants,Nearest O Luminosity,Nearest O Star,Nearest Neutron,Nearest White Dwarf,Nearest Black Hole,Nearest Kimberlite vein,Fractal silicon vein,Organic crystal vein,Optical grating crystal vein,Spiniform stalagmite crystal vein,Unipolar magnet vein,Sulfuric acid ocean\n");
     fmt::print(output[1], "Seed,Planet Id,Around,Type,Tidal Locked,Iron,Copper,Silicium,Titanium,Stone,Coal,Oil,FireIce,Diamond,Fractal,Crysrub,Grat,Bamboo,UnipolarMagnet\n");
     auto startTime = std::chrono::steady_clock::now();
@@ -234,16 +245,13 @@ int main(int argc, char *argv[]) {
         th.join();
     }
     auto duration = std::chrono::steady_clock::now() - startTime;
-    fclose(output[1]);
-    fclose(output[0]);
-    fmt::print(stdout, "Planet types\n============\n");
-    for (int i = 1; i < 22; ++i) {
-        auto *theme = themeProtoSet.select(i);
-        if (!theme) { continue; }
-        fmt::print(stdout, "{:2}: {}\n", i, translate(theme->displayName));
+    output[1].close();
+    output[0].close();
+    int count = 0;
+    for (auto &p: seedsToCheck) {
+        count += p.second - p.first;
     }
-
-    fmt::print(stderr, "\nOutput files\n============\n  {}: Star stats\n  {}: Birth star planet stats\n", file1, file2);
-    fmt::print(stderr, "============\n{}ms used.\n", std::chrono::duration_cast<std::chrono::milliseconds>(duration).count());
+    fmt::print(std::cout, "Output files\n============\n  Star stats: {}\n  Birth star planet stats: {}\n", file1, file2);
+    fmt::print(std::cout, "============\n{}ms used, {} seeds processed.\n", std::chrono::duration_cast<std::chrono::milliseconds>(duration).count(), count);
     return 0;
 }

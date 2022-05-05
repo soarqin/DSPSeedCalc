@@ -112,6 +112,8 @@ struct VeinProto: Proto {
 struct StringProto: Proto {
     std::string name;
     std::string zhcn;
+    std::string enus;
+    std::string frfr;
 };
 
 extern void loadProtoSets();
@@ -125,4 +127,5 @@ extern VeinProtoSet veinProtoSet;
 using StringProtoSet = ProtoSet<StringProto>;
 extern StringProtoSet stringProtoSet;
 
-extern const std::string &translate(const std::string &name);
+/* for type: 0-ZHCN 1-ENUS 2-FRFR */
+extern const std::string &translate(const std::string &name, int type = 0);
