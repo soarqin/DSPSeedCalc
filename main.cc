@@ -3,6 +3,7 @@
 
 #include <fmt/format.h>
 #include <getopt.h>
+#include <algorithm>
 #include <chrono>
 #include <mutex>
 #include <thread>
@@ -125,6 +126,15 @@ static void calc() {
     }
 }
 
+void addSeedByString(const char *buf) {
+    auto *pos = strchr(buf, '-');
+    int from = (int)strtol(buf, nullptr, 0);
+    int to = pos != nullptr ? (int)strtol(pos + 1, nullptr, 0) : from;
+    if (to >= from) {
+        seedsToCheck.emplace_back(from, to + 1);
+    }
+}
+
 void readFromInputFile(const char *filename) {
     FILE *fin = fopen(filename, "rt");
     if (fin == nullptr) {
@@ -134,14 +144,25 @@ void readFromInputFile(const char *filename) {
     char buf[64];
     while (!feof(fin)) {
         if (!fgets(buf, 64, fin) || buf[0] == 0) { break; }
-        auto *pos = strchr(buf, '-');
-        int from = (int)strtol(buf, nullptr, 0);
-        int to = pos != nullptr ? (int)strtol(pos + 1, nullptr, 0) : from;
-        if (to >= from) {
-            seedsToCheck.emplace_back(from, to + 1);
-        }
+        addSeedByString(buf);
     }
     fclose(fin);
+}
+void sortSeeds() {
+    std::sort(seedsToCheck.begin(), seedsToCheck.end());
+    auto sz = seedsToCheck.size();
+    for (size_t i = 1; i < sz;) {
+        auto last = seedsToCheck[i-1].second;
+        if (last > seedsToCheck[i].first) {
+            if (last < seedsToCheck[i].second) {
+                seedsToCheck[i-1].second = seedsToCheck[i].second;
+            }
+            seedsToCheck.erase(seedsToCheck.begin() + i);
+            --sz;
+        } else {
+            ++i;
+        }
+    }
     currIndex = 0;
     totalSize = seedsToCheck.size();
     if (totalSize) {
@@ -185,7 +206,19 @@ int main(int argc, char *argv[]) {
             break;
         }
     }
-    readFromInputFile(inputFilename);
+    if (optind >= argc && inputFilename[0] == 0) {
+        fprintf(stderr, "Usage: DSPSeedCalc [-i filename] [-s star.csv] [-b birth.csv] [ranges...]\n");
+        fprintf(stderr, "         Ranges format: a-b.   e.g. 0-1000\n");
+        fprintf(stderr, " Note: You need to supply either [filename] or [ranges...]\n");
+        return -1;
+    }
+    for (auto oind = optind; oind < argc; oind++) {
+        addSeedByString(argv[oind]);
+    }
+    if (inputFilename[0] != 0) {
+        readFromInputFile(inputFilename);
+    }
+    sortSeeds();
     loadProtoSets();
     output[0] = fopen(file1, "wt");
     output[1] = fopen(file2, "wt");
