@@ -39,7 +39,7 @@ class Galaxy;
 
 class Planet {
 public:
-    using Ptr = std::unique_ptr<Planet>;
+    void release();
 
     int id;
     int index;
@@ -90,7 +90,7 @@ public:
 */
     int veinSpot[15] = {};
 
-    static Ptr create(Star *star, int index, int orbitAround, int orbitIndex, int number, bool gasGiant, int infoSeed, int genSeed);
+    static Planet *create(Star *star, int index, int orbitAround, int orbitIndex, int number, bool gasGiant, int infoSeed, int genSeed);
 
     [[nodiscard]] inline float realRadius() const { return radius * scale; }
 

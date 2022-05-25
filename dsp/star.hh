@@ -10,6 +10,7 @@
 
 #include "planet.hh"
 #include "vectors.hh"
+#include <string>
 #include <vector>
 #include <memory>
 
@@ -36,7 +37,9 @@ enum class ESpectrType {
 
 class Star {
 public:
-    using Ptr = std::unique_ptr<Star>;
+    ~Star();
+    void release();
+
     static constexpr float kPhysicsRadiusRatio = 1200.0f;
 
     Galaxy *galaxy = nullptr;
@@ -69,13 +72,14 @@ public:
     float asterBelt1OrbitIndex;
     float asterBelt2OrbitIndex;
 */
-    std::vector<Planet::Ptr> planets;
+    std::vector<Planet*> planets;
+    std::string name;
 
-    static Star::Ptr createStar(Galaxy *galaxy, VectorLF3 pos, int id, int seed, EStarType needtype,
-                                ESpectrType needSpectr = ESpectrType::X);
-    static Star::Ptr createBirthStar(Galaxy *galaxy, int seed);
+    static Star *createStar(Galaxy *galaxy, VectorLF3 pos, int id, int seed, EStarType needtype,
+                                ESpectrType needSpectr = ESpectrType::X, bool genName = false);
+    static Star *createBirthStar(Galaxy *galaxy, int seed, bool genName = false);
     void createStarPlanets();
-
+    [[nodiscard]] const char *typeName() const;
     [[nodiscard]] inline float physicsRadius() const { return radius * kPhysicsRadiusRatio; }
 
 private:

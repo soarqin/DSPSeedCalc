@@ -1,5 +1,6 @@
 #include "dsp/galaxy.hh"
 #include "dsp/protoset.hh"
+#include "dsp/filter.hh"
 
 #include <fmt/ostream.h>
 #include <fmt/format.h>
@@ -17,7 +18,11 @@ static std::vector<std::pair<int, int>> seedsToCheck;
 static size_t currIndex = 0, totalSize = 0;
 static int current = -1, currMax = -1;
 
+static bool genName = false;
+static bool birthOnly = true;
+static bool hasStars = false;
 static std::ofstream output[2];
+static int found = 0;
 
 static void calc() {
     while (true) {
@@ -35,99 +40,70 @@ static void calc() {
                 seed = current++;
             }
         }
-        auto galaxy = Galaxy::create(DefaultAlgoVersion, seed, 64);
-        int countByStarType[11] = {};
-        double nearest[4] = {
-            1000., 1000., 1000., 1000.,
-        };
-        float nearestOLuminosity = 0.f;
-        double nearestVeins[16] = {
-            1000., 1000., 1000., 1000.,
-            1000., 1000., 1000., 1000.,
-            1000., 1000., 1000., 1000.,
-            1000., 1000., 1000., 1000.,
-        };
-        for (auto &star: galaxy->stars) {
-            int typeIndex = -1;
-            if (star->spectr != ESpectrType::X) {
-                countByStarType[(int)star->spectr]++;
-            }
-            switch (star->type) {
-            case EStarType::GiantStar:
-                switch (star->spectr) {
-                case ESpectrType::K:
-                case ESpectrType::M:
-                    countByStarType[7]++;
-                    break;
-                case ESpectrType::G:
-                case ESpectrType::F:
-                    countByStarType[8]++;
-                    break;
-                case ESpectrType::A:
-                    countByStarType[9]++;
-                    break;
-                default:
-                    countByStarType[10]++;
-                    break;
-                }
-                break;
-            case EStarType::NeutronStar:
-                typeIndex = 1;
-                break;
-            case EStarType::WhiteDwarf:
-                typeIndex = 2;
-                break;
-            case EStarType::BlackHole:
-                typeIndex = 3;
-                break;
-            default:
-                if (star->spectr == ESpectrType::O) {
-                    typeIndex = 0;
-                }
-                break;
-            }
-            auto distance = star->position.magnitude();
-            for (auto &planet: star->planets) {
-                if (planet->theme == 13) {
-                    if (distance < nearestVeins[15]) {
-                        nearestVeins[15] = distance;
+        auto galaxy = Galaxy::create(DefaultAlgoVersion, seed, 64, genName);
+        if (!runFilters(galaxy)) {
+            galaxy->release();
+            continue;
+        }
+        {
+            std::unique_lock lk(mutex2);
+            ++found;
+            if (birthOnly) {
+                if (hasStars) {
+                    for (const auto &star: galaxy->stars) {
+                        fmt::print(output[1],
+                                   "{},{},{},{:.3f},{:.3f},{}\n",
+                                   seed,
+                                   star->id,
+                                   star->typeName(),
+                                   star->position.magnitude(),
+                                   pow(star->luminosity, 0.33000001311302185),
+                                   star->name);
                     }
                 }
-                for (int i = 9; i < 15; ++i) {
-                    if (planet->veinSpot[i] > 0 && distance < nearestVeins[i]) {
-                        nearestVeins[i] = distance;
+                const auto *star = galaxy->starById(galaxy->birthStarId);
+                for (auto &planet: star->planets) {
+                    fmt::print(output[0],
+                               "{},{},{},{},{}",
+                               seed,
+                               planet->id,
+                               planet->orbitAround,
+                               planet->theme,
+                               planet->singularity & EPlanetSingularity::TidalLocked ? 1 : 0);
+                    for (int i = 1; i < 15; ++i) {
+                        fmt::print(output[0], ",{}", planet->veinSpot[i]);
+                    }
+                    fmt::print(output[0], "\n");
+                }
+            } else {
+                for (const auto &star: galaxy->stars) {
+                    if (hasStars) {
+                        fmt::print(output[1],
+                                   "{},{},{},{:.3f},{:.3f},{}\n",
+                                   seed,
+                                   star->id,
+                                   star->typeName(),
+                                   star->position.magnitude(),
+                                   pow(star->luminosity, 0.33000001311302185),
+                                   star->name);
+                    }
+                    for (auto &planet: star->planets) {
+                        fmt::print(output[0],
+                                   "{},{},{},{},{}",
+                                   seed,
+                                   planet->id,
+                                   planet->orbitAround,
+                                   planet->theme,
+                                   planet->singularity & EPlanetSingularity::TidalLocked ? 1 : 0);
+                        for (int i = 1; i < 15; ++i) {
+                            fmt::print(output[0], ",{}", planet->veinSpot[i]);
+                        }
+                        fmt::print(output[0], "\n");
                     }
                 }
             }
-            if (typeIndex < 0) { continue; }
-            if (distance < nearest[typeIndex]) {
-                nearest[typeIndex] = distance;
-                if (typeIndex == 0) {
-                    nearestOLuminosity = star->luminosity;
-                }
-            }
         }
-        std::unique_lock lk(mutex2);
-        fmt::print(output[0], "{}", seed);
-        for (auto &n: countByStarType) {
-            fmt::print(output[0], ",{}", n);
-        }
-        fmt::print(output[0], ",{:.3f}", pow(nearestOLuminosity, 0.33000001311302185));
-        for (auto &n: nearest) {
-            fmt::print(output[0], ",{:.3f}", n);
-        }
-        for (int i = 9; i < 16; ++i) {
-            fmt::print(output[0], ",{:.3f}", nearestVeins[i]);
-        }
-        fmt::print(output[0], "\n");
-        const auto *star = galaxy->starById(galaxy->birthStarId);
-        for (auto &planet: star->planets) {
-            fmt::print(output[1], "{},{},{},{},{}", seed, planet->id, planet->orbitAround, planet->theme, planet->singularity & EPlanetSingularity::TidalLocked ? 1 : 0);
-            for (int i = 1; i < 15; ++i) {
-                fmt::print(output[1], ",{}", planet->veinSpot[i]);
-            }
-            fmt::print(output[1], "\n");
-        }
+        galaxy->release();
     }
 }
 
@@ -188,15 +164,17 @@ int main(int argc, char *argv[]) {
         {"input", required_argument, nullptr, 'i'},
         {"range", required_argument, nullptr, 'r'},
         /* output options */
-        {"stars", required_argument, nullptr, 's'},
+        {"names", no_argument, nullptr, 'n'},
         {"birth", required_argument, nullptr, 'b'},
+        {"stars", required_argument, nullptr, 's'},
+        {"planets", required_argument, nullptr, 'p'},
         {nullptr},
     };
     char opt;
     std::string inputFilename;
-    std::string file1 = "stars.csv";
-    std::string file2 = "birth.csv";
-    while ((opt = getopt_long(argc, argv, ":i:r:s:b:", longOptions, nullptr)) != -1) {
+    std::string starFilename;
+    std::string planetFilename;
+    while ((opt = getopt_long(argc, argv, ":i:r:b:s:p:n", longOptions, nullptr)) != -1) {
         switch (opt) {
         case ':':
             fmt::print(std::cerr, "mssing argument for {}\n", optopt);
@@ -204,25 +182,44 @@ int main(int argc, char *argv[]) {
         case '?':
             fmt::print(std::cerr, "bad arument: {}\n", optopt);
             return -1;
+        case 'n':
+            genName = true;
+            break;
         case 'i':
             inputFilename = fmt::format("{}", optarg);
             break;
-        case 's':
-            file1 = fmt::format("{}", optarg);
+        case 'p':
+            if (!planetFilename.empty()) {
+                fmt::print(std::cerr, "You cannot supply both -p and -b\n");
+                return -1;
+            }
+            planetFilename = fmt::format("{}", optarg);
+            birthOnly = false;
             break;
         case 'b':
-            file2 = fmt::format("{}", optarg);
+            if (!planetFilename.empty()) {
+                fmt::print(std::cerr, "You cannot supply both -p and -b\n");
+                return -1;
+            }
+            planetFilename = fmt::format("{}", optarg);
+            birthOnly = true;
+            break;
+        case 's':
+            starFilename = fmt::format("{}", optarg);
+            hasStars = true;
             break;
         default:
             break;
         }
     }
     if (optind >= argc && inputFilename.empty()) {
-        fmt::print(std::cerr, "Usage: DSPSeedCalc [-i filename] [-s star.csv] [-b birth.csv] [ranges...]\n");
+        fmt::print(std::cerr, "Usage: DSPSeedCalc [-n] [-i filename] [-b birth.csv|-p planets.csv] [-s stars.csv] [ranges...]\n");
         fmt::print(std::cerr, "         Ranges format: a-b.   e.g. 0-1000\n");
+        fmt::print(std::cerr, "      -n Generate names for stars(which will reduce calculation speed)\n");
         fmt::print(std::cerr, " Note: You need to supply either [filename] or [ranges...]\n");
         return -1;
     }
+    loadFilters();
     for (auto oind = optind; oind < argc; oind++) {
         addSeedByString(argv[oind]);
     }
@@ -231,10 +228,15 @@ int main(int argc, char *argv[]) {
     }
     sortSeeds();
     loadProtoSets();
-    output[0] = std::ofstream(file1);
-    output[1] = std::ofstream(file2);
-    fmt::print(output[0], "Seed,M Stars,K Stars,G Stars,F Stars,A Stars,B Stars,O Stars,Red Giants,Yellow Giants,White Giants,Blue Giants,Nearest O Luminosity,Nearest O Star,Nearest Neutron,Nearest White Dwarf,Nearest Black Hole,Nearest Kimberlite vein,Fractal silicon vein,Organic crystal vein,Optical grating crystal vein,Spiniform stalagmite crystal vein,Unipolar magnet vein,Sulfuric acid ocean\n");
-    fmt::print(output[1], "Seed,Planet Id,Around,Type,Tidal Locked,Iron,Copper,Silicium,Titanium,Stone,Coal,Oil,FireIce,Diamond,Fractal,Crysrub,Grat,Bamboo,UnipolarMagnet\n");
+    if (planetFilename.empty()) {
+        planetFilename = "birth.csv";
+    }
+    output[0] = std::ofstream(planetFilename);
+    fmt::print(output[0], "Seed,Planet Id,Around,Type,Tidal Locked,Iron,Copper,Silicium,Titanium,Stone,Coal,Oil,FireIce,Diamond,Fractal,Crysrub,Grat,Bamboo,UnipolarMagnet\n");
+    if (hasStars) {
+        output[1] = std::ofstream(starFilename);
+        fmt::print(output[1], "Seed,Star Id,Type,Distance,Luminosity,Name\n");
+    }
     auto startTime = std::chrono::steady_clock::now();
     auto threadCount = std::thread::hardware_concurrency();
     std::vector<std::thread> thr(threadCount);
@@ -245,13 +247,15 @@ int main(int argc, char *argv[]) {
         th.join();
     }
     auto duration = std::chrono::steady_clock::now() - startTime;
-    output[1].close();
+    if (hasStars) {
+        output[1].close();
+    }
     output[0].close();
     int count = 0;
     for (auto &p: seedsToCheck) {
         count += p.second - p.first;
     }
-    fmt::print(std::cout, "Output files\n============\n  Star stats: {}\n  Birth star planet stats: {}\n", file1, file2);
-    fmt::print(std::cout, "============\n{}ms used, {} seeds processed.\n", std::chrono::duration_cast<std::chrono::milliseconds>(duration).count(), count);
+    fmt::print(std::cout, "Output files\n============\n  Stars: {}\n  Planets: {}\n", starFilename, planetFilename);
+    fmt::print(std::cout, "============\n{}ms used, {} found from {} processed seeds.\n", std::chrono::duration_cast<std::chrono::milliseconds>(duration).count(), found, count);
     return 0;
 }

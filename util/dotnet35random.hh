@@ -38,14 +38,14 @@ public:
 
     inline int next(int maxValue) {
         if (maxValue < 0) return 0;
-        return (int)(int64_t(sampleInt()) * int64_t(maxValue) / MBIG);
+        return (int)(int64_t(sampleInt()) * int64_t(maxValue) / int64_t(MBIG));
     }
 
     inline int next(int minValue, int maxValue) {
         if (minValue > maxValue) return minValue;
         auto num = maxValue - minValue;
         if (num <= 1) return minValue;
-        return (int)(int64_t(sample()) * int64_t(num) / MBIG + minValue);
+        return (int)(int64_t(sampleInt()) * int64_t(num) / int64_t(MBIG) + minValue);
     }
     template<typename T>
     inline void nextBytes(std::vector<uint8_t> &buffer) {

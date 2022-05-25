@@ -17,14 +17,20 @@ add_executable(${PROJECT_NAME} main.cc
     dsp/star.cc dsp/star.hh
     dsp/planet.cc dsp/planet.hh
     dsp/protoset.cc dsp/protoset.hh
+    dsp/namegen.cc dsp/namegen.hh
+    dsp/filter.cc dsp/filter.hh
     dsp/vectors.hh
     util/dotnet35random.cc util/dotnet35random.hh
-    util/maths.hh
+    util/maths.hh util/mempool.hh
     )
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(${PROJECT_NAME} fmt::fmt)
-
 if(WIN32)
     add_subdirectory(getopt)
-    target_link_libraries(${PROJECT_NAME} wingetopt)
+    add_subdirectory(dlfcn-win32)
+    target_link_libraries(${PROJECT_NAME} wingetopt dl)
+else()
+    target_link_libraries(${PROJECT_NAME} ${CMAKE_DL_LIBS})
 endif()
+set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+add_subdirectory(filters)

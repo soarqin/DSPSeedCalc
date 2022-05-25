@@ -18,13 +18,14 @@ enum : int {
 
 class Galaxy {
 public:
-    using Ptr = std::unique_ptr<Galaxy>;
     static constexpr double AU = 40000.0;
     static constexpr double LY = 2400000.0;
 
-    static Galaxy::Ptr create(int algoVersion, int galaxySeed, int starCount);
+    static Galaxy *create(int algoVersion, int galaxySeed, int starCount, bool genName = false);
 
 public:
+    ~Galaxy();
+    void release();
 /*
     int birthPlanetId = 0;
 */
@@ -33,12 +34,12 @@ public:
     int seed = 0;
     int starCount = 0;
 
-    std::vector<Star::Ptr> stars;
+    std::vector<Star*> stars;
 
     [[nodiscard]] inline Star *starById(int starId) const {
         auto num = starId - 1;
         if (num < 0 || num >= stars.size()) return nullptr;
-        return stars[num].get();
+        return stars[num];
     }
 
     [[nodiscard]] inline Planet *planetById(int planetId) const
@@ -46,9 +47,9 @@ public:
         auto num = planetId / 100 - 1;
         auto num2 = planetId % 100 - 1;
         if (num < 0 || num >= stars.size()) return nullptr;
-        auto star = stars[num].get();
+        auto star = stars[num];
         if (!star) return nullptr;
         if (num2 < 0 || num2 >= star->planets.size()) return nullptr;
-        return star->planets[num2].get();
+        return star->planets[num2];
     }
 };

@@ -13,17 +13,24 @@
 #include "protoset.hh"
 #include "util/dotnet35random.hh"
 #include "util/maths.hh"
+#include "util/mempool.hh"
 
 #include <algorithm>
+
+static thread_local MemPool<Planet> ppool;
 
 static constexpr float OrbitRadiusFactor[17] = {
     0.0f, 0.4f, 0.7f, 1.0f, 1.4f, 1.9f, 2.5f, 3.3f, 4.3f, 5.5f,
     6.9f, 8.4f, 10.0f, 11.7f, 13.5f, 15.4f, 17.5f
 };
 
-Planet::Ptr Planet::create(Star *star, int index, int orbitAround, int orbitIndex, int number,
+void Planet::release() {
+    ppool.release(this);
+}
+
+Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, int number,
                            bool gasGiant, int infoSeed, int genSeed) {
-    auto planet = new Planet;
+    auto planet = ppool.alloc();
     DotNet35Random dotNet35Random(infoSeed);
     auto *galaxy = star->galaxy;
     planet->index = index;
@@ -45,7 +52,7 @@ Planet::Ptr Planet::create(Star *star, int index, int orbitAround, int orbitInde
         auto planetCount = int(star->planets.size());
         for (auto j = 0; j < planetCount; j++)
             if (orbitAround == star->planets[j]->number && star->planets[j]->orbitAround == 0) {
-                planet->orbitAroundPlanet = star->planets[j].get();
+                planet->orbitAroundPlanet = star->planets[j];
                 if (orbitIndex > 1)
                     planet->orbitAroundPlanet->singularity |= EPlanetSingularity::MultipleSatellites;
                 break;
@@ -232,7 +239,7 @@ Planet::Ptr Planet::create(Star *star, int index, int orbitAround, int orbitInde
     planet->luminosity = (float)std::round(planet->luminosity * 100.0f) / 100.0f;
     planet->setPlanetTheme(rand, rand2, rand3, rand4, themeSeed);
     planet->generateVeins();
-    return Ptr(planet);
+    return planet;
 }
 
 void Planet::setPlanetTheme(double rand1, double rand2, double rand3, double rand4, int themeSeed) {

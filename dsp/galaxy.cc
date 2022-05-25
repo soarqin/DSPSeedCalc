@@ -9,8 +9,11 @@
 #include "galaxy.hh"
 
 #include "util/dotnet35random.hh"
+#include "util/mempool.hh"
 #include "vectors.hh"
 #include <vector>
+
+static thread_local MemPool<Galaxy> gpool;
 
 bool CheckCollision(std::vector<VectorLF3> &pts, VectorLF3 pt, double minDist) {
     double num = minDist * minDist;
@@ -94,7 +97,17 @@ static int GenerateTempPoses(std::vector<VectorLF3> &tmpPoses, std::vector<Vecto
     return int(tmpPoses.size());
 }
 
-Galaxy::Ptr Galaxy::create(int algoVersion, int galaxySeed, int starCount) {
+Galaxy::~Galaxy() {
+    for (auto *s: stars) {
+        s->release();
+    }
+}
+
+void Galaxy::release() {
+    gpool.release(this);
+}
+
+Galaxy *Galaxy::create(int algoVersion, int galaxySeed, int starCount, bool genName) {
     DotNet35Random dotNet35Random(galaxySeed);
     std::vector<VectorLF3> tmpPoses, tmpDrunk;
     tmpPoses.reserve(256);
@@ -102,7 +115,7 @@ Galaxy::Ptr Galaxy::create(int algoVersion, int galaxySeed, int starCount) {
     starCount = GenerateTempPoses(tmpPoses, tmpDrunk, dotNet35Random.next(), starCount, 4, 2.0, 2.3, 3.5, 0.18);
     if (starCount <= 0) { return nullptr; }
 
-    auto galaxy = std::make_unique<Galaxy>();
+    auto *galaxy = gpool.alloc();
     galaxy->seed = galaxySeed;
     galaxy->starCount = starCount;
     galaxy->stars.resize(starCount);
@@ -124,7 +137,7 @@ Galaxy::Ptr Galaxy::create(int algoVersion, int galaxySeed, int starCount) {
     for (int i = 0; i < starCount; i++) {
         auto seed = dotNet35Random.next();
         if (i == 0) {
-            galaxy->stars[i] = Star::createBirthStar(galaxy.get(), seed);
+            galaxy->stars[i] = Star::createBirthStar(galaxy, seed, genName);
             galaxy->birthStarId = galaxy->stars[i]->id;
             continue;
         }
@@ -140,10 +153,10 @@ Galaxy::Ptr Galaxy::create(int algoVersion, int galaxySeed, int starCount) {
         else if (i >= num10)
             needtype = EStarType::NeutronStar;
         else if (i >= num11) needtype = EStarType::WhiteDwarf;
-        galaxy->stars[i] = Star::createStar(galaxy.get(), tmpPoses[i], i + 1, seed, needtype, needSpectr);
+        galaxy->stars[i] = Star::createStar(galaxy, tmpPoses[i], i + 1, seed, needtype, needSpectr, genName);
     }
     for (auto &star: galaxy->stars) {
         star->createStarPlanets();
     }
-    return std::move(galaxy);
+    return galaxy;
 }

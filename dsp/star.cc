@@ -13,9 +13,11 @@
 #define _USE_MATH_DEFINES
 #endif
 #include "galaxy.hh"
+#include "star.hh"
+#include "namegen.hh"
 #include "util/dotnet35random.hh"
 #include "util/maths.hh"
-#include "star.hh"
+#include "util/mempool.hh"
 
 #include <algorithm>
 #include <functional>
@@ -26,13 +28,26 @@ static float randNormal(float averageValue, float standardDeviation, double r1, 
         (float)(std::sqrt(-2.0 * std::log(1.0 - r1)) * std::sin(M_PI * 2.0 * r2));
 }
 
-Star::Ptr Star::createStar(Galaxy *galaxy,
+static thread_local MemPool<Star> spool;
+
+Star::~Star() {
+    for (auto *p: planets) {
+        p->release();
+    }
+}
+
+void Star::release() {
+    spool.release(this);
+}
+
+Star *Star::createStar(Galaxy *galaxy,
                            VectorLF3 pos,
                            int id,
                            int seed,
                            EStarType needtype,
-                           ESpectrType needSpectr) {
-    auto *star = new Star;
+                           ESpectrType needSpectr,
+                           bool genName) {
+    auto *star = spool.alloc();
     star->galaxy = galaxy;
     star->index = id - 1;
     if (galaxy->starCount > 1)
@@ -165,11 +180,14 @@ Star::Ptr Star::createStar(Galaxy *galaxy,
 /*
     star->uPosition = star->position * 2400000.0;
 */
-    return Star::Ptr(star);
+    if (genName) {
+        star->name = NameGen::randomStarName(seed2, star, galaxy);
+    }
+    return star;
 }
 
-Star::Ptr Star::createBirthStar(Galaxy *galaxy, int seed) {
-    auto star = new Star;
+Star *Star::createBirthStar(Galaxy *galaxy, int seed, bool genName) {
+    auto star = spool.alloc();
     star->galaxy = galaxy;
     star->seed = seed;
     DotNet35Random dotNet35Random(seed);
@@ -219,7 +237,10 @@ Star::Ptr Star::createBirthStar(Galaxy *galaxy, int seed) {
     star->dysonRadius = star->orbitScaler * 0.28f;
     if (star->dysonRadius * 40000.0f < star->physicsRadius() * 1.5f)
         star->dysonRadius = star->physicsRadius() * 1.5f / 40000.0f;
-    return Star::Ptr(star);
+    if (genName) {
+        star->name = NameGen::randomStarName(seed2, star, galaxy);
+    }
+    return star;
 }
 
 void Star::setStarAge(double rn, double rt) {
@@ -429,7 +450,7 @@ void Star::createStarPlanets() {
             }
         }
     } else {
-        auto pGas = new double[10];
+        double pGas[10];
         if (index == 0) {
             planetCount = 4;
             pGas[0] = 0.0;
@@ -637,4 +658,49 @@ void Star::createStarPlanets() {
     asterBelt1OrbitIndex = num24;
     asterBelt2OrbitIndex = num25;
 */
+}
+
+const char *Star::typeName() const {
+    switch (type) {
+    case EStarType::BlackHole:
+        return "Black Hole";
+    case EStarType::NeutronStar:
+        return "Neutron Star";
+    case EStarType::WhiteDwarf:
+        return "White Dwarf";
+    case EStarType::GiantStar:
+        switch (spectr) {
+        case ESpectrType::M:
+        case ESpectrType::K:
+            return "Red Giant";
+        case ESpectrType::G:
+        case ESpectrType::F:
+            return "Yellow Giant";
+        case ESpectrType::A:
+            return "White Giant";
+        case ESpectrType::B:
+        case ESpectrType::O:
+            return "Blue Giant";
+        }
+        break;
+    case EStarType::MainSeqStar:
+        switch (spectr) {
+        case ESpectrType::M:
+            return "M";
+        case ESpectrType::K:
+            return "K";
+        case ESpectrType::G:
+            return "G";
+        case ESpectrType::F:
+            return "F";
+        case ESpectrType::A:
+            return "A";
+        case ESpectrType::B:
+            return "B";
+        case ESpectrType::O:
+            return "O";
+        }
+        break;
+    }
+    return "";
 }
