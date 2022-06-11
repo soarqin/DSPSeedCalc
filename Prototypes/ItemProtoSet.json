@@ -6,7 +6,7 @@
   "m_Enabled": 1,
   "m_Script": {
     "m_FileID": 1,
-    "m_PathID": 1361
+    "m_PathID": 1791
   },
   "m_Name": "ItemProtoSet",
   "TableName": "Item",
@@ -3197,7 +3197,7 @@
       "Description": "I自动集装机"
     },
     {
-      "Name": "流速监测器",
+      "Name": "流速器",
       "ID": 2030,
       "SID": "",
       "Type": 5,

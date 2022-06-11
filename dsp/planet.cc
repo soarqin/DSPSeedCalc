@@ -249,12 +249,25 @@ void Planet::setPlanetTheme(double rand1, double rand2, double rand3, double ran
         auto flag = false;
         if (star->index == 0 && type == EPlanetType::Ocean) {
             if (themeProto.distribute == EThemeDistribute::Birth) flag = true;
-        } else if (themeProto.planetType == (int)type &&
-            themeProto.temperature * temperatureBias >= -0.1f) {
-            if (star->index == 0) {
-                if (themeProto.distribute == EThemeDistribute::Default) flag = true;
-            } else if (themeProto.distribute != EThemeDistribute::Birth) {
-                flag = true;
+        } else {
+            bool flag2 = themeProto.temperature * temperatureBias >= -0.1f;
+            if (std::abs(themeProto.temperature) < 0.5f && themeProto.planetType == int(EPlanetType::Desert))
+            {
+                flag2 = std::abs(temperatureBias) < std::abs(themeProto.temperature) + 0.1f;
+            }
+            if (themeProto.planetType == int(type) && flag2)
+            {
+                if (star->index == 0)
+                {
+                    if (themeProto.distribute == EThemeDistribute::Default)
+                    {
+                        flag = true;
+                    }
+                }
+                else if (themeProto.distribute == EThemeDistribute::Default || themeProto.distribute == EThemeDistribute::Interstellar)
+                {
+                    flag = true;
+                }
             }
         }
 

@@ -6,7 +6,7 @@
   "m_Enabled": 1,
   "m_Script": {
     "m_FileID": 1,
-    "m_PathID": 223
+    "m_PathID": 274
   },
   "m_Name": "ThemeProtoSet",
   "TableName": "Theme",
@@ -791,13 +791,38 @@
         "y": 0.0
       },
       "ModY": {
-        "x": 1.0,
-        "y": 1.0
+        "x": 0.34,
+        "y": -0.15
       },
-      "Vegetables0": [],
-      "Vegetables1": [],
-      "Vegetables2": [],
-      "Vegetables3": [],
+      "Vegetables0": [
+        669,
+        670,
+        671
+      ],
+      "Vegetables1": [
+        665,
+        666,
+        667,
+        668,
+        665,
+        666,
+        667,
+        668,
+        664,
+        663,
+        662,
+        661
+      ],
+      "Vegetables2": [
+        1071,
+        1072
+      ],
+      "Vegetables3": [
+        1073,
+        1074,
+        1071,
+        1072
+      ],
       "Vegetables4": [],
       "Vegetables5": [],
       "VeinSpot": [
@@ -854,8 +879,8 @@
       "WaterHeight": 0.0,
       "WaterItemId": 1000,
       "Musics": [
-        4,
-        11
+        27,
+        4
       ],
       "SFXPath": "SFX/sfx-amb-ice-1",
       "SFXVolume": 0.3,
@@ -1031,8 +1056,8 @@
       "WaterHeight": 0.0,
       "WaterItemId": 0,
       "Musics": [
-        11,
-        4
+        26,
+        11
       ],
       "SFXPath": "SFX/sfx-amb-desert-5",
       "SFXVolume": 0.4,
@@ -1733,6 +1758,7 @@
       "WaterHeight": 0.0,
       "WaterItemId": 0,
       "Musics": [
+        26,
         11,
         4
       ],
@@ -1836,11 +1862,12 @@
       "WaterItemId": -2,
       "Musics": [
         4,
-        11
+        11,
+        27
       ],
       "SFXPath": "SFX/sfx-amb-ice-1",
       "SFXVolume": 0.3,
-      "CullingRadius": 0.0,
+      "CullingRadius": -5.0,
       "IceFlag": 1
     },
     {
@@ -1890,6 +1917,451 @@
       "Musics": [],
       "SFXPath": "SFX/sfx-amb-massive",
       "SFXVolume": 0.35,
+      "CullingRadius": 0.0,
+      "IceFlag": 0
+    },
+    {
+      "Name": "Desert 8",
+      "ID": 22,
+      "SID": "",
+      "DisplayName": "草原荒漠",
+      "PlanetType": 2,
+      "MaterialPath": "Universe/Materials/Planets/Desert 8/",
+      "Temperature": 0.0,
+      "Distribute": 2,
+      "Algos": [
+        10
+      ],
+      "ModX": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "ModY": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "Vegetables0": [
+        1093,
+        1093,
+        1092,
+        164,
+        165,
+        163,
+        166,
+        1094
+      ],
+      "Vegetables1": [
+        692,
+        693,
+        691,
+        694,
+        167,
+        168,
+        161,
+        162,
+        169,
+        170
+      ],
+      "Vegetables2": [
+        1094,
+        166,
+        161,
+        693,
+        694
+      ],
+      "Vegetables3": [
+        1093,
+        1092,
+        1091,
+        1094
+      ],
+      "Vegetables4": [],
+      "Vegetables5": [],
+      "VeinSpot": [
+        7,
+        4,
+        7,
+        2,
+        3,
+        6,
+        14
+      ],
+      "VeinCount": [
+        0.7,
+        0.6,
+        1.0,
+        0.8,
+        0.7,
+        1.0,
+        1.0
+      ],
+      "VeinOpacity": [
+        0.7,
+        0.6,
+        0.8,
+        0.7,
+        1.0,
+        1.2,
+        1.0
+      ],
+      "RareVeins": [
+        11,
+        13
+      ],
+      "RareSettings": [
+        0.0,
+        1.0,
+        0.5,
+        1.0,
+        0.0,
+        0.6,
+        0.25,
+        1.0
+      ],
+      "GasItems": [],
+      "GasSpeeds": [],
+      "UseHeightForBuild": false,
+      "Wind": 1.1,
+      "IonHeight": 60.0,
+      "WaterHeight": -0.7,
+      "WaterItemId": 1000,
+      "Musics": [
+        25,
+        16
+      ],
+      "SFXPath": "SFX/sfx-amb-ocean-1",
+      "SFXVolume": 0.35,
+      "CullingRadius": 0.0,
+      "IceFlag": 0
+    },
+    {
+      "Name": "Desert 9",
+      "ID": 23,
+      "SID": "",
+      "DisplayName": "橙晶荒漠",
+      "PlanetType": 3,
+      "MaterialPath": "Universe/Materials/Planets/Desert 9/",
+      "Temperature": 0.08,
+      "Distribute": 2,
+      "Algos": [
+        11
+      ],
+      "ModX": {
+        "x": 1.5,
+        "y": 1.5
+      },
+      "ModY": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "Vegetables0": [
+        701,
+        702,
+        703
+      ],
+      "Vegetables1": [
+        713,
+        712,
+        711
+      ],
+      "Vegetables2": [
+        710,
+        709,
+        708,
+        707,
+        706,
+        705,
+        704
+      ],
+      "Vegetables3": [],
+      "Vegetables4": [],
+      "Vegetables5": [],
+      "VeinSpot": [
+        13,
+        2,
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "VeinCount": [
+        1.0,
+        0.5,
+        0.0,
+        0.7,
+        0.0,
+        0.6,
+        0.0
+      ],
+      "VeinOpacity": [
+        1.2,
+        0.8,
+        0.0,
+        1.0,
+        0.0,
+        0.5,
+        0.0
+      ],
+      "RareVeins": [
+        11,
+        12
+      ],
+      "RareSettings": [
+        0.0,
+        0.7,
+        0.2,
+        0.6,
+        0.0,
+        1.0,
+        1.0,
+        0.84
+      ],
+      "GasItems": [],
+      "GasSpeeds": [],
+      "UseHeightForBuild": false,
+      "Wind": 1.5,
+      "IonHeight": 55.0,
+      "WaterHeight": 0.0,
+      "WaterItemId": 0,
+      "Musics": [
+        26,
+        11
+      ],
+      "SFXPath": "SFX/sfx-amb-desert-5",
+      "SFXVolume": 0.3,
+      "CullingRadius": 0.0,
+      "IceFlag": 0
+    },
+    {
+      "Name": "Desert 10",
+      "ID": 24,
+      "SID": "",
+      "DisplayName": "极寒荒漠",
+      "PlanetType": 4,
+      "MaterialPath": "Universe/Materials/Planets/Desert 10/",
+      "Temperature": -4.0,
+      "Distribute": 0,
+      "Algos": [
+        12
+      ],
+      "ModX": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "ModY": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "Vegetables0": [
+        734,
+        733,
+        732,
+        731,
+        730,
+        729,
+        724,
+        723,
+        722,
+        721
+      ],
+      "Vegetables1": [
+        728,
+        727,
+        726,
+        725
+      ],
+      "Vegetables2": [],
+      "Vegetables3": [],
+      "Vegetables4": [],
+      "Vegetables5": [],
+      "VeinSpot": [
+        9,
+        2,
+        2,
+        6,
+        2,
+        1,
+        0
+      ],
+      "VeinCount": [
+        0.8,
+        0.5,
+        0.8,
+        1.0,
+        0.7,
+        0.3,
+        0.0
+      ],
+      "VeinOpacity": [
+        0.8,
+        0.8,
+        1.2,
+        1.0,
+        1.0,
+        0.3,
+        0.0
+      ],
+      "RareVeins": [
+        8,
+        9,
+        12
+      ],
+      "RareSettings": [
+        0.3,
+        1.0,
+        0.8,
+        1.0,
+        0.0,
+        1.0,
+        0.7,
+        1.0,
+        0.0,
+        0.4,
+        0.5,
+        0.7
+      ],
+      "GasItems": [],
+      "GasSpeeds": [],
+      "UseHeightForBuild": false,
+      "Wind": 1.3,
+      "IonHeight": 55.0,
+      "WaterHeight": 0.0,
+      "WaterItemId": 0,
+      "Musics": [
+        27,
+        4
+      ],
+      "SFXPath": "SFX/sfx-amb-desert-1",
+      "SFXVolume": 0.4,
+      "CullingRadius": 0.0,
+      "IceFlag": 0
+    },
+    {
+      "Name": "Desert 11",
+      "ID": 25,
+      "SID": "",
+      "DisplayName": "潘多拉荒漠",
+      "PlanetType": 2,
+      "MaterialPath": "Universe/Materials/Planets/Desert 11/",
+      "Temperature": 0.0,
+      "Distribute": 2,
+      "Algos": [
+        13
+      ],
+      "ModX": {
+        "x": 1.0,
+        "y": 1.0
+      },
+      "ModY": {
+        "x": 3.0,
+        "y": 3.0
+      },
+      "Vegetables0": [
+        681,
+        682,
+        683,
+        684,
+        685,
+        151,
+        148,
+        149,
+        1085
+      ],
+      "Vegetables1": [
+        1085,
+        681,
+        142,
+        685,
+        143,
+        682,
+        1086,
+        144,
+        150
+      ],
+      "Vegetables2": [
+        1084,
+        1081,
+        1082,
+        1083,
+        1085,
+        1086
+      ],
+      "Vegetables3": [
+        141,
+        145
+      ],
+      "Vegetables4": [
+        1084,
+        681,
+        682,
+        683,
+        684,
+        1086,
+        685,
+        146,
+        147
+      ],
+      "Vegetables5": [],
+      "VeinSpot": [
+        8,
+        3,
+        8,
+        1,
+        3,
+        9,
+        20
+      ],
+      "VeinCount": [
+        0.7,
+        0.6,
+        1.0,
+        1.0,
+        0.6,
+        1.0,
+        1.0
+      ],
+      "VeinOpacity": [
+        0.7,
+        0.5,
+        1.0,
+        1.0,
+        0.7,
+        1.2,
+        1.0
+      ],
+      "RareVeins": [
+        10,
+        11,
+        13
+      ],
+      "RareSettings": [
+        0.0,
+        0.5,
+        0.3,
+        1.0,
+        0.0,
+        1.0,
+        0.3,
+        1.0,
+        0.0,
+        0.5,
+        0.2,
+        1.0
+      ],
+      "GasItems": [],
+      "GasSpeeds": [],
+      "UseHeightForBuild": false,
+      "Wind": 1.0,
+      "IonHeight": 60.0,
+      "WaterHeight": -2.0,
+      "WaterItemId": 0,
+      "Musics": [
+        15,
+        16
+      ],
+      "SFXPath": "SFX/sfx-amb-ocean-3",
+      "SFXVolume": 1.0,
       "CullingRadius": 0.0,
       "IceFlag": 0
     }

@@ -28,6 +28,10 @@ Dyson Sphere Program Seed Calculator
 19. Hurricane Stone Forest (飓风石林)
 20. Scarlet Ice Lake (猩红冰湖)
 21. Gas Giant (气态巨星)
+22. Savanna (热带草原)
+23. Crystal Desert (橙晶荒漠)
+24. Frozen Tundra (极寒冻土)
+25. Pandora Swamp (潘多拉沼泽)
 
 ### Vein types
 1. Iron veins (铁矿脉)
