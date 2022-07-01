@@ -10,7 +10,8 @@
 
 extern "C" {
 
-__declspec(dllexport) const char *FILTERAPI name() {
+__declspec(dllexport) const char *FILTERAPI init(PluginAPI *api, int *type) {
+    *type = 0;
     return "Red Giant With Volcano/Water and 2 Tidal-Locked Planets";
 }
 

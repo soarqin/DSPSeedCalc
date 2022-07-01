@@ -8,19 +8,27 @@
 
 #pragma once
 
-#include "galaxy.hh"
+#include "dsp/galaxy.hh"
 
 extern void loadFilters();
 extern bool runFilters(const Galaxy*);
+extern bool runOutput(const Galaxy*);
 
 #if defined(_WIN32)
 #define FILTERAPI __stdcall
 #else
 #define FILTERAPI
 #endif
-using PluginNameFunc = const char*(*FILTERAPI)();
+
+struct PluginAPI {
+    void (*output)(const Star *star);
+};
+
+using PluginInitFunc = const char*(*FILTERAPI)(PluginAPI*, int*);
 using SeedBeginFunc = void*(*FILTERAPI)(int);
 using GalaxyFilterFunc = bool(*FILTERAPI)(const Galaxy*, void*);
 using StarFilterFunc = bool(*FILTERAPI)(const Star*, void*);
 using PlanetFilterFunc = bool(*FILTERAPI)(const Planet*, void*);
 using SeedEndFunc = bool(*FILTERAPI)(void*);
+
+using OutputFunc = void(*FILTERAPI)(const Galaxy*);

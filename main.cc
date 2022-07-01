@@ -1,6 +1,6 @@
 #include "dsp/galaxy.hh"
 #include "dsp/protoset.hh"
-#include "dsp/filter.hh"
+#include "filter.hh"
 
 #include <fmt/ostream.h>
 #include <fmt/format.h>
@@ -23,6 +23,33 @@ static bool birthOnly = true;
 static bool hasStars = false;
 static std::ofstream output[2];
 static int found = 0;
+
+void outputFunc(const Star *star) {
+    auto seed = star->galaxy->seed;
+    if (hasStars) {
+        fmt::print(output[1],
+                   "{},{},{},{:.3f},{:.3f},{}\n",
+                   seed,
+                   star->id,
+                   star->typeName(),
+                   star->position.magnitude(),
+                   pow(star->luminosity, 0.33000001311302185),
+                   star->name);
+    }
+    for (auto &planet: star->planets) {
+        fmt::print(output[0],
+                   "{},{},{},{},{}",
+                   seed,
+                   planet->id,
+                   planet->orbitAround,
+                   planet->theme,
+                   planet->singularity & EPlanetSingularity::TidalLocked ? 1 : 0);
+        for (int i = 1; i < 15; ++i) {
+            fmt::print(output[0], ",{}", planet->veinSpot[i]);
+        }
+        fmt::print(output[0], "\n");
+    }
+};
 
 static void calc() {
     while (true) {
@@ -48,57 +75,13 @@ static void calc() {
         {
             std::unique_lock lk(mutex2);
             ++found;
-            if (birthOnly) {
-                if (hasStars) {
-                    for (const auto &star: galaxy->stars) {
-                        fmt::print(output[1],
-                                   "{},{},{},{:.3f},{:.3f},{}\n",
-                                   seed,
-                                   star->id,
-                                   star->typeName(),
-                                   star->position.magnitude(),
-                                   pow(star->luminosity, 0.33000001311302185),
-                                   star->name);
-                    }
-                }
-                const auto *star = galaxy->starById(galaxy->birthStarId);
-                for (auto &planet: star->planets) {
-                    fmt::print(output[0],
-                               "{},{},{},{},{}",
-                               seed,
-                               planet->id,
-                               planet->orbitAround,
-                               planet->theme,
-                               planet->singularity & EPlanetSingularity::TidalLocked ? 1 : 0);
-                    for (int i = 1; i < 15; ++i) {
-                        fmt::print(output[0], ",{}", planet->veinSpot[i]);
-                    }
-                    fmt::print(output[0], "\n");
-                }
-            } else {
-                for (const auto &star: galaxy->stars) {
-                    if (hasStars) {
-                        fmt::print(output[1],
-                                   "{},{},{},{:.3f},{:.3f},{}\n",
-                                   seed,
-                                   star->id,
-                                   star->typeName(),
-                                   star->position.magnitude(),
-                                   pow(star->luminosity, 0.33000001311302185),
-                                   star->name);
-                    }
-                    for (auto &planet: star->planets) {
-                        fmt::print(output[0],
-                                   "{},{},{},{},{}",
-                                   seed,
-                                   planet->id,
-                                   planet->orbitAround,
-                                   planet->theme,
-                                   planet->singularity & EPlanetSingularity::TidalLocked ? 1 : 0);
-                        for (int i = 1; i < 15; ++i) {
-                            fmt::print(output[0], ",{}", planet->veinSpot[i]);
-                        }
-                        fmt::print(output[0], "\n");
+            if (!runOutput(galaxy)) {
+                if (birthOnly) {
+                    const auto *star = galaxy->starById(galaxy->birthStarId);
+                    outputFunc(star);
+                } else {
+                    for (const auto *star: galaxy->stars) {
+                        outputFunc(star);
                     }
                 }
             }

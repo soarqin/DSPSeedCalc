@@ -13,12 +13,12 @@ add_static_runtime_option()
 add_subdirectory(fmt)
 
 add_executable(${PROJECT_NAME} main.cc
+    filter.cc filter.hh
     dsp/galaxy.cc dsp/galaxy.hh
     dsp/star.cc dsp/star.hh
     dsp/planet.cc dsp/planet.hh
     dsp/protoset.cc dsp/protoset.hh
     dsp/namegen.cc dsp/namegen.hh
-    dsp/filter.cc dsp/filter.hh
     dsp/vectors.hh
     util/dotnet35random.cc util/dotnet35random.hh
     util/maths.hh util/mempool.hh
