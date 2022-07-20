@@ -76,7 +76,7 @@ void loadFilters() {
                 case 1: {
                     auto func = (OutputFunc)dlsym(lib, "output");
                     if (func) {
-                        outputFuncs.emplace_back();
+                        outputFuncs.emplace_back(func);
                         if (pname) {
                             fmt::print(std::cout, "Loaded output filter: \"{}\" from [{}]\n", pname, filename);
                         } else {

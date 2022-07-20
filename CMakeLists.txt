@@ -10,6 +10,8 @@ fix_compile_flags()
 fix_release_flags()
 add_static_runtime_option()
 
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
 add_subdirectory(fmt)
 
 add_executable(${PROJECT_NAME} main.cc
@@ -32,5 +34,9 @@ if(WIN32)
 else()
     target_link_libraries(${PROJECT_NAME} ${CMAKE_DL_LIBS})
 endif()
-set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    FOLDER "cli")
 add_subdirectory(filters)
+
+add_subdirectory(viewer)
