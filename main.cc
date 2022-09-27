@@ -92,8 +92,8 @@ static void calc() {
 
 void addSeedByString(const std::string &buf) {
     auto pos = buf.find('-');
-    int from = (int)std::strtol(buf.c_str(), nullptr, 0);
-    int to = pos != std::string::npos ? (int)std::strtol(buf.c_str() + pos + 1, nullptr, 0) : from;
+    int from = (int)std::strtol(buf.c_str(), nullptr, 10);
+    int to = pos != std::string::npos ? (int)std::strtol(buf.c_str() + pos + 1, nullptr, 10) : from;
     if (from == 0 && to == 0) {
         return;
     }

@@ -344,7 +344,7 @@ void Planet::setPlanetTheme(double rand1, double rand2, double rand3, double ran
 }
 
 void Planet::generateVeins() {
-    if (algoId >= 1 && algoId <= 9) {
+    if (algoId >= 1 && algoId <= 13) {
         const auto *themeProto = themeProtoSet.select(theme);
         if (themeProto == nullptr) return;
         DotNet35Random dotNet35Random(seed);
