@@ -67,7 +67,7 @@ static void calc() {
                 seed = current++;
             }
         }
-        auto galaxy = Galaxy::create(DefaultAlgoVersion, seed, 64, genName);
+        auto galaxy = Galaxy::create(DefaultAlgoVersion, seed, 64, genName, birthOnly);
         if (!runFilters(galaxy)) {
             galaxy->release();
             continue;
@@ -160,10 +160,10 @@ int main(int argc, char *argv[]) {
     while ((opt = getopt_long(argc, argv, ":i:r:b:s:p:n", longOptions, nullptr)) != -1) {
         switch (opt) {
         case ':':
-            fmt::print(std::cerr, "mssing argument for {}\n", optopt);
+            fmt::print(std::cerr, "mssing argument for {}\n", (char)optopt);
             return -1;
         case '?':
-            fmt::print(std::cerr, "bad arument: {}\n", optopt);
+            fmt::print(std::cerr, "bad arument: {}\n", (char)optopt);
             return -1;
         case 'n':
             genName = true;
@@ -222,6 +222,7 @@ int main(int argc, char *argv[]) {
     }
     auto startTime = std::chrono::steady_clock::now();
     auto threadCount = std::thread::hardware_concurrency();
+    if (threadCount > 1) --threadCount;
     std::vector<std::thread> thr(threadCount);
     for (auto &th: thr) {
         th = std::thread(calc);

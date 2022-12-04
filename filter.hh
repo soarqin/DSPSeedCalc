@@ -24,11 +24,11 @@ struct PluginAPI {
     void (*output)(const Star *star);
 };
 
-using PluginInitFunc = const char*(*FILTERAPI)(PluginAPI*, int*);
-using SeedBeginFunc = void*(*FILTERAPI)(int);
-using GalaxyFilterFunc = bool(*FILTERAPI)(const Galaxy*, void*);
-using StarFilterFunc = bool(*FILTERAPI)(const Star*, void*);
-using PlanetFilterFunc = bool(*FILTERAPI)(const Planet*, void*);
-using SeedEndFunc = bool(*FILTERAPI)(void*);
+using PluginInitFunc = const char*(FILTERAPI*)(PluginAPI*, int*);
+using SeedBeginFunc = void*(FILTERAPI*)(int);
+using GalaxyFilterFunc = bool(FILTERAPI*)(const Galaxy*, void*);
+using StarFilterFunc = bool(FILTERAPI*)(const Star*, void*);
+using PlanetFilterFunc = bool(FILTERAPI*)(const Planet*, void*);
+using SeedEndFunc = bool(FILTERAPI*)(void*);
 
-using OutputFunc = void(*FILTERAPI)(const Galaxy*);
+using OutputFunc = void(FILTERAPI*)(const Galaxy*);

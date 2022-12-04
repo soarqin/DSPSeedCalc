@@ -69,7 +69,7 @@ static void RandomPoses(std::vector<VectorLF3> &tmpPoses, std::vector<VectorLF3>
                 double num18 = num14 * num14 + num15 * num15 + num16 * num16;
                 if (num18 > 1.0 || num18 < 1E-08) continue;
                 double num19 = std::sqrt(num18);
-                num17 = (num17 * (maxStepLen - minStepLen) + minDist) / num19;
+                num17 = (num17 * (maxStepLen - minStepLen) + minStepLen) / num19;
                 VectorLF3 vectorLf2{drunk.x + num14 * num17, drunk.y + num15 * num17,
                                     drunk.z + num16 * num17};
                 if (!CheckCollision(tmpPoses, vectorLf2, minDist)) {
@@ -107,12 +107,15 @@ void Galaxy::release() {
     gpool.release(this);
 }
 
-Galaxy *Galaxy::create(int algoVersion, int galaxySeed, int starCount, bool genName) {
+Galaxy *Galaxy::create(int algoVersion, int galaxySeed, int starCount, bool genName, bool birthOnly) {
     DotNet35Random dotNet35Random(galaxySeed);
     std::vector<VectorLF3> tmpPoses, tmpDrunk;
     tmpPoses.reserve(256);
     tmpDrunk.reserve(256);
-    starCount = GenerateTempPoses(tmpPoses, tmpDrunk, dotNet35Random.next(), starCount, 4, 2.0, 2.3, 3.5, 0.18);
+    const double MIN_DIST = 2.0;
+    const double MIN_STEP = 2.0;
+    const double MAX_STEP = 3.2;
+    starCount = GenerateTempPoses(tmpPoses, tmpDrunk, dotNet35Random.next(), starCount, 4, MIN_DIST, MIN_STEP, MAX_STEP, 0.18);
     if (starCount <= 0) { return nullptr; }
 
     auto *galaxy = gpool.alloc();
@@ -155,8 +158,12 @@ Galaxy *Galaxy::create(int algoVersion, int galaxySeed, int starCount, bool genN
         else if (i >= num11) needtype = EStarType::WhiteDwarf;
         galaxy->stars[i] = Star::createStar(galaxy, tmpPoses[i], i + 1, seed, needtype, needSpectr, genName);
     }
-    for (auto &star: galaxy->stars) {
-        star->createStarPlanets();
+    if (birthOnly) {
+        galaxy->starById(galaxy->birthStarId)->createStarPlanets();
+    } else {
+        for (auto &star: galaxy->stars) {
+            star->createStarPlanets();
+        }
     }
     return galaxy;
 }

@@ -104,10 +104,10 @@ bool runFilters(const Galaxy *galaxy) {
     if (hasPlanetFilter) {
         bool pass;
         for (auto &s: galaxy->stars) {
-            pass = false;
+            pass = true;
             for (auto &fs: filters) {
-                if(!fs.starFilter || fs.starFilter(s, fs.userp)) {
-                    pass = true;
+                if(fs.starFilter && !fs.starFilter(s, fs.userp)) {
+                    pass = false;
                     break;
                 }
             }
@@ -126,11 +126,11 @@ bool runFilters(const Galaxy *galaxy) {
         }
         if (!pass) { return false; }
     } else if (hasStarFilter) {
-        bool pass = false;
+        bool pass = true;
         for (auto &s: galaxy->stars) {
             for (auto &fs: filters) {
-                if(!fs.starFilter || fs.starFilter(s, fs.userp)) {
-                    pass = true;
+                if(fs.starFilter && !fs.starFilter(s, fs.userp)) {
+                    pass = false;
                     break;
                 }
             }

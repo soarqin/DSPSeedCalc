@@ -60,6 +60,7 @@ Star *Star::createStar(Galaxy *galaxy,
     auto seed2 = dotNet35Random.next();
     auto seed3 = dotNet35Random.next();
     star->position = pos;
+/*
     auto num = (float)pos.magnitude() / 32.0f;
     if (num > 1.0f) {
         num = (float)std::log(num) + 1.0f;
@@ -68,8 +69,6 @@ Star *Star::createStar(Galaxy *galaxy,
         num = (float)std::log(num) + 1.0f;
         num = (float)std::log(num) + 1.0f;
     }
-
-/*
     star->resourceCoef = (float)std::pow(7.0f, num) * 0.6f;
 */
     DotNet35Random dotNet35Random2(seed3);
