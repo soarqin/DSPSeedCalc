@@ -41,12 +41,12 @@ void Star::release() {
 }
 
 Star *Star::createStar(Galaxy *galaxy,
-                           VectorLF3 pos,
-                           int id,
-                           int seed,
-                           EStarType needtype,
-                           ESpectrType needSpectr,
-                           bool genName) {
+                       VectorLF3 pos,
+                       int id,
+                       int seed,
+                       EStarType needtype,
+                       ESpectrType needSpectr,
+                       bool genName) {
     auto *star = spool.alloc();
     star->galaxy = galaxy;
     star->index = id - 1;
@@ -91,24 +91,31 @@ Star *Star::createStar(Galaxy *galaxy,
 
     float num10;
     switch (needSpectr) {
-    case ESpectrType::M:num10 = -3.0f;
+    case ESpectrType::M:
+        num10 = -3.0f;
         break;
-    case ESpectrType::O:num10 = 3.0f;
+    case ESpectrType::O:
+        num10 = 3.0f;
         break;
-    default:num10 = randNormal(num9, standardDeviation, num2, num3);
+    default:
+        num10 = randNormal(num9, standardDeviation, num2, num3);
         break;
     }
 
     num10 = num10 <= 0.0f ? num10 * 1.0f : num10 * 2.0f;
     num10 = std::clamp(num10, -2.4f, 4.65f) + (float)num5 + 1.0f;
     switch (needtype) {
-    case EStarType::BlackHole:star->mass = 18.0f + (float)(num2 * num3) * 30.0f;
+    case EStarType::BlackHole:
+        star->mass = 18.0f + (float)(num2 * num3) * 30.0f;
         break;
-    case EStarType::NeutronStar:star->mass = 7.0f + (float)num2 * 11.0f;
+    case EStarType::NeutronStar:
+        star->mass = 7.0f + (float)num2 * 11.0f;
         break;
-    case EStarType::WhiteDwarf:star->mass = 1.0f + (float)num3 * 5.0f;
+    case EStarType::WhiteDwarf:
+        star->mass = 1.0f + (float)num3 * 5.0f;
         break;
-    default:star->mass = (float)std::pow(2.0f, num10);
+    default:
+        star->mass = (float)std::pow(2.0f, num10);
         break;
     }
 
@@ -125,11 +132,14 @@ Star *Star::createStar(Galaxy *galaxy,
         break;
     case EStarType::WhiteDwarf:
     case EStarType::NeutronStar:
-    case EStarType::BlackHole:star->age = (float)num4 * 0.4f + 1.0f;
+    case EStarType::BlackHole:
+        star->age = (float)num4 * 0.4f + 1.0f;
         switch (needtype) {
-        case EStarType::WhiteDwarf:star->lifetime += 10000.0f;
+        case EStarType::WhiteDwarf:
+            star->lifetime += 10000.0f;
             break;
-        case EStarType::NeutronStar:star->lifetime += 1000.0f;
+        case EStarType::NeutronStar:
+            star->lifetime += 1000.0f;
             break;
         }
 

@@ -11,12 +11,14 @@
 #include <thread>
 #include <fstream>
 #include <iostream>
+#include <map>
 #include <cmath>
 
 static std::mutex mutex1, mutex2;
-static std::vector<std::pair<int, int>> seedsToCheck;
+static std::map<int, std::vector<std::pair<int, int>>> seedsToCheckMap;
+static std::vector<std::pair<int, int>> *seedsToCheck = nullptr;
 static size_t currIndex = 0, totalSize = 0;
-static int current = -1, currMax = -1;
+static int current = -1, currMax = -1, starCount = 64;
 
 static bool genName = false;
 static bool birthOnly = true;
@@ -60,14 +62,14 @@ static void calc() {
                 if (++currIndex >= totalSize) {
                     break;
                 }
-                current = seedsToCheck[currIndex].first;
-                currMax = seedsToCheck[currIndex].second;
+                current = (*seedsToCheck)[currIndex].first;
+                currMax = (*seedsToCheck)[currIndex].second;
                 seed = current++;
             } else {
                 seed = current++;
             }
         }
-        auto galaxy = Galaxy::create(DefaultAlgoVersion, seed, 64, genName, birthOnly);
+        auto galaxy = Galaxy::create(DefaultAlgoVersion, seed, starCount, genName, birthOnly);
         if (!runFilters(galaxy)) {
             galaxy->release();
             continue;
@@ -90,7 +92,7 @@ static void calc() {
     }
 }
 
-void addSeedByString(const std::string &buf) {
+void addSeedByString(const std::string &buf, int stars = 64) {
     auto pos = buf.find('-');
     int from = (int)std::strtol(buf.c_str(), nullptr, 10);
     int to = pos != std::string::npos ? (int)std::strtol(buf.c_str() + pos + 1, nullptr, 10) : from;
@@ -98,7 +100,11 @@ void addSeedByString(const std::string &buf) {
         return;
     }
     if (to >= from) {
-        seedsToCheck.emplace_back(from, to + 1);
+        pos = buf.find(',');
+        if (pos != std::string::npos) {
+            stars = (int)std::strtol(buf.c_str() + pos + 1, nullptr, 10);
+        }
+        seedsToCheckMap[stars].emplace_back(from, to + 1);
     }
 }
 
@@ -119,25 +125,23 @@ void readFromInputFile(const std::string &filename) {
 }
 
 void sortSeeds() {
-    std::sort(seedsToCheck.begin(), seedsToCheck.end());
-    auto sz = seedsToCheck.size();
-    for (size_t i = 1; i < sz;) {
-        auto last = seedsToCheck[i-1].second;
-        if (last > seedsToCheck[i].first) {
-            if (last < seedsToCheck[i].second) {
-                seedsToCheck[i-1].second = seedsToCheck[i].second;
+    for (auto &p: seedsToCheckMap) {
+        auto &seeds = p.second;
+        std::sort(seeds.begin(), seeds.end());
+        auto sz = seeds.size();
+        for (size_t i = 1; i < sz;) {
+            auto last = seeds[i-1].second;
+            if (last > seeds[i].first) {
+                if (last < seeds[i].second) {
+                    seeds[i-1].second = seeds[i].second;
+                }
+                seeds.erase(seeds.begin() + i);
+                --sz;
+            } else {
+                ++i;
             }
-            seedsToCheck.erase(seedsToCheck.begin() + i);
-            --sz;
-        } else {
-            ++i;
         }
-    }
-    currIndex = 0;
-    totalSize = seedsToCheck.size();
-    if (totalSize) {
-        current = seedsToCheck[0].first;
-        currMax = seedsToCheck[0].second;
+        currIndex = 0;
     }
 }
 
@@ -197,7 +201,7 @@ int main(int argc, char *argv[]) {
     }
     if (optind >= argc && inputFilename.empty()) {
         fmt::print(std::cerr, "Usage: DSPSeedCalc [-n] [-i filename] [-b birth.csv|-p planets.csv] [-s stars.csv] [ranges...]\n");
-        fmt::print(std::cerr, "         Ranges format: a-b.   e.g. 0-1000\n");
+        fmt::print(std::cerr, "         Ranges format: a-b[,starCount]. starCount is 64 by default.   e.g. 0-1000 / 333-666,32\n");
         fmt::print(std::cerr, "      -n Generate names for stars(which will reduce calculation speed)\n");
         fmt::print(std::cerr, " Note: You need to supply either [filename] or [ranges...]\n");
         return -1;
@@ -223,12 +227,22 @@ int main(int argc, char *argv[]) {
     auto startTime = std::chrono::steady_clock::now();
     auto threadCount = std::thread::hardware_concurrency();
     if (threadCount > 1) --threadCount;
-    std::vector<std::thread> thr(threadCount);
-    for (auto &th: thr) {
-        th = std::thread(calc);
-    }
-    for (auto &th: thr) {
-        th.join();
+    for (auto &p: seedsToCheckMap) {
+        auto &seeds = p.second;
+        starCount = p.first;
+        totalSize = seeds.size();
+        if (totalSize) {
+            current = seeds[0].first;
+            currMax = seeds[0].second;
+        }
+        seedsToCheck = &seeds;
+        std::vector<std::thread> thr(threadCount);
+        for (auto &th: thr) {
+            th = std::thread(calc);
+        }
+        for (auto &th: thr) {
+            th.join();
+        }
     }
     auto duration = std::chrono::steady_clock::now() - startTime;
     if (hasStars) {
@@ -236,8 +250,10 @@ int main(int argc, char *argv[]) {
     }
     output[0].close();
     int count = 0;
-    for (auto &p: seedsToCheck) {
-        count += p.second - p.first;
+    for (auto &sp: seedsToCheckMap) {
+        for (auto &p: sp.second) {
+            count += p.second - p.first;
+        }
     }
     fmt::print(std::cout, "Output files\n============\n  Stars: {}\n  Planets: {}\n", starFilename, planetFilename);
     fmt::print(std::cout, "============\n{}ms used, {} found from {} processed seeds.\n", std::chrono::duration_cast<std::chrono::milliseconds>(duration).count(), found, count);

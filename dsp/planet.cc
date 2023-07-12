@@ -361,19 +361,26 @@ void Planet::generateVeins() {
         switch (star->type) {
         case EStarType::MainSeqStar:
             switch (spectr) {
-            case ESpectrType::M:p = 2.5f;
+            case ESpectrType::M:
+                p = 2.5f;
                 break;
-            case ESpectrType::K:p = 1.0f;
+            case ESpectrType::K:
+                p = 1.0f;
                 break;
-            case ESpectrType::G:p = 0.7f;
+            case ESpectrType::G:
+                p = 0.7f;
                 break;
-            case ESpectrType::F:p = 0.6f;
+            case ESpectrType::F:
+                p = 0.6f;
                 break;
-            case ESpectrType::A:p = 1.0f;
+            case ESpectrType::A:
+                p = 1.0f;
                 break;
-            case ESpectrType::B:p = 0.4f;
+            case ESpectrType::B:
+                p = 0.4f;
                 break;
-            case ESpectrType::O:p = 1.6f;
+            case ESpectrType::O:
+                p = 1.6f;
                 break;
             }
 
