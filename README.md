@@ -3,7 +3,7 @@ Dyson Sphere Program Seed Calculator
 
 # Usage
 * Command Line. ```DSPSeedCalc [-i filename] [-s star.csv] [-b birth.csv] [ranges...]```
-* Ranges format. a-b means [a,b] (e.g. 0-999)
+* Ranges format: a-b[,c]. which means seed range is [a,b] and star count is c (e.g. 0-999 / 333-666,55), star count is 64 by default.
 * Note. You need to supply either [filename] or [ranges...]
 
 ### Planet Types
