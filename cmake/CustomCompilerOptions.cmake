@@ -11,13 +11,13 @@ macro(fix_release_flags)
         set(CMAKE_EXE_LINKER_FLAGS_MINSIZEREL "${CMAKE_EXE_LINKER_FLAGS_MINSIZEREL} -s")
         set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} -s")
         set(CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL "${CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL} -s")
-        set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
-        set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+        set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -mavx2")
+        set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -mavx2")
     endif()
     if(MSVC)
         add_compile_options(
-            $<$<CONFIG:Release>:/GL>
-            $<$<CONFIG:MinSizeRel>:/GL>
+            $<$<CONFIG:Release>:"/GL /arch:AVX2">
+            $<$<CONFIG:MinSizeRel>:"/GL /arch:AVX2">
         )
         add_link_options(
             $<$<CONFIG:Release>:/LTCG>
