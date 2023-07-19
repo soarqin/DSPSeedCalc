@@ -21,6 +21,7 @@ static size_t currIndex = 0, totalSize = 0;
 static int current = -1, currMax = -1, starCount = 64;
 
 static bool genName = false;
+static bool hasPlanets = false;
 static bool birthOnly = true;
 static bool hasStars = false;
 static std::ofstream output[2];
@@ -28,28 +29,33 @@ static int found = 0;
 
 void outputFunc(const Star *star) {
     auto seed = star->galaxy->seed;
+    auto sc = star->galaxy->starCount;
     if (hasStars) {
         fmt::print(output[1],
-                   "{},{},{},{:.3f},{:.3f},{}\n",
+                   "{},{},{},{},{:.3f},{:.3f},{}\n",
                    seed,
+                   sc,
                    star->id,
                    star->typeName(),
                    star->position.magnitude(),
                    pow(star->luminosity, 0.33000001311302185),
                    star->name);
     }
-    for (auto &planet: star->planets) {
-        fmt::print(output[0],
-                   "{},{},{},{},{}",
-                   seed,
-                   planet->id,
-                   planet->orbitAround,
-                   planet->theme,
-                   planet->singularity & EPlanetSingularity::TidalLocked ? 1 : 0);
-        for (int i = 1; i < 15; ++i) {
-            fmt::print(output[0], ",{}", planet->veinSpot[i]);
+    if (hasPlanets) {
+        for (auto &planet: star->planets) {
+            fmt::print(output[0],
+                       "{},{},{},{},{},{}",
+                       seed,
+                       sc,
+                       planet->id,
+                       planet->orbitAround,
+                       planet->theme,
+                       planet->singularity & EPlanetSingularity::TidalLocked ? 1 : 0);
+            for (int i = 1; i < 15; ++i) {
+                fmt::print(output[0], ",{}", planet->veinSpot[i]);
+            }
+            fmt::print(output[0], "\n");
         }
-        fmt::print(output[0], "\n");
     }
 };
 
@@ -69,7 +75,7 @@ static void calc() {
                 seed = current++;
             }
         }
-        auto galaxy = Galaxy::create(DefaultAlgoVersion, seed, starCount, genName, birthOnly);
+        auto galaxy = Galaxy::create(DefaultAlgoVersion, seed, starCount, genName, hasPlanets, birthOnly);
         if (!runFilters(galaxy)) {
             galaxy->release();
             continue;
@@ -141,7 +147,6 @@ void sortSeeds() {
                 ++i;
             }
         }
-        currIndex = 0;
     }
 }
 
@@ -181,6 +186,7 @@ int main(int argc, char *argv[]) {
                 return -1;
             }
             planetFilename = fmt::format("{}", optarg);
+            hasPlanets = true;
             birthOnly = false;
             break;
         case 'b':
@@ -189,6 +195,7 @@ int main(int argc, char *argv[]) {
                 return -1;
             }
             planetFilename = fmt::format("{}", optarg);
+            hasPlanets = true;
             birthOnly = true;
             break;
         case 's':
@@ -199,11 +206,11 @@ int main(int argc, char *argv[]) {
             break;
         }
     }
-    if (optind >= argc && inputFilename.empty()) {
+    if ((optind >= argc && inputFilename.empty()) || (!hasStars && !hasPlanets)) {
         fmt::print(std::cerr, "Usage: DSPSeedCalc [-n] [-i filename] [-b birth.csv|-p planets.csv] [-s stars.csv] [ranges...]\n");
         fmt::print(std::cerr, "         Ranges format: a-b[,starCount]. starCount is 64 by default.   e.g. 0-1000 / 333-666,32\n");
         fmt::print(std::cerr, "      -n Generate names for stars(which will reduce calculation speed)\n");
-        fmt::print(std::cerr, " Note: You need to supply either [filename] or [ranges...]\n");
+        fmt::print(std::cerr, " Note: You need to supply either [filename] or [ranges...] and any of -b, -p or -s\n");
         return -1;
     }
     loadFilters();
@@ -215,14 +222,14 @@ int main(int argc, char *argv[]) {
     }
     sortSeeds();
     loadProtoSets();
-    if (planetFilename.empty()) {
-        planetFilename = "birth.csv";
+    if (hasPlanets) {
+        output[0] = std::ofstream(planetFilename);
+        fmt::print(output[0],
+                   "Seed,Star Count,Planet Id,Around,Type,Tidal Locked,Iron,Copper,Silicium,Titanium,Stone,Coal,Oil,FireIce,Diamond,Fractal,Crysrub,Grat,Bamboo,UnipolarMagnet\n");
     }
-    output[0] = std::ofstream(planetFilename);
-    fmt::print(output[0], "Seed,Planet Id,Around,Type,Tidal Locked,Iron,Copper,Silicium,Titanium,Stone,Coal,Oil,FireIce,Diamond,Fractal,Crysrub,Grat,Bamboo,UnipolarMagnet\n");
     if (hasStars) {
         output[1] = std::ofstream(starFilename);
-        fmt::print(output[1], "Seed,Star Id,Type,Distance,Luminosity,Name\n");
+        fmt::print(output[1], "Seed,Star Count,Star Id,Type,Distance,Luminosity,Name\n");
     }
     auto startTime = std::chrono::steady_clock::now();
     auto threadCount = std::thread::hardware_concurrency();
@@ -235,6 +242,7 @@ int main(int argc, char *argv[]) {
             current = seeds[0].first;
             currMax = seeds[0].second;
         }
+        currIndex = 0;
         seedsToCheck = &seeds;
         std::vector<std::thread> thr(threadCount);
         for (auto &th: thr) {

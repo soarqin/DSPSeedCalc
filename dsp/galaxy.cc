@@ -107,7 +107,7 @@ void Galaxy::release() {
     gpool.release(this);
 }
 
-Galaxy *Galaxy::create(int algoVersion, int galaxySeed, int starCount, bool genName, bool birthOnly) {
+Galaxy *Galaxy::create(int algoVersion, int galaxySeed, int starCount, bool genName, bool hasPlanets, bool birthOnly) {
     DotNet35Random dotNet35Random(galaxySeed);
     std::vector<VectorLF3> tmpPoses, tmpDrunk;
     tmpPoses.reserve(256);
@@ -158,11 +158,13 @@ Galaxy *Galaxy::create(int algoVersion, int galaxySeed, int starCount, bool genN
         else if (i >= num11) needtype = EStarType::WhiteDwarf;
         galaxy->stars[i] = Star::createStar(galaxy, tmpPoses[i], i + 1, seed, needtype, needSpectr, genName);
     }
-    if (birthOnly) {
-        galaxy->starById(galaxy->birthStarId)->createStarPlanets();
-    } else {
-        for (auto &star: galaxy->stars) {
-            star->createStarPlanets();
+    if (hasPlanets) {
+        if (birthOnly) {
+            galaxy->starById(galaxy->birthStarId)->createStarPlanets();
+        } else {
+            for (auto &star: galaxy->stars) {
+                star->createStarPlanets();
+            }
         }
     }
     return galaxy;
