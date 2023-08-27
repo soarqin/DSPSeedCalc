@@ -51,7 +51,7 @@ Star *Star::createStar(Galaxy *galaxy,
     star->galaxy = galaxy;
     star->index = id - 1;
     if (galaxy->starCount > 1)
-        star->level = star->index / (float)(galaxy->starCount - 1);
+        star->level = (float)star->index / (float)(galaxy->starCount - 1);
     else
         star->level = 0.0f;
     star->id = id;

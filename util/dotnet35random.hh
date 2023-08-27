@@ -25,27 +25,31 @@ private:
     int seedArray[56] = {};
 
 private:
-    int sampleInt();
     inline double sample() {
-        return sampleInt() * 4.6566128752457969E-10;
+        if (++inext >= 56) inext = 1;
+        if (++inextp >= 56) inextp = 1;
+        int num = seedArray[inext] - seedArray[inextp];
+        if (num < 0) num += MBIG;
+        seedArray[inext] = num;
+        return (double)num * 4.6566128752457969E-10;
     }
 
 public:
     explicit DotNet35Random(int seed);
     inline int next() {
-        return sampleInt();
+        return (int)(sample() * 2147483647.0);
     }
 
     inline int next(int maxValue) {
         if (maxValue < 0) return 0;
-        return (int)(int64_t(sampleInt()) * int64_t(maxValue) / int64_t(MBIG));
+        return (int)(sample() * (double)maxValue);
     }
 
     inline int next(int minValue, int maxValue) {
         if (minValue > maxValue) return minValue;
         auto num = maxValue - minValue;
         if (num <= 1) return minValue;
-        return (int)(int64_t(sampleInt()) * int64_t(num) / int64_t(MBIG) + minValue);
+        return (int)((uint64_t)(uint32_t)(sample() * double(num)) + (uint64_t)(int64_t)minValue);
     }
     template<typename T>
     inline void nextBytes(std::vector<uint8_t> &buffer) {

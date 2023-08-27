@@ -28,12 +28,3 @@ DotNet35Random::DotNet35Random(int seed) {
             if (seedArray[k] < 0) seedArray[k] += MBIG;
         }
 }
-
-int DotNet35Random::sampleInt() {
-    if (++inext >= 56) inext = 1;
-    if (++inextp >= 56) inextp = 1;
-    int num = seedArray[inext] - seedArray[inextp];
-    if (num < 0) num += MBIG;
-    seedArray[inext] = num;
-    return num;
-}
