@@ -10,5 +10,5 @@ foreach(FILTER_SRC ${FILTER_SRC_FILES})
     set_target_properties(${FILTER_PROJ} PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/filters
         LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/filters
-        PREFIX "")
+        PREFIX "" FOLDER "filters")
 endforeach()
