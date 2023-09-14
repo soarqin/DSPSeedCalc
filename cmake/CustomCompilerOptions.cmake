@@ -16,8 +16,12 @@ macro(fix_release_flags)
     endif()
     if(MSVC)
         add_compile_options(
-            $<$<CONFIG:Release>:"/GL /arch:AVX2">
-            $<$<CONFIG:MinSizeRel>:"/GL /arch:AVX2">
+            $<$<CONFIG:Release>:/GL>
+            $<$<CONFIG:MinSizeRel>:/GL>
+        )
+        add_compile_options(
+            $<$<CONFIG:Release>:/arch:AVX2>
+            $<$<CONFIG:MinSizeRel>:/arch:AVX2>
         )
         add_link_options(
             $<$<CONFIG:Release>:/LTCG>
