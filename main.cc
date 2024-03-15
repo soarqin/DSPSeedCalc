@@ -21,11 +21,13 @@ static size_t currIndex = 0, totalSize = 0;
 static int current = -1, currMax = -1, starCount = 64;
 
 static bool genName = false;
+static bool seedsOnly = false;
 static bool hasPlanets = false;
 static bool birthOnly = true;
 static bool hasStars = false;
 static std::ofstream output[2];
 static int found = 0;
+static std::chrono::time_point<std::chrono::steady_clock> startTime;
 
 void outputFunc(const Star *star) {
     auto seed = star->galaxy->seed;
@@ -75,6 +77,9 @@ static void calc() {
                 seed = current++;
             }
         }
+        if (seed % 500000 == 0) {
+            fmt::print(std::cout, "Processed to: {},{}. Currently found: {}. {}ms elapsed.\n", seed, starCount, found, std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - startTime).count());
+        }
         auto galaxy = Galaxy::create(DefaultAlgoVersion, seed, starCount, genName, hasPlanets, birthOnly);
         if (!runFilters(galaxy)) {
             galaxy->release();
@@ -84,7 +89,9 @@ static void calc() {
             std::unique_lock lk(mutex2);
             ++found;
             if (!runOutput(galaxy)) {
-                if (birthOnly) {
+                if (seedsOnly) {
+                    fmt::print(output[1], "{},{}\n", seed, galaxy->starCount);
+                } else if (birthOnly) {
                     const auto *star = galaxy->starById(galaxy->birthStarId);
                     outputFunc(star);
                 } else {
@@ -107,10 +114,22 @@ void addSeedByString(const std::string &buf, int stars = 64) {
     }
     if (to >= from) {
         pos = buf.find(',');
+        int starsTo = 0;
         if (pos != std::string::npos) {
             stars = (int)std::strtol(buf.c_str() + pos + 1, nullptr, 10);
+            auto pos2 = buf.find('-', pos + 1);
+            if (pos2 != std::string::npos) {
+                starsTo = (int)std::strtol(buf.c_str() + pos2 + 1, nullptr, 10);
+            }
         }
-        seedsToCheckMap[stars].emplace_back(from, to + 1);
+        if (starsTo > stars) {
+            while (stars <= starsTo) {
+                seedsToCheckMap[stars].emplace_back(from, to + 1);
+                ++stars;
+            }
+        } else {
+            seedsToCheckMap[stars].emplace_back(from, to + 1);
+        }
     }
 }
 
@@ -154,7 +173,7 @@ int main(int argc, char *argv[]) {
     const option longOptions[] = {
         /* input options */
         {"input", required_argument, nullptr, 'i'},
-        {"range", required_argument, nullptr, 'r'},
+        {"seeds_only", required_argument, nullptr, 'S'},
         /* output options */
         {"names", no_argument, nullptr, 'n'},
         {"birth", required_argument, nullptr, 'b'},
@@ -166,7 +185,7 @@ int main(int argc, char *argv[]) {
     std::string inputFilename;
     std::string starFilename;
     std::string planetFilename;
-    while ((opt = getopt_long(argc, argv, ":i:r:b:s:p:n", longOptions, nullptr)) != -1) {
+    while ((opt = getopt_long(argc, argv, ":i:r:b:s:S:p:n", longOptions, nullptr)) != -1) {
         switch (opt) {
         case ':':
             fmt::print(std::cerr, "mssing argument for {}\n", (char)optopt);
@@ -199,15 +218,27 @@ int main(int argc, char *argv[]) {
             birthOnly = true;
             break;
         case 's':
+            if (!starFilename.empty()) {
+                fmt::print(std::cerr, "You cannot supply both -s and -S\n");
+                return -1;
+            }
             starFilename = fmt::format("{}", optarg);
             hasStars = true;
+            break;
+        case 'S':
+            if (!starFilename.empty()) {
+                fmt::print(std::cerr, "You cannot supply both -s and -S\n");
+                return -1;
+            }
+            starFilename = fmt::format("{}", optarg);
+            seedsOnly = true;
             break;
         default:
             break;
         }
     }
-    if ((optind >= argc && inputFilename.empty()) || (!hasStars && !hasPlanets)) {
-        fmt::print(std::cerr, "Usage: DSPSeedCalc [-n] [-i filename] [-b birth.csv|-p planets.csv] [-s stars.csv] [ranges...]\n");
+    if ((optind >= argc && inputFilename.empty()) || (!seedsOnly && !hasStars && !hasPlanets)) {
+        fmt::print(std::cerr, "Usage: DSPSeedCalc [-n] [-i filename] [-b birth.csv|-p planets.csv] [-s stars.csv | -S seeds.csv] [ranges...]\n");
         fmt::print(std::cerr, "         Ranges format: a-b[,starCount]. starCount is 64 by default.   e.g. 0-1000 / 333-666,32\n");
         fmt::print(std::cerr, "      -n Generate names for stars(which will reduce calculation speed)\n");
         fmt::print(std::cerr, " Note: You need to supply either [filename] or [ranges...] and any of -b, -p or -s\n");
@@ -227,11 +258,15 @@ int main(int argc, char *argv[]) {
         fmt::print(output[0],
                    "Seed,Star Count,Planet Id,Around,Type,Tidal Locked,Iron,Copper,Silicium,Titanium,Stone,Coal,Oil,FireIce,Diamond,Fractal,Crysrub,Grat,Bamboo,UnipolarMagnet\n");
     }
-    if (hasStars) {
+    if (seedsOnly || hasStars) {
         output[1] = std::ofstream(starFilename);
-        fmt::print(output[1], "Seed,Star Count,Star Id,Type,Distance,Luminosity,Name\n");
+        if (seedsOnly) {
+            fmt::print(output[1], "Seed,Star Count\n");
+        } else {
+            fmt::print(output[1], "Seed,Star Count,Star Id,Type,Distance,Luminosity,Name\n");
+        }
     }
-    auto startTime = std::chrono::steady_clock::now();
+    startTime = std::chrono::steady_clock::now();
     auto threadCount = std::thread::hardware_concurrency();
     if (threadCount > 1) --threadCount;
     for (auto &p: seedsToCheckMap) {
