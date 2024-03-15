@@ -18,7 +18,7 @@ add_executable(${PROJECT_NAME} viewer.cc
     ../util/dotnet35random.cc ../util/dotnet35random.hh
     ../util/maths.hh ../util/mempool.hh
     )
-target_include_directories(${PROJECT_NAME} PRIVATE ..)
+target_include_directories(${PROJECT_NAME} PRIVATE .. glm)
 target_link_libraries(${PROJECT_NAME} fmt::fmt imgui glfw opengl32)
 set_target_properties(${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin

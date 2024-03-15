@@ -1,3 +1,5 @@
+#include "dsp/galaxy.hh"
+
 #include <GLFW/glfw3.h>
 #include <imgui.h>
 #include <backends/imgui_impl_glfw.h>
@@ -46,6 +48,10 @@ int main(int, char *[]) {
     ImGui_ImplOpenGL3_Init(glsl_version);
 
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+    static int seed = 0, lastSeed = seed;
+    static int starCount = 64;
+    auto galaxy = Galaxy::create(DefaultAlgoVersion, seed, starCount, true);
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
         ImGui_ImplOpenGL3_NewFrame();
@@ -53,7 +59,6 @@ int main(int, char *[]) {
         ImGui::NewFrame();
         {
             static float f = 0.0f;
-            static int seed = 0;
 
             ImGui::Begin("Parameters");
             if (seed > 99999999) {
@@ -63,7 +68,11 @@ int main(int, char *[]) {
             }
             ImGui::InputInt("Seed", &seed, 1, 100, ImGuiInputTextFlags_EnterReturnsTrue);
             if (ImGui::Button("Update")) {
-
+                if (seed != lastSeed) {
+                    lastSeed = seed;
+                    delete galaxy;
+                    galaxy = Galaxy::create(DefaultAlgoVersion, seed, starCount, true);
+                }
             }
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
             ImGui::End();
