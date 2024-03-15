@@ -15,12 +15,12 @@ static PluginAPI *theAPI = nullptr;
 __declspec(dllexport) const char *FILTERAPI init(PluginAPI *api, int *type) {
     theAPI = api;
     *type = 1;
-    return "Blue Giant & Birth only";
+    return "O-Star & Special & Birth only";
 }
 
 __declspec(dllexport) void FILTERAPI output(const Galaxy *galaxy) {
     for (const auto *star: galaxy->stars) {
-        if (star->index == 0 || (star->type == EStarType::GiantStar && star->spectr >= ESpectrType::B)) {
+        if (star->index == 0 || star->spectr == ESpectrType::O || star->type == EStarType::BlackHole || star->type == EStarType::NeutronStar) {
             theAPI->output(star);
         }
     }
