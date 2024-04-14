@@ -29,6 +29,8 @@ static float randNormal(float averageValue, float standardDeviation, double r1, 
 }
 
 static thread_local MemPool<Star> spool;
+static auto log10_26 = std::log10(2.6);
+static auto log10_5 = std::log10(5.0);
 
 Star::~Star() {
     for (auto *p: planets) {
@@ -161,8 +163,8 @@ Star *Star::createStar(Galaxy *galaxy,
     star->lifetime = num11 / star->age;
     auto num12 = (1.0f - (float)std::pow(maths::clamp01(star->age), 20.0f) * 0.5f) * star->mass;
     star->temperature =
-        (float)(std::pow(num12, 0.56 + 0.14 / (std::log10(num12 + 4.0f) / std::log10(5.0))) * 4450.0 + 1300.0);
-    auto num13 = std::log10((star->temperature - 1300.0) / 4500.0) / std::log10(2.6) - 0.5;
+        (float)(std::pow(num12, 0.56 + 0.14 / (std::log10(num12 + 4.0f) / log10_5)) * 4450.0 + 1300.0);
+    auto num13 = std::log10((star->temperature - 1300.0) / 4500.0) / log10_26 - 0.5;
     if (num13 < 0.0) num13 *= 4.0;
     if (num13 > 2.0)
         num13 = 2.0;
@@ -184,8 +186,9 @@ Star *Star::createStar(Galaxy *galaxy,
     if (star->orbitScaler < 1.0f) star->orbitScaler = maths::lerp(star->orbitScaler, 1.0f, 0.6f);
     star->setStarAge(rn, rt);
     star->dysonRadius = star->orbitScaler * 0.28f;
-    if (star->dysonRadius * 40000.0 < star->physicsRadius() * 1.5f)
-        star->dysonRadius = (float)(star->physicsRadius() * 1.5f / 40000.0);
+    auto radMin = (float)(star->physicsRadius() * 1.5 / 40000.0);
+    if (star->dysonRadius < radMin)
+        star->dysonRadius = radMin;
 /*
     star->uPosition = star->position * 2400000.0;
 */
@@ -221,8 +224,8 @@ Star *Star::createBirthStar(Galaxy *galaxy, int seed, bool genName) {
     star->age = (float)(num * 0.4 + 0.3);
     auto num5 = (1.0f - (float)std::pow(std::clamp(star->age, 0.0f, 1.0f), 20.0f) * 0.5f) * star->mass;
     star->temperature =
-        (float)(std::pow(num5, 0.56 + 0.14 / (std::log10(num5 + 4.0f) / std::log10(5.0))) * 4450.0 + 1300.0);
-    auto num6 = std::log10((star->temperature - 1300.0) / 4500.0) / std::log10(2.6) - 0.5;
+        (float)(std::pow(num5, 0.56 + 0.14 / (std::log10(num5 + 4.0f) / log10_5)) * 4450.0 + 1300.0);
+    auto num6 = std::log10((star->temperature - 1300.0) / 4500.0) / log10_26 - 0.5;
     if (num6 < 0.0) num6 *= 4.0;
     if (num6 > 2.0)
         num6 = 2.0;

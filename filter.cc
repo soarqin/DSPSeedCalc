@@ -25,13 +25,19 @@ struct FilterSet {
 
 static std::vector<FilterSet> filters;
 static std::vector<OutputFunc> outputFuncs;
+static std::vector<void(FILTERAPI*)()> uninitFuncs;
 static bool hasStarFilter = false;
 static bool hasPlanetFilter = false;
 
-extern void outputFunc(const Star *star);
+extern bool hasPlanets;
+
+static void generatePlanets(Star *star) {
+    if (!star->planets.empty()) return;
+    star->createStarPlanets();
+}
 
 static PluginAPI api = {
-    &outputFunc,
+    &generatePlanets,
 };
 
 void loadFilters() {
@@ -45,49 +51,60 @@ void loadFilters() {
             auto filename = path.string();
             auto *lib = dlopen(filename.c_str(), RTLD_LAZY);
             if (lib) {
-                auto initfunc = (PluginInitFunc)dlsym(lib, "init");
-                if (!initfunc) {
-                    dlclose(lib);
-                    continue;
-                }
                 int type = 0;
-                const char *pname = initfunc(&api, &type);
+                const char *pname = nullptr;
+                auto initfunc = (PluginInitFunc)dlsym(lib, "init");
+                if (initfunc) {
+                    pname = initfunc(&api, &type);
+                } else {
+                    auto init2func = (PluginInit2Func)dlsym(lib, "init2");
+                    if (init2func) {
+                        pname = init2func(&api, &type, hasPlanets);
+                    } else {
+                        dlclose(lib);
+                        continue;
+                    }
+                }
+                auto uninitfunc = (void(FILTERAPI*)())dlsym(lib, "uninit");
+                if (uninitfunc) {
+                    uninitFuncs.emplace_back(uninitfunc);
+                }
                 switch (type) {
-                case 0: {
-                    FilterSet fs{
-                        (SeedBeginFunc)dlsym(lib, "seedBegin"),
-                        (GalaxyFilterFunc)dlsym(lib, "galaxyFilter"),
-                        (StarFilterFunc)dlsym(lib, "starFilter"),
-                        (PlanetFilterFunc)dlsym(lib, "planetFilter"),
-                        (SeedEndFunc)dlsym(lib, "seedEnd")
-                    };
-                    filters.emplace_back(fs);
-                    if (fs.galaxyFilter || fs.starFilter || fs.planetFilter || fs.seedEnd) {
-                        hasStarFilter = hasStarFilter || fs.starFilter != nullptr;
-                        hasPlanetFilter = hasStarFilter || fs.planetFilter != nullptr;
-                        if (pname) {
-                            fmt::print(std::cout, "Loaded galaxy filter: \"{}\" from [{}]\n", pname, filename);
-                        } else {
-                            fmt::print(std::cout, "Loaded galaxy filter: [{}]\n", filename);
+                    case 0: {
+                        FilterSet fs{
+                            (SeedBeginFunc)dlsym(lib, "seedBegin"),
+                            (GalaxyFilterFunc)dlsym(lib, "galaxyFilter"),
+                            (StarFilterFunc)dlsym(lib, "starFilter"),
+                            (PlanetFilterFunc)dlsym(lib, "planetFilter"),
+                            (SeedEndFunc)dlsym(lib, "seedEnd")
+                        };
+                        filters.emplace_back(fs);
+                        if (fs.galaxyFilter || fs.starFilter || fs.planetFilter || fs.seedEnd) {
+                            hasStarFilter = hasStarFilter || fs.starFilter != nullptr;
+                            hasPlanetFilter = hasStarFilter || fs.planetFilter != nullptr;
+                            if (pname) {
+                                fmt::print(std::cout, "Loaded galaxy filter: \"{}\" from [{}]\n", pname, filename);
+                            } else {
+                                fmt::print(std::cout, "Loaded galaxy filter: [{}]\n", filename);
+                            }
                         }
+                        break;
                     }
-                    break;
-                }
-                case 1: {
-                    auto func = (OutputFunc)dlsym(lib, "output");
-                    if (func) {
-                        outputFuncs.emplace_back(func);
-                        if (pname) {
-                            fmt::print(std::cout, "Loaded output filter: \"{}\" from [{}]\n", pname, filename);
-                        } else {
-                            fmt::print(std::cout, "Loaded output filter: [{}]\n", filename);
+                    case 1: {
+                        auto func = (OutputFunc)dlsym(lib, "output");
+                        if (func) {
+                            outputFuncs.emplace_back(func);
+                            if (pname) {
+                                fmt::print(std::cout, "Loaded output filter: \"{}\" from [{}]\n", pname, filename);
+                            } else {
+                                fmt::print(std::cout, "Loaded output filter: [{}]\n", filename);
+                            }
                         }
+                        break;
                     }
-                    break;
-                }
-                default:
-                    dlclose(lib);
-                    continue;
+                    default:
+                        dlclose(lib);
+                        break;
                 }
             }
         }
@@ -154,4 +171,13 @@ bool runOutput(const Galaxy *g) {
         func(g);
     }
     return true;
+}
+
+void unloadFilters() {
+    for (auto &func: uninitFuncs) {
+        func();
+    }
+    filters.clear();
+    outputFuncs.clear();
+    uninitFuncs.clear();
 }

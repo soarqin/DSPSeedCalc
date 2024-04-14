@@ -13,6 +13,7 @@
 extern void loadFilters();
 extern bool runFilters(const Galaxy*);
 extern bool runOutput(const Galaxy*);
+extern void unloadFilters();
 
 #if defined(_WIN32)
 #define FILTERAPI __stdcall
@@ -21,10 +22,11 @@ extern bool runOutput(const Galaxy*);
 #endif
 
 struct PluginAPI {
-    void (*output)(const Star *star);
+    void (*GeneratePlanets)(Star *star);
 };
 
 using PluginInitFunc = const char*(FILTERAPI*)(PluginAPI*, int*);
+using PluginInit2Func = const char*(FILTERAPI*)(PluginAPI*, int*, bool);
 using SeedBeginFunc = void*(FILTERAPI*)(int);
 using GalaxyFilterFunc = bool(FILTERAPI*)(const Galaxy*, void*);
 using StarFilterFunc = bool(FILTERAPI*)(const Star*, void*);
