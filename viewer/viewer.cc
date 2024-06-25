@@ -28,9 +28,9 @@ void GradiantColor(float t, Color &color) {
     };
 
     if (t == 0) {
-        color.r = std::roundf(colors[0].color.x * 255.0f);
-        color.g = std::roundf(colors[0].color.y * 255.0f);
-        color.b = std::roundf(colors[0].color.z * 255.0f);
+        color.r = uint8_t(std::roundf(colors[0].color.x * 255.0f));
+        color.g = uint8_t(std::roundf(colors[0].color.y * 255.0f));
+        color.b = uint8_t(std::roundf(colors[0].color.z * 255.0f));
     }
     color.a = 255;
     for (size_t i = 1; i < 8; i++) {
@@ -39,9 +39,9 @@ void GradiantColor(float t, Color &color) {
         auto &lc = colors[i - 1];
         auto lz = lc.z;
         float p = (t - lz) / (gc.z - lz);
-        color.r = std::roundf((lc.color.x + (gc.color.x - lc.color.x) * p) * 255.0f);
-        color.g = std::roundf((lc.color.y + (gc.color.y - lc.color.y) * p) * 255.0f);
-        color.b = std::roundf((lc.color.z + (gc.color.z - lc.color.z) * p) * 255.0f);
+        color.r = uint8_t(std::roundf((lc.color.x + (gc.color.x - lc.color.x) * p) * 255.0f));
+        color.g = uint8_t(std::roundf((lc.color.y + (gc.color.y - lc.color.y) * p) * 255.0f));
+        color.b = uint8_t(std::roundf((lc.color.z + (gc.color.z - lc.color.z) * p) * 255.0f));
         break;
     }
 }
@@ -105,13 +105,38 @@ void CameraControl(Camera *camera)
     if (IsKeyPressed(KEY_KP_ADD)) CameraMoveToTarget(camera, -2.0f);
 }
 
+static Vector2 storedMousePosition;
+
+void StoreCursorPosition() {
+    storedMousePosition = GetMousePosition();
+}
+
+void RestoreCursorPosition() {
+    SetMousePosition(int(storedMousePosition.x), int(storedMousePosition.y));
+}
+
 int main(int, char *[]) {
+    const int screenWidth = 1280;
+    const int screenHeight = 720;
+    SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_HIGHDPI | FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
+    InitWindow(screenWidth, screenHeight, "Dyson Sphere Program Universe Viewer");
+
+    int codepoints[95 + 11];
+    for (int i = 0; i < 95; i++) {
+        codepoints[i] = 32 + i;
+    }
+    for (int i = 0; i < 11; i++) {
+        codepoints[95 + i] = 0x3B1 + i;
+    }
+    auto font = LoadFontEx("Roboto-Regular.ttf", 18, codepoints, 95 + 11);
+
     auto *galaxy = dspugen::Galaxy::create(dspugen::DefaultAlgoVersion, 0, 64, true, false);
     struct StarData {
         int id;
         Vector3 position;
         float radius;
         Color color;
+        float nameWidth;
         const dspugen::Star *data;
     };
     std::vector<StarData> stars;
@@ -147,13 +172,10 @@ int main(int, char *[]) {
             default:
                 radius = 1.5f;
         }
-        stars.emplace_back(StarData{s->id, p, radius * 0.2f, c, s});
+        auto v2 = MeasureTextEx(font, s->name.c_str(), 18, 0);
+        stars.emplace_back(StarData{s->id, p, radius * 0.2f, c, v2.x, s});
     }
 
-    const int screenWidth = 1280;
-    const int screenHeight = 720;
-    SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_HIGHDPI | FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
-    InitWindow(screenWidth, screenHeight, "raylib [core] example - 3d camera free");
     Camera3D camera = {0};
     camera.position = (Vector3){40.0f, -40.0f, 40.0f};
     camera.target = (Vector3){0.0f, -10.0f, 0.0f};
@@ -162,30 +184,37 @@ int main(int, char *[]) {
     camera.projection = CAMERA_PERSPECTIVE;
 
     const StarData *selectedStar = nullptr;
-    const StarData *collisionStar = nullptr;
-    Ray ray = {};
     SetTargetFPS(60);
 
     while (!WindowShouldClose()) {
+        auto needHide = IsMouseButtonDown(MOUSE_MIDDLE_BUTTON) || IsMouseButtonDown(MOUSE_RIGHT_BUTTON);
+        if (IsCursorHidden() != needHide) {
+            needHide ? (StoreCursorPosition(), DisableCursor()) : (EnableCursor(), RestoreCursorPosition());
+        }
         CameraControl(&camera);
 
         if (IsKeyPressed('Z')) camera.target = (Vector3){0.0f, -10.0f, 0.0f};
 
-        ray = GetMouseRay(GetMousePosition(), camera);
-        float collisionDistance = FLT_MAX;
-        collisionStar = nullptr;
-        for (auto &s: stars) {
-            auto collision = GetRayCollisionSphere(ray, s.position, s.radius);
-            if (collision.hit && collision.distance >= 0.5) {
-                if (collision.distance < collisionDistance) {
-                    collisionStar = &s;
-                    collisionDistance = collision.distance;
+        const StarData *collisionStar;
+        if (IsCursorHidden()) {
+            collisionStar = nullptr;
+        } else {
+            auto ray = GetMouseRay(GetMousePosition(), camera);
+            float collisionDistance = FLT_MAX;
+            collisionStar = nullptr;
+            for (auto &s: stars) {
+                auto collision = GetRayCollisionSphere(ray, s.position, s.radius);
+                if (collision.hit && collision.distance >= 0.5) {
+                    if (collision.distance < collisionDistance) {
+                        collisionStar = &s;
+                        collisionDistance = collision.distance;
+                    }
                 }
             }
-        }
 
-        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
-            selectedStar = collisionStar;
+            if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
+                selectedStar = collisionStar;
+            }
         }
 
         BeginDrawing();
@@ -194,7 +223,7 @@ int main(int, char *[]) {
 
         BeginMode3D(camera);
 
-        DrawGrid(10, 10.0f);
+        DrawGrid(8, 10.0f);
 
         for (auto &s: stars) {
             DrawSphere(s.position, s.radius, s.color);
@@ -203,18 +232,24 @@ int main(int, char *[]) {
                 DrawCubeWiresV(s.position, dimension, WHITE);
             } else if (&s == collisionStar) {
                 Vector3 dimension = {s.radius * 1.8f, s.radius * 1.8f, s.radius * 1.8f};
-                DrawCubeWiresV(s.position, dimension, MAROON);
+                DrawCubeWiresV(s.position, dimension, LIGHTGRAY);
             }
         }
 
         EndMode3D();
 
-        if (collisionStar) {
+        if (selectedStar) {
+            auto pos2d = GetWorldToScreen(selectedStar->position, camera);
+            pos2d.y = pos2d.y - 20.0f;
+            pos2d.x -= selectedStar->nameWidth * 0.5f;
+            DrawTextEx(font, selectedStar->data->name.c_str(), pos2d, 18, 0, WHITE);
+        }
+
+        if (collisionStar && collisionStar != selectedStar) {
             auto pos2d = GetWorldToScreen(collisionStar->position, camera);
             pos2d.y = pos2d.y - 20.0f;
-            const auto *name = collisionStar->data->name.c_str();
-            auto w = MeasureText(name, 18);
-            DrawText(name, pos2d.x - (w >> 1), pos2d.y, 18, WHITE);
+            pos2d.x -= collisionStar->nameWidth * 0.5f;
+            DrawTextEx(font, collisionStar->data->name.c_str(), pos2d, 18, 0, LIGHTGRAY);
         }
 
         EndDrawing();
