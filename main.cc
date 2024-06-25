@@ -1,5 +1,5 @@
-#include "dsp/galaxy.hh"
-#include "dsp/protoset.hh"
+#include "galaxy.hh"
+#include "protoset.hh"
 #include "filter.hh"
 
 #include <fmt/ostream.h>

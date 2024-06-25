@@ -1,25 +1,39 @@
-project(viwer)
+cmake_minimum_required(VERSION 3.11)
+project(viewer)
 
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-add_subdirectory(glfw)
-add_subdirectory(imgui)
-
-add_executable(${PROJECT_NAME} viewer.cc
-    ../dsp/galaxy.cc ../dsp/galaxy.hh
-    ../dsp/star.cc ../dsp/star.hh
-    ../dsp/planet.cc ../dsp/planet.hh
-    ../dsp/protoset.cc ../dsp/protoset.hh
-    ../dsp/namegen.cc ../dsp/namegen.hh
-    ../dsp/vectors.hh
-    ../util/dotnet35random.cc ../util/dotnet35random.hh
-    ../util/maths.hh ../util/mempool.hh
+set(RAYLIB_VERSION 5.0)
+find_package(raylib ${RAYLIB_VERSION} QUIET)
+if (NOT raylib_FOUND)
+    include(FetchContent)
+    FetchContent_Declare(
+        raylib
+        DOWNLOAD_EXTRACT_TIMESTAMP OFF
+        URL https://github.com/raysan5/raylib/archive/refs/tags/${RAYLIB_VERSION}.tar.gz
     )
-target_include_directories(${PROJECT_NAME} PRIVATE .. glm)
-target_link_libraries(${PROJECT_NAME} fmt::fmt imgui glfw opengl32)
+    FetchContent_GetProperties(raylib)
+    if (NOT raylib_POPULATED)
+        set(FETCHCONTENT_QUIET NO)
+        FetchContent_Populate(raylib)
+        set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+        add_subdirectory(${raylib_SOURCE_DIR} ${raylib_BINARY_DIR})
+    endif()
+endif()
+
+add_executable(${PROJECT_NAME} viewer.cc)
+target_link_libraries(${PROJECT_NAME} dspugen raylib)
+
+if (${PLATFORM} STREQUAL "Web")
+    set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX ".html")
+endif()
+
+if (APPLE)
+    target_link_libraries(${PROJECT_NAME} "-framework IOKit")
+    target_link_libraries(${PROJECT_NAME} "-framework Cocoa")
+    target_link_libraries(${PROJECT_NAME} "-framework OpenGL")
+endif()
+
 set_target_properties(${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
     FOLDER "gui")

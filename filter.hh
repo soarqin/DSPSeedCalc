@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "dsp/galaxy.hh"
+#include "galaxy.hh"
 
 extern void loadFilters();
 extern bool runFilters(const Galaxy*);

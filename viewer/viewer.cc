@@ -1,93 +1,226 @@
-#include "dsp/galaxy.hh"
+#include <cfloat>
+#include "galaxy.hh"
 
-#include <GLFW/glfw3.h>
-#include <imgui.h>
-#include <backends/imgui_impl_glfw.h>
-#include <backends/imgui_impl_opengl3.h>
+#include <raylib.h>
+#include <rcamera.h>
+#include <raymath.h>
 
-#if defined(IMGUI_IMPL_OPENGL_ES2)
-#include <GLES2/gl2.h>
-#endif
-#include <GLFW/glfw3.h>
-#include <cstdio>
+#define CAMERA_MOVE_SPEED                               0.09f
+#define CAMERA_ROTATION_SPEED                           0.03f
+#define CAMERA_PAN_SPEED                                0.2f
+#define CAMERA_MOUSE_MOVE_SENSITIVITY                   0.003f
 
-static void glfw_error_callback(int error, const char *description) {
-    fprintf(stderr, "Glfw Error %d: %s\n", error, description);
+void GradiantColor(float t, Color &color) {
+    const struct {
+        float z;
+        struct {
+            float x, y, z;
+        } color;
+    } colors[] = {
+        {0, {1, 0.229, 0.1745}},
+        {0.07, {1, 0.4373, 0.1765}},
+        {0.32, {1, 0.9515, 0.1557}},
+        {0.5, {0.9879, 1, 0.6179}},
+        {0.7235, {0.9764, 1, 0.978}},
+        {0.82, {0.58, 0.8963, 1}},
+        {0.92, {0.1176, 0.6548, 1}},
+        {1, {0.0991, 0.34, 1}},
+    };
+
+    if (t == 0) {
+        color.r = std::roundf(colors[0].color.x * 255.0f);
+        color.g = std::roundf(colors[0].color.y * 255.0f);
+        color.b = std::roundf(colors[0].color.z * 255.0f);
+    }
+    color.a = 255;
+    for (size_t i = 1; i < 8; i++) {
+        auto &gc = colors[i];
+        if (t > gc.z) continue;
+        auto &lc = colors[i - 1];
+        auto lz = lc.z;
+        float p = (t - lz) / (gc.z - lz);
+        color.r = std::roundf((lc.color.x + (gc.color.x - lc.color.x) * p) * 255.0f);
+        color.g = std::roundf((lc.color.y + (gc.color.y - lc.color.y) * p) * 255.0f);
+        color.b = std::roundf((lc.color.z + (gc.color.z - lc.color.z) * p) * 255.0f);
+        break;
+    }
+}
+
+void CameraControl(Camera *camera)
+{
+    bool rotateUp = false;
+
+    // Camera rotation
+    if (IsKeyDown(KEY_DOWN)) CameraPitch(camera, -CAMERA_ROTATION_SPEED, false, false, rotateUp);
+    if (IsKeyDown(KEY_UP)) CameraPitch(camera, CAMERA_ROTATION_SPEED, false, false, rotateUp);
+    if (IsKeyDown(KEY_RIGHT)) CameraYaw(camera, -CAMERA_ROTATION_SPEED, false);
+    if (IsKeyDown(KEY_LEFT)) CameraYaw(camera, CAMERA_ROTATION_SPEED, false);
+    if (IsKeyDown(KEY_Q)) CameraRoll(camera, -CAMERA_ROTATION_SPEED);
+    if (IsKeyDown(KEY_E)) CameraRoll(camera, CAMERA_ROTATION_SPEED);
+
+    // Camera movement
+    if (!IsGamepadAvailable(0))
+    {
+        // Camera pan (for CAMERA_FREE)
+        if (IsMouseButtonDown(MOUSE_BUTTON_MIDDLE))
+        {
+            const Vector2 mouseDelta = GetMouseDelta();
+            if (mouseDelta.x > 0.0f) CameraMoveRight(camera, CAMERA_PAN_SPEED, false);
+            if (mouseDelta.x < 0.0f) CameraMoveRight(camera, -CAMERA_PAN_SPEED, false);
+            if (mouseDelta.y > 0.0f) CameraMoveUp(camera, -CAMERA_PAN_SPEED);
+            if (mouseDelta.y < 0.0f) CameraMoveUp(camera, CAMERA_PAN_SPEED);
+        }
+        else if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
+        {
+            // Mouse support
+            Vector2 mouseDelta = GetMouseDelta();
+            CameraYaw(camera, -mouseDelta.x*CAMERA_MOUSE_MOVE_SENSITIVITY, false);
+            CameraPitch(camera, -mouseDelta.y*CAMERA_MOUSE_MOVE_SENSITIVITY, false, false, rotateUp);
+        }
+
+        // Keyboard support
+        if (IsKeyDown(KEY_W)) CameraMoveForward(camera, CAMERA_MOVE_SPEED, false);
+        if (IsKeyDown(KEY_A)) CameraMoveRight(camera, -CAMERA_MOVE_SPEED, false);
+        if (IsKeyDown(KEY_S)) CameraMoveForward(camera, -CAMERA_MOVE_SPEED, false);
+        if (IsKeyDown(KEY_D)) CameraMoveRight(camera, CAMERA_MOVE_SPEED, false);
+    }
+    else
+    {
+        // Gamepad controller support
+        CameraYaw(camera, -(GetGamepadAxisMovement(0, GAMEPAD_AXIS_RIGHT_X) * 2)*CAMERA_MOUSE_MOVE_SENSITIVITY, false);
+        CameraPitch(camera, -(GetGamepadAxisMovement(0, GAMEPAD_AXIS_RIGHT_Y) * 2)*CAMERA_MOUSE_MOVE_SENSITIVITY, false, false, rotateUp);
+
+        if (GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_Y) <= -0.25f) CameraMoveForward(camera, CAMERA_MOVE_SPEED, false);
+        if (GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X) <= -0.25f) CameraMoveRight(camera, -CAMERA_MOVE_SPEED, false);
+        if (GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_Y) >= 0.25f) CameraMoveForward(camera, -CAMERA_MOVE_SPEED, false);
+        if (GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X) >= 0.25f) CameraMoveRight(camera, CAMERA_MOVE_SPEED, false);
+    }
+
+    if (IsKeyDown(KEY_SPACE)) CameraMoveUp(camera, CAMERA_MOVE_SPEED);
+    if (IsKeyDown(KEY_LEFT_CONTROL)) CameraMoveUp(camera, -CAMERA_MOVE_SPEED);
+
+    // Zoom target distance
+    CameraMoveToTarget(camera, -GetMouseWheelMove());
+    if (IsKeyPressed(KEY_KP_SUBTRACT)) CameraMoveToTarget(camera, 2.0f);
+    if (IsKeyPressed(KEY_KP_ADD)) CameraMoveToTarget(camera, -2.0f);
 }
 
 int main(int, char *[]) {
-    glfwSetErrorCallback(glfw_error_callback);
-    if (!glfwInit())
-        return 1;
-#if defined(IMGUI_IMPL_OPENGL_ES2)
-    // GL ES 2.0 + GLSL 100
-    const char* glsl_version = "#version 100";
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
-#else
-    // GL 3.2 + GLSL 150
-    const char* glsl_version = "#version 150";
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-#if defined(__APPLE__)
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac
-#endif
-#endif
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "DSP Seed Viewer", nullptr, nullptr);
-    if (window == nullptr)
-        return 1;
-    glfwMakeContextCurrent(window);
-    glfwSwapInterval(1); // Enable vsync
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
+    auto *galaxy = dspugen::Galaxy::create(dspugen::DefaultAlgoVersion, 0, 64, true, false);
+    struct StarData {
+        int id;
+        Vector3 position;
+        float radius;
+        Color color;
+        const dspugen::Star *data;
+    };
+    std::vector<StarData> stars;
+    for (const auto *s: galaxy->stars) {
+        auto &pos = s->position;
+        Vector3 p = {float(pos.x), float(pos.y - 10.0f), float(pos.z)};
+        Color c;
+        switch (s->type) {
+            case dspugen::EStarType::WhiteDwarf:
+                c = Color {118, 118, 118, 255};
+                break;
+            case dspugen::EStarType::NeutronStar:
+                c = Color {128, 97, 255, 255};
+                break;
+            case dspugen::EStarType::BlackHole:
+                c = Color {0, 0, 0, 255};
+                break;
+            default:
+                GradiantColor(s->color, c);
+        }
+        float radius;
+        switch (s->type) {
+            case dspugen::EStarType::GiantStar:
+                radius = 4.0f;
+                break;
+            case dspugen::EStarType::WhiteDwarf:
+            case dspugen::EStarType::NeutronStar:
+                radius = 0.8f;
+                break;
+            case dspugen::EStarType::BlackHole:
+                radius = 1.0f;
+                break;
+            default:
+                radius = 1.5f;
+        }
+        stars.emplace_back(StarData{s->id, p, radius * 0.2f, c, s});
+    }
 
-    ImGui::StyleColorsDark();
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init(glsl_version);
+    const int screenWidth = 1280;
+    const int screenHeight = 720;
+    SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_HIGHDPI | FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
+    InitWindow(screenWidth, screenHeight, "raylib [core] example - 3d camera free");
+    Camera3D camera = {0};
+    camera.position = (Vector3){40.0f, -40.0f, 40.0f};
+    camera.target = (Vector3){0.0f, -10.0f, 0.0f};
+    camera.up = (Vector3){0.0f, -1.0f, 0.0f};
+    camera.fovy = 45.0f;
+    camera.projection = CAMERA_PERSPECTIVE;
 
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    const StarData *selectedStar = nullptr;
+    const StarData *collisionStar = nullptr;
+    Ray ray = {};
+    SetTargetFPS(60);
 
-    static int seed = 0, lastSeed = seed;
-    static int starCount = 64;
-    auto galaxy = Galaxy::create(DefaultAlgoVersion, seed, starCount, true);
-    while (!glfwWindowShouldClose(window)) {
-        glfwPollEvents();
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-        {
-            static float f = 0.0f;
+    while (!WindowShouldClose()) {
+        CameraControl(&camera);
 
-            ImGui::Begin("Parameters");
-            if (seed > 99999999) {
-                seed = 99999999;
-            } else if (seed < 0) {
-                seed = 0;
-            }
-            ImGui::InputInt("Seed", &seed, 1, 100, ImGuiInputTextFlags_EnterReturnsTrue);
-            if (ImGui::Button("Update")) {
-                if (seed != lastSeed) {
-                    lastSeed = seed;
-                    delete galaxy;
-                    galaxy = Galaxy::create(DefaultAlgoVersion, seed, starCount, true);
+        if (IsKeyPressed('Z')) camera.target = (Vector3){0.0f, -10.0f, 0.0f};
+
+        ray = GetMouseRay(GetMousePosition(), camera);
+        float collisionDistance = FLT_MAX;
+        collisionStar = nullptr;
+        for (auto &s: stars) {
+            auto collision = GetRayCollisionSphere(ray, s.position, s.radius);
+            if (collision.hit && collision.distance >= 0.5) {
+                if (collision.distance < collisionDistance) {
+                    collisionStar = &s;
+                    collisionDistance = collision.distance;
                 }
             }
-            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-            ImGui::End();
-
-            ImGui::Render();
-            int display_w, display_h;
-            glfwGetFramebufferSize(window, &display_w, &display_h);
-            glViewport(0, 0, display_w, display_h);
-            glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
-            glClear(GL_COLOR_BUFFER_BIT);
-            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-            glfwSwapBuffers(window);
         }
+
+        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
+            selectedStar = collisionStar;
+        }
+
+        BeginDrawing();
+
+        ClearBackground(Color {32, 32, 32, 255});
+
+        BeginMode3D(camera);
+
+        DrawGrid(10, 10.0f);
+
+        for (auto &s: stars) {
+            DrawSphere(s.position, s.radius, s.color);
+            if (&s == selectedStar) {
+                Vector3 dimension = {s.radius * 1.8f, s.radius * 1.8f, s.radius * 1.8f};
+                DrawCubeWiresV(s.position, dimension, WHITE);
+            } else if (&s == collisionStar) {
+                Vector3 dimension = {s.radius * 1.8f, s.radius * 1.8f, s.radius * 1.8f};
+                DrawCubeWiresV(s.position, dimension, MAROON);
+            }
+        }
+
+        EndMode3D();
+
+        if (collisionStar) {
+            auto pos2d = GetWorldToScreen(collisionStar->position, camera);
+            pos2d.y = pos2d.y - 20.0f;
+            const auto *name = collisionStar->data->name.c_str();
+            auto w = MeasureText(name, 18);
+            DrawText(name, pos2d.x - (w >> 1), pos2d.y, 18, WHITE);
+        }
+
+        EndDrawing();
     }
+
+    CloseWindow();
 
     return 0;
 }

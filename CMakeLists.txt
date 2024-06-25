@@ -12,21 +12,10 @@ add_static_runtime_option()
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-add_subdirectory(fmt)
+add_subdirectory(dspugen)
 
-add_executable(${PROJECT_NAME} main.cc
-    filter.cc filter.hh
-    dsp/galaxy.cc dsp/galaxy.hh
-    dsp/star.cc dsp/star.hh
-    dsp/planet.cc dsp/planet.hh
-    dsp/protoset.cc dsp/protoset.hh
-    dsp/namegen.cc dsp/namegen.hh
-    dsp/vectors.hh
-    util/dotnet35random.cc util/dotnet35random.hh
-    util/maths.hh util/mempool.hh
-    )
-target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(${PROJECT_NAME} fmt::fmt)
+add_executable(${PROJECT_NAME} main.cc filter.cc filter.hh)
+target_link_libraries(${PROJECT_NAME} dspugen)
 if(WIN32)
     add_subdirectory(getopt)
     add_subdirectory(dlfcn-win32)
@@ -37,6 +26,7 @@ endif()
 set_target_properties(${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
     FOLDER "cli")
+
 add_subdirectory(filters)
 
 add_subdirectory(viewer)
