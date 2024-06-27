@@ -29,7 +29,7 @@ __declspec(dllexport) void FILTERAPI uninit() {
     starOut.close();
 }
 
-__declspec(dllexport) void FILTERAPI output(const Galaxy *galaxy) {
+__declspec(dllexport) void FILTERAPI output(const dspugen::Galaxy *galaxy) {
     bool isGas = false;
     bool groundFireIce = false;
     int gasCount = 0;
@@ -69,8 +69,8 @@ __declspec(dllexport) void FILTERAPI output(const Galaxy *galaxy) {
             }
         } else {
             switch (star->type) {
-                case EStarType::GiantStar:
-                    if (star->spectr == ESpectrType::O) {
+                case dspugen::EStarType::GiantStar:
+                    if (star->spectr == dspugen::ESpectrType::O) {
                         int cnt = 0;
                         for (auto *planet: star->planets) {
                             switch (planet->theme) {
@@ -94,8 +94,8 @@ __declspec(dllexport) void FILTERAPI output(const Galaxy *galaxy) {
                         }
                     }
                     break;
-                case EStarType::MainSeqStar:
-                    if (star->spectr == ESpectrType::O) {
+                case dspugen::EStarType::MainSeqStar:
+                    if (star->spectr == dspugen::ESpectrType::O) {
                         oCount++;
                     }
                     for (const auto *planet: star->planets) {
@@ -111,8 +111,8 @@ __declspec(dllexport) void FILTERAPI output(const Galaxy *galaxy) {
                         }
                     }
                     break;
-                case EStarType::BlackHole:
-                case EStarType::NeutronStar:
+                case dspugen::EStarType::BlackHole:
+                case dspugen::EStarType::NeutronStar:
                     for (const auto *planet: star->planets) {
                         magnetCount += planet->veinSpot[14];
                     }

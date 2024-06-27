@@ -70,7 +70,7 @@ static inline std::string id2roman(int id) {
     return std::move(roman);
 }
 
-__declspec(dllexport) void FILTERAPI output(const Galaxy *galaxy) {
+__declspec(dllexport) void FILTERAPI output(const dspugen::Galaxy *galaxy) {
     for (auto *star: galaxy->stars) {
         if (!planets) {
             theAPI->GeneratePlanets(star);

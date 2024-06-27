@@ -34,12 +34,10 @@ struct VectorLF3 {
         double num2 = std::sqrt(num);
         return VectorLF3{x / num2, y / num2, z / num2};
     }
-    VectorLF3 operator*(VectorLF3 &rhs) const {
-        return VectorLF3{x * rhs.x, y * rhs.y, z * rhs.z};
-    }
-    VectorLF3 operator*(double s) const {
-        return VectorLF3{x * s, y * s, z * s};
-    }
 };
+
+inline VectorLF3 operator-(const VectorLF3 &lhs, const VectorLF3 &rhs) {
+    return VectorLF3{lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z};
+}
 
 }

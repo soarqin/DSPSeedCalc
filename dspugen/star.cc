@@ -668,6 +668,21 @@ void Star::createStarPlanets() {
 */
 }
 
+float Star::updateResourceCoef() {
+    if (resourceCoef == 0.0f) {
+        auto distanceFactor = (float)position.magnitude() / 32.0f;
+        if (distanceFactor > 1.0f) {
+            distanceFactor = (float)std::log(distanceFactor) + 1.0f;
+            distanceFactor = (float)std::log(distanceFactor) + 1.0f;
+            distanceFactor = (float)std::log(distanceFactor) + 1.0f;
+            distanceFactor = (float)std::log(distanceFactor) + 1.0f;
+            distanceFactor = (float)std::log(distanceFactor) + 1.0f;
+        }
+        resourceCoef = (float)std::pow(7.0f, distanceFactor) * 0.6f;
+    }
+    return resourceCoef;
+}
+
 const char *Star::typeName() const {
     switch (type) {
         case EStarType::BlackHole:

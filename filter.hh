@@ -8,11 +8,11 @@
 
 #pragma once
 
-#include "galaxy.hh"
+#include "dspugen/galaxy.hh"
 
 extern void loadFilters();
-extern bool runFilters(const Galaxy*);
-extern bool runOutput(const Galaxy*);
+extern bool runFilters(const dspugen::Galaxy*);
+extern bool runOutput(const dspugen::Galaxy*);
 extern void unloadFilters();
 
 #if defined(_WIN32)
@@ -22,15 +22,16 @@ extern void unloadFilters();
 #endif
 
 struct PluginAPI {
-    void (*GeneratePlanets)(Star *star);
+    void (*GenerateAllPlanets)(const dspugen::Galaxy *galaxy);
+    void (*GeneratePlanetGas)(const dspugen::Planet *planet);
 };
 
 using PluginInitFunc = const char*(FILTERAPI*)(PluginAPI*, int*);
 using PluginInit2Func = const char*(FILTERAPI*)(PluginAPI*, int*, bool);
 using SeedBeginFunc = void*(FILTERAPI*)(int);
-using GalaxyFilterFunc = bool(FILTERAPI*)(const Galaxy*, void*);
-using StarFilterFunc = bool(FILTERAPI*)(const Star*, void*);
-using PlanetFilterFunc = bool(FILTERAPI*)(const Planet*, void*);
+using GalaxyFilterFunc = bool(FILTERAPI*)(const dspugen::Galaxy*, void*);
+using StarFilterFunc = bool(FILTERAPI*)(const dspugen::Star*, void*);
+using PlanetFilterFunc = bool(FILTERAPI*)(const dspugen::Planet*, void*);
 using SeedEndFunc = bool(FILTERAPI*)(void*);
 
-using OutputFunc = void(FILTERAPI*)(const Galaxy*);
+using OutputFunc = void(FILTERAPI*)(const dspugen::Galaxy*);

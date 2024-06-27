@@ -68,7 +68,9 @@ public:
     float color;
 /*
     float classFactor;
-    float resourceCoef = 0.6f;
+*/
+    float resourceCoef = 0.0f;
+/*
     float acdiskRadius;
     VectorLF3 uPosition;
     float asterBelt1OrbitIndex;
@@ -83,6 +85,7 @@ public:
     void createStarPlanets();
     [[nodiscard]] const char *typeName() const;
     [[nodiscard]] inline float physicsRadius() const { return radius * kPhysicsRadiusRatio; }
+    [[nodiscard]] float updateResourceCoef();
 
 private:
     void setStarAge(double rn, double rt);

@@ -15,7 +15,7 @@ __declspec(dllexport) const char *FILTERAPI init(PluginAPI *api, int *type) {
     return "Has Fire-Ice on any planet in birth star, with at least 2 O-star luminosity >= 2.4 and at least one with tidy-locked planet(s)";
 }
 
-__declspec(dllexport) bool FILTERAPI galaxyFilter(const Galaxy *g) {
+__declspec(dllexport) bool FILTERAPI galaxyFilter(const dspugen::Galaxy *g) {
     const auto *star = g->starById(g->birthStarId);
     if (!star) { return false; }
     bool foundFI = false, foundGas = false;

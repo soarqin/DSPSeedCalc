@@ -244,9 +244,38 @@ Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, i
     return planet;
 }
 
-void Planet::setPlanetTheme(double rand1, double rand2, double rand3, double rand4, int themeSeed) {
+void Planet::generateGas() {
+    if (type != EPlanetType::Gas || !gasItems.empty()) return;
+    const auto *themeProto4 = themeProtoSet.select(theme);
+    auto num3 = int(themeProto4->gasSpeeds.size());
+    gasItems = themeProto4->gasItems;
+    gasSpeeds.resize(num3);
+/*
+    gasHeatValues.resize(num2);
+*/
+    auto resourceCoef = star->updateResourceCoef();
+/*
+    auto num4 = 0.0;
+*/
+    util::DotNet35Random dotNet35Random(themeSeed);
+    for (auto num5 = 0; num5 < num3; num5++) {
+        gasSpeeds[num5] = themeProto4->gasSpeeds[num5] * ((float)dotNet35Random.nextDouble() * 0.190909147f + 0.9090909f) * std::pow(resourceCoef, 0.3f);
+/*
+        auto *itemProto = itemProtoSet.select(gasItems[num5]);
+        gasHeatValues[num5] = itemProto->heatValue;
+        num4 += gasHeatValues[num5] * gasSpeeds[num5];
+*/
+    }
+
+/*
+    gasTotalHeat = num4;
+*/
+}
+
+void Planet::setPlanetTheme(double rand1, double rand2, double rand3, double rand4, int thmSeed) {
     int tmpTheme[32];
     int tmpThemeCount = 0;
+    this->themeSeed = thmSeed;
     for (const auto &themeProto: themeProtoSet.dataArray) {
         auto flag = false;
         if (star->index == 0 && type == EPlanetType::Ocean) {
@@ -323,25 +352,6 @@ void Planet::setPlanetTheme(double rand1, double rand2, double rand3, double ran
     waterItemId = themeProto4->waterItemId;
     levelized = themeProto4->useHeightForBuild;
     iceFlag = themeProto4->iceFlag;
-    if (type == EPlanetType::Gas) {
-        auto num2 = int(themeProto4->gasItems.size());
-        auto num3 = int(themeProto4->gasSpeeds.size());
-        gasItems = themeProto4->gasItems;
-        gasSpeeds.resize(num3);
-        gasHeatValues.resize(num2);
-        auto num4 = 0.0;
-        DotNet35Random dotNet35Random(themeSeed);
-        for (auto num5 = 0; num5 < num3; num5++) {
-            auto num6 = themeProto4->gasSpeeds[num5];
-            num6 *= (float)dotNet35Random.nextDouble() * 0.190909147f + 0.9090909f;
-            gasSpeeds[num5] = num6 * std::pow(star->resourceCoef, 0.3f);
-            auto *itemProto = itemProtoSet.select(gasItems[num5]);
-            gasHeatValues[num5] = itemProto->heatValue;
-            num4 += gasHeatValues[num5] * gasSpeeds[num5];
-        }
-
-        gasTotalHeat = num4;
-    }
 */
 }
 

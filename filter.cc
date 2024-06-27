@@ -31,13 +31,20 @@ static bool hasPlanetFilter = false;
 
 extern bool hasPlanets;
 
-static void generatePlanets(Star *star) {
-    if (!star->planets.empty()) return;
-    star->createStarPlanets();
+static void generateAllPlanets(const dspugen::Galaxy *galaxy) {
+    if (!galaxy->stars[0]->planets.empty()) return;
+    for (auto *star: galaxy->stars) {
+        star->createStarPlanets();
+    }
+}
+
+static void generatePlanetGas(const dspugen::Planet *planet) {
+    ((dspugen::Planet *)planet)->generateGas();
 }
 
 static PluginAPI api = {
-    &generatePlanets,
+    &generateAllPlanets,
+    &generatePlanetGas,
 };
 
 void loadFilters() {
@@ -111,7 +118,7 @@ void loadFilters() {
     }
 }
 
-bool runFilters(const Galaxy *galaxy) {
+bool runFilters(const dspugen::Galaxy *galaxy) {
     for (auto &fs: filters) {
         fs.userp = fs.seedBegin ? fs.seedBegin(galaxy->seed) : nullptr;
         if (fs.galaxyFilter && !fs.galaxyFilter(galaxy, fs.userp)) {
@@ -165,7 +172,7 @@ bool runFilters(const Galaxy *galaxy) {
     return true;
 }
 
-bool runOutput(const Galaxy *g) {
+bool runOutput(const dspugen::Galaxy *g) {
     if (outputFuncs.empty()) { return false; }
     for (auto &func: outputFuncs) {
         func(g);

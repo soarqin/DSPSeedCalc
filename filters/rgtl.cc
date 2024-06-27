@@ -15,13 +15,13 @@ __declspec(dllexport) const char *FILTERAPI init(PluginAPI *api, int *type) {
     return "Red Giant With Volcano/Water and 2 Tidal-Locked Planets";
 }
 
-__declspec(dllexport) bool FILTERAPI starFilter(const Star *star) {
-    if (star->type == EStarType::GiantStar && star->spectr <= ESpectrType::K) {
+__declspec(dllexport) bool FILTERAPI starFilter(const dspugen::Star *star) {
+    if (star->type == dspugen::EStarType::GiantStar && star->spectr <= dspugen::ESpectrType::K) {
         int cnt = 0;
         bool foundV = false;
         bool foundW = false;
         for (auto *planet: star->planets) {
-            if (planet->singularity & EPlanetSingularity::TidalLocked) {
+            if (planet->singularity & dspugen::EPlanetSingularity::TidalLocked) {
                 ++cnt;
             }
             switch (planet->theme) {

@@ -13,13 +13,62 @@
 
 namespace dspugen {
 
-enum class EPlanetType {
+enum class EVeinType: uint8_t {
+    None,
+    Iron,
+    Copper,
+    Silicium,
+    Titanium,
+    Stone,
+    Coal,
+    Oil,
+    Fireice,
+    Diamond,
+    Fractal,
+    Crysrub,
+    Grat,
+    Bamboo,
+    Mag,
+    Max
+};
+
+enum class EPlanetType: uint8_t {
     None,
     Vocano,
     Ocean,
     Desert,
     Ice,
     Gas
+};
+
+enum class EPlanetTheme: uint8_t {
+    None,
+    Mediterranean,
+    GasGiant1,
+    GasGiant2,
+    IceGiant1,
+    IceGiant2,
+    AridDesert,
+    AshenGelisol,
+    OceanicJungle,
+    Lava,
+    IceFieldGelisol,
+    BarrenDesert,
+    Gobi,
+    VolcanicAsh,
+    RedStone,
+    Prairie,
+    Waterworld,
+    RockySaltLake,
+    SakuraOcean,
+    HurricaneStoneForest,
+    ScarletIceLake,
+    GasGiantHigh,
+    Savanna,
+    CrystalDesert,
+    FrozenTundra,
+    PandoraSwamp,
+    Max,
 };
 
 namespace EPlanetSingularity {
@@ -85,19 +134,24 @@ public:
     int waterItemId = 0;
     bool levelized = false;
     int iceFlag = 0;
+*/
     std::vector<int> gasItems;
     std::vector<float> gasSpeeds;
+/*
     std::vector<float> gasHeatValues;
     double gasTotalHeat = 0.0;
 */
     int veinSpot[15] = {};
+    int themeSeed = 0;
 
     static Planet *create(Star *star, int index, int orbitAround, int orbitIndex, int number, bool gasGiant, int infoSeed, int genSeed);
 
     [[nodiscard]] inline float realRadius() const { return radius * scale; }
 
+    void generateGas();
+
 private:
-    void setPlanetTheme(double rand1, double rand2, double rand3, double rand4, int themeSeed);
+    void setPlanetTheme(double rand1, double rand2, double rand3, double rand4, int thmSeed);
     void generateVeins();
 };
 

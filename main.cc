@@ -79,7 +79,7 @@ static void calc() {
         if (seed % 500000 == 0) {
             fmt::print(std::cout, "Processed to: {},{}. Currently found: {}. {}ms elapsed.\n", seed, starCount, found, std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - startTime).count());
         }
-        auto galaxy = Galaxy::create(DefaultAlgoVersion, seed, starCount, genName, hasPlanets);
+        auto galaxy = dspugen::Galaxy::create(dspugen::DefaultAlgoVersion, seed, starCount, genName, hasPlanets);
         if (!runFilters(galaxy)) {
             galaxy->release();
             continue;
@@ -211,7 +211,7 @@ int main(int argc, char *argv[]) {
         readFromInputFile(inputFilename);
     }
     sortSeeds();
-    loadProtoSets();
+    dspugen::loadProtoSets();
 /*
     if (hasPlanets) {
         output = std::ofstream(planetFilename);
@@ -247,6 +247,7 @@ int main(int argc, char *argv[]) {
     }
     auto duration = std::chrono::steady_clock::now() - startTime;
     output.close();
+    unloadFilters();
     int count = 0;
     for (auto &sp: seedsToCheckMap) {
         for (auto &p: sp.second) {

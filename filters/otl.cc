@@ -15,12 +15,12 @@ __declspec(dllexport) const char *FILTERAPI init(PluginAPI *api, int *type) {
     return "O Star With Tidal-Locked Planets";
 }
 
-__declspec(dllexport) bool FILTERAPI galaxyFilter(const Galaxy *g) {
+__declspec(dllexport) bool FILTERAPI galaxyFilter(const dspugen::Galaxy *g) {
     int cnt = 0;
     for (const auto *star: g->stars) {
-        if (star->spectr != ESpectrType::O) { continue; }
+        if (star->spectr != dspugen::ESpectrType::O) { continue; }
         for (auto *planet: star->planets) {
-            if (planet->singularity & EPlanetSingularity::TidalLocked) {
+            if (planet->singularity & dspugen::EPlanetSingularity::TidalLocked) {
                 if (++cnt > 0) {
                     return true;
                 }

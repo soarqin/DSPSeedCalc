@@ -15,12 +15,12 @@ __declspec(dllexport) const char *FILTERAPI init(PluginAPI *api, int *type) {
     return "Water world";
 }
 
-__declspec(dllexport) bool FILTERAPI galaxyFilter(const Galaxy *g) {
+__declspec(dllexport) bool FILTERAPI galaxyFilter(const dspugen::Galaxy *g) {
     int cnt = 0, cnt2 = 0, cnt3 = 0;
     for (const auto *star: g->stars) {
         switch (star->type) {
-        case EStarType::BlackHole:
-        case EStarType::NeutronStar:
+        case dspugen::EStarType::BlackHole:
+        case dspugen::EStarType::NeutronStar:
             for (auto *planet: star->planets) {
                 cnt3 += planet->veinSpot[14];
             }

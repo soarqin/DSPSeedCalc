@@ -102,13 +102,13 @@ struct ThemeProto : Proto {
 };
 
 struct ItemProto : Proto {
-    int64_t heatValue;
+    int64_t heatValue = 0;
 };
 
 struct VeinProto : Proto {
-    int miningItem;
-    int modelCount;
-    int modelIndex;
+    int miningItem = 0;
+    int modelCount = 0;
+    int modelIndex = 0;
 };
 
 struct StringProto : Proto {
