@@ -22,6 +22,7 @@ static int current = -1, currMax = -1, starCount = 64;
 
 static bool genName = false;
 bool hasPlanets = false;
+bool birthOnly = false;
 static std::ofstream output;
 static int found = 0;
 static std::chrono::time_point<std::chrono::steady_clock> startTime;
@@ -79,7 +80,7 @@ static void calc() {
         if (seed % 500000 == 0) {
             fmt::print(std::cout, "Processed to: {},{}. Currently found: {}. {}ms elapsed.\n", seed, starCount, found, std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - startTime).count());
         }
-        auto galaxy = dspugen::Galaxy::create(dspugen::DefaultAlgoVersion, seed, starCount, genName, hasPlanets);
+        auto galaxy = dspugen::Galaxy::create(dspugen::DefaultAlgoVersion, seed, starCount, genName, hasPlanets, birthOnly);
         if (!runFilters(galaxy)) {
             galaxy->release();
             continue;
@@ -161,9 +162,11 @@ void sortSeeds() {
 int main(int argc, char *argv[]) {
     const option longOptions[] = {
         /* input options */
+        {"threads", required_argument, nullptr, 't'},
         {"input", required_argument, nullptr, 'i'},
         /* output options */
         {"output", required_argument, nullptr, 'o'},
+        {"birth", no_argument, nullptr, 'b'},
         {"planets", no_argument, nullptr, 'p'},
         {"names", no_argument, nullptr, 'n'},
         {nullptr},
@@ -171,7 +174,8 @@ int main(int argc, char *argv[]) {
     char opt;
     std::string inputFilename;
     std::string seedFilename = "seeds.csv";
-    while ((opt = getopt_long(argc, argv, ":i:o:pn", longOptions, nullptr)) != -1) {
+    int threadCount = 0;
+    while ((opt = getopt_long(argc, argv, ":t:i:o:bpn", longOptions, nullptr)) != -1) {
         switch (opt) {
         case ':':
             fmt::print(std::cerr, "mssing argument for {}\n", (char)optopt);
@@ -188,17 +192,25 @@ int main(int argc, char *argv[]) {
         case 'p':
             hasPlanets = true;
             break;
+        case 'b':
+            birthOnly = true;
+            break;
         case 'o':
             seedFilename = fmt::format("{}", optarg);
+            break;
+        case 't':
+            threadCount = std::stoi(optarg);
             break;
         default:
             break;
         }
     }
     if (optind >= argc && inputFilename.empty()) {
-        fmt::print(std::cerr, "Usage: DSPSeedCalc [-n] [-i filename] [-p] [-o seeds.csv] [ranges...]\n");
+        fmt::print(std::cerr, "Usage: DSPSeedCalc [-t threads] [-n] [-i filename] [-b] [-p] [-o seeds.csv] [ranges...]\n");
         fmt::print(std::cerr, "          Ranges format: a-b[,starCount]. starCount is 64 by default, can be range.   e.g. 0-1000 / 333-666,32\n");
+        fmt::print(std::cerr, "      -t  Threads to use, 0 for default, which means (logic CPU threads - 1)\n");
         fmt::print(std::cerr, "      -n  Generate names for stars(which will reduce calculation speed)\n");
+        fmt::print(std::cerr, "      -b  Generate only birth star\n");
         fmt::print(std::cerr, "      -p  Generate planet info for plugins use\n");
         fmt::print(std::cerr, " Note: You need to supply either [filename] or [ranges...]\n");
         return -1;
@@ -224,8 +236,10 @@ int main(int argc, char *argv[]) {
 /*
     fmt::print(output[1], "Seed,Star Count,Star Id,Type,Distance,Luminosity,Name\n");
 */
-    auto threadCount = std::thread::hardware_concurrency();
-    if (threadCount > 1) --threadCount;
+    if (threadCount <= 0) {
+        threadCount = std::thread::hardware_concurrency();
+        if (threadCount > 1) --threadCount;
+    }
     startTime = std::chrono::steady_clock::now();
     for (auto &p: seedsToCheckMap) {
         auto &seeds = p.second;

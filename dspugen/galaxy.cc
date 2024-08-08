@@ -101,7 +101,7 @@ static int GenerateTempPoses(std::vector<VectorLF3> &tmpPoses, std::vector<Vecto
 
 Galaxy::~Galaxy() {
     for (auto *s: stars) {
-        s->release();
+        if (s) s->release();
     }
 }
 
@@ -109,7 +109,7 @@ void Galaxy::release() {
     gpool.release(this);
 }
 
-Galaxy *Galaxy::create(int algoVersion, int galaxySeed, int starCount, bool genName, bool hasPlanets) {
+Galaxy *Galaxy::create(int algoVersion, int galaxySeed, int starCount, bool genName, bool hasPlanets, bool birthOnly) {
     util::DotNet35Random dotNet35Random(galaxySeed);
     std::vector<VectorLF3> tmpPoses, tmpDrunk;
     tmpPoses.reserve(256);
@@ -123,7 +123,7 @@ Galaxy *Galaxy::create(int algoVersion, int galaxySeed, int starCount, bool genN
     auto *galaxy = gpool.alloc();
     galaxy->seed = galaxySeed;
     galaxy->starCount = starCount;
-    galaxy->stars.resize(starCount);
+    galaxy->stars.resize(birthOnly ? 1 : starCount);
 
     auto num = (float)dotNet35Random.nextDouble();
     auto num2 = (float)dotNet35Random.nextDouble();
@@ -144,6 +144,7 @@ Galaxy *Galaxy::create(int algoVersion, int galaxySeed, int starCount, bool genN
         if (i == 0) {
             galaxy->stars[i] = Star::createBirthStar(galaxy, seed, genName);
             galaxy->birthStarId = galaxy->stars[i]->id;
+            if (birthOnly) break;
             continue;
         }
 

@@ -23,7 +23,7 @@ public:
     static constexpr double AU = 40000.0;
     static constexpr double LY = 2400000.0;
 
-    static Galaxy *create(int algoVersion, int galaxySeed, int starCount, bool genName = false, bool hasPlanets = true);
+    static Galaxy *create(int algoVersion, int galaxySeed, int starCount, bool genName = false, bool hasPlanets = true, bool birthOnly = false);
 
 public:
     ~Galaxy();

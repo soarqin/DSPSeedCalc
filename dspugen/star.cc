@@ -332,8 +332,10 @@ void Star::createStarPlanets() {
     auto num3 = dotNet35Random2.nextDouble();
     auto num4 = dotNet35Random2.nextDouble();
     auto num5 = dotNet35Random2.nextDouble();
+/*
     auto num6 = dotNet35Random2.nextDouble() * 0.2 + 0.9;
     auto num7 = dotNet35Random2.nextDouble() * 0.2 + 0.9;
+*/
     int planetCount;
     if (type == EStarType::BlackHole) {
         planetCount = 1;
