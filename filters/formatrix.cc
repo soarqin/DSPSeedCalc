@@ -11,24 +11,71 @@
 #include <fmt/std.h>
 #include <fstream>
 #include <set>
+#include <mutex>
 
 extern "C" {
 
 static PluginAPI *theAPI = nullptr;
 
 static std::ofstream *ofs = nullptr;
+static std::mutex mtx;
 
 __declspec(dllexport) const char *FILTERAPI init(PluginAPI *api, int *type) {
     theAPI = api;
     *type = 0;
-    ofs = new std::ofstream("formatrix.csv");
-    fmt::print(*ofs, "种子,星系数,距离母星最远,最大跨度,巨星数,全球锅行星数,水世界数,橙晶数,高产气巨,油井数,磁石堆数,黑洞/中子星附近行星数A,B,C,高产气巨附近行星数A,B,C\n");
+    ofs = new std::ofstream("formatrix.csv", std::ios::out | std::ios::trunc);
+    {
+        std::unique_lock lk(mtx);
+        fmt::print(*ofs,
+                   "种子,星系数,距离母星最远,最大跨度,巨星数,全球锅行星数,全球锅行星列表,水世界数,橙晶数,高产气巨,油井数,磁石堆数,黑洞/中子星附近行星数A,B,C,高产气巨附近行星数A,B,C\n");
+    }
     return "Filter for Manufacturing Universe Matrices";
 }
 
 __declspec(dllexport) void FILTERAPI uninit() {
     ofs->close();
     delete ofs;
+}
+
+static inline std::string id2roman(int id) {
+    std::string roman;
+    if (id >= 100) {
+        roman += "C";
+        id -= 100;
+    }
+    if (id >= 90) {
+        roman += "XC";
+        id -= 90;
+    }
+    if (id >= 50) {
+        roman += "L";
+        id -= 50;
+    }
+    if (id >= 40) {
+        roman += "XL";
+        id -= 40;
+    }
+    while (id >= 10) {
+        roman += "X";
+        id -= 10;
+    }
+    if (id == 9) {
+        roman += "IX";
+        id -= 9;
+    }
+    if (id >= 5) {
+        roman += "V";
+        id -= 5;
+    }
+    if (id == 4) {
+        roman += "IV";
+        id -= 4;
+    }
+    while (id > 0) {
+        roman += "I";
+        id -= 1;
+    }
+    return std::move(roman);
 }
 
 inline bool isThemeFullPower(int theme, double orbitRadius, double dysonRadius) {
@@ -224,24 +271,38 @@ __declspec(dllexport) bool FILTERAPI galaxyFilter(const dspugen::Galaxy *g) {
         }
     }
 
-    fmt::print(*ofs, "{},{},{:.3f},{:.3f},{},{},{},{},{},{},{},{},{},{},{},{},{}\n",
-               g->seed,
-               g->starCount,
-               std::sqrt(maxDist),
-               std::sqrt(maxDist2),
-               giants,
-               lumCnt,
-               water,
-               orange,
-               highHydrogen,
-               steeps,
-               umCount,
-               magNearPlanets[0],
-               magNearPlanets[1],
-               magNearPlanets[2],
-               highHydrogenNearPlanets[0],
-               highHydrogenNearPlanets[1],
-               highHydrogenNearPlanets[2]);
+    std::string allLumPlanets;
+    for (int i = 0; i < lumCnt; i++) {
+        if (i > 0) {
+            allLumPlanets += '|';
+        }
+        auto *star = g->starById(lumId[i] / 100);
+        allLumPlanets += star->name;
+        allLumPlanets += ' ';
+        allLumPlanets += id2roman(lumId[i] % 100);
+    }
+    {
+        std::unique_lock lk(mtx);
+        fmt::print(*ofs, "{},{},{:.3f},{:.3f},{},{},{},{},{},{},{},{},{},{},{},{},{},{}\n",
+                   g->seed,
+                   g->starCount,
+                   std::sqrt(maxDist),
+                   std::sqrt(maxDist2),
+                   giants,
+                   lumCnt,
+                   allLumPlanets,
+                   water,
+                   orange,
+                   highHydrogen,
+                   steeps,
+                   umCount,
+                   magNearPlanets[0],
+                   magNearPlanets[1],
+                   magNearPlanets[2],
+                   highHydrogenNearPlanets[0],
+                   highHydrogenNearPlanets[1],
+                   highHydrogenNearPlanets[2]);
+    }
     return true;
 }
 
