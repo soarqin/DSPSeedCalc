@@ -145,6 +145,8 @@ Star *Star::createStar(Galaxy *galaxy,
                 case EStarType::NeutronStar:
                     star->lifetime += 1000.0f;
                     break;
+                default:
+                    break;
             }
 
             break;
@@ -706,6 +708,8 @@ const char *Star::typeName() const {
                 case ESpectrType::B:
                 case ESpectrType::O:
                     return "Blue Giant";
+                default:
+                    break;
             }
             break;
         case EStarType::MainSeqStar:
@@ -724,6 +728,8 @@ const char *Star::typeName() const {
                     return "B";
                 case ESpectrType::O:
                     return "O";
+                default:
+                    break;
             }
             break;
     }

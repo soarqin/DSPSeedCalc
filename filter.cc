@@ -25,6 +25,7 @@ struct FilterSet {
 
 static std::vector<FilterSet> filters;
 static std::vector<OutputFunc> outputFuncs;
+static std::vector<PoseFunc> poseFuncs;
 static std::vector<void(FILTERAPI*)()> uninitFuncs;
 static bool hasStarFilter = false;
 static bool hasPlanetFilter = false;
@@ -109,6 +110,18 @@ void loadFilters() {
                         }
                         break;
                     }
+                    case 2: {
+                        auto func = (PoseFunc)dlsym(lib, "pose");
+                        if (func) {
+                            poseFuncs.emplace_back(func);
+                            if (pname) {
+                                fmt::print(std::cout, "Loaded pose filter: \"{}\" from [{}]\n", pname, filename);
+                            } else {
+                                fmt::print(std::cout, "Loaded pose filter: [{}]\n", filename);
+                            }
+                        }
+                        break;
+                    }
                     default:
                         dlclose(lib);
                         break;
@@ -168,6 +181,14 @@ bool runFilters(const dspugen::Galaxy *galaxy) {
         if (fs.seedEnd && !fs.seedEnd(fs.userp)) {
             return false;
         }
+    }
+    return true;
+}
+
+extern bool runPoseFilters(int seed, const std::vector<dspugen::VectorLF3> &poses) {
+    if (poseFuncs.empty()) { return false; }
+    for (auto &func: poseFuncs) {
+        func(seed, poses);
     }
     return true;
 }

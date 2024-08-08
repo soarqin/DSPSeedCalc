@@ -12,77 +12,59 @@
 #include <tuple>
 #include <algorithm>
 
-static double minDist = 10000000.0;
-static double maxDist = 0.0;
-std::vector<std::tuple<int, double>> minDistList;
-std::vector<std::tuple<int, double>> maxDistList;
+static double minDist[65] = {};
+static int minSeed[65] = {};
+static double maxDist[65] = {};
+static int maxSeed[65] = {};
 std::mutex mtx;
 
 extern "C" {
 
 __declspec(dllexport) const char *FILTERAPI init(PluginAPI *, int *type) {
-    *type = 0;
+    *type = 2;
+    for (auto &d: minDist) {
+        d = 10000000.0;
+    }
+    for (auto &d: maxDist) {
+        d = 0.0;
+    }
     return "For Fun Seeds 2";
 }
 
-__declspec(dllexport) bool FILTERAPI galaxyFilter(const dspugen::Galaxy *g) {
-    double dmax = 0.0;
-    size_t sz = g->stars.size();
-    int magNearPlanets[3] = {0, 0, 0};
-    int highHydrogenNearPlanets[3] = {0, 0, 0};
-    for (size_t i = 0; i < sz; i++) {
-        const auto *star = g->stars[i];
-        for (size_t j = i + 1; j < sz; j++) {
-            const auto *star2 = g->stars[j];
-            auto dist = (star->position - star2->position).sqrMagnitude();
-            if (dist > dmax) {
-                dmax = dist;
-            }
-        }
+inline void updateDist(size_t i, double dmax, int seed) {
+    std::unique_lock lock(mtx);
+    if (dmax < minDist[i]) {
+        minDist[i] = dmax;
+        minSeed[i] = seed;
     }
-    {
-        std::unique_lock lock(mtx);
-        if (dmax < minDist) {
-            minDist = dmax;
-            auto bear = minDist + 1.0;
-            for (auto ite = minDistList.begin(); ite != minDistList.end();) {
-                if (std::get<1>(*ite) > bear) {
-                    ite = minDistList.erase(ite);
-                } else {
-                    ++ite;
+    if (dmax > maxDist[i]) {
+        maxDist[i] = dmax;
+        maxSeed[i] = seed;
+    }
+}
+
+__declspec(dllexport) bool FILTERAPI pose(int seed, std::vector<dspugen::VectorLF3> &poses) {
+    for (size_t z = 31; z < 64; z++) {
+        double dmax = 0.0;
+        for (size_t i = 0; i < z; i++) {
+            const auto &pose1 = poses[i];
+            for (size_t j = i + 1; j <= z; j++) {
+                const auto &pose2 = poses[j];
+                auto dist = (pose1 - pose2).sqrMagnitude();
+                if (dist > dmax) {
+                    dmax = dist;
                 }
             }
-            minDistList.emplace_back(g->seed, minDist);
-        } else if (dmax > maxDist) {
-            maxDist = dmax;
-            auto bear = maxDist - 1.0;
-            for (auto ite = maxDistList.begin(); ite != maxDistList.end();) {
-                if (std::get<1>(*ite) < bear) {
-                    ite = maxDistList.erase(ite);
-                } else {
-                    ++ite;
-                }
-            }
-            maxDistList.emplace_back(g->seed, maxDist);
         }
+        updateDist(z + 1, dmax, seed);
     }
     return false;
 }
 
 __declspec(dllexport) void FILTERAPI uninit() {
     std::unique_lock lock(mtx);
-    std::sort(minDistList.begin(), minDistList.end(), [](const auto &a, const auto &b) {
-        return std::get<1>(a) < std::get<1>(b);
-    });
-    std::sort(maxDistList.begin(), maxDistList.end(), [](const auto &a, const auto &b) {
-        return std::get<1>(a) > std::get<1>(b);
-    });
-    for (auto [seed, dist]: minDistList) {
-        fprintf(stdout, "minDist: %g, seed: %d\n", std::sqrt(dist), seed);
-    }
-    for (auto [seed, dist]: maxDistList) {
-        fprintf(stdout, "maxDist: %g, seed: %d\n", std::sqrt(dist), seed);
-    }
+    for (int i = 32; i <= 64; i++)
+        fprintf(stdout, "%d,%d,%g,%d,%g\n", i, minSeed[i], std::sqrt(minDist[i]), maxSeed[i], std::sqrt(maxDist[i]));
 }
 
 }

@@ -394,6 +394,8 @@ void Planet::generateVeins() {
             case ESpectrType::O:
                 p = 1.6f;
                 break;
+            default:
+                break;
             }
 
             break;

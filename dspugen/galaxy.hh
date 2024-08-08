@@ -24,6 +24,7 @@ public:
     static constexpr double LY = 2400000.0;
 
     static Galaxy *create(int algoVersion, int galaxySeed, int starCount, bool genName = false, bool hasPlanets = true, bool birthOnly = false);
+    static int GeneratePoses(int algoVersion, int galaxySeed, int starCount, std::vector<VectorLF3>& poses);
 
 public:
     ~Galaxy();

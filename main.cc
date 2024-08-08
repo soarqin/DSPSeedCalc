@@ -22,6 +22,7 @@ static int current = -1, currMax = -1, starCount = 64;
 
 static bool genName = false;
 bool hasPlanets = false;
+static bool poseOnly = false;
 bool birthOnly = false;
 static std::ofstream output;
 static int found = 0;
@@ -92,6 +93,31 @@ static void calc() {
             fmt::print(output, "{},{}\n", seed, galaxy->starCount);
         }
         galaxy->release();
+    }
+}
+
+static void pose() {
+    std::vector<dspugen::VectorLF3> poses;
+    while (true) {
+        int seed;
+        {
+            std::unique_lock lk(mutex1);
+            if (current >= currMax) {
+                if (++currIndex >= totalSize) {
+                    break;
+                }
+                current = (*seedsToCheck)[currIndex].first;
+                currMax = (*seedsToCheck)[currIndex].second;
+                seed = current++;
+            } else {
+                seed = current++;
+            }
+        }
+        dspugen::Galaxy::GeneratePoses(dspugen::DefaultAlgoVersion, seed, starCount, poses);
+        runPoseFilters(seed, poses);
+        if (seed % 500000 == 0) {
+            fmt::print(std::cout, "Processed to: {},{}. {}ms elapsed.\n", seed, starCount, std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - startTime).count());
+        }
     }
 }
 
@@ -175,7 +201,7 @@ int main(int argc, char *argv[]) {
     std::string inputFilename;
     std::string seedFilename = "seeds.csv";
     int threadCount = 0;
-    while ((opt = getopt_long(argc, argv, ":t:i:o:bpn", longOptions, nullptr)) != -1) {
+    while ((opt = getopt_long(argc, argv, ":t:i:o:bpPn", longOptions, nullptr)) != -1) {
         switch (opt) {
         case ':':
             fmt::print(std::cerr, "mssing argument for {}\n", (char)optopt);
@@ -192,6 +218,9 @@ int main(int argc, char *argv[]) {
         case 'p':
             hasPlanets = true;
             break;
+        case 'P':
+            poseOnly = true;
+            break;
         case 'b':
             birthOnly = true;
             break;
@@ -206,12 +235,13 @@ int main(int argc, char *argv[]) {
         }
     }
     if (optind >= argc && inputFilename.empty()) {
-        fmt::print(std::cerr, "Usage: DSPSeedCalc [-t threads] [-n] [-i filename] [-b] [-p] [-o seeds.csv] [ranges...]\n");
+        fmt::print(std::cerr, "Usage: DSPSeedCalc [-t threads] [-n] [-i filename] [-b] [-p] [-P] [-o seeds.csv] [ranges...]\n");
         fmt::print(std::cerr, "          Ranges format: a-b[,starCount]. starCount is 64 by default, can be range.   e.g. 0-1000 / 333-666,32\n");
         fmt::print(std::cerr, "      -t  Threads to use, 0 for default, which means (logic CPU threads - 1)\n");
         fmt::print(std::cerr, "      -n  Generate names for stars(which will reduce calculation speed)\n");
         fmt::print(std::cerr, "      -b  Generate only birth star\n");
         fmt::print(std::cerr, "      -p  Generate planet info for plugins use\n");
+        fmt::print(std::cerr, "      -P  Generate only poses, support only pose() filters\n");
         fmt::print(std::cerr, " Note: You need to supply either [filename] or [ranges...]\n");
         return -1;
     }
@@ -253,7 +283,7 @@ int main(int argc, char *argv[]) {
         seedsToCheck = &seeds;
         std::vector<std::thread> thr(threadCount);
         for (auto &th: thr) {
-            th = std::thread(calc);
+            th = std::thread(poseOnly ? pose : calc);
         }
         for (auto &th: thr) {
             th.join();

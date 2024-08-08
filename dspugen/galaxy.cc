@@ -114,9 +114,9 @@ Galaxy *Galaxy::create(int algoVersion, int galaxySeed, int starCount, bool genN
     std::vector<VectorLF3> tmpPoses, tmpDrunk;
     tmpPoses.reserve(256);
     tmpDrunk.reserve(256);
-    const double MIN_DIST = 2.0;
-    const double MIN_STEP = 2.0;
-    const double MAX_STEP = 3.2;
+    constexpr double MIN_DIST = 2.0;
+    constexpr double MIN_STEP = 2.0;
+    constexpr double MAX_STEP = 3.2;
     starCount = GenerateTempPoses(tmpPoses, tmpDrunk, dotNet35Random.next(), starCount, 4, MIN_DIST, MIN_STEP, MAX_STEP, 0.18);
     if (starCount <= 0) { return nullptr; }
 
@@ -167,6 +167,18 @@ Galaxy *Galaxy::create(int algoVersion, int galaxySeed, int starCount, bool genN
         }
     }
     return galaxy;
+}
+
+int Galaxy::GeneratePoses(int algoVersion, int galaxySeed, int starCount, std::vector<VectorLF3> &poses) {
+    util::DotNet35Random dotNet35Random(galaxySeed);
+    std::vector<VectorLF3> tmpDrunk;
+    poses.clear();
+    poses.reserve(256);
+    tmpDrunk.reserve(256);
+    constexpr double MIN_DIST = 2.0;
+    constexpr double MIN_STEP = 2.0;
+    constexpr double MAX_STEP = 3.2;
+    return GenerateTempPoses(poses, tmpDrunk, dotNet35Random.next(), starCount, 4, MIN_DIST, MIN_STEP, MAX_STEP, 0.18);
 }
 
 }
