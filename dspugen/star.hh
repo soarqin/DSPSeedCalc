@@ -80,8 +80,8 @@ public:
     std::string name;
 
     static Star *createStar(Galaxy *galaxy, VectorLF3 pos, int id, int seed, EStarType needtype,
-                                ESpectrType needSpectr = ESpectrType::X, bool genName = false);
-    static Star *createBirthStar(Galaxy *galaxy, int seed, bool genName = false);
+                                ESpectrType needSpectr = ESpectrType::X);
+    static Star *createBirthStar(Galaxy *galaxy, int seed);
     void createStarPlanets();
     [[nodiscard]] const char *typeName() const;
     [[nodiscard]] inline float physicsRadius() const { return radius * kPhysicsRadiusRatio; }

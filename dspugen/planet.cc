@@ -108,21 +108,25 @@ Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, i
     planet->orbitPhase = (float)(num6 * 360.0);
 */
     if (num14 < 0.039999999105930328) {
-        // planet->obliquity = (float)(num7 * (num8 - 0.5) * 39.9);
-        // if (planet->obliquity < 0.0f)
-        //     planet->obliquity -= 70.0f;
-        // else
-        //     planet->obliquity += 70.0f;
+/*
+        planet->obliquity = (float)(num7 * (num8 - 0.5) * 39.9);
+        if (planet->obliquity < 0.0f)
+            planet->obliquity -= 70.0f;
+        else
+            planet->obliquity += 70.0f;
+*/
         planet->singularity |= EPlanetSingularity::LaySide;
-    } else if (num14 < 0.10000000149011612) {
-        // planet->obliquity = (float)(num7 * (num8 - 0.5) * 80.0);
-        // if (planet->obliquity < 0.0f)
-        //     planet->obliquity -= 30.0f;
-        // else
-        //     planet->obliquity += 30.0f;
+    }/* else if (num14 < 0.10000000149011612) {
+
+        planet->obliquity = (float)(num7 * (num8 - 0.5) * 80.0);
+        if (planet->obliquity < 0.0f)
+            planet->obliquity -= 30.0f;
+        else
+            planet->obliquity += 30.0f;
     } else {
-        // planet->obliquity = (float)(num7 * (num8 - 0.5) * 60.0);
+        planet->obliquity = (float)(num7 * (num8 - 0.5) * 60.0);
     }
+*/
 
 /*
     planet->rotationPeriod = (num9 * num10 * 1000.0 + 400.0) *
@@ -447,9 +451,7 @@ void Planet::generateVeins() {
         auto rareVeinsSize = int(themeProto->rareVeins.size());
         for (auto n = 0; n < rareVeinsSize; n++) {
             auto num2 = themeProto->rareVeins[n];
-            auto num3 = star->index == 0
-                       ? themeProto->rareSettings[n * 4]
-                       : themeProto->rareSettings[n * 4 + 1];
+            auto num3 = themeProto->rareSettings[star->index == 0 ? (n * 4) : (n * 4 + 1)];
             auto num4 = themeProto->rareSettings[n * 4 + 2];
             num3 = 1.0f - (float)std::pow(1.0f - num3, p);
             if (dotNet35Random.nextDouble() >= num3) continue;

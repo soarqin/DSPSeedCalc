@@ -13,6 +13,9 @@
 #include "vectors.hh"
 #include <vector>
 
+extern bool hasPlanets;
+extern bool birthOnly;
+
 namespace dspugen {
 
 static thread_local util::MemPool<Galaxy> gpool;
@@ -28,9 +31,11 @@ bool CheckCollision(std::vector<VectorLF3> &pts, VectorLF3 pt, double minDist) {
     return false;
 }
 
-static void RandomPoses(std::vector<VectorLF3> &tmpPoses, std::vector<VectorLF3> &tmpDrunk, int seed, int maxCount,
-                        double minDist, double minStepLen, double maxStepLen,
-                        double flatten) {
+static void RandomPoses(std::vector<VectorLF3> &tmpPoses, std::vector<VectorLF3> &tmpDrunk, int seed, int maxCount) {
+    constexpr double MIN_DIST = 2.0;
+    constexpr double MIN_STEP = 2.0;
+    constexpr double MAX_STEP = 3.2;
+    constexpr double FLATTEN = 0.18;
     util::DotNet35Random dotNet35Random(seed);
     double num = dotNet35Random.nextDouble();
     tmpPoses.emplace_back();
@@ -41,15 +46,15 @@ static void RandomPoses(std::vector<VectorLF3> &tmpPoses, std::vector<VectorLF3>
         int num5 = 0;
         while (num5++ < 256) {
             double num6 = dotNet35Random.nextDouble() * 2.0 - 1.0;
-            double num7 = (dotNet35Random.nextDouble() * 2.0 - 1.0) * flatten;
+            double num7 = (dotNet35Random.nextDouble() * 2.0 - 1.0) * FLATTEN;
             double num8 = dotNet35Random.nextDouble() * 2.0 - 1.0;
             double num9 = dotNet35Random.nextDouble();
             double num10 = num6 * num6 + num7 * num7 + num8 * num8;
             if (num10 > 1.0 || num10 < 1E-08) continue;
             double num11 = std::sqrt(num10);
-            num9 = (num9 * (maxStepLen - minStepLen) + minDist) / num11;
+            num9 = (num9 * (MAX_STEP - MIN_STEP) + MIN_STEP) / num11;
             VectorLF3 vectorLf{num6 * num9, num7 * num9, num8 * num9};
-            if (!CheckCollision(tmpPoses, vectorLf, minDist)) {
+            if (!CheckCollision(tmpPoses, vectorLf, MIN_DIST)) {
                 tmpDrunk.emplace_back(vectorLf);
                 tmpPoses.emplace_back(vectorLf);
                 if (tmpPoses.size() < maxCount) break;
@@ -65,16 +70,16 @@ static void RandomPoses(std::vector<VectorLF3> &tmpPoses, std::vector<VectorLF3>
             int num13 = 0;
             while (num13++ < 256) {
                 double num14 = dotNet35Random.nextDouble() * 2.0 - 1.0;
-                double num15 = (dotNet35Random.nextDouble() * 2.0 - 1.0) * flatten;
+                double num15 = (dotNet35Random.nextDouble() * 2.0 - 1.0) * FLATTEN;
                 double num16 = dotNet35Random.nextDouble() * 2.0 - 1.0;
                 double num17 = dotNet35Random.nextDouble();
                 double num18 = num14 * num14 + num15 * num15 + num16 * num16;
                 if (num18 > 1.0 || num18 < 1E-08) continue;
                 double num19 = std::sqrt(num18);
-                num17 = (num17 * (maxStepLen - minStepLen) + minStepLen) / num19;
+                num17 = (num17 * (MAX_STEP - MIN_STEP) + MIN_STEP) / num19;
                 VectorLF3 vectorLf2{drunk.x + num14 * num17, drunk.y + num15 * num17,
                                     drunk.z + num16 * num17};
-                if (!CheckCollision(tmpPoses, vectorLf2, minDist)) {
+                if (!CheckCollision(tmpPoses, vectorLf2, MIN_DIST)) {
                     drunk = vectorLf2;
                     tmpPoses.emplace_back(vectorLf2);
                     if (tmpPoses.size() < maxCount) break;
@@ -84,15 +89,10 @@ static void RandomPoses(std::vector<VectorLF3> &tmpPoses, std::vector<VectorLF3>
         }
 }
 
-static int GenerateTempPoses(std::vector<VectorLF3> &tmpPoses, std::vector<VectorLF3> &tmpDrunk, int seed,
-                             int targetCount, int iterCount, double minDist,
-                             double minStepLen, double maxStepLen, double flatten) {
-    if (iterCount < 1)
-        iterCount = 1;
-    else if (iterCount > 16) iterCount = 16;
-    RandomPoses(tmpPoses, tmpDrunk, seed, targetCount * iterCount, minDist, minStepLen, maxStepLen, flatten);
+static int GenerateTempPoses(std::vector<VectorLF3> &tmpPoses, std::vector<VectorLF3> &tmpDrunk, int seed, int targetCount) {
+    RandomPoses(tmpPoses, tmpDrunk, seed, targetCount * 4);
     for (int num = int(tmpPoses.size()) - 1; num >= 0; num--) {
-        if ((num % iterCount) == 0) { continue; }
+        if ((num % 4) == 0) { continue; }
         tmpPoses.erase(tmpPoses.begin() + num);
         if (tmpPoses.size() <= targetCount) break;
     }
@@ -109,15 +109,12 @@ void Galaxy::release() {
     gpool.release(this);
 }
 
-Galaxy *Galaxy::create(int algoVersion, int galaxySeed, int starCount, bool genName, bool hasPlanets, bool birthOnly) {
+Galaxy *Galaxy::create(int algoVersion, int galaxySeed, int starCount) {
     util::DotNet35Random dotNet35Random(galaxySeed);
     std::vector<VectorLF3> tmpPoses, tmpDrunk;
     tmpPoses.reserve(256);
     tmpDrunk.reserve(256);
-    constexpr double MIN_DIST = 2.0;
-    constexpr double MIN_STEP = 2.0;
-    constexpr double MAX_STEP = 3.2;
-    starCount = GenerateTempPoses(tmpPoses, tmpDrunk, dotNet35Random.next(), starCount, 4, MIN_DIST, MIN_STEP, MAX_STEP, 0.18);
+    starCount = GenerateTempPoses(tmpPoses, tmpDrunk, dotNet35Random.next(), starCount);
     if (starCount <= 0) { return nullptr; }
 
     auto *galaxy = gpool.alloc();
@@ -142,7 +139,7 @@ Galaxy *Galaxy::create(int algoVersion, int galaxySeed, int starCount, bool genN
     for (int i = 0; i < starCount; i++) {
         auto seed = dotNet35Random.next();
         if (i == 0) {
-            galaxy->stars[i] = Star::createBirthStar(galaxy, seed, genName);
+            galaxy->stars[i] = Star::createBirthStar(galaxy, seed);
             galaxy->birthStarId = galaxy->stars[i]->id;
             if (birthOnly) break;
             continue;
@@ -159,7 +156,7 @@ Galaxy *Galaxy::create(int algoVersion, int galaxySeed, int starCount, bool genN
         else if (i >= num10)
             needtype = EStarType::NeutronStar;
         else if (i >= num11) needtype = EStarType::WhiteDwarf;
-        galaxy->stars[i] = Star::createStar(galaxy, tmpPoses[i], i + 1, seed, needtype, needSpectr, genName);
+        galaxy->stars[i] = Star::createStar(galaxy, tmpPoses[i], i + 1, seed, needtype, needSpectr);
     }
     if (hasPlanets) {
         for (auto &star: galaxy->stars) {
@@ -178,7 +175,7 @@ int Galaxy::GeneratePoses(int algoVersion, int galaxySeed, int starCount, std::v
     constexpr double MIN_DIST = 2.0;
     constexpr double MIN_STEP = 2.0;
     constexpr double MAX_STEP = 3.2;
-    return GenerateTempPoses(poses, tmpDrunk, dotNet35Random.next(), starCount, 4, MIN_DIST, MIN_STEP, MAX_STEP, 0.18);
+    return GenerateTempPoses(poses, tmpDrunk, dotNet35Random.next(), starCount);
 }
 
 }

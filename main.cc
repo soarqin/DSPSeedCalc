@@ -20,10 +20,10 @@ static std::vector<std::pair<int, int>> *seedsToCheck = nullptr;
 static size_t currIndex = 0, totalSize = 0;
 static int current = -1, currMax = -1, starCount = 64;
 
-static bool genName = false;
+bool genName = false;
 bool hasPlanets = false;
-static bool poseOnly = false;
 bool birthOnly = false;
+static bool poseOnly = false;
 static std::ofstream output;
 static int found = 0;
 static std::chrono::time_point<std::chrono::steady_clock> startTime;
@@ -81,7 +81,7 @@ static void calc() {
         if (seed % 500000 == 0) {
             fmt::print(std::cout, "Processed to: {},{}. Currently found: {}. {}ms elapsed.\n", seed, starCount, found, std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - startTime).count());
         }
-        auto galaxy = dspugen::Galaxy::create(dspugen::DefaultAlgoVersion, seed, starCount, genName, hasPlanets, birthOnly);
+        auto galaxy = dspugen::Galaxy::create(dspugen::DefaultAlgoVersion, seed, starCount);
         if (!runFilters(galaxy)) {
             galaxy->release();
             continue;

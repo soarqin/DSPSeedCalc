@@ -23,6 +23,8 @@
 #include <functional>
 #include <cmath>
 
+extern bool genName;
+
 namespace dspugen {
 
 static float randNormal(float averageValue, float standardDeviation, double r1, double r2) {
@@ -49,8 +51,7 @@ Star *Star::createStar(Galaxy *galaxy,
                        int id,
                        int seed,
                        EStarType needtype,
-                       ESpectrType needSpectr,
-                       bool genName) {
+                       ESpectrType needSpectr) {
     auto *star = spool.alloc();
     star->galaxy = galaxy;
     star->index = id - 1;
@@ -64,24 +65,14 @@ Star *Star::createStar(Galaxy *galaxy,
     auto seed2 = dotNet35Random.next();
     auto seed3 = dotNet35Random.next();
     star->position = pos;
-/*
-    auto num = (float)pos.magnitude() / 32.0f;
-    if (num > 1.0f) {
-        num = (float)std::log(num) + 1.0f;
-        num = (float)std::log(num) + 1.0f;
-        num = (float)std::log(num) + 1.0f;
-        num = (float)std::log(num) + 1.0f;
-        num = (float)std::log(num) + 1.0f;
-    }
-    star->resourceCoef = (float)std::pow(7.0f, num) * 0.6f;
-*/
+
     util::DotNet35Random dotNet35Random2(seed3);
     auto num2 = dotNet35Random2.nextDouble();
     auto num3 = dotNet35Random2.nextDouble();
-    auto num4 = dotNet35Random2.nextDouble();
+    auto num4 = (float)dotNet35Random2.nextDouble();
     auto rn = dotNet35Random2.nextDouble();
     auto rt = dotNet35Random2.nextDouble();
-    auto num5 = (dotNet35Random2.nextDouble() - 0.5) * 0.2;
+    auto num5 = (float)((dotNet35Random2.nextDouble() - 0.5) * 0.2);
     auto num6 = dotNet35Random2.nextDouble() * 0.2 + 0.9;
     auto num7 = dotNet35Random2.nextDouble() * 0.4 - 0.2;
     auto num8 = std::pow(2.0, num7);
@@ -107,7 +98,7 @@ Star *Star::createStar(Galaxy *galaxy,
     }
 
     num10 = num10 <= 0.0f ? num10 * 1.0f : num10 * 2.0f;
-    num10 = std::clamp(num10, -2.4f, 4.65f) + (float)num5 + 1.0f;
+    num10 = std::clamp(num10, -2.4f, 4.65f) + num5 + 1.0f;
     switch (needtype) {
         case EStarType::BlackHole:
             star->mass = 18.0f + (float)(num2 * num3) * 30.0f;
@@ -123,8 +114,7 @@ Star *Star::createStar(Galaxy *galaxy,
             break;
     }
 
-    auto d = 5.0;
-    if (star->mass < 2.0f) d = 2.0 + 0.4 * (1.0 - star->mass);
+    auto d = star->mass < 2.0f ? (2.0 + 0.4 * (1.0 - star->mass)) : 5.0;
     star->lifetime =
         (float)(10000.0 * std::pow(0.1, std::log10(star->mass * 0.5) / std::log10(d) + 1.0) * num6);
     switch (needtype) {
@@ -132,12 +122,12 @@ Star *Star::createStar(Galaxy *galaxy,
             star->lifetime = (float)(10000.0 *
                 std::pow(0.1, std::log10(star->mass * 0.58) / std::log10(d) + 1.0) *
                 num6);
-            star->age = (float)num4 * 0.04f + 0.96f;
+            star->age = num4 * 0.04f + 0.96f;
             break;
         case EStarType::WhiteDwarf:
         case EStarType::NeutronStar:
         case EStarType::BlackHole:
-            star->age = (float)num4 * 0.4f + 1.0f;
+            star->age = num4 * 0.4f + 1.0f;
             switch (needtype) {
                 case EStarType::WhiteDwarf:
                     star->lifetime += 10000.0f;
@@ -152,11 +142,11 @@ Star *Star::createStar(Galaxy *galaxy,
             break;
         default:
             if (star->mass < 0.5)
-                star->age = (float)num4 * 0.12f + 0.02f;
+                star->age = num4 * 0.12f + 0.02f;
             else if (star->mass < 0.8)
-                star->age = (float)num4 * 0.4f + 0.1f;
+                star->age = num4 * 0.4f + 0.1f;
             else
-                star->age = (float)num4 * 0.7f + 0.2f;
+                star->age = num4 * 0.7f + 0.2f;
             break;
     }
 
@@ -173,20 +163,21 @@ Star *Star::createStar(Galaxy *galaxy,
     if (num13 > 2.0)
         num13 = 2.0;
     else if (num13 < -4.0) num13 = -4.0;
-    star->spectr = (ESpectrType)(int)std::round((float)num13 + 4.0f);
-    star->color = util::clamp01(((float)num13 + 3.5f) * 0.2f);
 /*
     star->classFactor = (float)num13;
 */
-    star->luminosity = (float)std::pow(num12, 0.7f);
+    auto classFactor = (float)num13;
+    star->spectr = (ESpectrType)(int)std::round(classFactor + 4.0f);
+    star->color = util::clamp01((classFactor + 3.5f) * 0.2f);
+    star->luminosity = std::pow(num12, 0.7f);
     star->radius = (float)(std::pow(star->mass, 0.4) * num8);
 /*
     star->acdiskRadius = 0.0f;
 */
-    auto p = (float)num13 + 2.0f;
-    star->habitableRadius = (float)std::pow(1.7f, p) + 0.25f * std::min(1.0f, star->orbitScaler);
-    star->lightBalanceRadius = (float)std::pow(1.7f, p);
-    star->orbitScaler = (float)std::pow(1.35f, p);
+    auto p = classFactor + 2.0f;
+    star->habitableRadius = std::pow(1.7f, p) + 0.25f * std::min(1.0f, star->orbitScaler);
+    star->lightBalanceRadius = std::pow(1.7f, p);
+    star->orbitScaler = std::pow(1.35f, p);
     if (star->orbitScaler < 1.0f) star->orbitScaler = util::lerp(star->orbitScaler, 1.0f, 0.6f);
     star->setStarAge(rn, rt);
     star->dysonRadius = star->orbitScaler * 0.28f;
@@ -202,7 +193,7 @@ Star *Star::createStar(Galaxy *galaxy,
     return star;
 }
 
-Star *Star::createBirthStar(Galaxy *galaxy, int seed, bool genName) {
+Star *Star::createBirthStar(Galaxy *galaxy, int seed) {
     auto star = spool.alloc();
     star->galaxy = galaxy;
     star->seed = seed;
@@ -221,8 +212,7 @@ Star *Star::createBirthStar(Galaxy *galaxy, int seed, bool genName) {
     auto value = randNormal(0.0f, 0.08f, r, r2);
     value = std::clamp(value, -0.2f, 0.2f);
     star->mass = std::pow(2.0f, value);
-    auto num4 = 5.0;
-    num4 = 2.0 + 0.4 * (1.0 - star->mass);
+    auto num4 = 2.0 + 0.4 * (1.0 - star->mass);
     star->lifetime =
         (float)(10000.0 * std::pow(0.1, std::log10(star->mass * 0.5) / std::log10(num4) + 1.0) * num2);
     star->age = (float)(num * 0.4 + 0.3);
@@ -234,20 +224,21 @@ Star *Star::createBirthStar(Galaxy *galaxy, int seed, bool genName) {
     if (num6 > 2.0)
         num6 = 2.0;
     else if (num6 < -4.0) num6 = -4.0;
-    star->spectr = (ESpectrType)(int)std::round((float)num6 + 4.0f);
-    star->color = std::clamp(((float)num6 + 3.5f) * 0.2f, 0.0f, 1.0f);
 /*
     star->classFactor = (float)num6;
 */
+    auto classFactor = (float)num6;
+    star->spectr = (ESpectrType)(int)std::round(classFactor + 4.0f);
+    star->color = std::clamp((classFactor + 3.5f) * 0.2f, 0.0f, 1.0f);
     star->luminosity = (float)std::pow(num5, 0.7f);
     star->radius = (float)(std::pow(star->mass, 0.4) * num3);
 /*
     star->acdiskRadius = 0.0f;
 */
-    auto p = (float)num6 + 2.0f;
-    star->habitableRadius = (float)std::pow(1.7f, p) + 0.2f * std::min(1.0f, star->orbitScaler);
-    star->lightBalanceRadius = (float)std::pow(1.7f, p);
-    star->orbitScaler = (float)std::pow(1.35f, p);
+    auto p = classFactor + 2.0f;
+    star->habitableRadius = std::pow(1.7f, p) + 0.2f * std::min(1.0f, star->orbitScaler);
+    star->lightBalanceRadius = std::pow(1.7f, p);
+    star->orbitScaler = std::pow(1.35f, p);
     if (star->orbitScaler < 1.0f) star->orbitScaler = util::lerp(star->orbitScaler, 1.0f, 0.6f);
     star->setStarAge(rn, rt);
     star->dysonRadius = star->orbitScaler * 0.28f;
@@ -307,8 +298,8 @@ void Star::setStarAge(double rn, double rt) {
         }
     } else if (age >= 0.96f) {
         auto num4 = (float)(std::pow(5.0, std::abs(std::log10(mass) - 0.7)) * 5.0);
-        if (num4 > 10.0f) num4 = ((float)std::log(num4 * 0.1f) + 1.0f) * 10.0f;
-        auto num5 = 1.0f - (float)std::pow(age, 30.0f) * 0.5f;
+        if (num4 > 10.0f) num4 = (std::log(num4 * 0.1f) + 1.0f) * 10.0f;
+        auto num5 = 1.0f - std::pow(age, 30.0f) * 0.5f;
         type = EStarType::GiantStar;
         mass = num5 * mass;
         radius = num4 * num2;
@@ -394,11 +385,9 @@ void Star::createStarPlanets() {
         } else if (num < 0.800000011920929) {
             planetCount = 2;
             planets.resize(2);
-            auto num10 = 0;
-            auto num11 = 0;
             if (num2 < 0.25) {
-                num10 = dotNet35Random2.next();
-                num11 = dotNet35Random2.next();
+                auto num10 = dotNet35Random2.next();
+                auto num11 = dotNet35Random2.next();
                 planets[0] = Planet::create(this, 0, 0,
                                             num3 > 0.5 ? 3 : 2, 1, false, num10, num11);
                 num10 = dotNet35Random2.next();
@@ -406,8 +395,8 @@ void Star::createStarPlanets() {
                 planets[1] = Planet::create(this, 1, 0,
                                             num3 > 0.5 ? 4 : 3, 2, false, num10, num11);
             } else {
-                num10 = dotNet35Random2.next();
-                num11 = dotNet35Random2.next();
+                auto num10 = dotNet35Random2.next();
+                auto num11 = dotNet35Random2.next();
                 planets[0] = Planet::create(this, 0, 0, 3, 1, true,
                                             num10, num11);
                 num10 = dotNet35Random2.next();
@@ -418,11 +407,9 @@ void Star::createStarPlanets() {
         } else {
             planetCount = 3;
             planets.resize(3);
-            auto num12 = 0;
-            auto num13 = 0;
             if (num2 < 0.15000000596046448) {
-                num12 = dotNet35Random2.next();
-                num13 = dotNet35Random2.next();
+                auto num12 = dotNet35Random2.next();
+                auto num13 = dotNet35Random2.next();
                 planets[0] = Planet::create(this, 0, 0,
                                             num3 > 0.5 ? 3 : 2, 1, false, num12, num13);
                 num12 = dotNet35Random2.next();
@@ -434,8 +421,8 @@ void Star::createStarPlanets() {
                 planets[2] = Planet::create(this, 2, 0,
                                             num3 > 0.5 ? 5 : 4, 3, false, num12, num13);
             } else if (num2 < 0.75) {
-                num12 = dotNet35Random2.next();
-                num13 = dotNet35Random2.next();
+                auto num12 = dotNet35Random2.next();
+                auto num13 = dotNet35Random2.next();
                 planets[0] = Planet::create(this, 0, 0,
                                             num3 > 0.5 ? 3 : 2, 1, false, num12, num13);
                 num12 = dotNet35Random2.next();
@@ -447,8 +434,8 @@ void Star::createStarPlanets() {
                 planets[2] = Planet::create(this, 2, 2, 1, 1,
                                             false, num12, num13);
             } else {
-                num12 = dotNet35Random2.next();
-                num13 = dotNet35Random2.next();
+                auto num12 = dotNet35Random2.next();
+                auto num13 = dotNet35Random2.next();
                 planets[0] = Planet::create(this, 0, 0,
                                             num3 > 0.5 ? 4 : 3, 1, true, num12, num13);
                 num12 = dotNet35Random2.next();
@@ -639,6 +626,7 @@ void Star::createStarPlanets() {
         }
     }
 
+/*
     auto num22 = 0;
     auto num23 = 0;
     auto num24 = 0;
@@ -666,9 +654,6 @@ void Star::createStarPlanets() {
 
     num25 = num5 < 0.2 ? num23 + 3 : num5 < 0.4 ? num23 + 2 : num5 < 0.8 ? num23 + 1 : 0;
     if (num25 != 0 && num25 < 5) num25 = 5;
-/*
-    asterBelt1OrbitIndex = num24;
-    asterBelt2OrbitIndex = num25;
 */
 }
 
@@ -676,13 +661,13 @@ float Star::updateResourceCoef() {
     if (resourceCoef == 0.0f) {
         auto distanceFactor = (float)position.magnitude() / 32.0f;
         if (distanceFactor > 1.0f) {
-            distanceFactor = (float)std::log(distanceFactor) + 1.0f;
-            distanceFactor = (float)std::log(distanceFactor) + 1.0f;
-            distanceFactor = (float)std::log(distanceFactor) + 1.0f;
-            distanceFactor = (float)std::log(distanceFactor) + 1.0f;
-            distanceFactor = (float)std::log(distanceFactor) + 1.0f;
+            distanceFactor = std::log(distanceFactor) + 1.0f;
+            distanceFactor = std::log(distanceFactor) + 1.0f;
+            distanceFactor = std::log(distanceFactor) + 1.0f;
+            distanceFactor = std::log(distanceFactor) + 1.0f;
+            distanceFactor = std::log(distanceFactor) + 1.0f;
         }
-        resourceCoef = (float)std::pow(7.0f, distanceFactor) * 0.6f;
+        resourceCoef = std::pow(7.0f, distanceFactor) * 0.6f;
     }
     return resourceCoef;
 }
