@@ -71,10 +71,8 @@ static inline std::string id2roman(int id) {
 }
 
 __declspec(dllexport) void FILTERAPI output(const dspugen::Galaxy *galaxy) {
+    theAPI->GenerateAllPlanets(galaxy);
     for (auto *star: galaxy->stars) {
-        if (!planets) {
-            theAPI->GeneratePlanets(star);
-        }
         for (const auto *planet: star->planets) {
             fmt::print(planetOut, "{},{},{},{},{}\n",
                galaxy->seed,
