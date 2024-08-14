@@ -10,7 +10,6 @@
 #include <mutex>
 #include <vector>
 #include <tuple>
-#include <algorithm>
 
 static double minDist[65] = {};
 static int minSeed[65] = {};
@@ -48,6 +47,11 @@ __declspec(dllexport) bool FILTERAPI pose(int seed, std::vector<dspugen::VectorL
         double dmax = 0.0;
         for (size_t i = 0; i < z; i++) {
             const auto &pose1 = poses[i];
+            auto dist = pose1.sqrMagnitude();
+            if (dist > dmax) {
+                dmax = dist;
+            }
+            /*
             for (size_t j = i + 1; j <= z; j++) {
                 const auto &pose2 = poses[j];
                 auto dist = (pose1 - pose2).sqrMagnitude();
@@ -55,6 +59,7 @@ __declspec(dllexport) bool FILTERAPI pose(int seed, std::vector<dspugen::VectorL
                     dmax = dist;
                 }
             }
+            */
         }
         updateDist(z + 1, dmax, seed);
     }

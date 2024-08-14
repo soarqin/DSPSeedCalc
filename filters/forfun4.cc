@@ -71,6 +71,9 @@ __declspec(dllexport) void FILTERAPI uninit() {
         }
         fmt::println(stdout, "{}: 最大{}({}), 最小{}({})", themeNames[i], maxCount[i], maxIds, minCount[i], minIds);
     }
+    for (int i = 0; i < 4; i++) {
+        fmt::println(stdout, "最高气速 {}({})", highestValue[i], highestId[i]);
+    }
 }
 
 std::mutex mux;
