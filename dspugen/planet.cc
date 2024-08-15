@@ -443,7 +443,6 @@ void Planet::generateVeins() {
                 if (dotNet35Random.nextDouble() >= 0.64999997615814209) break;
                 veinSpot[14]++;
             }
-
             break;
         }
         }
