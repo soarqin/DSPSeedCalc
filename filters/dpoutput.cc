@@ -21,7 +21,8 @@ __declspec(dllexport) const char *FILTERAPI init2(PluginAPI *api, int *type, boo
     *type = 1;
     planets = hasPlanets;
     starOut = std::ofstream("dp_stars.csv");
-    fmt::print(starOut, "种子,星系数,母星巨星类型,母星地表可燃冰,母星巨星卫星数,蓝巨1亮度,蓝巨1行星数,蓝巨2亮度,蓝巨2行星数,O星数,水世界数,橙晶数,磁石簇数\n");
+    fmt::print(starOut,
+               "种子,星系数,母星巨星类型,母星地表可燃冰,母星巨星卫星数,蓝巨1亮度,蓝巨1行星数,蓝巨2亮度,蓝巨2行星数,O星数,水世界数,橙晶数,磁石簇数\n");
     return "DSP-Power Related Output";
 }
 
@@ -41,10 +42,8 @@ __declspec(dllexport) void FILTERAPI output(const dspugen::Galaxy *galaxy) {
     int waterCount = 0;
     int orangeCount = 0;
     int magnetCount = 0;
+    if (!planets) theAPI->GenerateAllPlanets(galaxy);
     for (auto *star: galaxy->stars) {
-        if (!planets) {
-            theAPI->GeneratePlanets(star);
-        }
         if (star->index == 0) {
             for (const auto *planet: star->planets) {
                 switch (planet->theme) {

@@ -10,7 +10,7 @@
 
 extern "C" {
 
-__declspec(dllexport) const char *FILTERAPI init(PluginAPI *, int *type) {
+__declspec(dllexport) const char *FILTERAPI init(PluginAPI*, int *type) {
     *type = 0;
     return "2 Blue Giants with high luminosity";
 }
@@ -20,7 +20,7 @@ __declspec(dllexport) bool FILTERAPI galaxyFilter(const dspugen::Galaxy *g) {
     for (const auto *star: g->stars) {
         if (star->type == dspugen::EStarType::GiantStar && star->spectr == dspugen::ESpectrType::O) {
             ++cnt;
-            if (star->luminosity >= 19.832529646959319302266016012115f /* 18.092348467648446913917646190829f 16.064927362833999424416458640845f*/) {
+            if (star->luminosity >= /*19.832529646959319302266016012115f*/ 18.092348467648446913917646190829f /*16.064927362833999424416458640845f*/) {
                 ++cnt2;
             }
         }
