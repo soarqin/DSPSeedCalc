@@ -79,7 +79,7 @@ public:
     std::vector<Planet*> planets;
     std::string name;
 
-    static Star *createStar(Galaxy *galaxy, VectorLF3 pos, int id, int seed, EStarType needtype,
+    static Star *createStar(Galaxy *galaxy, const VectorLF3 &pos, int id, int seed, EStarType needtype,
                                 ESpectrType needSpectr = ESpectrType::X);
     static Star *createBirthStar(Galaxy *galaxy, int seed);
     void createStarPlanets();

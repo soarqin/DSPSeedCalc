@@ -46,7 +46,7 @@ void Star::release() {
 }
 
 Star *Star::createStar(Galaxy *galaxy,
-                       VectorLF3 pos,
+                       const VectorLF3 &pos,
                        int id,
                        int seed,
                        EStarType needtype,
@@ -166,7 +166,7 @@ Star *Star::createStar(Galaxy *galaxy,
     star->classFactor = (float)num13;
 */
     auto classFactor = static_cast<float>(num13);
-    star->spectr = static_cast<ESpectrType>((int)std::round(classFactor + 4.0f));
+    star->spectr = static_cast<ESpectrType>(static_cast<int>(std::round(classFactor + 4.0f)));
     star->color = util::clamp01((classFactor + 3.5f) * 0.2f);
     star->luminosity = std::pow(num12, 0.7f);
     star->radius = static_cast<float>(std::pow(star->mass, 0.4) * num8);
@@ -227,7 +227,7 @@ Star *Star::createBirthStar(Galaxy *galaxy, int seed) {
     star->classFactor = (float)num6;
 */
     auto classFactor = static_cast<float>(num6);
-    star->spectr = static_cast<ESpectrType>((int)std::round(classFactor + 4.0f));
+    star->spectr = static_cast<ESpectrType>(static_cast<int>(std::round(classFactor + 4.0f)));
     star->color = std::clamp((classFactor + 3.5f) * 0.2f, 0.0f, 1.0f);
     star->luminosity = std::pow(num5, 0.7f);
     star->radius = static_cast<float>(std::pow(star->mass, 0.4) * num3);
@@ -326,31 +326,31 @@ void Star::createStarPlanets() {
     auto num5 = dotNet35Random2.nextDouble();
     auto num6 = dotNet35Random2.nextDouble() * 0.2 + 0.9;
     auto num7 = dotNet35Random2.nextDouble() * 0.2 + 0.9;
-    int planetCount;
+    // int planetCount;
     if (type == EStarType::BlackHole) {
-        planetCount = 1;
+        // planetCount = 1;
         planets.resize(1);
         auto infoSeed = dotNet35Random2.next();
         auto genSeed = dotNet35Random2.next();
         planets[0] = Planet::create(this, 0, 0, 3, 1, false, infoSeed, genSeed);
     } else if (type == EStarType::NeutronStar) {
-        planetCount = 1;
+        // planetCount = 1;
         planets.resize(1);
         auto infoSeed2 = dotNet35Random2.next();
         auto genSeed2 = dotNet35Random2.next();
         planets[0] = Planet::create(this, 0, 0, 3, 1, false, infoSeed2, genSeed2);
     } else if (type == EStarType::WhiteDwarf) {
         if (num < 0.699999988079071) {
-            planetCount = 1;
+            // planetCount = 1;
             planets.resize(1);
             auto infoSeed3 = dotNet35Random2.next();
             auto genSeed3 = dotNet35Random2.next();
             planets[0] = Planet::create(this, 0, 0, 3, 1, false, infoSeed3, genSeed3);
         } else {
-            planetCount = 2;
+            // planetCount = 2;
             planets.resize(2);
-            auto num8 = 0;
-            auto num9 = 0;
+            int num8;
+            int num9;
             if (num2 < 0.30000001192092896) {
                 num8 = dotNet35Random2.next();
                 num9 = dotNet35Random2.next();
@@ -373,14 +373,14 @@ void Star::createStarPlanets() {
         }
     } else if (type == EStarType::GiantStar) {
         if (num < 0.30000001192092896) {
-            planetCount = 1;
+            // planetCount = 1;
             planets.resize(1);
             auto infoSeed4 = dotNet35Random2.next();
             auto genSeed4 = dotNet35Random2.next();
             planets[0] = Planet::create(this, 0, 0,
                                         num3 > 0.5 ? 3 : 2, 1, false, infoSeed4, genSeed4);
         } else if (num < 0.800000011920929) {
-            planetCount = 2;
+            // planetCount = 2;
             planets.resize(2);
             if (num2 < 0.25) {
                 auto num10 = dotNet35Random2.next();
@@ -402,7 +402,7 @@ void Star::createStarPlanets() {
                                             false, num10, num11);
             }
         } else {
-            planetCount = 3;
+            // planetCount = 3;
             planets.resize(3);
             if (num2 < 0.15000000596046448) {
                 auto num12 = dotNet35Random2.next();
@@ -447,6 +447,7 @@ void Star::createStarPlanets() {
         }
     } else {
         double pGas[10];
+        int planetCount;
         if (index == 0) {
             planetCount = 4;
             pGas[0] = 0.0;
@@ -544,10 +545,10 @@ void Star::createStarPlanets() {
                 planetCount = 5;
             else
                 planetCount = 6;
-            if (planetCount <= 3) {
+            /*if (planetCount <= 3) {
                 pGas[0] = 0.2;
                 pGas[1] = 0.2;
-            } else {
+            } else*/ {
                 pGas[0] = 0.1;
                 pGas[1] = 0.22;
                 pGas[2] = 0.28;
@@ -593,7 +594,7 @@ void Star::createStarPlanets() {
                     auto num20 = planetCount - i;
                     auto num21 = 9 - num17;
                     if (num21 <= num20) break;
-                    auto a = num20 / static_cast<float>(num21);
+                    auto a = static_cast<float>(num20) / static_cast<float>(num21);
                     a = num17 <= 3 ? util::lerp(a, 1.0f, 0.15f) + 0.01f : util::lerp(a, 1.0f, 0.45f) + 0.01f;
                     if (dotNet35Random2.nextDouble() < a) break;
                     num17++;

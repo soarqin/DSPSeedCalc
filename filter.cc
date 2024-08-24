@@ -61,10 +61,10 @@ void loadFilters() {
             if (auto *lib = dlopen(filename.c_str(), RTLD_LAZY)) {
                 int type = 0;
                 const char *pname;
-                if (auto initfunc = reinterpret_cast<PluginInitFunc>(dlsym(lib, "init"))) {
+                if (const auto initfunc = reinterpret_cast<PluginInitFunc>(dlsym(lib, "init"))) {
                     pname = initfunc(&api, &type);
                 } else {
-                    if (auto init2func = reinterpret_cast<PluginInit2Func>(dlsym(lib, "init2"))) {
+                    if (const auto init2func = reinterpret_cast<PluginInit2Func>(dlsym(lib, "init2"))) {
                         pname = init2func(&api, &type, dspugen::settings.hasPlanets);
                     } else {
                         dlclose(lib);
@@ -137,7 +137,7 @@ bool runFilters(const dspugen::Galaxy *galaxy) {
         bool pass = true;
         for (auto &s: galaxy->stars) {
             pass = true;
-            for (auto &fs: filters) {
+            for (const auto &fs: filters) {
                 if(fs.starFilter && !fs.starFilter(s, fs.userp)) {
                     pass = false;
                     break;
@@ -145,8 +145,8 @@ bool runFilters(const dspugen::Galaxy *galaxy) {
             }
             if (!pass) { continue; }
             pass = false;
-            for (auto &p: s->planets) {
-                for (auto &fs: filters) {
+            for (const auto &p: s->planets) {
+                for (const auto &fs: filters) {
                     if (!fs.planetFilter || fs.planetFilter(p, fs.userp)) {
                         pass = true;
                     }
@@ -160,7 +160,7 @@ bool runFilters(const dspugen::Galaxy *galaxy) {
     } else if (hasStarFilter) {
         bool pass = true;
         for (auto &s: galaxy->stars) {
-            for (auto &fs: filters) {
+            for (const auto &fs: filters) {
                 if(fs.starFilter && !fs.starFilter(s, fs.userp)) {
                     pass = false;
                     break;
@@ -172,7 +172,7 @@ bool runFilters(const dspugen::Galaxy *galaxy) {
         }
         if (!pass) { return false; }
     }
-    for (auto &fs: filters) {
+    for (const auto &fs: filters) {
         if (fs.seedEnd && !fs.seedEnd(fs.userp)) {
             return false;
         }
@@ -182,7 +182,7 @@ bool runFilters(const dspugen::Galaxy *galaxy) {
 
 bool runPoseFilters(int seed, const std::vector<dspugen::VectorLF3> &poses) {
     if (poseFuncs.empty()) { return false; }
-    for (auto &func: poseFuncs) {
+    for (const auto &func: poseFuncs) {
         func(seed, poses);
     }
     return true;
@@ -190,14 +190,14 @@ bool runPoseFilters(int seed, const std::vector<dspugen::VectorLF3> &poses) {
 
 bool runOutput(const dspugen::Galaxy *g) {
     if (outputFuncs.empty()) { return false; }
-    for (auto &func: outputFuncs) {
+    for (const auto &func: outputFuncs) {
         func(g);
     }
     return true;
 }
 
 void unloadFilters() {
-    for (auto &func: uninitFuncs) {
+    for (const auto &func: uninitFuncs) {
         func();
     }
     filters.clear();

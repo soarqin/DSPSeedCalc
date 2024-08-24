@@ -79,7 +79,7 @@ Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, i
     auto rand4 = dotNet35Random.nextDouble();
     auto themeSeed = dotNet35Random.next();
     auto num15 = std::pow(1.2f, static_cast<float>(num2 * (num3 - 0.5) * 0.5));
-    auto num16 = 0.0f;
+    float num16;
     if (orbitAround == 0) {
         num16 = OrbitRadiusFactor[orbitIndex] * star->orbitScaler;
         auto num17 = (num15 - 1.0f) / std::max(1.0f, num16) + 1.0f;
@@ -369,8 +369,8 @@ void Planet::generateVeins() {
         dotNet35Random.next();
         dotNet35Random.next();
         dotNet35Random.next();
-        util::DotNet35Random dotNet35Random2(dotNet35Random.next());
-        auto num = 2.1f / radius;
+        // util::DotNet35Random dotNet35Random2(dotNet35Random.next());
+        // auto num = 2.1f / radius;
         memcpy(&veinSpot[1], &themeProto->veinSpot[0], sizeof(int) * std::min(14, static_cast<int>(themeProto->veinSpot.size())));
         auto p = 1.0f;
         auto spectr = star->spectr;
