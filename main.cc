@@ -123,8 +123,8 @@ static void pose() {
 
 void addSeedByString(const std::string &buf, int stars = 64) {
     auto pos = buf.find('-');
-    int from = (int)std::strtol(buf.c_str(), nullptr, 10);
-    int to = pos != std::string::npos ? (int)std::strtol(buf.c_str() + pos + 1, nullptr, 10) : from;
+    int from = static_cast<int>(std::strtol(buf.c_str(), nullptr, 10));
+    int to = pos != std::string::npos ? static_cast<int>(std::strtol(buf.c_str() + pos + 1, nullptr, 10)) : from;
     if (from == 0 && to == 0) {
         return;
     }
@@ -132,10 +132,10 @@ void addSeedByString(const std::string &buf, int stars = 64) {
         pos = buf.find(',');
         int starsTo = 0;
         if (pos != std::string::npos) {
-            stars = (int)std::strtol(buf.c_str() + pos + 1, nullptr, 10);
+            stars = static_cast<int>(std::strtol(buf.c_str() + pos + 1, nullptr, 10));
             auto pos2 = buf.find('-', pos + 1);
             if (pos2 != std::string::npos) {
-                starsTo = (int)std::strtol(buf.c_str() + pos2 + 1, nullptr, 10);
+                starsTo = static_cast<int>(std::strtol(buf.c_str() + pos2 + 1, nullptr, 10));
             }
         }
         if (starsTo > stars) {
@@ -204,10 +204,10 @@ int main(int argc, char *argv[]) {
     while ((opt = getopt_long(argc, argv, ":t:i:o:bpPn", longOptions, nullptr)) != -1) {
         switch (opt) {
         case ':':
-            fmt::print(std::cerr, "mssing argument for {}\n", (char)optopt);
+            fmt::print(std::cerr, "mssing argument for {}\n", static_cast<char>(optopt));
             return -1;
         case '?':
-            fmt::print(std::cerr, "bad arument: {}\n", (char)optopt);
+            fmt::print(std::cerr, "bad arument: {}\n", static_cast<char>(optopt));
             return -1;
         case 'n':
             genName = true;

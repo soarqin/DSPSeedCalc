@@ -1,5 +1,7 @@
 #include <cfloat>
 #include "galaxy.hh"
+#include "protoset.hh"
+#include "settings.hh"
 
 #include <raylib.h>
 #include <rcamera.h>
@@ -13,24 +15,25 @@
 void GradiantColor(float t, Color &color) {
     const struct {
         float z;
+
         struct {
             float x, y, z;
         } color;
     } colors[] = {
-        {0, {1, 0.229, 0.1745}},
-        {0.07, {1, 0.4373, 0.1765}},
-        {0.32, {1, 0.9515, 0.1557}},
-        {0.5, {0.9879, 1, 0.6179}},
-        {0.7235, {0.9764, 1, 0.978}},
-        {0.82, {0.58, 0.8963, 1}},
-        {0.92, {0.1176, 0.6548, 1}},
-        {1, {0.0991, 0.34, 1}},
-    };
+            { 0, { 1, 0.229, 0.1745 } },
+            { 0.07, { 1, 0.4373, 0.1765 } },
+            { 0.32, { 1, 0.9515, 0.1557 } },
+            { 0.5, { 0.9879, 1, 0.6179 } },
+            { 0.7235, { 0.9764, 1, 0.978 } },
+            { 0.82, { 0.58, 0.8963, 1 } },
+            { 0.92, { 0.1176, 0.6548, 1 } },
+            { 1, { 0.0991, 0.34, 1 } },
+        };
 
     if (t == 0) {
-        color.r = uint8_t(std::roundf(colors[0].color.x * 255.0f));
-        color.g = uint8_t(std::roundf(colors[0].color.y * 255.0f));
-        color.b = uint8_t(std::roundf(colors[0].color.z * 255.0f));
+        color.r = static_cast<uint8_t>(std::roundf(colors[0].color.x * 255.0f));
+        color.g = static_cast<uint8_t>(std::roundf(colors[0].color.y * 255.0f));
+        color.b = static_cast<uint8_t>(std::roundf(colors[0].color.z * 255.0f));
     }
     color.a = 255;
     for (size_t i = 1; i < 8; i++) {
@@ -39,15 +42,14 @@ void GradiantColor(float t, Color &color) {
         auto &lc = colors[i - 1];
         auto lz = lc.z;
         float p = (t - lz) / (gc.z - lz);
-        color.r = uint8_t(std::roundf((lc.color.x + (gc.color.x - lc.color.x) * p) * 255.0f));
-        color.g = uint8_t(std::roundf((lc.color.y + (gc.color.y - lc.color.y) * p) * 255.0f));
-        color.b = uint8_t(std::roundf((lc.color.z + (gc.color.z - lc.color.z) * p) * 255.0f));
+        color.r = static_cast<uint8_t>(std::roundf((lc.color.x + (gc.color.x - lc.color.x) * p) * 255.0f));
+        color.g = static_cast<uint8_t>(std::roundf((lc.color.y + (gc.color.y - lc.color.y) * p) * 255.0f));
+        color.b = static_cast<uint8_t>(std::roundf((lc.color.z + (gc.color.z - lc.color.z) * p) * 255.0f));
         break;
     }
 }
 
-void CameraControl(Camera *camera)
-{
+void CameraControl(Camera *camera) {
     bool rotateUp = false;
 
     // Camera rotation
@@ -59,23 +61,19 @@ void CameraControl(Camera *camera)
     if (IsKeyDown(KEY_E)) CameraRoll(camera, CAMERA_ROTATION_SPEED);
 
     // Camera movement
-    if (!IsGamepadAvailable(0))
-    {
+    if (!IsGamepadAvailable(0)) {
         // Camera pan (for CAMERA_FREE)
-        if (IsMouseButtonDown(MOUSE_BUTTON_MIDDLE))
-        {
+        if (IsMouseButtonDown(MOUSE_BUTTON_MIDDLE)) {
             const Vector2 mouseDelta = GetMouseDelta();
             if (mouseDelta.x > 0.0f) CameraMoveRight(camera, CAMERA_PAN_SPEED, false);
             if (mouseDelta.x < 0.0f) CameraMoveRight(camera, -CAMERA_PAN_SPEED, false);
             if (mouseDelta.y > 0.0f) CameraMoveUp(camera, -CAMERA_PAN_SPEED);
             if (mouseDelta.y < 0.0f) CameraMoveUp(camera, CAMERA_PAN_SPEED);
-        }
-        else if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
-        {
+        } else if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
             // Mouse support
             Vector2 mouseDelta = GetMouseDelta();
-            CameraYaw(camera, -mouseDelta.x*CAMERA_MOUSE_MOVE_SENSITIVITY, false);
-            CameraPitch(camera, -mouseDelta.y*CAMERA_MOUSE_MOVE_SENSITIVITY, false, false, rotateUp);
+            CameraYaw(camera, -mouseDelta.x * CAMERA_MOUSE_MOVE_SENSITIVITY, false);
+            CameraPitch(camera, -mouseDelta.y * CAMERA_MOUSE_MOVE_SENSITIVITY, false, false, rotateUp);
         }
 
         // Keyboard support
@@ -83,12 +81,10 @@ void CameraControl(Camera *camera)
         if (IsKeyDown(KEY_A)) CameraMoveRight(camera, -CAMERA_MOVE_SPEED, false);
         if (IsKeyDown(KEY_S)) CameraMoveForward(camera, -CAMERA_MOVE_SPEED, false);
         if (IsKeyDown(KEY_D)) CameraMoveRight(camera, CAMERA_MOVE_SPEED, false);
-    }
-    else
-    {
+    } else {
         // Gamepad controller support
-        CameraYaw(camera, -(GetGamepadAxisMovement(0, GAMEPAD_AXIS_RIGHT_X) * 2)*CAMERA_MOUSE_MOVE_SENSITIVITY, false);
-        CameraPitch(camera, -(GetGamepadAxisMovement(0, GAMEPAD_AXIS_RIGHT_Y) * 2)*CAMERA_MOUSE_MOVE_SENSITIVITY, false, false, rotateUp);
+        CameraYaw(camera, -(GetGamepadAxisMovement(0, GAMEPAD_AXIS_RIGHT_X) * 2) * CAMERA_MOUSE_MOVE_SENSITIVITY, false);
+        CameraPitch(camera, -(GetGamepadAxisMovement(0, GAMEPAD_AXIS_RIGHT_Y) * 2) * CAMERA_MOUSE_MOVE_SENSITIVITY, false, false, rotateUp);
 
         if (GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_Y) <= -0.25f) CameraMoveForward(camera, CAMERA_MOVE_SPEED, false);
         if (GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X) <= -0.25f) CameraMoveRight(camera, -CAMERA_MOVE_SPEED, false);
@@ -112,12 +108,12 @@ void StoreCursorPosition() {
 }
 
 void RestoreCursorPosition() {
-    SetMousePosition(int(storedMousePosition.x), int(storedMousePosition.y));
+    SetMousePosition(static_cast<int>(storedMousePosition.x), static_cast<int>(storedMousePosition.y));
 }
 
 int main(int, char *[]) {
-    const int screenWidth = 1280;
-    const int screenHeight = 720;
+    constexpr int screenWidth = 1280;
+    constexpr int screenHeight = 720;
     SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_HIGHDPI | FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
     InitWindow(screenWidth, screenHeight, "Dyson Sphere Program Universe Viewer");
 
@@ -130,7 +126,11 @@ int main(int, char *[]) {
     }
     auto font = LoadFontEx("Roboto-Regular.ttf", 18, codepoints, 95 + 11);
 
-    auto *galaxy = dspugen::Galaxy::create(dspugen::DefaultAlgoVersion, 0, 64, true, false);
+    dspugen::settings.hasPlanets = true;
+    dspugen::settings.birthOnly = false;
+    dspugen::settings.genName = true;
+    dspugen::loadProtoSets();
+    auto *galaxy = dspugen::Galaxy::create(dspugen::DefaultAlgoVersion, 0, 64);
     struct StarData {
         int id;
         Vector3 position;
@@ -142,17 +142,17 @@ int main(int, char *[]) {
     std::vector<StarData> stars;
     for (const auto *s: galaxy->stars) {
         auto &pos = s->position;
-        Vector3 p = {float(pos.x), float(pos.y - 10.0f), float(pos.z)};
+        Vector3 p = { static_cast<float>(pos.x), static_cast<float>(pos.y - 10.0f), static_cast<float>(pos.z) };
         Color c;
         switch (s->type) {
             case dspugen::EStarType::WhiteDwarf:
-                c = Color {118, 118, 118, 255};
+                c = Color { 118, 118, 118, 255 };
                 break;
             case dspugen::EStarType::NeutronStar:
-                c = Color {128, 97, 255, 255};
+                c = Color { 128, 97, 255, 255 };
                 break;
             case dspugen::EStarType::BlackHole:
-                c = Color {0, 0, 0, 255};
+                c = Color { 0, 0, 0, 255 };
                 break;
             default:
                 GradiantColor(s->color, c);
@@ -173,13 +173,13 @@ int main(int, char *[]) {
                 radius = 1.5f;
         }
         auto v2 = MeasureTextEx(font, s->name.c_str(), 18, 0);
-        stars.emplace_back(StarData{s->id, p, radius * 0.2f, c, v2.x, s});
+        stars.emplace_back(StarData { s->id, p, radius * 0.2f, c, v2.x, s });
     }
 
-    Camera3D camera = {0};
-    camera.position = (Vector3){40.0f, -40.0f, 40.0f};
-    camera.target = (Vector3){0.0f, -10.0f, 0.0f};
-    camera.up = (Vector3){0.0f, -1.0f, 0.0f};
+    Camera3D camera = { 0 };
+    camera.position = (Vector3) { 40.0f, -40.0f, 40.0f };
+    camera.target = (Vector3) { 0.0f, -10.0f, 0.0f };
+    camera.up = (Vector3) { 0.0f, -1.0f, 0.0f };
     camera.fovy = 45.0f;
     camera.projection = CAMERA_PERSPECTIVE;
 
@@ -193,7 +193,7 @@ int main(int, char *[]) {
         }
         CameraControl(&camera);
 
-        if (IsKeyPressed('Z')) camera.target = (Vector3){0.0f, -10.0f, 0.0f};
+        if (IsKeyPressed('Z')) camera.target = (Vector3) { 0.0f, -10.0f, 0.0f };
 
         const StarData *collisionStar;
         if (IsCursorHidden()) {
@@ -219,7 +219,7 @@ int main(int, char *[]) {
 
         BeginDrawing();
 
-        ClearBackground(Color {32, 32, 32, 255});
+        ClearBackground(Color { 32, 32, 32, 255 });
 
         BeginMode3D(camera);
 
@@ -228,10 +228,10 @@ int main(int, char *[]) {
         for (auto &s: stars) {
             DrawSphere(s.position, s.radius, s.color);
             if (&s == selectedStar) {
-                Vector3 dimension = {s.radius * 1.8f, s.radius * 1.8f, s.radius * 1.8f};
+                Vector3 dimension = { s.radius * 1.8f, s.radius * 1.8f, s.radius * 1.8f };
                 DrawCubeWiresV(s.position, dimension, WHITE);
             } else if (&s == collisionStar) {
-                Vector3 dimension = {s.radius * 1.8f, s.radius * 1.8f, s.radius * 1.8f};
+                Vector3 dimension = { s.radius * 1.8f, s.radius * 1.8f, s.radius * 1.8f };
                 DrawCubeWiresV(s.position, dimension, LIGHTGRAY);
             }
         }

@@ -8,6 +8,7 @@ add_library(dspugen STATIC
     planet.cc planet.hh
     protoset.cc protoset.hh
     namegen.cc namegen.hh
+    settings.hh
     vectors.hh
     util/dotnet35random.cc util/dotnet35random.hh
     util/maths.hh util/mempool.hh

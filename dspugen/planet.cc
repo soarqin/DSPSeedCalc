@@ -48,10 +48,10 @@ Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, i
     planet->id = star->id * 100 + index + 1;
     auto &stars = galaxy->stars;
     auto num = 0;
-    for (auto i = 0; i < star->index; i++) num += stars[i]->planets.size();
+    for (auto i = 0; i < star->index; i++) num += static_cast<int>(stars[i]->planets.size());
     num += index;
     if (orbitAround > 0) {
-        auto planetCount = int(star->planets.size());
+        auto planetCount = static_cast<int>(star->planets.size());
         for (auto j = 0; j < planetCount; j++)
             if (orbitAround == star->planets[j]->number && star->planets[j]->orbitAround == 0) {
                 planet->orbitAroundPlanet = star->planets[j];
@@ -78,15 +78,15 @@ Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, i
     auto rand3 = dotNet35Random.nextDouble();
     auto rand4 = dotNet35Random.nextDouble();
     auto themeSeed = dotNet35Random.next();
-    auto num15 = (float)std::pow(1.2f, (float)(num2 * (num3 - 0.5) * 0.5));
+    auto num15 = std::pow(1.2f, static_cast<float>(num2 * (num3 - 0.5) * 0.5));
     auto num16 = 0.0f;
     if (orbitAround == 0) {
         num16 = OrbitRadiusFactor[orbitIndex] * star->orbitScaler;
         auto num17 = (num15 - 1.0f) / std::max(1.0f, num16) + 1.0f;
         num16 *= num17;
     } else {
-        num16 = (float)(((1600.0f * orbitIndex + 200.0f) * (float)std::pow(star->orbitScaler, 0.3f) *
-            util::lerp(num15, 1.0f, 0.5f) + planet->orbitAroundPlanet->realRadius()) / 40000.0);
+        num16 = static_cast<float>(((1600.0f * static_cast<float>(orbitIndex) + 200.0f) * std::pow(star->orbitScaler, 0.3f) *
+                                    util::lerp(num15, 1.0f, 0.5f) + planet->orbitAroundPlanet->realRadius()) / 40000.0);
     }
 
     planet->orbitRadius = num16;
@@ -185,19 +185,19 @@ Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, i
         planet->scale = 10.0f;
         planet->habitableBias = 100.0f;
     } else {
-        auto num19 = (float)std::ceil(galaxy->starCount * 0.29f);
+        auto num19 = std::ceil(static_cast<float>(galaxy->starCount) * 0.29f);
         if (num19 < 11.0f) num19 = 11.0f;
-        auto num20 = num19 - galaxy->HabitableCount;
-        float num21 = galaxy->starCount - star->index;
+        auto num20 = num19 - static_cast<float>(galaxy->HabitableCount);
+        auto num21 = static_cast<float>(galaxy->starCount - star->index);
         auto sunDistance = planet->sunDistance;
         auto num22 = 1000.0f;
         auto num23 = 1000.0f;
         if (habitableRadius > 0.0f && sunDistance > 0.0f) {
             num23 = sunDistance / habitableRadius;
-            num22 = std::abs((float)std::log(num23));
+            num22 = std::abs(std::log(num23));
         }
 
-        auto num24 = std::clamp((float)std::sqrt(habitableRadius), 1.0f, 2.0f) - 0.04f;
+        auto num24 = std::clamp(std::sqrt(habitableRadius), 1.0f, 2.0f) - 0.04f;
         auto a = num20 / num21;
         a = util::lerp(a, 0.35f, 0.5f);
         a = std::clamp(a, 0.08f, 0.8f);
@@ -206,7 +206,7 @@ Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, i
 
         auto f = util::clamp01(planet->habitableBias / a);
         auto p = a * 10.0f;
-        f = (float)std::pow(f, p);
+        f = std::pow(f, p);
         if (num12 > f && star->index > 0 ||
             planet->orbitAround > 0 && planet->orbitIndex == 1 && star->index == 0) {
             planet->type = EPlanetType::Ocean;
@@ -235,14 +235,14 @@ Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, i
 */
 
     planet->luminosity =
-        (float)std::pow(planet->star->lightBalanceRadius / (planet->sunDistance + 0.01f), 0.6f);
+        std::pow(planet->star->lightBalanceRadius / (planet->sunDistance + 0.01f), 0.6f);
     if (planet->luminosity > 1.0f) {
-        planet->luminosity = (float)std::log(planet->luminosity) + 1.0f;
-        planet->luminosity = (float)std::log(planet->luminosity) + 1.0f;
-        planet->luminosity = (float)std::log(planet->luminosity) + 1.0f;
+        planet->luminosity = std::log(planet->luminosity) + 1.0f;
+        planet->luminosity = std::log(planet->luminosity) + 1.0f;
+        planet->luminosity = std::log(planet->luminosity) + 1.0f;
     }
 
-    planet->luminosity = (float)std::round(planet->luminosity * 100.0f) / 100.0f;
+    planet->luminosity = std::round(planet->luminosity * 100.0f) / 100.0f;
     planet->setPlanetTheme(rand, rand2, rand3, rand4, themeSeed);
     planet->generateVeins();
     return planet;
@@ -251,7 +251,7 @@ Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, i
 void Planet::generateGas() {
     if (type != EPlanetType::Gas || !gasItems.empty()) return;
     const auto *themeProto4 = themeProtoSet.select(theme);
-    auto num3 = int(themeProto4->gasSpeeds.size());
+    auto num3 = static_cast<int>(themeProto4->gasSpeeds.size());
     gasItems = themeProto4->gasItems;
     gasSpeeds.resize(num3);
 /*
@@ -263,7 +263,7 @@ void Planet::generateGas() {
 */
     util::DotNet35Random dotNet35Random(themeSeed);
     for (auto num5 = 0; num5 < num3; num5++) {
-        gasSpeeds[num5] = themeProto4->gasSpeeds[num5] * ((float)dotNet35Random.nextDouble() * 0.190909147f + 0.9090909f) * std::pow(resourceCoef, 0.3f);
+        gasSpeeds[num5] = themeProto4->gasSpeeds[num5] * (static_cast<float>(dotNet35Random.nextDouble()) * 0.190909147f + 0.9090909f) * std::pow(resourceCoef, 0.3f);
 /*
         auto *itemProto = itemProtoSet.select(gasItems[num5]);
         gasHeatValues[num5] = itemProto->heatValue;
@@ -286,11 +286,11 @@ void Planet::setPlanetTheme(double rand1, double rand2, double rand3, double ran
             if (themeProto.distribute == EThemeDistribute::Birth) flag = true;
         } else {
             bool flag2 = themeProto.temperature * temperatureBias >= -0.1f;
-            if (std::abs(themeProto.temperature) < 0.5f && themeProto.planetType == int(EPlanetType::Desert))
+            if (std::abs(themeProto.temperature) < 0.5f && themeProto.planetType == static_cast<int>(EPlanetType::Desert))
             {
                 flag2 = std::abs(temperatureBias) < std::abs(themeProto.temperature) + 0.1f;
             }
-            if (themeProto.planetType == int(type) && flag2)
+            if (themeProto.planetType == static_cast<int>(type) && flag2)
             {
                 if (star->index == 0)
                 {
@@ -318,7 +318,7 @@ void Planet::setPlanetTheme(double rand1, double rand2, double rand3, double ran
 
     if (tmpThemeCount == 0)
         for (const auto &themeProto2: themeProtoSet.dataArray) {
-            auto flag2 = themeProto2.planetType == (int)EPlanetType::Desert;
+            auto flag2 = themeProto2.planetType == static_cast<int>(EPlanetType::Desert);
             if (flag2)
                 for (auto l = 0; l < index; l++)
                     if (star->planets[l]->theme == themeProto2.id) {
@@ -331,15 +331,15 @@ void Planet::setPlanetTheme(double rand1, double rand2, double rand3, double ran
 
     if (tmpThemeCount == 0)
         for (const auto &themeProto3: themeProtoSet.dataArray) {
-            if (themeProto3.planetType == (int)EPlanetType::Desert) tmpTheme[tmpThemeCount++] = themeProto3.id;
+            if (themeProto3.planetType == static_cast<int>(EPlanetType::Desert)) tmpTheme[tmpThemeCount++] = themeProto3.id;
         }
 
-    theme = tmpTheme[(int)(rand1 * tmpThemeCount) % tmpThemeCount];
+    theme = tmpTheme[static_cast<int>(rand1 * tmpThemeCount) % tmpThemeCount];
     const auto *themeProto4 = themeProtoSet.select(theme);
     algoId = 0;
     if (themeProto4 != nullptr && !themeProto4->algos.empty()) {
-        auto count = int(themeProto4->algos.size());
-        algoId = themeProto4->algos[(int)(rand2 * count) % count];
+        auto count = static_cast<int>(themeProto4->algos.size());
+        algoId = themeProto4->algos[static_cast<int>(rand2 * count) % count];
 /*
         modX = themeProto4->modX.x + rand3 * (themeProto4->modX.y - themeProto4->modX.x);
         modY = themeProto4->modY.x + rand4 * (themeProto4->modY.y - themeProto4->modY.x);
@@ -347,7 +347,7 @@ void Planet::setPlanetTheme(double rand1, double rand2, double rand3, double ran
     }
 
     if (themeProto4 == nullptr) return;
-    type = EPlanetType(themeProto4->planetType);
+    type = static_cast<EPlanetType>(themeProto4->planetType);
 /*
     style = themeSeed % 60;
     ionHeight = themeProto4->ionHeight;
@@ -371,7 +371,7 @@ void Planet::generateVeins() {
         dotNet35Random.next();
         util::DotNet35Random dotNet35Random2(dotNet35Random.next());
         auto num = 2.1f / radius;
-        memcpy(&veinSpot[1], &themeProto->veinSpot[0], sizeof(int) * std::min(14, int(themeProto->veinSpot.size())));
+        memcpy(&veinSpot[1], &themeProto->veinSpot[0], sizeof(int) * std::min(14, static_cast<int>(themeProto->veinSpot.size())));
         auto p = 1.0f;
         auto spectr = star->spectr;
         switch (star->type) {
@@ -447,12 +447,12 @@ void Planet::generateVeins() {
         }
         }
 
-        auto rareVeinsSize = int(themeProto->rareVeins.size());
+        auto rareVeinsSize = static_cast<int>(themeProto->rareVeins.size());
         for (auto n = 0; n < rareVeinsSize; n++) {
             auto num2 = themeProto->rareVeins[n];
             auto num3 = themeProto->rareSettings[star->index == 0 ? (n * 4) : (n * 4 + 1)];
             auto num4 = themeProto->rareSettings[n * 4 + 2];
-            num3 = 1.0f - (float)std::pow(1.0f - num3, p);
+            num3 = 1.0f - std::pow(1.0f - num3, p);
             if (dotNet35Random.nextDouble() >= num3) continue;
             veinSpot[num2]++;
             for (auto num7 = 1; num7 < 12; num7++) {

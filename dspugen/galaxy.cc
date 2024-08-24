@@ -8,19 +8,19 @@
 
 #include "galaxy.hh"
 
+#include "settings.hh"
 #include "util/dotnet35random.hh"
 #include "util/mempool.hh"
 #include "vectors.hh"
 #include <vector>
 
-extern bool hasPlanets;
-extern bool birthOnly;
-
 namespace dspugen {
+
+Settings settings;
 
 static thread_local util::MemPool<Galaxy> gpool;
 
-bool CheckCollision(std::vector<VectorLF3> &pts, VectorLF3 pt, double minDist) {
+bool CheckCollision(const std::vector<VectorLF3> &pts, const VectorLF3 &pt, double minDist) {
     double num = minDist * minDist;
     for (auto &pt2: pts) {
         double num2 = pt.x - pt2.x;
@@ -41,7 +41,7 @@ static void RandomPoses(std::vector<VectorLF3> &tmpPoses, std::vector<VectorLF3>
     tmpPoses.emplace_back();
     int num2 = 6;
     int num3 = 8;
-    int num4 = (int)(num * (num3 - num2) + num2);
+    int num4 = static_cast<int>(num * (num3 - num2) + num2);
     for (int i = 0; i < num4; i++) {
         int num5 = 0;
         while (num5++ < 256) {
@@ -53,7 +53,7 @@ static void RandomPoses(std::vector<VectorLF3> &tmpPoses, std::vector<VectorLF3>
             if (num10 > 1.0 || num10 < 1E-08) continue;
             double num11 = std::sqrt(num10);
             num9 = (num9 * (MAX_STEP - MIN_STEP) + MIN_STEP) / num11;
-            VectorLF3 vectorLf{num6 * num9, num7 * num9, num8 * num9};
+            VectorLF3 vectorLf { num6 * num9, num7 * num9, num8 * num9 };
             if (!CheckCollision(tmpPoses, vectorLf, MIN_DIST)) {
                 tmpDrunk.emplace_back(vectorLf);
                 tmpPoses.emplace_back(vectorLf);
@@ -77,8 +77,10 @@ static void RandomPoses(std::vector<VectorLF3> &tmpPoses, std::vector<VectorLF3>
                 if (num18 > 1.0 || num18 < 1E-08) continue;
                 double num19 = std::sqrt(num18);
                 num17 = (num17 * (MAX_STEP - MIN_STEP) + MIN_STEP) / num19;
-                VectorLF3 vectorLf2{drunk.x + num14 * num17, drunk.y + num15 * num17,
-                                    drunk.z + num16 * num17};
+                VectorLF3 vectorLf2 {
+                    drunk.x + num14 * num17, drunk.y + num15 * num17,
+                    drunk.z + num16 * num17
+                };
                 if (!CheckCollision(tmpPoses, vectorLf2, MIN_DIST)) {
                     drunk = vectorLf2;
                     tmpPoses.emplace_back(vectorLf2);
@@ -91,12 +93,12 @@ static void RandomPoses(std::vector<VectorLF3> &tmpPoses, std::vector<VectorLF3>
 
 static int GenerateTempPoses(std::vector<VectorLF3> &tmpPoses, std::vector<VectorLF3> &tmpDrunk, int seed, int targetCount) {
     RandomPoses(tmpPoses, tmpDrunk, seed, targetCount * 4);
-    for (int num = int(tmpPoses.size()) - 1; num >= 0; num--) {
+    for (int num = static_cast<int>(tmpPoses.size()) - 1; num >= 0; num--) {
         if ((num % 4) == 0) { continue; }
         tmpPoses.erase(tmpPoses.begin() + num);
         if (tmpPoses.size() <= targetCount) break;
     }
-    return int(tmpPoses.size());
+    return static_cast<int>(tmpPoses.size());
 }
 
 Galaxy::~Galaxy() {
@@ -120,16 +122,17 @@ Galaxy *Galaxy::create(int algoVersion, int galaxySeed, int starCount) {
     auto *galaxy = gpool.alloc();
     galaxy->seed = galaxySeed;
     galaxy->starCount = starCount;
-    galaxy->stars.resize(birthOnly ? 1 : starCount);
+    galaxy->stars.resize(settings.birthOnly ? 1 : starCount);
 
-    auto num = (float)dotNet35Random.nextDouble();
-    auto num2 = (float)dotNet35Random.nextDouble();
-    auto num3 = (float)dotNet35Random.nextDouble();
-    auto num4 = (float)dotNet35Random.nextDouble();
-    auto num5 = (int)std::ceil(0.01f * starCount + num * 0.3f);
-    auto num6 = (int)std::ceil(0.01f * starCount + num2 * 0.3f);
-    auto num7 = (int)std::ceil(0.016f * starCount + num3 * 0.4f);
-    auto num8 = (int)std::ceil(0.013f * starCount + num4 * 1.4f);
+    auto starCountf = static_cast<float>(starCount);
+    auto num = static_cast<float>(dotNet35Random.nextDouble());
+    auto num2 = static_cast<float>(dotNet35Random.nextDouble());
+    auto num3 = static_cast<float>(dotNet35Random.nextDouble());
+    auto num4 = static_cast<float>(dotNet35Random.nextDouble());
+    auto num5 = static_cast<int>(std::ceil(0.01f * starCountf + num * 0.3f));
+    auto num6 = static_cast<int>(std::ceil(0.01f * starCountf + num2 * 0.3f));
+    auto num7 = static_cast<int>(std::ceil(0.016f * starCountf + num3 * 0.4f));
+    auto num8 = static_cast<int>(std::ceil(0.013f * starCountf + num4 * 1.4f));
     auto num9 = starCount - num5;
     auto num10 = num9 - num6;
     auto num11 = num10 - num7;
@@ -141,7 +144,7 @@ Galaxy *Galaxy::create(int algoVersion, int galaxySeed, int starCount) {
         if (i == 0) {
             galaxy->stars[i] = Star::createBirthStar(galaxy, seed);
             galaxy->birthStarId = galaxy->stars[i]->id;
-            if (birthOnly) break;
+            if (settings.birthOnly) break;
             continue;
         }
 
@@ -158,7 +161,7 @@ Galaxy *Galaxy::create(int algoVersion, int galaxySeed, int starCount) {
         else if (i >= num11) needtype = EStarType::WhiteDwarf;
         galaxy->stars[i] = Star::createStar(galaxy, tmpPoses[i], i + 1, seed, needtype, needSpectr);
     }
-    if (hasPlanets) {
+    if (settings.hasPlanets) {
         for (auto &star: galaxy->stars) {
             star->createStarPlanets();
         }
@@ -172,9 +175,6 @@ int Galaxy::GeneratePoses(int algoVersion, int galaxySeed, int starCount, std::v
     poses.clear();
     poses.reserve(256);
     tmpDrunk.reserve(256);
-    constexpr double MIN_DIST = 2.0;
-    constexpr double MIN_STEP = 2.0;
-    constexpr double MAX_STEP = 3.2;
     return GenerateTempPoses(poses, tmpDrunk, dotNet35Random.next(), starCount);
 }
 

@@ -25,7 +25,7 @@ public:
     T *alloc(const V &...v) {
         T *ptr;
         if (pool_->empty()) {
-            ptr = (T *)malloc(sizeof(T));
+            ptr = static_cast<T*>(malloc(sizeof(T)));
         } else {
             ptr = pool_->back();
             pool_->pop_back();

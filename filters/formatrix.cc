@@ -207,7 +207,7 @@ __declspec(dllexport) bool FILTERAPI galaxyFilter(const dspugen::Galaxy *g) {
             return;
         }
         countedStars.insert(star->id);
-        cnt[0] += int(star->planets.size());
+        cnt[0] += static_cast<int>(star->planets.size());
         for (const auto *planet: star->planets) {
             if (lumSet.find(planet->id) != lumSet.end()) {
                 continue;

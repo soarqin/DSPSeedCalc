@@ -195,9 +195,9 @@ struct rgb {
   FMT_CONSTEXPR rgb(uint32_t hex)
       : r((hex >> 16) & 0xFF), g((hex >> 8) & 0xFF), b(hex & 0xFF) {}
   FMT_CONSTEXPR rgb(color hex)
-      : r((uint32_t(hex) >> 16) & 0xFF),
-        g((uint32_t(hex) >> 8) & 0xFF),
-        b(uint32_t(hex) & 0xFF) {}
+      : r((static_cast<uint32_t>(hex) >> 16) & 0xFF),
+        g((static_cast<uint32_t>(hex) >> 8) & 0xFF),
+        b(static_cast<uint32_t>(hex) & 0xFF) {}
   uint8_t r;
   uint8_t g;
   uint8_t b;

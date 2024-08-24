@@ -390,7 +390,7 @@ template <typename...> struct conjunction : std::true_type {};
 template <typename P> struct conjunction<P> : P {};
 template <typename P1, typename... Pn>
 struct conjunction<P1, Pn...>
-    : conditional_t<bool(P1::value), conjunction<Pn...>, P1> {};
+    : conditional_t<static_cast<bool>(P1::value), conjunction<Pn...>, P1> {};
 
 template <typename T, typename Char, typename Enable = void>
 struct range_formatter;

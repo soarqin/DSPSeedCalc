@@ -1631,7 +1631,7 @@ inline auto get_file(F* f, int) -> glibc_file<F> {
 
 inline auto get_file(FILE* f, ...) -> fallback_file<FILE> { return f; }
 
-using file_ref = decltype(get_file(static_cast<FILE*>(nullptr), 0));
+using file_ref = decltype(get_file(nullptr, 0));
 
 template <typename F = FILE, typename Enable = void>
 class file_print_buffer : public buffer<char> {
@@ -1681,7 +1681,7 @@ extern "C" __declspec(dllimport) int __stdcall WriteConsoleW(  //
 FMT_FUNC bool write_console(int fd, string_view text) {
   auto u16 = utf8_to_utf16(text);
   return WriteConsoleW(reinterpret_cast<void*>(_get_osfhandle(fd)), u16.c_str(),
-                       static_cast<dword>(u16.size()), nullptr, nullptr) != 0;
+                       u16.size(), nullptr, nullptr) != 0;
 }
 #endif
 

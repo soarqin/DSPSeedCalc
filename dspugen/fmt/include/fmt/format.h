@@ -631,19 +631,19 @@ FMT_CONSTEXPR inline auto utf8_decode(const char* s, uint32_t* c, int* e)
 
   // Assume a four-byte character and load four bytes. Unused bits are
   // shifted out.
-  *c = uint32_t(uchar(s[0]) & masks[len]) << 18;
-  *c |= uint32_t(uchar(s[1]) & 0x3f) << 12;
-  *c |= uint32_t(uchar(s[2]) & 0x3f) << 6;
-  *c |= uint32_t(uchar(s[3]) & 0x3f) << 0;
+  *c = static_cast<uint32_t>(uchar(s[0]) & masks[len]) << 18;
+  *c |= static_cast<uint32_t>(uchar(s[1]) & 0x3f) << 12;
+  *c |= static_cast<uint32_t>(uchar(s[2]) & 0x3f) << 6;
+  *c |= static_cast<uint32_t>(uchar(s[3]) & 0x3f) << 0;
   *c >>= shiftc[len];
 
   // Accumulate the various error conditions.
   *e = (*c < mins[len]) << 6;       // non-canonical encoding
   *e |= ((*c >> 11) == 0x1b) << 7;  // surrogate half?
   *e |= (*c > 0x10FFFF) << 8;       // out of range?
-  *e |= (uchar(s[1]) & 0xc0) >> 2;
-  *e |= (uchar(s[2]) & 0xc0) >> 4;
-  *e |= uchar(s[3]) >> 6;
+  *e |= (static_cast<uchar>(s[1]) & 0xc0) >> 2;
+  *e |= (static_cast<uchar>(s[2]) & 0xc0) >> 4;
+  *e |= static_cast<uchar>(s[3]) >> 6;
   *e ^= 0x2a;  // top two bits of each tail byte correct?
   *e >>= shifte[len];
 
@@ -1752,7 +1752,7 @@ template <typename Char, typename OutputIt, typename UIntPtr>
 auto write_ptr(OutputIt out, UIntPtr value, const format_specs* specs)
     -> OutputIt {
   int num_digits = count_digits<4>(value);
-  auto size = to_unsigned(num_digits) + size_t(2);
+  auto size = to_unsigned(num_digits) + static_cast<size_t>(2);
   auto write = [=](reserve_iterator<OutputIt> it) {
     *it++ = static_cast<Char>('0');
     *it++ = static_cast<Char>('x');
@@ -2068,7 +2068,7 @@ auto write_int(OutputIt out, UInt value, unsigned prefix,
     break;
   case presentation_type::hex:
     if (specs.alt)
-      prefix_append(prefix, unsigned(specs.upper ? 'X' : 'x') << 8 | '0');
+      prefix_append(prefix, static_cast<unsigned>(specs.upper ? 'X' : 'x') << 8 | '0');
     num_digits = count_digits<4>(value);
     format_uint<4, char>(appender(buffer), value, num_digits, specs.upper);
     break;
@@ -2082,7 +2082,7 @@ auto write_int(OutputIt out, UInt value, unsigned prefix,
     break;
   case presentation_type::bin:
     if (specs.alt)
-      prefix_append(prefix, unsigned(specs.upper ? 'B' : 'b') << 8 | '0');
+      prefix_append(prefix, static_cast<unsigned>(specs.upper ? 'B' : 'b') << 8 | '0');
     num_digits = count_digits<1>(value);
     format_uint<1, char>(appender(buffer), value, num_digits);
     break;
@@ -2172,7 +2172,7 @@ FMT_CONSTEXPR FMT_INLINE auto write_int(OutputIt out, write_int_arg<T> arg,
   }
   case presentation_type::hex: {
     if (specs.alt)
-      prefix_append(prefix, unsigned(specs.upper ? 'X' : 'x') << 8 | '0');
+      prefix_append(prefix, static_cast<unsigned>(specs.upper ? 'X' : 'x') << 8 | '0');
     int num_digits = count_digits<4>(abs_value);
     return write_int<Char>(
         out, num_digits, prefix, specs, [=](reserve_iterator<OutputIt> it) {
@@ -2192,7 +2192,7 @@ FMT_CONSTEXPR FMT_INLINE auto write_int(OutputIt out, write_int_arg<T> arg,
   }
   case presentation_type::bin: {
     if (specs.alt)
-      prefix_append(prefix, unsigned(specs.upper ? 'B' : 'b') << 8 | '0');
+      prefix_append(prefix, static_cast<unsigned>(specs.upper ? 'B' : 'b') << 8 | '0');
     int num_digits = count_digits<1>(abs_value);
     return write_int<Char>(
         out, num_digits, prefix, specs, [=](reserve_iterator<OutputIt> it) {
@@ -3039,7 +3039,7 @@ FMT_CONSTEXPR20 inline void format_dragon(basic_fp<uint128_t> value,
       upper = &upper_store;
     }
   }
-  int even = static_cast<int>((value.f & 1) == 0);
+  int even = (value.f & 1) == 0;
   if (!upper) upper = &lower;
   bool shortest = num_digits < 0;
   if ((flags & dragon::fixup) != 0) {

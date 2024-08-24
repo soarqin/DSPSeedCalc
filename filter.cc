@@ -61,11 +61,11 @@ void loadFilters() {
             if (lib) {
                 int type = 0;
                 const char *pname = nullptr;
-                auto initfunc = (PluginInitFunc)dlsym(lib, "init");
+                auto initfunc = static_cast<PluginInitFunc>(dlsym(lib, "init"));
                 if (initfunc) {
                     pname = initfunc(&api, &type);
                 } else {
-                    auto init2func = (PluginInit2Func)dlsym(lib, "init2");
+                    auto init2func = static_cast<PluginInit2Func>(dlsym(lib, "init2"));
                     if (init2func) {
                         pname = init2func(&api, &type, hasPlanets);
                     } else {
@@ -73,18 +73,18 @@ void loadFilters() {
                         continue;
                     }
                 }
-                auto uninitfunc = (void(FILTERAPI*)())dlsym(lib, "uninit");
+                auto uninitfunc = static_cast<void(__attribute__((__stdcall__))*)()>(dlsym(lib, "uninit"));
                 if (uninitfunc) {
                     uninitFuncs.emplace_back(uninitfunc);
                 }
                 switch (type) {
                     case 0: {
                         FilterSet fs{
-                            (SeedBeginFunc)dlsym(lib, "seedBegin"),
-                            (GalaxyFilterFunc)dlsym(lib, "galaxyFilter"),
-                            (StarFilterFunc)dlsym(lib, "starFilter"),
-                            (PlanetFilterFunc)dlsym(lib, "planetFilter"),
-                            (SeedEndFunc)dlsym(lib, "seedEnd")
+                            static_cast<SeedBeginFunc>(dlsym(lib, "seedBegin")),
+                            static_cast<GalaxyFilterFunc>(dlsym(lib, "galaxyFilter")),
+                            static_cast<StarFilterFunc>(dlsym(lib, "starFilter")),
+                            static_cast<PlanetFilterFunc>(dlsym(lib, "planetFilter")),
+                            static_cast<SeedEndFunc>(dlsym(lib, "seedEnd"))
                         };
                         filters.emplace_back(fs);
                         if (fs.galaxyFilter || fs.starFilter || fs.planetFilter || fs.seedEnd) {
@@ -99,7 +99,7 @@ void loadFilters() {
                         break;
                     }
                     case 1: {
-                        auto func = (OutputFunc)dlsym(lib, "output");
+                        auto func = static_cast<OutputFunc>(dlsym(lib, "output"));
                         if (func) {
                             outputFuncs.emplace_back(func);
                             if (pname) {
@@ -111,7 +111,7 @@ void loadFilters() {
                         break;
                     }
                     case 2: {
-                        auto func = (PoseFunc)dlsym(lib, "pose");
+                        auto func = static_cast<PoseFunc>(dlsym(lib, "pose"));
                         if (func) {
                             poseFuncs.emplace_back(func);
                             if (pname) {

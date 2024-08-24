@@ -448,8 +448,8 @@ struct is_std_string_like<T, void_t<decltype(std::declval<T>().find_first_of(
 constexpr auto is_utf8_enabled() -> bool {
   // Avoid an MSVC sign extension bug: https://github.com/fmtlib/fmt/pull/2297.
   using uchar = unsigned char;
-  return sizeof("\u00A7") == 3 && uchar("\u00A7"[0]) == 0xC2 &&
-         uchar("\u00A7"[1]) == 0xA7;
+  return sizeof("\u00A7") == 3 && static_cast<uchar>("\u00A7"[0]) == 0xC2 &&
+         static_cast<uchar>("\u00A7"[1]) == 0xA7;
 }
 constexpr auto use_utf8() -> bool {
   return !FMT_MSC_VERSION || is_utf8_enabled();
@@ -2249,17 +2249,17 @@ FMT_CONSTEXPR auto parse_nonnegative_int(const Char*& begin, const Char* end,
   auto p = begin;
   do {
     prev = value;
-    value = value * 10 + unsigned(*p - '0');
+    value = value * 10 + static_cast<unsigned>(*p - '0');
     ++p;
   } while (p != end && '0' <= *p && *p <= '9');
   auto num_digits = p - begin;
   begin = p;
-  int digits10 = static_cast<int>(sizeof(int) * CHAR_BIT * 3 / 10);
+  int digits10 = sizeof(int) * CHAR_BIT * 3 / 10;
   if (num_digits <= digits10) return static_cast<int>(value);
   // Check for overflow.
   unsigned max = INT_MAX;
   return num_digits == digits10 + 1 &&
-                 prev * 10ull + unsigned(p[-1] - '0') <= max
+                 prev * 10ull + static_cast<unsigned>(p[-1] - '0') <= max
              ? static_cast<int>(value)
              : error_value;
 }

@@ -182,7 +182,7 @@ static const std::string black_hole_name_formats[2] = {"DSR J{0:02}{1:02}+{2:02}
 
 std::string NameGen::randomName(int seed) {
     util::DotNet35Random dotNet35Random(seed);
-    int num = (int)(dotNet35Random.nextDouble() * 1.8 + 2.3);
+    int num = static_cast<int>(dotNet35Random.nextDouble() * 1.8 + 2.3);
     std::string text;
     for (int i = 0; i < num; i++) {
         if (!(dotNet35Random.nextDouble() < 0.05000000074505806) || i != 0) {

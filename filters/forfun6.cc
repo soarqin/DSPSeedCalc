@@ -180,7 +180,7 @@ __declspec(dllexport) bool FILTERAPI galaxyFilter(const dspugen::Galaxy *g) {
             case dspugen::EStarType::BlackHole:
             case dspugen::EStarType::NeutronStar: {
                 auto d = s->position.sqrMagnitude();
-                auto distanceFactor = (float)std::sqrt(d) / 32.0f;
+                auto distanceFactor = static_cast<float>(std::sqrt(d)) / 32.0f;
                 if (distanceFactor > 1.0f) {
                     distanceFactor = std::log(distanceFactor) + 1.0f;
                     distanceFactor = std::log(distanceFactor) + 1.0f;

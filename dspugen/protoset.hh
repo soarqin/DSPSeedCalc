@@ -59,7 +59,7 @@ public:
     }
 
     inline void onLoaded() {
-        auto count = int(dataArray.size());
+        auto count = static_cast<int>(dataArray.size());
         for (int i = 0; i < count; ++i) {
             dataIndices[dataArray[i].id] = i;
             nameIndices[dataArray[i].name] = i;

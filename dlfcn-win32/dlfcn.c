@@ -178,7 +178,7 @@ static void save_err_str( const char *str, DWORD dwMessageId )
 
     ret = FormatMessageA( FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, dwMessageId,
         MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ),
-        error_buffer + pos, (DWORD) ( sizeof( error_buffer ) - pos ), NULL );
+        error_buffer + pos, sizeof( error_buffer ) - pos, NULL );
     pos += ret;
 
     /* When FormatMessageA() fails it returns zero and does not touch buffer
@@ -430,13 +430,13 @@ void *dlopen( const char *file, int mode )
     /* Return to previous state of the error-mode bit flags. */
     MySetErrorMode( uMode );
 
-    return (void *) hModule;
+    return hModule;
 }
 
 DLFCN_EXPORT
 int dlclose( void *handle )
 {
-    HMODULE hModule = (HMODULE) handle;
+    HMODULE hModule = handle;
     BOOL ret;
 
     error_occurred = FALSE;
@@ -454,7 +454,7 @@ int dlclose( void *handle )
     /* dlclose's return value in inverted in relation to FreeLibrary's. */
     ret = !ret;
 
-    return (int) ret;
+    return ret;
 }
 
 DLFCN_NOINLINE /* Needed for _ReturnAddress() */
@@ -503,7 +503,7 @@ void *dlsym( void *handle, const char *name )
 
     if( handle != RTLD_NEXT )
     {
-        symbol = GetProcAddress( (HMODULE) handle, name );
+        symbol = GetProcAddress( handle, name );
 
         if( symbol != NULL )
             goto end;
@@ -709,7 +709,7 @@ static void *get_address_from_import_address_table( void *iat, DWORD iat_size, c
      *   100002f20:   ff 25 3a e1 ff ff    jmpq   *-0x1ec6(%rip)    # 0x100001060
      * So cast to signed LONG type
      */
-    BYTE *ptr = (BYTE *)( thkp + 6 + (LONG) offset );
+    BYTE *ptr = thkp + 6 + (LONG) offset;
 #else
     /* On 32 bit the offset is absolute
      *   4019b4:    ff 25 90 71 40 00    jmp    *0x40719

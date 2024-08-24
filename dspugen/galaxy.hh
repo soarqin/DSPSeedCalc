@@ -10,7 +10,6 @@
 
 #include "star.hh"
 #include <vector>
-#include <memory>
 
 namespace dspugen {
 
