@@ -29,6 +29,7 @@ struct PluginAPI {
 
 using PluginInitFunc = const char*(FILTERAPI*)(PluginAPI*, int*);
 using PluginInit2Func = const char*(FILTERAPI*)(PluginAPI*, int*, bool);
+using PluginUninitFunc = void(FILTERAPI*)();
 using SeedBeginFunc = void*(FILTERAPI*)(int);
 using GalaxyFilterFunc = bool(FILTERAPI*)(const dspugen::Galaxy*, void*);
 using StarFilterFunc = bool(FILTERAPI*)(const dspugen::Star*, void*);

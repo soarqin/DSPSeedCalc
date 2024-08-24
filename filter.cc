@@ -7,6 +7,9 @@
  */
 
 #include "filter.hh"
+
+#include "settings.hh"
+
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 #include <dlfcn.h>
@@ -26,11 +29,9 @@ struct FilterSet {
 static std::vector<FilterSet> filters;
 static std::vector<OutputFunc> outputFuncs;
 static std::vector<PoseFunc> poseFuncs;
-static std::vector<void(FILTERAPI*)()> uninitFuncs;
+static std::vector<PluginUninitFunc> uninitFuncs;
 static bool hasStarFilter = false;
 static bool hasPlanetFilter = false;
-
-extern bool hasPlanets;
 
 static void generateAllPlanets(const dspugen::Galaxy *galaxy) {
     if (!galaxy->stars[0]->planets.empty()) return;
@@ -40,7 +41,7 @@ static void generateAllPlanets(const dspugen::Galaxy *galaxy) {
 }
 
 static void generatePlanetGas(const dspugen::Planet *planet) {
-    ((dspugen::Planet *)planet)->generateGas();
+    const_cast<dspugen::Planet*>(planet)->generateGas();
 }
 
 static PluginAPI api = {
@@ -57,34 +58,30 @@ void loadFilters() {
         if (dir_entry.is_regular_file()) {
             const auto &path = dir_entry.path();
             auto filename = path.string();
-            auto *lib = dlopen(filename.c_str(), RTLD_LAZY);
-            if (lib) {
+            if (auto *lib = dlopen(filename.c_str(), RTLD_LAZY)) {
                 int type = 0;
-                const char *pname = nullptr;
-                auto initfunc = static_cast<PluginInitFunc>(dlsym(lib, "init"));
-                if (initfunc) {
+                const char *pname;
+                if (auto initfunc = reinterpret_cast<PluginInitFunc>(dlsym(lib, "init"))) {
                     pname = initfunc(&api, &type);
                 } else {
-                    auto init2func = static_cast<PluginInit2Func>(dlsym(lib, "init2"));
-                    if (init2func) {
-                        pname = init2func(&api, &type, hasPlanets);
+                    if (auto init2func = reinterpret_cast<PluginInit2Func>(dlsym(lib, "init2"))) {
+                        pname = init2func(&api, &type, dspugen::settings.hasPlanets);
                     } else {
                         dlclose(lib);
                         continue;
                     }
                 }
-                auto uninitfunc = static_cast<void(__attribute__((__stdcall__))*)()>(dlsym(lib, "uninit"));
-                if (uninitfunc) {
+                if (auto uninitfunc = reinterpret_cast<PluginUninitFunc>(dlsym(lib, "uninit"))) {
                     uninitFuncs.emplace_back(uninitfunc);
                 }
                 switch (type) {
                     case 0: {
                         FilterSet fs{
-                            static_cast<SeedBeginFunc>(dlsym(lib, "seedBegin")),
-                            static_cast<GalaxyFilterFunc>(dlsym(lib, "galaxyFilter")),
-                            static_cast<StarFilterFunc>(dlsym(lib, "starFilter")),
-                            static_cast<PlanetFilterFunc>(dlsym(lib, "planetFilter")),
-                            static_cast<SeedEndFunc>(dlsym(lib, "seedEnd"))
+                            reinterpret_cast<SeedBeginFunc>(dlsym(lib, "seedBegin")),
+                            reinterpret_cast<GalaxyFilterFunc>(dlsym(lib, "galaxyFilter")),
+                            reinterpret_cast<StarFilterFunc>(dlsym(lib, "starFilter")),
+                            reinterpret_cast<PlanetFilterFunc>(dlsym(lib, "planetFilter")),
+                            reinterpret_cast<SeedEndFunc>(dlsym(lib, "seedEnd"))
                         };
                         filters.emplace_back(fs);
                         if (fs.galaxyFilter || fs.starFilter || fs.planetFilter || fs.seedEnd) {
@@ -99,8 +96,7 @@ void loadFilters() {
                         break;
                     }
                     case 1: {
-                        auto func = static_cast<OutputFunc>(dlsym(lib, "output"));
-                        if (func) {
+                        if (auto func = reinterpret_cast<OutputFunc>(dlsym(lib, "output"))) {
                             outputFuncs.emplace_back(func);
                             if (pname) {
                                 fmt::print(std::cout, "Loaded output filter: \"{}\" from [{}]\n", pname, filename);
@@ -111,8 +107,7 @@ void loadFilters() {
                         break;
                     }
                     case 2: {
-                        auto func = static_cast<PoseFunc>(dlsym(lib, "pose"));
-                        if (func) {
+                        if (auto func = reinterpret_cast<PoseFunc>(dlsym(lib, "pose"))) {
                             poseFuncs.emplace_back(func);
                             if (pname) {
                                 fmt::print(std::cout, "Loaded pose filter: \"{}\" from [{}]\n", pname, filename);
@@ -139,7 +134,7 @@ bool runFilters(const dspugen::Galaxy *galaxy) {
         }
     }
     if (hasPlanetFilter) {
-        bool pass;
+        bool pass = true;
         for (auto &s: galaxy->stars) {
             pass = true;
             for (auto &fs: filters) {
@@ -185,7 +180,7 @@ bool runFilters(const dspugen::Galaxy *galaxy) {
     return true;
 }
 
-extern bool runPoseFilters(int seed, const std::vector<dspugen::VectorLF3> &poses) {
+bool runPoseFilters(int seed, const std::vector<dspugen::VectorLF3> &poses) {
     if (poseFuncs.empty()) { return false; }
     for (auto &func: poseFuncs) {
         func(seed, poses);

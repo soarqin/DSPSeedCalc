@@ -1,6 +1,7 @@
 #include "galaxy.hh"
 #include "protoset.hh"
 #include "filter.hh"
+#include "settings.hh"
 
 #include <fmt/ostream.h>
 #include <fmt/format.h>
@@ -20,9 +21,6 @@ static std::vector<std::pair<int, int>> *seedsToCheck = nullptr;
 static size_t currIndex = 0, totalSize = 0;
 static int current = -1, currMax = -1, starCount = 64;
 
-bool genName = false;
-bool hasPlanets = false;
-bool birthOnly = false;
 static bool poseOnly = false;
 static std::ofstream output;
 static int found = 0;
@@ -210,19 +208,19 @@ int main(int argc, char *argv[]) {
             fmt::print(std::cerr, "bad arument: {}\n", static_cast<char>(optopt));
             return -1;
         case 'n':
-            genName = true;
+            dspugen::settings.genName = true;
             break;
         case 'i':
             inputFilename = fmt::format("{}", optarg);
             break;
         case 'p':
-            hasPlanets = true;
+            dspugen::settings.hasPlanets = true;
             break;
         case 'P':
             poseOnly = true;
             break;
         case 'b':
-            birthOnly = true;
+            dspugen::settings.birthOnly = true;
             break;
         case 'o':
             seedFilename = fmt::format("{}", optarg);
