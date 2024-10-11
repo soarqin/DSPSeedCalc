@@ -39,6 +39,9 @@ enum class ESpectrType {
 
 class Star {
 public:
+    static void initThread();
+    static void releaseThread();
+
     ~Star();
     void release();
 

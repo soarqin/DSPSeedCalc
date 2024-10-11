@@ -26,6 +26,9 @@ public:
     static int GeneratePoses(int algoVersion, int galaxySeed, int starCount, std::vector<VectorLF3>& poses);
 
 public:
+    static void initThread();
+    static void releaseThread();
+
     ~Galaxy();
     void release();
 /*

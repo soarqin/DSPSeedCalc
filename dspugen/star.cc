@@ -29,7 +29,15 @@ static float randNormal(float averageValue, float standardDeviation, double r1, 
     return averageValue + standardDeviation * float(std::sqrt(-2.0 * std::log(1.0 - r1)) * std::sin(M_PI * 2.0 * r2));
 }
 
-static thread_local util::MemPool<Star> spool;
+static thread_local util::MemPool<Star> *spool;
+
+void Star::initThread() {
+    spool = new util::MemPool<Star>();
+}
+
+void Star::releaseThread() {
+    delete spool;
+}
 
 Star::~Star() {
     for (auto *p: planets) {
@@ -38,7 +46,7 @@ Star::~Star() {
 }
 
 void Star::release() {
-    spool.release(this);
+    spool->release(this);
 }
 
 Star *Star::createStar(Galaxy *galaxy,
@@ -50,7 +58,7 @@ Star *Star::createStar(Galaxy *galaxy,
     static const auto log10_26 = std::log10(2.6);
     static const auto log10_5 = std::log10(5.0);
 
-    auto *star = spool.alloc();
+    auto *star = spool->alloc();
     star->galaxy = galaxy;
     star->index = id - 1;
     if (galaxy->starCount > 1)
@@ -187,7 +195,7 @@ Star *Star::createBirthStar(Galaxy *galaxy, int seed) {
     static const auto log10_26 = std::log10(2.6);
     static const auto log10_5 = std::log10(5.0);
 
-    auto star = spool.alloc();
+    auto star = spool->alloc();
     star->galaxy = galaxy;
     star->seed = seed;
     util::DotNet35Random dotNet35Random(seed);

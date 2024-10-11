@@ -19,20 +19,28 @@
 
 namespace dspugen {
 
-static thread_local util::MemPool<Planet> ppool;
+static thread_local util::MemPool<Planet> *ppool;
 
 static constexpr float OrbitRadiusFactor[17] = {
     0.0f, 0.4f, 0.7f, 1.0f, 1.4f, 1.9f, 2.5f, 3.3f, 4.3f, 5.5f,
     6.9f, 8.4f, 10.0f, 11.7f, 13.5f, 15.4f, 17.5f
 };
 
+void Planet::initThread() {
+    ppool = new util::MemPool<Planet>();
+}
+
+void Planet::releaseThread() {
+    delete ppool;
+}
+
 void Planet::release() {
-    ppool.release(this);
+    ppool->release(this);
 }
 
 Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, int number,
                            bool gasGiant, int infoSeed, int genSeed) {
-    auto planet = ppool.alloc();
+    auto planet = ppool->alloc();
     util::DotNet35Random dotNet35Random(infoSeed);
     auto *galaxy = star->galaxy;
     planet->index = index;

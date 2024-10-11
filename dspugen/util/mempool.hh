@@ -18,30 +18,30 @@ template<typename T, size_t N = 65536>
 class MemPool final {
 public:
     MemPool() noexcept {
-        pool_ = new std::vector<T *>;
-        pool_->reserve(N);
+        pool_.reserve(N);
     }
     template<typename...V>
     T *alloc(const V &...v) {
         T *ptr;
-        if (pool_->empty()) {
+        if (pool_.empty()) {
             ptr = static_cast<T*>(malloc(sizeof(T)));
         } else {
-            ptr = pool_->back();
-            pool_->pop_back();
+            ptr = pool_.back();
+            pool_.pop_back();
         }
         return new(ptr) T(v...);
     }
     void release(T *v) {
-        if (pool_->size() < N) {
+        if (pool_.size() < N) {
             v->~T();
-            pool_->push_back(v);
+            pool_.push_back(v);
         } else {
-            delete v;
+            v->~T();
+            free(v);
         }
     }
 private:
-    std::vector<T *> *pool_;
+    std::vector<T *> pool_;
 };
 
 }

@@ -18,7 +18,15 @@ namespace dspugen {
 
 Settings settings;
 
-static thread_local util::MemPool<Galaxy> gpool;
+static thread_local util::MemPool<Galaxy> *gpool;
+
+void Galaxy::initThread() {
+    gpool = new util::MemPool<Galaxy>();
+}
+
+void Galaxy::releaseThread() {
+    delete gpool;
+}
 
 bool CheckCollision(const std::vector<VectorLF3> &pts, const VectorLF3 &pt, double minDist) {
     double sqrDist = minDist * minDist;
@@ -108,7 +116,7 @@ Galaxy::~Galaxy() {
 }
 
 void Galaxy::release() {
-    gpool.release(this);
+    gpool->release(this);
 }
 
 Galaxy *Galaxy::create(int algoVersion, int galaxySeed, int starCount) {
@@ -119,7 +127,7 @@ Galaxy *Galaxy::create(int algoVersion, int galaxySeed, int starCount) {
     starCount = GenerateTempPoses(tmpPoses, tmpDrunk, dotNet35Random.next(), starCount);
     if (starCount <= 0) { return nullptr; }
 
-    auto *galaxy = gpool.alloc();
+    auto *galaxy = gpool->alloc();
     galaxy->seed = galaxySeed;
     galaxy->starCount = starCount;
     galaxy->stars.resize(settings.birthOnly ? 1 : starCount);

@@ -60,6 +60,9 @@ void outputFunc(const Star *star) {
 */
 
 static void calc() {
+    dspugen::Galaxy::initThread();
+    dspugen::Star::initThread();
+    dspugen::Planet::initThread();
     while (true) {
         int seed;
         {
@@ -91,6 +94,9 @@ static void calc() {
         }
         galaxy->release();
     }
+    dspugen::Planet::releaseThread();
+    dspugen::Star::releaseThread();
+    dspugen::Galaxy::releaseThread();
 }
 
 static void pose() {

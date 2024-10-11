@@ -90,6 +90,9 @@ class Galaxy;
 
 class Planet {
 public:
+    static void initThread();
+    static void releaseThread();
+
     void release();
 
     int id;
