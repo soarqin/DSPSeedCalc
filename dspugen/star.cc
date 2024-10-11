@@ -27,8 +27,7 @@
 namespace dspugen {
 
 static float randNormal(float averageValue, float standardDeviation, double r1, double r2) {
-    return averageValue + standardDeviation *
-        static_cast<float>(std::sqrt(-2.0 * std::log(1.0 - r1)) * std::sin(M_PI * 2.0 * r2));
+    return averageValue + standardDeviation * float(std::sqrt(-2.0 * std::log(1.0 - r1)) * std::sin(M_PI * 2.0 * r2));
 }
 
 static thread_local util::MemPool<Star> spool;
@@ -55,7 +54,7 @@ Star *Star::createStar(Galaxy *galaxy,
     star->galaxy = galaxy;
     star->index = id - 1;
     if (galaxy->starCount > 1)
-        star->level = static_cast<float>(star->index) / static_cast<float>(galaxy->starCount - 1);
+        star->level = float(star->index) / float(galaxy->starCount - 1);
     else
         star->level = 0.0f;
     star->id = id;
@@ -68,10 +67,10 @@ Star *Star::createStar(Galaxy *galaxy,
     util::DotNet35Random dotNet35Random2(seed3);
     auto num2 = dotNet35Random2.nextDouble();
     auto num3 = dotNet35Random2.nextDouble();
-    auto num4 = static_cast<float>(dotNet35Random2.nextDouble());
+    auto num4 = dotNet35Random2.nextDouble();
     auto rn = dotNet35Random2.nextDouble();
     auto rt = dotNet35Random2.nextDouble();
-    auto num5 = static_cast<float>((dotNet35Random2.nextDouble() - 0.5) * 0.2);
+    auto num5 = (dotNet35Random2.nextDouble() - 0.5) * 0.2;
     auto num6 = dotNet35Random2.nextDouble() * 0.2 + 0.9;
     auto num7 = dotNet35Random2.nextDouble() * 0.4 - 0.2;
     auto num8 = std::pow(2.0, num7);
@@ -97,16 +96,16 @@ Star *Star::createStar(Galaxy *galaxy,
     }
 
     num10 = num10 <= 0.0f ? num10 * 1.0f : num10 * 2.0f;
-    num10 = std::clamp(num10, -2.4f, 4.65f) + num5 + 1.0f;
+    num10 = float(std::clamp(num10, -2.4f, 4.65f) + num5 + 1.0f);
     switch (needtype) {
         case EStarType::BlackHole:
-            star->mass = 18.0f + static_cast<float>(num2 * num3) * 30.0f;
+            star->mass = 18.0f + (num2 * num3) * 30.0f;
             break;
         case EStarType::NeutronStar:
-            star->mass = 7.0f + static_cast<float>(num2) * 11.0f;
+            star->mass = 7.0f + num2 * 11.0f;
             break;
         case EStarType::WhiteDwarf:
-            star->mass = 1.0f + static_cast<float>(num3) * 5.0f;
+            star->mass = 1.0f + num3 * 5.0f;
             break;
         default:
             star->mass = std::pow(2.0f, num10);
@@ -114,13 +113,10 @@ Star *Star::createStar(Galaxy *galaxy,
     }
 
     auto d = star->mass < 2.0f ? (2.0 + 0.4 * (1.0 - star->mass)) : 5.0;
-    star->lifetime =
-        static_cast<float>(10000.0 * std::pow(0.1, std::log10(star->mass * 0.5) / std::log10(d) + 1.0) * num6);
+    star->lifetime = 10000.0 * std::pow(0.1, std::log10(star->mass * 0.5) / std::log10(d) + 1.0) * num6;
     switch (needtype) {
         case EStarType::GiantStar:
-            star->lifetime = static_cast<float>(10000.0 *
-                                                std::pow(0.1, std::log10(star->mass * 0.58) / std::log10(d) + 1.0) *
-                                                num6);
+            star->lifetime = 10000.0 * std::pow(0.1, std::log10(star->mass * 0.58) / std::log10(d) + 1.0) * num6;
             star->age = num4 * 0.04f + 0.96f;
             break;
         case EStarType::WhiteDwarf:
@@ -152,35 +148,30 @@ Star *Star::createStar(Galaxy *galaxy,
     auto num11 = star->lifetime * star->age;
     if (num11 > 5000.0f) num11 = (std::log(num11 / 5000.0f) + 1.0f) * 5000.0f;
     if (num11 > 8000.0f)
-        num11 = (std::log(std::log(std::log(num11 / 8000.0f) + 1.0f) + 1.0f) + 1.0f) * 8000.0f;
+        num11 = (std::log(float(std::log(float(std::log(num11 / 8000.0f) + 1.0f)) + 1.0f)) + 1.0f) * 8000.0f;
     star->lifetime = num11 / star->age;
     auto num12 = (1.0f - std::pow(util::clamp01(star->age), 20.0f) * 0.5f) * star->mass;
-    star->temperature =
-        static_cast<float>(std::pow(num12, 0.56 + 0.14 / (std::log10(num12 + 4.0f) / log10_5)) * 4450.0 + 1300.0);
+    star->temperature = std::pow(num12, 0.56 + 0.14 / (std::log10(num12 + 4.0f) / log10_5)) * 4450.0 + 1300.0;
     auto num13 = std::log10((star->temperature - 1300.0) / 4500.0) / log10_26 - 0.5;
     if (num13 < 0.0) num13 *= 4.0;
     if (num13 > 2.0)
         num13 = 2.0;
     else if (num13 < -4.0) num13 = -4.0;
-/*
-    star->classFactor = (float)num13;
-*/
-    auto classFactor = static_cast<float>(num13);
-    star->spectr = static_cast<ESpectrType>(static_cast<int>(std::round(classFactor + 4.0f)));
-    star->color = util::clamp01((classFactor + 3.5f) * 0.2f);
+    star->spectr = (ESpectrType)(int)std::round(float(num13 + 4.0f));
+    star->color = util::clamp01(float((num13 + 3.5f) * 0.2f));
     star->luminosity = std::pow(num12, 0.7f);
-    star->radius = static_cast<float>(std::pow(star->mass, 0.4) * num8);
+    star->radius = std::pow(star->mass, 0.4) * num8;
 /*
     star->acdiskRadius = 0.0f;
 */
-    auto p = classFactor + 2.0f;
+    auto p = float(num13 + 2.0f);
     star->habitableRadius = std::pow(1.7f, p) + 0.25f * std::min(1.0f, star->orbitScaler);
     star->lightBalanceRadius = std::pow(1.7f, p);
     star->orbitScaler = std::pow(1.35f, p);
     if (star->orbitScaler < 1.0f) star->orbitScaler = util::lerp(star->orbitScaler, 1.0f, 0.6f);
     star->setStarAge(rn, rt);
     star->dysonRadius = star->orbitScaler * 0.28f;
-    auto radMin = static_cast<float>(star->physicsRadius() * 1.5 / 40000.0);
+    auto radMin = star->physicsRadius() * 1.5 / 40000.0;
     if (star->dysonRadius < radMin)
         star->dysonRadius = radMin;
 /*
@@ -212,29 +203,23 @@ Star *Star::createBirthStar(Galaxy *galaxy, int seed) {
     value = std::clamp(value, -0.2f, 0.2f);
     star->mass = std::pow(2.0f, value);
     auto num4 = 2.0 + 0.4 * (1.0 - star->mass);
-    star->lifetime =
-        static_cast<float>(10000.0 * std::pow(0.1, std::log10(star->mass * 0.5) / std::log10(num4) + 1.0) * num2);
-    star->age = static_cast<float>(num * 0.4 + 0.3);
+    star->lifetime = 10000.0 * std::pow(0.1, std::log10(star->mass * 0.5) / std::log10(num4) + 1.0) * num2;
+    star->age = float(num * 0.4 + 0.3);
     auto num5 = (1.0f - std::pow(std::clamp(star->age, 0.0f, 1.0f), 20.0f) * 0.5f) * star->mass;
-    star->temperature =
-        static_cast<float>(std::pow(num5, 0.56 + 0.14 / (std::log10(num5 + 4.0f) / log10_5)) * 4450.0 + 1300.0);
+    star->temperature = std::pow(num5, 0.56 + 0.14 / (std::log10((double)(num5 + 4.0f)) / log10_5)) * 4450.0 + 1300.0;
     auto num6 = std::log10((star->temperature - 1300.0) / 4500.0) / log10_26 - 0.5;
     if (num6 < 0.0) num6 *= 4.0;
     if (num6 > 2.0)
         num6 = 2.0;
     else if (num6 < -4.0) num6 = -4.0;
-/*
-    star->classFactor = (float)num6;
-*/
-    auto classFactor = static_cast<float>(num6);
-    star->spectr = static_cast<ESpectrType>(static_cast<int>(std::round(classFactor + 4.0f)));
-    star->color = std::clamp((classFactor + 3.5f) * 0.2f, 0.0f, 1.0f);
+    star->spectr = (ESpectrType)(int)std::round(float(num6 + 4.0f));
+    star->color = util::clamp01(float((num6 + 3.5f) * 0.2f));
     star->luminosity = std::pow(num5, 0.7f);
-    star->radius = static_cast<float>(std::pow(star->mass, 0.4) * num3);
+    star->radius = std::pow(star->mass, 0.4) * num3;
 /*
     star->acdiskRadius = 0.0f;
 */
-    auto p = classFactor + 2.0f;
+    auto p = float(num6 + 2.0f);
     star->habitableRadius = std::pow(1.7f, p) + 0.2f * std::min(1.0f, star->orbitScaler);
     star->lightBalanceRadius = std::pow(1.7f, p);
     star->orbitScaler = std::pow(1.35f, p);
@@ -250,9 +235,9 @@ Star *Star::createBirthStar(Galaxy *galaxy, int seed) {
 }
 
 void Star::setStarAge(double rn, double rt) {
-    auto num = static_cast<float>(rn * 0.1 + 0.95);
-    auto num2 = static_cast<float>(rt * 0.4 + 0.8);
-    auto num3 = static_cast<float>(rt * 9.0 + 1.0);
+    auto num = float(rn * 0.1 + 0.95);
+    auto num2 = float(rt * 0.4 + 0.8);
+    auto num3 = float(rt * 9.0 + 1.0);
     if (age >= 1.0f) {
         if (mass >= 18.0f) {
             type = EStarType::BlackHole;
@@ -296,7 +281,7 @@ void Star::setStarAge(double rn, double rt) {
             color = 0.7f;
         }
     } else if (age >= 0.96f) {
-        auto num4 = static_cast<float>(std::pow(5.0, std::abs(std::log10(mass) - 0.7)) * 5.0);
+        auto num4 = float(std::pow(5.0, std::abs(std::log10(mass) - 0.7)) * 5.0);
         if (num4 > 10.0f) num4 = (std::log(num4 * 0.1f) + 1.0f) * 10.0f;
         auto num5 = 1.0f - std::pow(age, 30.0f) * 0.5f;
         type = EStarType::GiantStar;
@@ -594,7 +579,7 @@ void Star::createStarPlanets() {
                     auto num20 = planetCount - i;
                     auto num21 = 9 - num17;
                     if (num21 <= num20) break;
-                    auto a = static_cast<float>(num20) / static_cast<float>(num21);
+                    auto a = num20 / float(num21);
                     a = num17 <= 3 ? util::lerp(a, 1.0f, 0.15f) + 0.01f : util::lerp(a, 1.0f, 0.45f) + 0.01f;
                     if (dotNet35Random2.nextDouble() < a) break;
                     num17++;
@@ -657,7 +642,7 @@ void Star::createStarPlanets() {
 
 float Star::updateResourceCoef() {
     if (resourceCoef == 0.0f) {
-        auto distanceFactor = static_cast<float>(position.magnitude()) / 32.0f;
+        auto distanceFactor = float(position.magnitude() / 32.0f);
         if (distanceFactor > 1.0f) {
             distanceFactor = std::log(distanceFactor) + 1.0f;
             distanceFactor = std::log(distanceFactor) + 1.0f;

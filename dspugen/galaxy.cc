@@ -124,15 +124,15 @@ Galaxy *Galaxy::create(int algoVersion, int galaxySeed, int starCount) {
     galaxy->starCount = starCount;
     galaxy->stars.resize(settings.birthOnly ? 1 : starCount);
 
-    auto starCountf = static_cast<float>(starCount);
-    auto num = static_cast<float>(dotNet35Random.nextDouble());
-    auto num2 = static_cast<float>(dotNet35Random.nextDouble());
-    auto num3 = static_cast<float>(dotNet35Random.nextDouble());
-    auto num4 = static_cast<float>(dotNet35Random.nextDouble());
-    auto num5 = static_cast<int>(std::ceil(0.01f * starCountf + num * 0.3f));
-    auto num6 = static_cast<int>(std::ceil(0.01f * starCountf + num2 * 0.3f));
-    auto num7 = static_cast<int>(std::ceil(0.016f * starCountf + num3 * 0.4f));
-    auto num8 = static_cast<int>(std::ceil(0.013f * starCountf + num4 * 1.4f));
+    auto starCountf = float(starCount);
+    auto num = float(dotNet35Random.nextDouble());
+    auto num2 = float(dotNet35Random.nextDouble());
+    auto num3 = float(dotNet35Random.nextDouble());
+    auto num4 = float(dotNet35Random.nextDouble());
+    auto num5 = int(std::ceil(0.01f * starCountf + num * 0.3f));
+    auto num6 = int(std::ceil(0.01f * starCountf + num2 * 0.3f));
+    auto num7 = int(std::ceil(0.016f * starCountf + num3 * 0.4f));
+    auto num8 = int(std::ceil(0.013f * starCountf + num4 * 1.4f));
     auto num9 = starCount - num5;
     auto num10 = num9 - num6;
     auto num11 = num10 - num7;

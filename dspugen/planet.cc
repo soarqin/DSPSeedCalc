@@ -78,22 +78,22 @@ Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, i
     auto rand3 = dotNet35Random.nextDouble();
     auto rand4 = dotNet35Random.nextDouble();
     auto themeSeed = dotNet35Random.next();
-    auto num15 = std::pow(1.2f, static_cast<float>(num2 * (num3 - 0.5) * 0.5));
+    auto num15 = std::pow(1.2f, float(num2 * (num3 - 0.5) * 0.5));
     float num16;
     if (orbitAround == 0) {
         num16 = OrbitRadiusFactor[orbitIndex] * star->orbitScaler;
         auto num17 = (num15 - 1.0f) / std::max(1.0f, num16) + 1.0f;
         num16 *= num17;
     } else {
-        num16 = static_cast<float>(((1600.0f * static_cast<float>(orbitIndex) + 200.0f) * std::pow(star->orbitScaler, 0.3f) *
-                                    util::lerp(num15, 1.0f, 0.5f) + planet->orbitAroundPlanet->realRadius()) / 40000.0);
+        num16 = ((1600.0f * orbitIndex + 200.0f) * std::pow(star->orbitScaler, 0.3f) *
+            util::lerp(num15, 1.0f, 0.5f) + planet->orbitAroundPlanet->realRadius()) / 40000.0;
     }
 
     planet->orbitRadius = num16;
 /*
-    planet->orbitInclination = (float)(num4 * 16.0 - 8.0);
+    planet->orbitInclination = float(num4 * 16.0 - 8.0);
     if (orbitAround > 0) planet->orbitInclination *= 2.2f;
-    planet->orbitLongitude = (float)(num5 * 360.0);
+    planet->orbitLongitude = float(num5 * 360.0);
     if (star->type >= EStarType::NeutronStar) {
         if (planet->orbitInclination > 0.0f)
             planet->orbitInclination += 3.0f;
@@ -105,11 +105,11 @@ Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, i
         std::sqrt(39.478417604357432 * num16 * num16 * num16 / (planet->orbitAroundPlanet == nullptr
                                                                 ? 1.3538551990520382E-06 * star->mass
                                                                 : 1.0830842106853677E-08));
-    planet->orbitPhase = (float)(num6 * 360.0);
+    planet->orbitPhase = float(num6 * 360.0);
 */
     if (num14 < 0.039999999105930328) {
 /*
-        planet->obliquity = (float)(num7 * (num8 - 0.5) * 39.9);
+        planet->obliquity = float(num7 * (num8 - 0.5) * 39.9);
         if (planet->obliquity < 0.0f)
             planet->obliquity -= 70.0f;
         else
@@ -118,19 +118,19 @@ Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, i
         planet->singularity |= EPlanetSingularity::LaySide;
     }/* else if (num14 < 0.10000000149011612) {
 
-        planet->obliquity = (float)(num7 * (num8 - 0.5) * 80.0);
+        planet->obliquity = float(num7 * (num8 - 0.5) * 80.0);
         if (planet->obliquity < 0.0f)
             planet->obliquity -= 30.0f;
         else
             planet->obliquity += 30.0f;
     } else {
-        planet->obliquity = (float)(num7 * (num8 - 0.5) * 60.0);
+        planet->obliquity = float(num7 * (num8 - 0.5) * 60.0);
     }
 */
 
 /*
     planet->rotationPeriod = (num9 * num10 * 1000.0 + 400.0) *
-        (orbitAround == 0 ? (float)std::pow(num16, 0.25f) : 1.0f) *
+        (orbitAround == 0 ? std::pow(num16, 0.25f) : 1.0f) *
         (gasGiant ? 0.2f : 1.0f);
     if (!gasGiant) {
         if (star->type == EStarType::WhiteDwarf)
@@ -140,7 +140,7 @@ Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, i
         else if (star->type == EStarType::BlackHole) planet->rotationPeriod *= 0.15000000596046448;
     }
 
-    planet->rotationPhase = (float)(num11 * 360.0);
+    planet->rotationPhase = float(num11 * 360.0);
 */
     planet->sunDistance =
         orbitAround == 0 ? planet->orbitRadius : planet->orbitAroundPlanet->orbitRadius;
@@ -185,7 +185,7 @@ Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, i
         planet->scale = 10.0f;
         planet->habitableBias = 100.0f;
     } else {
-        auto num19 = std::ceil(static_cast<float>(galaxy->starCount) * 0.29f);
+        auto num19 = std::ceil(galaxy->starCount * 0.29f);
         if (num19 < 11.0f) num19 = 11.0f;
         auto num20 = num19 - static_cast<float>(galaxy->HabitableCount);
         auto num21 = static_cast<float>(galaxy->starCount - star->index);
@@ -234,8 +234,7 @@ Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, i
     }
 */
 
-    planet->luminosity =
-        std::pow(planet->star->lightBalanceRadius / (planet->sunDistance + 0.01f), 0.6f);
+    planet->luminosity = std::pow(planet->star->lightBalanceRadius / (planet->sunDistance + 0.01f), 0.6f);
     if (planet->luminosity > 1.0f) {
         planet->luminosity = std::log(planet->luminosity) + 1.0f;
         planet->luminosity = std::log(planet->luminosity) + 1.0f;
@@ -263,7 +262,7 @@ void Planet::generateGas() {
 */
     util::DotNet35Random dotNet35Random(themeSeed);
     for (auto num5 = 0; num5 < num3; num5++) {
-        gasSpeeds[num5] = themeProto4->gasSpeeds[num5] * (static_cast<float>(dotNet35Random.nextDouble()) * 0.190909147f + 0.9090909f) * std::pow(resourceCoef, 0.3f);
+        gasSpeeds[num5] = themeProto4->gasSpeeds[num5] * (dotNet35Random.nextDouble() * 0.190909147f + 0.9090909f) * std::pow(resourceCoef, 0.3f);
 /*
         auto *itemProto = itemProtoSet.select(gasItems[num5]);
         gasHeatValues[num5] = itemProto->heatValue;

@@ -15,12 +15,14 @@ namespace dspugen::util {
 
 template<typename T>
 inline T clamp01(T a) {
-    return std::clamp(a, T(0), T(1));
+    if (a < T(0)) return T(0);
+    if (a > T(1)) return T(1);
+    return a;
 }
 
 template<typename T>
 inline T lerp(T a, T b, T t) {
-    return a + (b - a) * clamp01(t);
+    return a + (b - a) * double(clamp01(t));
 }
 
 }
