@@ -21,7 +21,6 @@
 #include "util/mempool.hh"
 
 #include <algorithm>
-#include <functional>
 #include <cmath>
 
 namespace dspugen {
@@ -31,8 +30,6 @@ static float randNormal(float averageValue, float standardDeviation, double r1, 
 }
 
 static thread_local util::MemPool<Star> spool;
-static auto log10_26 = std::log10(2.6);
-static auto log10_5 = std::log10(5.0);
 
 Star::~Star() {
     for (auto *p: planets) {
@@ -50,6 +47,9 @@ Star *Star::createStar(Galaxy *galaxy,
                        int seed,
                        EStarType needtype,
                        ESpectrType needSpectr) {
+    static const auto log10_26 = std::log10(2.6);
+    static const auto log10_5 = std::log10(5.0);
+
     auto *star = spool.alloc();
     star->galaxy = galaxy;
     star->index = id - 1;
@@ -184,6 +184,9 @@ Star *Star::createStar(Galaxy *galaxy,
 }
 
 Star *Star::createBirthStar(Galaxy *galaxy, int seed) {
+    static const auto log10_26 = std::log10(2.6);
+    static const auto log10_5 = std::log10(5.0);
+
     auto star = spool.alloc();
     star->galaxy = galaxy;
     star->seed = seed;

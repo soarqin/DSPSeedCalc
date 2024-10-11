@@ -21,12 +21,12 @@ Settings settings;
 static thread_local util::MemPool<Galaxy> gpool;
 
 bool CheckCollision(const std::vector<VectorLF3> &pts, const VectorLF3 &pt, double minDist) {
-    double num = minDist * minDist;
+    double sqrDist = minDist * minDist;
     for (auto &pt2: pts) {
-        double num2 = pt.x - pt2.x;
-        double num3 = pt.y - pt2.y;
-        double num4 = pt.z - pt2.z;
-        if (num2 * num2 + num3 * num3 + num4 * num4 < num) return true;
+        double dx = pt.x - pt2.x;
+        double dy = pt.y - pt2.y;
+        double dz = pt.z - pt2.z;
+        if (dx * dx + dy * dy + dz * dz < sqrDist) return true;
     }
     return false;
 }

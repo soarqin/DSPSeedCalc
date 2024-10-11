@@ -10,7 +10,6 @@
 
 #include "settings.hh"
 
-#include <fmt/format.h>
 #include <fmt/ostream.h>
 #include <dlfcn.h>
 #include <vector>

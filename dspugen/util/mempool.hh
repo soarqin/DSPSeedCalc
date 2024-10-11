@@ -17,7 +17,7 @@ namespace dspugen::util {
 template<typename T, size_t N = 65536>
 class MemPool final {
 public:
-    MemPool() {
+    MemPool() noexcept {
         pool_ = new std::vector<T *>;
         pool_->reserve(N);
     }

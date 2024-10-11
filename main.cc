@@ -13,7 +13,6 @@
 #include <fstream>
 #include <iostream>
 #include <map>
-#include <cmath>
 
 static std::mutex mutex1, mutex2;
 static std::map<int, std::vector<std::pair<int, int>>> seedsToCheckMap;
@@ -22,9 +21,9 @@ static size_t currIndex = 0, totalSize = 0;
 static int current = -1, currMax = -1, starCount = 64;
 
 static bool poseOnly = false;
-static std::ofstream output;
+static std::ofstream *outputStream;
 static int found = 0;
-static std::chrono::time_point<std::chrono::steady_clock> startTime;
+static std::chrono::time_point<std::chrono::steady_clock> *startTime;
 
 /*
 void outputFunc(const Star *star) {
@@ -77,7 +76,7 @@ static void calc() {
             }
         }
         if (seed % 500000 == 0) {
-            fmt::print(std::cout, "Processed to: {},{}. Currently found: {}. {}ms elapsed.\n", seed, starCount, found, std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - startTime).count());
+            fmt::print(std::cout, "Processed to: {},{}. Currently found: {}. {}ms elapsed.\n", seed, starCount, found, std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - *startTime).count());
         }
         auto galaxy = dspugen::Galaxy::create(dspugen::DefaultAlgoVersion, seed, starCount);
         if (!runFilters(galaxy)) {
@@ -88,7 +87,7 @@ static void calc() {
             std::unique_lock lk(mutex2);
             ++found;
             runOutput(galaxy);
-            fmt::print(output, "{},{}\n", seed, galaxy->starCount);
+            fmt::print(*outputStream, "{},{}\n", seed, galaxy->starCount);
         }
         galaxy->release();
     }
@@ -114,7 +113,7 @@ static void pose() {
         dspugen::Galaxy::GeneratePoses(dspugen::DefaultAlgoVersion, seed, starCount, poses);
         runPoseFilters(seed, poses);
         if (seed % 500000 == 0) {
-            fmt::print(std::cout, "Processed to: {},{}. {}ms elapsed.\n", seed, starCount, std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - startTime).count());
+            fmt::print(std::cout, "Processed to: {},{}. {}ms elapsed.\n", seed, starCount, std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - *startTime).count());
         }
     }
 }
@@ -259,8 +258,8 @@ int main(int argc, char *argv[]) {
                    "Seed,Star Count,Planet Id,Around,Type,Tidal Locked,Iron,Copper,Silicium,Titanium,Stone,Coal,Oil,FireIce,Diamond,Fractal,Crysrub,Grat,Bamboo,UnipolarMagnet\n");
     }
 */
-    output = std::ofstream(seedFilename);
-    fmt::print(output, "Seed,Star Count\n");
+    outputStream = new std::ofstream(seedFilename);
+    fmt::print(*outputStream, "Seed,Star Count\n");
 /*
     fmt::print(output[1], "Seed,Star Count,Star Id,Type,Distance,Luminosity,Name\n");
 */
@@ -268,7 +267,7 @@ int main(int argc, char *argv[]) {
         threadCount = std::thread::hardware_concurrency();
         if (threadCount > 1) --threadCount;
     }
-    startTime = std::chrono::steady_clock::now();
+    startTime = new std::chrono::time_point<std::chrono::steady_clock>(std::chrono::steady_clock::now());
     for (auto &p: seedsToCheckMap) {
         auto &seeds = p.second;
         starCount = p.first;
@@ -287,8 +286,9 @@ int main(int argc, char *argv[]) {
             th.join();
         }
     }
-    auto duration = std::chrono::steady_clock::now() - startTime;
-    output.close();
+    auto duration = std::chrono::steady_clock::now() - *startTime;
+    outputStream->close();
+    delete outputStream;
     unloadFilters();
     int count = 0;
     for (auto &sp: seedsToCheckMap) {
@@ -298,5 +298,6 @@ int main(int argc, char *argv[]) {
     }
     fmt::print(std::cout, "Output file: {}\n", seedFilename);
     fmt::print(std::cout, "============\n{}ms used, {} found from {} processed seeds.\n", std::chrono::duration_cast<std::chrono::milliseconds>(duration).count(), found, count);
+    delete startTime;
     return 0;
 }
