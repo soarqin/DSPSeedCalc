@@ -12,6 +12,7 @@ struct Settings {
     bool hasPlanets = false;
     bool birthOnly = false;
     bool genName = false;
+    bool noPosition = false;
 };
 
 extern Settings settings;

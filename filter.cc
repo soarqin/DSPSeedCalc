@@ -87,9 +87,9 @@ void loadFilters() {
                             hasStarFilter = hasStarFilter || fs.starFilter != nullptr;
                             hasPlanetFilter = hasStarFilter || fs.planetFilter != nullptr;
                             if (pname) {
-                                fmt::print(std::cout, "Loaded galaxy filter: \"{}\" from [{}]\n", pname, filename);
+                                fmt::print(std::cerr, "Loaded galaxy filter: \"{}\" from [{}]\n", pname, filename);
                             } else {
-                                fmt::print(std::cout, "Loaded galaxy filter: [{}]\n", filename);
+                                fmt::print(std::cerr, "Loaded galaxy filter: [{}]\n", filename);
                             }
                         }
                         break;
@@ -98,9 +98,9 @@ void loadFilters() {
                         if (auto func = reinterpret_cast<OutputFunc>(dlsym(lib, "output"))) {
                             outputFuncs.emplace_back(func);
                             if (pname) {
-                                fmt::print(std::cout, "Loaded output filter: \"{}\" from [{}]\n", pname, filename);
+                                fmt::print(std::cerr, "Loaded output filter: \"{}\" from [{}]\n", pname, filename);
                             } else {
-                                fmt::print(std::cout, "Loaded output filter: [{}]\n", filename);
+                                fmt::print(std::cerr, "Loaded output filter: [{}]\n", filename);
                             }
                         }
                         break;
@@ -109,9 +109,9 @@ void loadFilters() {
                         if (auto func = reinterpret_cast<PoseFunc>(dlsym(lib, "pose"))) {
                             poseFuncs.emplace_back(func);
                             if (pname) {
-                                fmt::print(std::cout, "Loaded pose filter: \"{}\" from [{}]\n", pname, filename);
+                                fmt::print(std::cerr, "Loaded pose filter: \"{}\" from [{}]\n", pname, filename);
                             } else {
-                                fmt::print(std::cout, "Loaded pose filter: [{}]\n", filename);
+                                fmt::print(std::cerr, "Loaded pose filter: [{}]\n", filename);
                             }
                         }
                         break;
@@ -179,10 +179,10 @@ bool runFilters(const dspugen::Galaxy *galaxy) {
     return true;
 }
 
-bool runPoseFilters(int seed, const std::vector<dspugen::VectorLF3> &poses) {
+bool runPoseFilters(int seed, int starCount, const std::vector<dspugen::VectorLF3> &poses) {
     if (poseFuncs.empty()) { return false; }
     for (const auto &func: poseFuncs) {
-        func(seed, poses);
+        func(seed, starCount, poses);
     }
     return true;
 }

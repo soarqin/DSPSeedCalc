@@ -42,7 +42,7 @@ inline void updateDist(size_t i, double dmax, int seed) {
     }
 }
 
-__declspec(dllexport) bool FILTERAPI pose(int seed, std::vector<dspugen::VectorLF3> &poses) {
+__declspec(dllexport) bool FILTERAPI pose(int seed, int, std::vector<dspugen::VectorLF3> &poses) {
     for (size_t z = 31; z < 64; z++) {
         double dmax = 0.0;
         for (size_t i = 0; i < z; i++) {

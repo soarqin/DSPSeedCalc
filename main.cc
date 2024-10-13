@@ -79,7 +79,7 @@ static void calc() {
             }
         }
         if (seed % 500000 == 0) {
-            fmt::print(std::cout, "Processed to: {},{}. Currently found: {}. {}ms elapsed.\n", seed, starCount, found, std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - *startTime).count());
+            fmt::print(std::cerr, "Processed to: {},{}. Currently found: {}. {}ms elapsed.\n", seed, starCount, found, std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - *startTime).count());
         }
         auto galaxy = dspugen::Galaxy::create(dspugen::DefaultAlgoVersion, seed, starCount);
         if (!runFilters(galaxy)) {
@@ -117,18 +117,26 @@ static void pose() {
             }
         }
         dspugen::Galaxy::GeneratePoses(dspugen::DefaultAlgoVersion, seed, starCount, poses);
-        runPoseFilters(seed, poses);
+        runPoseFilters(seed, starCount, poses);
         if (seed % 500000 == 0) {
-            fmt::print(std::cout, "Processed to: {},{}. {}ms elapsed.\n", seed, starCount, std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - *startTime).count());
+            fmt::print(std::cerr, "Processed to: {},{}. {}ms elapsed.\n", seed, starCount, std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - *startTime).count());
         }
     }
 }
 
 void addSeedByString(const std::string &buf, int stars = 64) {
     auto pos = buf.find('-');
-    int from = static_cast<int>(std::strtol(buf.c_str(), nullptr, 10));
-    int to = pos != std::string::npos ? static_cast<int>(std::strtol(buf.c_str() + pos + 1, nullptr, 10)) : from;
-    if (from == 0 && to == 0) {
+    char *end = nullptr;
+    int from = static_cast<int>(std::strtol(buf.c_str(), &end, 10));
+    if (pos != std::string::npos && *end != '-' && *end != ',' && *end != '\0') {
+        from = -1;
+    }
+    end = nullptr;
+    int to = pos != std::string::npos ? static_cast<int>(std::strtol(buf.c_str() + pos + 1, &end, 10)) : from;
+    if (end != nullptr && *end != ',' && *end != '\0') {
+        to = -1;
+    }
+    if (from == -1 && to == -1) {
         return;
     }
     if (to >= from) {
@@ -204,7 +212,7 @@ int main(int argc, char *argv[]) {
     std::string inputFilename;
     std::string seedFilename = "seeds.csv";
     int threadCount = 0;
-    while ((opt = getopt_long(argc, argv, ":t:i:o:bpPn", longOptions, nullptr)) != -1) {
+    while ((opt = getopt_long(argc, argv, ":t:i:o:bpPZn", longOptions, nullptr)) != -1) {
         switch (opt) {
         case ':':
             fmt::print(std::cerr, "mssing argument for {}\n", static_cast<char>(optopt));
@@ -223,6 +231,9 @@ int main(int argc, char *argv[]) {
             break;
         case 'P':
             poseOnly = true;
+            break;
+        case 'Z':
+            dspugen::settings.noPosition = true;
             break;
         case 'b':
             dspugen::settings.birthOnly = true;
@@ -302,8 +313,8 @@ int main(int argc, char *argv[]) {
             count += p.second - p.first;
         }
     }
-    fmt::print(std::cout, "Output file: {}\n", seedFilename);
-    fmt::print(std::cout, "============\n{}ms used, {} found from {} processed seeds.\n", std::chrono::duration_cast<std::chrono::milliseconds>(duration).count(), found, count);
+    fmt::print(std::cerr, "Output file: {}\n", seedFilename);
+    fmt::print(std::cerr, "============\n{}ms used, {} found from {} processed seeds.\n", std::chrono::duration_cast<std::chrono::milliseconds>(duration).count(), found, count);
     delete startTime;
     return 0;
 }

@@ -12,7 +12,7 @@
 
 extern void loadFilters();
 extern bool runFilters(const dspugen::Galaxy*);
-extern bool runPoseFilters(int, const std::vector<dspugen::VectorLF3>&);
+extern bool runPoseFilters(int, int, const std::vector<dspugen::VectorLF3>&);
 extern bool runOutput(const dspugen::Galaxy*);
 extern void unloadFilters();
 
@@ -37,4 +37,4 @@ using PlanetFilterFunc = bool(FILTERAPI*)(const dspugen::Planet*, void*);
 using SeedEndFunc = bool(FILTERAPI*)(void*);
 
 using OutputFunc = void(FILTERAPI*)(const dspugen::Galaxy*);
-using PoseFunc = void(FILTERAPI*)(int, const std::vector<dspugen::VectorLF3>&);
+using PoseFunc = void(FILTERAPI*)(int, int, const std::vector<dspugen::VectorLF3>&);

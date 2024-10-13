@@ -121,6 +121,58 @@ void Galaxy::release() {
 
 Galaxy *Galaxy::create(int algoVersion, int galaxySeed, int starCount) {
     util::DotNet35Random dotNet35Random(galaxySeed);
+    if (settings.noPosition) {
+        static const VectorLF3 temp;
+        dotNet35Random.next();
+        auto *galaxy = gpool->alloc();
+        galaxy->seed = galaxySeed;
+        galaxy->starCount = starCount;
+        galaxy->stars.resize(settings.birthOnly ? 1 : starCount);
+
+        auto starCountf = float(starCount);
+        auto num = float(dotNet35Random.nextDouble());
+        auto num2 = float(dotNet35Random.nextDouble());
+        auto num3 = float(dotNet35Random.nextDouble());
+        auto num4 = float(dotNet35Random.nextDouble());
+        auto num5 = int(std::ceil(0.01f * starCountf + num * 0.3f));
+        auto num6 = int(std::ceil(0.01f * starCountf + num2 * 0.3f));
+        auto num7 = int(std::ceil(0.016f * starCountf + num3 * 0.4f));
+        auto num8 = int(std::ceil(0.013f * starCountf + num4 * 1.4f));
+        auto num9 = starCount - num5;
+        auto num10 = num9 - num6;
+        auto num11 = num10 - num7;
+        auto num12 = (num11 - 1) / num8;
+        auto num13 = num12 / 2;
+
+        for (int i = 0; i < starCount; i++) {
+            auto seed = dotNet35Random.next();
+            if (i == 0) {
+                galaxy->stars[i] = Star::createBirthStar(galaxy, seed);
+                galaxy->birthStarId = galaxy->stars[i]->id;
+                if (settings.birthOnly) break;
+                continue;
+            }
+
+            auto needSpectr = ESpectrType::X;
+            if (i == 3)
+                needSpectr = ESpectrType::M;
+            else if (i == num11 - 1) needSpectr = ESpectrType::O;
+            auto needtype = EStarType::MainSeqStar;
+            if (i % num12 == num13) needtype = EStarType::GiantStar;
+            if (i >= num9)
+                needtype = EStarType::BlackHole;
+            else if (i >= num10)
+                needtype = EStarType::NeutronStar;
+            else if (i >= num11) needtype = EStarType::WhiteDwarf;
+            galaxy->stars[i] = Star::createStar(galaxy, temp, i + 1, seed, needtype, needSpectr);
+        }
+        if (settings.hasPlanets) {
+            for (auto &star: galaxy->stars) {
+                star->createStarPlanets();
+            }
+        }
+        return galaxy;
+    }
     std::vector<VectorLF3> tmpPoses, tmpDrunk;
     tmpPoses.reserve(256);
     tmpDrunk.reserve(256);
