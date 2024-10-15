@@ -169,6 +169,9 @@ void readFromInputFile(const std::string &filename) {
     while (!ifs.eof()) {
         std::string buf;
         std::getline(ifs, buf);
+        while (buf.back() == '\r' || buf.back() == '\n') {
+            buf.pop_back();
+        }
         if (!buf.empty()) {
             addSeedByString(buf);
         }

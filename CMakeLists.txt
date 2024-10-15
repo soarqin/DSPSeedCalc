@@ -12,6 +12,8 @@ add_static_runtime_option()
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
+option(BUILD_VIEWER "Build viewer application" OFF)
+
 add_subdirectory(dspugen)
 
 add_executable(${PROJECT_NAME} main.cc filter.cc filter.hh)
@@ -29,4 +31,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 
 add_subdirectory(filters)
 
-add_subdirectory(viewer)
+if(BUILD_VIEWER)
+    add_subdirectory(viewer)
+endif()

@@ -39,7 +39,7 @@ void Planet::release() {
 }
 
 Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, int number,
-                           bool gasGiant, int infoSeed, int genSeed) {
+                       bool gasGiant, int infoSeed, int genSeed) {
     auto planet = ppool->alloc();
     util::DotNet35Random dotNet35Random(infoSeed);
     auto *galaxy = star->galaxy;
@@ -94,7 +94,7 @@ Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, i
         num16 *= num17;
     } else {
         num16 = ((1600.0f * orbitIndex + 200.0f) * std::pow(star->orbitScaler, 0.3f) *
-            util::lerp(num15, 1.0f, 0.5f) + planet->orbitAroundPlanet->realRadius()) / 40000.0;
+                 util::lerp(num15, 1.0f, 0.5f) + planet->orbitAroundPlanet->realRadius()) / 40000.0;
     }
 
     planet->orbitRadius = num16;
@@ -293,21 +293,15 @@ void Planet::setPlanetTheme(double rand1, double rand2, double rand3, double ran
             if (themeProto.distribute == EThemeDistribute::Birth) flag = true;
         } else {
             bool flag2 = themeProto.temperature * temperatureBias >= -0.1f;
-            if (std::abs(themeProto.temperature) < 0.5f && themeProto.planetType == static_cast<int>(EPlanetType::Desert))
-            {
+            if (std::abs(themeProto.temperature) < 0.5f && themeProto.planetType == static_cast<int>(EPlanetType::Desert)) {
                 flag2 = std::abs(temperatureBias) < std::abs(themeProto.temperature) + 0.1f;
             }
-            if (themeProto.planetType == static_cast<int>(type) && flag2)
-            {
-                if (star->index == 0)
-                {
-                    if (themeProto.distribute == EThemeDistribute::Default)
-                    {
+            if (themeProto.planetType == static_cast<int>(type) && flag2) {
+                if (star->index == 0) {
+                    if (themeProto.distribute == EThemeDistribute::Default) {
                         flag = true;
                     }
-                }
-                else if (themeProto.distribute == EThemeDistribute::Default || themeProto.distribute == EThemeDistribute::Interstellar)
-                {
+                } else if (themeProto.distribute == EThemeDistribute::Default || themeProto.distribute == EThemeDistribute::Interstellar) {
                     flag = true;
                 }
             }
@@ -376,82 +370,86 @@ void Planet::generateVeins() {
         dotNet35Random.next();
         dotNet35Random.next();
         dotNet35Random.next();
-        // util::DotNet35Random dotNet35Random2(dotNet35Random.next());
+
+        dotNet35Random.next();
+        // => util::DotNet35Random dotNet35Random2(dotNet35Random.next());
+
         // auto num = 2.1f / radius;
         memcpy(&veinSpot[1], &themeProto->veinSpot[0], sizeof(int) * std::min(14, static_cast<int>(themeProto->veinSpot.size())));
         auto p = 1.0f;
         auto spectr = star->spectr;
         switch (star->type) {
-        case EStarType::MainSeqStar:
-            switch (spectr) {
-            case ESpectrType::M:
+            case EStarType::MainSeqStar:
+                switch (spectr) {
+                    case ESpectrType::M:
+                        p = 2.5f;
+                        break;
+                    case ESpectrType::K:
+                        p = 1.0f;
+                        break;
+                    case ESpectrType::G:
+                        p = 0.7f;
+                        break;
+                    case ESpectrType::F:
+                        p = 0.6f;
+                        break;
+                    case ESpectrType::A:
+                        p = 1.0f;
+                        break;
+                    case ESpectrType::B:
+                        p = 0.4f;
+                        break;
+                    case ESpectrType::O:
+                        p = 1.6f;
+                        break;
+                    default:
+                        break;
+                }
+
+                break;
+            case EStarType::GiantStar:
                 p = 2.5f;
                 break;
-            case ESpectrType::K:
-                p = 1.0f;
-                break;
-            case ESpectrType::G:
-                p = 0.7f;
-                break;
-            case ESpectrType::F:
-                p = 0.6f;
-                break;
-            case ESpectrType::A:
-                p = 1.0f;
-                break;
-            case ESpectrType::B:
-                p = 0.4f;
-                break;
-            case ESpectrType::O:
-                p = 1.6f;
-                break;
-            default:
-                break;
-            }
+            case EStarType::WhiteDwarf: {
+                p = 3.5f;
+                veinSpot[9] += 2;
+                for (auto j = 1; j < 12; j++) {
+                    if (dotNet35Random.nextDouble() >= 0.44999998807907104) break;
+                    veinSpot[9]++;
+                }
 
-            break;
-        case EStarType::GiantStar:p = 2.5f;
-            break;
-        case EStarType::WhiteDwarf: {
-            p = 3.5f;
-            veinSpot[9] += 2;
-            for (auto j = 1; j < 12; j++) {
-                if (dotNet35Random.nextDouble() >= 0.44999998807907104) break;
-                veinSpot[9]++;
-            }
+                veinSpot[10] += 2;
+                for (auto k = 1; k < 12; k++) {
+                    if (dotNet35Random.nextDouble() >= 0.44999998807907104) break;
+                    veinSpot[10]++;
+                }
 
-            veinSpot[10] += 2;
-            for (auto k = 1; k < 12; k++) {
-                if (dotNet35Random.nextDouble() >= 0.44999998807907104) break;
-                veinSpot[10]++;
-            }
-
-            veinSpot[12]++;
-            for (auto l = 1; l < 12; l++) {
-                if (dotNet35Random.nextDouble() >= 0.5) break;
                 veinSpot[12]++;
-            }
+                for (auto l = 1; l < 12; l++) {
+                    if (dotNet35Random.nextDouble() >= 0.5) break;
+                    veinSpot[12]++;
+                }
 
-            break;
-        }
-        case EStarType::NeutronStar: {
-            p = 4.5f;
-            veinSpot[14]++;
-            for (auto m = 1; m < 12; m++) {
-                if (dotNet35Random.nextDouble() >= 0.64999997615814209) break;
-                veinSpot[14]++;
+                break;
             }
-            break;
-        }
-        case EStarType::BlackHole: {
-            p = 5.0f;
-            veinSpot[14]++;
-            for (auto i = 1; i < 12; i++) {
-                if (dotNet35Random.nextDouble() >= 0.64999997615814209) break;
+            case EStarType::NeutronStar: {
+                p = 4.5f;
                 veinSpot[14]++;
+                for (auto m = 1; m < 12; m++) {
+                    if (dotNet35Random.nextDouble() >= 0.64999997615814209) break;
+                    veinSpot[14]++;
+                }
+                break;
             }
-            break;
-        }
+            case EStarType::BlackHole: {
+                p = 5.0f;
+                veinSpot[14]++;
+                for (auto i = 1; i < 12; i++) {
+                    if (dotNet35Random.nextDouble() >= 0.64999997615814209) break;
+                    veinSpot[14]++;
+                }
+                break;
+            }
         }
 
         auto rareVeinsSize = static_cast<int>(themeProto->rareVeins.size());
@@ -460,10 +458,10 @@ void Planet::generateVeins() {
             auto num3 = themeProto->rareSettings[star->index == 0 ? (n * 4) : (n * 4 + 1)];
             auto num4 = themeProto->rareSettings[n * 4 + 2];
             num3 = 1.0f - std::pow(1.0f - num3, p);
-            if (dotNet35Random.nextDouble() >= num3) continue;
+            if (dotNet35Random.nextDouble() >= double(num3)) continue;
             veinSpot[num2]++;
             for (auto num7 = 1; num7 < 12; num7++) {
-                if (dotNet35Random.nextDouble() >= num4) break;
+                if (dotNet35Random.nextDouble() >= double(num4)) break;
                 veinSpot[num2]++;
             }
         }

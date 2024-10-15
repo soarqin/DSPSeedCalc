@@ -74,12 +74,19 @@ __declspec(dllexport) void FILTERAPI output(const dspugen::Galaxy *galaxy) {
     theAPI->GenerateAllPlanets(galaxy);
     for (auto *star: galaxy->stars) {
         for (const auto *planet: star->planets) {
-            fmt::print(planetOut, "{},{},{},{},{}\n",
+            fmt::print(planetOut, "{},{},{},{},{},{},{},{},{},{},{},{}\n",
                galaxy->seed,
                galaxy->starCount,
                planet->id,
                star->name + ' ' + id2roman(planet->id % 100),
-               planet->theme
+               planet->theme,
+               planet->veinSpot[8],
+               planet->veinSpot[9],
+               planet->veinSpot[10],
+               planet->veinSpot[11],
+               planet->veinSpot[12],
+               planet->veinSpot[13],
+               planet->veinSpot[14]
             );
         }
     }
