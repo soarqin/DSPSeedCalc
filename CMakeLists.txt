@@ -1,3 +1,5 @@
+set(CMAKE_WARN_DEPRECATED OFF CACHE BOOL "" FORCE)
+
 cmake_minimum_required(VERSION 3.21)
 
 project(DSPSeedCalc CXX)
