@@ -3,14 +3,10 @@ project(filters)
 file(GLOB FILTER_SRC_FILES *.cc)
 foreach(FILTER_SRC ${FILTER_SRC_FILES})
     get_filename_component(FILTER_PROJ ${FILTER_SRC} NAME_WE)
-    add_library(${FILTER_PROJ} SHARED ${FILTER_SRC})
+    add_project(${FILTER_PROJ} SHARED ${FILTER_SRC} INLINE_TARGET FOLDER "cli/filters" OUTPUT_SUBDIR filters)
     target_link_libraries(${FILTER_PROJ} PRIVATE fmt::fmt)
-    target_compile_options(${FILTER_PROJ} PRIVATE -fvisibility=hidden)
-    target_link_options(${FILTER_PROJ} PRIVATE -Wl,--exclude-all-symbols)
     target_include_directories(${FILTER_PROJ} PRIVATE ..)
     set_target_properties(${FILTER_PROJ} PROPERTIES
-        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/filters
-        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/filters
         PREFIX ""
         FOLDER "cli/filters")
 endforeach()
