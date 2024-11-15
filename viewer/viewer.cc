@@ -130,6 +130,10 @@ int main(int, char *[]) {
     dspugen::settings.birthOnly = false;
     dspugen::settings.genName = true;
     dspugen::loadProtoSets();
+
+    dspugen::Galaxy::initThread();
+    dspugen::Star::initThread();
+    dspugen::Planet::initThread();
     auto *galaxy = dspugen::Galaxy::create(dspugen::DefaultAlgoVersion, 0, 64);
     struct StarData {
         int id;

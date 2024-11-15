@@ -15,7 +15,7 @@ if (NOT raylib_FOUND)
         URL_HASH SHA256=${RAYLIB_SHA256SUM}
         EXCLUDE_FROM_ALL
     )
-    set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+    set(BUILD_EXAMPLES OFF CACHE INTERNAL "")
     FetchContent_MakeAvailable(raylib)
 endif()
 
