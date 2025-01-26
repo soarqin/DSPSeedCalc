@@ -131,14 +131,15 @@ __declspec(dllexport) bool FILTERAPI galaxyFilter(const dspugen::Galaxy *g) {
                 /* Luminosity >= 1.7f, can have al least 1 full planet photon receivers */
                 if (star->luminosity >= 4.99263753f) {
                     auto *planet = star->planets[0];
-                    auto dysonRad = std::round(star->dysonRadius * 40000.0 / 100.0) * 100.0;
-                    if (isThemeFullPower(planet->theme, planet->orbitRadius * 40000.0, dysonRad)) {
+                    auto dysonRad = std::round(star->dysonRadius * 80000.0 / 100.0) * 100.0;
+                    auto rad = (planet->orbitAroundPlanet ? planet->orbitAroundPlanet->orbitRadius : planet->orbitRadius) * 40000.0;
+                    if (isThemeFullPower(planet->theme, rad, dysonRad)) {
                         lumId[lumCnt++] = planet->id;
                     }
                     /* Luminosity >= 2.04f, can have 2 full planet photon receivers */
                     if (star->luminosity >= 8.675074184f) {
                         planet = star->planets[1];
-                        if (isThemeFullPower(planet->theme, planet->orbitRadius * 40000.0, dysonRad)) {
+                        if (isThemeFullPower(planet->theme, rad, dysonRad)) {
                             lumId[lumCnt++] = planet->id;
                         }
                     }

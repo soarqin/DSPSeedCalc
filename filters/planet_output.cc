@@ -80,6 +80,8 @@ __declspec(dllexport) void FILTERAPI output(const dspugen::Galaxy *galaxy) {
                planet->id,
                star->name + ' ' + id2roman(planet->id % 100),
                planet->theme,
+               planet->orbitRadius,
+               planet->orbitAround,
                planet->veinSpot[8],
                planet->veinSpot[9],
                planet->veinSpot[10],
