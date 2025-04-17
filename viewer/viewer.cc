@@ -242,18 +242,27 @@ int main(int, char *[]) {
 
         EndMode3D();
 
-        if (selectedStar) {
-            auto pos2d = GetWorldToScreen(selectedStar->position, camera);
-            pos2d.y = pos2d.y - 20.0f;
-            pos2d.x -= selectedStar->nameWidth * 0.5f;
-            DrawTextEx(font, selectedStar->data->name.c_str(), pos2d, 18, 0, WHITE);
-        }
+        if (IsKeyDown(KEY_LEFT_ALT)) {
+            for (auto &s: stars) {
+                auto pos2d = GetWorldToScreen(s.position, camera);
+                pos2d.y = pos2d.y - 20.0f;
+                pos2d.x -= s.nameWidth * 0.5f;
+                DrawTextEx(font, s.data->name.c_str(), pos2d, 18, 0, WHITE);
+            }
+        } else {
+            if (selectedStar) {
+                auto pos2d = GetWorldToScreen(selectedStar->position, camera);
+                pos2d.y = pos2d.y - 20.0f;
+                pos2d.x -= selectedStar->nameWidth * 0.5f;
+                DrawTextEx(font, selectedStar->data->name.c_str(), pos2d, 18, 0, WHITE);
+            }
 
-        if (collisionStar && collisionStar != selectedStar) {
-            auto pos2d = GetWorldToScreen(collisionStar->position, camera);
-            pos2d.y = pos2d.y - 20.0f;
-            pos2d.x -= collisionStar->nameWidth * 0.5f;
-            DrawTextEx(font, collisionStar->data->name.c_str(), pos2d, 18, 0, LIGHTGRAY);
+            if (collisionStar && collisionStar != selectedStar) {
+                auto pos2d = GetWorldToScreen(collisionStar->position, camera);
+                pos2d.y = pos2d.y - 20.0f;
+                pos2d.x -= collisionStar->nameWidth * 0.5f;
+                DrawTextEx(font, collisionStar->data->name.c_str(), pos2d, 18, 0, LIGHTGRAY);
+            }
         }
 
         EndDrawing();
