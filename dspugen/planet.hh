@@ -13,7 +13,7 @@
 
 namespace dspugen {
 
-enum class EVeinType: uint8_t {
+enum class EVeinType {
     None,
     Iron,
     Copper,
@@ -32,7 +32,7 @@ enum class EVeinType: uint8_t {
     Max
 };
 
-enum class EPlanetType: uint8_t {
+enum class EPlanetType {
     None,
     Vocano,
     Ocean,
@@ -41,7 +41,7 @@ enum class EPlanetType: uint8_t {
     Gas
 };
 
-enum class EPlanetTheme: uint8_t {
+enum class EPlanetTheme {
     None,
     Mediterranean,
     GasGiant1,

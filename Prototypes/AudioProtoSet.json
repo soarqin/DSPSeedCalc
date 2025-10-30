@@ -1,0 +1,6118 @@
+{
+  "m_GameObject": {
+    "m_FileID": 0,
+    "m_PathID": 0
+  },
+  "m_Enabled": 1,
+  "m_Script": {
+    "m_FileID": 1,
+    "m_PathID": 2553
+  },
+  "m_Name": "AudioProtoSet",
+  "TableName": "Audio",
+  "Signature": "",
+  "dataArray": [
+    {
+      "Name": "prebuild",
+      "ID": 1,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-prebuild-0",
+      "ClipCount": 1
+    },
+    {
+      "Name": "build-x",
+      "ID": 2,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-build-0",
+      "ClipCount": 1
+    },
+    {
+      "Name": "prebuild-error",
+      "ID": 3,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-error-0",
+      "ClipCount": 1
+    },
+    {
+      "Name": "footsteps-x",
+      "ID": 4,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.03,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-footstep-x",
+      "ClipCount": 11
+    },
+    {
+      "Name": "footsteps-y",
+      "ID": 5,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.03,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-footstep-y",
+      "ClipCount": 2
+    },
+    {
+      "Name": "mouseover-stone",
+      "ID": 6,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-mouseover",
+      "ClipCount": 2
+    },
+    {
+      "Name": "mining-stone",
+      "ID": 7,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.02,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-metal-1",
+      "ClipCount": 1
+    },
+    {
+      "Name": "mining-tree",
+      "ID": 8,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.02,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-metal-1",
+      "ClipCount": 1
+    },
+    {
+      "Name": "mining-vein",
+      "ID": 9,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.02,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-metal-1",
+      "ClipCount": 1
+    },
+    {
+      "Name": "build-menu-category",
+      "ID": 10,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-click-1",
+      "ClipCount": 1
+    },
+    {
+      "Name": "build-menu-child",
+      "ID": 11,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-click-1",
+      "ClipCount": 1
+    },
+    {
+      "Name": "player-inventory-button",
+      "ID": 12,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-click-1",
+      "ClipCount": 1
+    },
+    {
+      "Name": "enter-0",
+      "ID": 13,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-click-1",
+      "ClipCount": 1
+    },
+    {
+      "Name": "enter-1",
+      "ID": 14,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-click-1",
+      "ClipCount": 1
+    },
+    {
+      "Name": "enter-2",
+      "ID": 15,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-click-1",
+      "ClipCount": 1
+    },
+    {
+      "Name": "down-0",
+      "ID": 16,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-click-0",
+      "ClipCount": 1
+    },
+    {
+      "Name": "down-1",
+      "ID": 17,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-click-0",
+      "ClipCount": 1
+    },
+    {
+      "Name": "down-2",
+      "ID": 18,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-click-0",
+      "ClipCount": 1
+    },
+    {
+      "Name": "up-0",
+      "ID": 19,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-click-1",
+      "ClipCount": 1
+    },
+    {
+      "Name": "up-1",
+      "ID": 20,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-click-1",
+      "ClipCount": 1
+    },
+    {
+      "Name": "up-2",
+      "ID": 21,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-click-1",
+      "ClipCount": 1
+    },
+    {
+      "Name": "ui-error",
+      "ID": 22,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.02,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-error-0",
+      "ClipCount": 1
+    },
+    {
+      "Name": "footsteps-0",
+      "ID": 101,
+      "SID": "",
+      "Volume": 0.5,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.07,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-footstep-0",
+      "ClipCount": 7
+    },
+    {
+      "Name": "footsteps-1",
+      "ID": 102,
+      "SID": "",
+      "Volume": 0.5,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.07,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-footstep-1",
+      "ClipCount": 4
+    },
+    {
+      "Name": "footsteps-2",
+      "ID": 103,
+      "SID": "",
+      "Volume": 0.5,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.07,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-footstep-2",
+      "ClipCount": 5
+    },
+    {
+      "Name": "footsteps-3",
+      "ID": 104,
+      "SID": "",
+      "Volume": 0.5,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.07,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-footstep-3",
+      "ClipCount": 5
+    },
+    {
+      "Name": "footsteps-6",
+      "ID": 105,
+      "SID": "",
+      "Volume": 0.9,
+      "Pitch": 1.07,
+      "PitchRandomness": 0.1,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-footstep-6",
+      "ClipCount": 4
+    },
+    {
+      "Name": "build-large",
+      "ID": 106,
+      "SID": "",
+      "Volume": 0.5,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.1,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-build-large",
+      "ClipCount": 1
+    },
+    {
+      "Name": "build-medium",
+      "ID": 107,
+      "SID": "",
+      "Volume": 0.3,
+      "Pitch": 2.0,
+      "PitchRandomness": 0.2,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-build-medium",
+      "ClipCount": 1
+    },
+    {
+      "Name": "build-small",
+      "ID": 108,
+      "SID": "",
+      "Volume": 0.4,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.25,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-build-small",
+      "ClipCount": 1
+    },
+    {
+      "Name": "grass-wash",
+      "ID": 109,
+      "SID": "",
+      "Volume": 0.8,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.05,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-grass-wash",
+      "ClipCount": 3
+    },
+    {
+      "Name": "landing",
+      "ID": 110,
+      "SID": "",
+      "Volume": 0.4,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.07,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-mecha-land",
+      "ClipCount": 1
+    },
+    {
+      "Name": "landing-water",
+      "ID": 111,
+      "SID": "",
+      "Volume": 0.55,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.1,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-mecha-land-water",
+      "ClipCount": 1
+    },
+    {
+      "Name": "warp-begin",
+      "ID": 112,
+      "SID": "",
+      "Volume": 1.4,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-warp-begin",
+      "ClipCount": 1
+    },
+    {
+      "Name": "warp-during",
+      "ID": 113,
+      "SID": "",
+      "Volume": 1.2,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-warp-during",
+      "ClipCount": 1
+    },
+    {
+      "Name": "warp-end",
+      "ID": 114,
+      "SID": "",
+      "Volume": 1.6,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-warp-end",
+      "ClipCount": 1
+    },
+    {
+      "Name": "drift",
+      "ID": 115,
+      "SID": "",
+      "Volume": 0.54,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-drift",
+      "ClipCount": 1
+    },
+    {
+      "Name": "fly-start",
+      "ID": 116,
+      "SID": "",
+      "Volume": 0.29,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-fly-start",
+      "ClipCount": 1
+    },
+    {
+      "Name": "fly-atmos",
+      "ID": 117,
+      "SID": "",
+      "Volume": 0.54,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-fly-atmos",
+      "ClipCount": 1
+    },
+    {
+      "Name": "fly-space",
+      "ID": 118,
+      "SID": "",
+      "Volume": 0.4,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-fly-space",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tree-break",
+      "ID": 119,
+      "SID": "",
+      "Volume": 0.55,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-tree-break",
+      "ClipCount": 1
+    },
+    {
+      "Name": "stone-break",
+      "ID": 120,
+      "SID": "",
+      "Volume": 0.55,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-stone-break",
+      "ClipCount": 1
+    },
+    {
+      "Name": "leaves-break",
+      "ID": 121,
+      "SID": "",
+      "Volume": 0.8,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-leaves-break",
+      "ClipCount": 1
+    },
+    {
+      "Name": "ore-break",
+      "ID": 122,
+      "SID": "",
+      "Volume": 0.3,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-ore-break",
+      "ClipCount": 1
+    },
+    {
+      "Name": "mecha-mining",
+      "ID": 123,
+      "SID": "",
+      "Volume": 0.45,
+      "Pitch": 0.85,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-mecha-mining",
+      "ClipCount": 1
+    },
+    {
+      "Name": "build-start",
+      "ID": 124,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.5,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-build-start",
+      "ClipCount": 1
+    },
+    {
+      "Name": "build-end",
+      "ID": 125,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.5,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-build-end",
+      "ClipCount": 1
+    },
+    {
+      "Name": "ui-click-0",
+      "ID": 126,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-ui-click-0",
+      "ClipCount": 1
+    },
+    {
+      "Name": "ui-click-1",
+      "ID": 127,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-ui-click-1",
+      "ClipCount": 1
+    },
+    {
+      "Name": "ui-click-2",
+      "ID": 128,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-ui-click-2",
+      "ClipCount": 1
+    },
+    {
+      "Name": "ui-hover-0",
+      "ID": 129,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-ui-hover-0",
+      "ClipCount": 1
+    },
+    {
+      "Name": "research-complete",
+      "ID": 130,
+      "SID": "",
+      "Volume": 0.55,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-research-complete",
+      "ClipCount": 1
+    },
+    {
+      "Name": "mission-accomplished",
+      "ID": 131,
+      "SID": "",
+      "Volume": 0.9,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-mission-accomplished",
+      "ClipCount": 1
+    },
+    {
+      "Name": "transfer-item",
+      "ID": 132,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.05,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-transfer-item",
+      "ClipCount": 1
+    },
+    {
+      "Name": "demolish-small",
+      "ID": 133,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.1,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-demolish-small",
+      "ClipCount": 1
+    },
+    {
+      "Name": "demolish-large",
+      "ID": 134,
+      "SID": "",
+      "Volume": 0.5,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.1,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-demolish-large",
+      "ClipCount": 1
+    },
+    {
+      "Name": "reform-terrain",
+      "ID": 135,
+      "SID": "",
+      "Volume": 0.6,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.03,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-reform-terrain",
+      "ClipCount": 1
+    },
+    {
+      "Name": "knock-0",
+      "ID": 136,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.05,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-knock-0",
+      "ClipCount": 1
+    },
+    {
+      "Name": "knock-1",
+      "ID": 137,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.05,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-knock-1",
+      "ClipCount": 1
+    },
+    {
+      "Name": "equip-0",
+      "ID": 138,
+      "SID": "",
+      "Volume": 1.5874,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.05,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-equip-0",
+      "ClipCount": 1
+    },
+    {
+      "Name": "equip-1",
+      "ID": 139,
+      "SID": "",
+      "Volume": 1.25,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.05,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-equip-1",
+      "ClipCount": 1
+    },
+    {
+      "Name": "unlock-1",
+      "ID": 140,
+      "SID": "",
+      "Volume": 0.8,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-unlock-1",
+      "ClipCount": 1
+    },
+    {
+      "Name": "advisor-popup",
+      "ID": 141,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-advisor-popup",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tutorial-popup",
+      "ID": 142,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.05,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-tutorial-popup",
+      "ClipCount": 1
+    },
+    {
+      "Name": "warning-popup-0",
+      "ID": 143,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-warning-popup-0",
+      "ClipCount": 1
+    },
+    {
+      "Name": "warning-popup-1",
+      "ID": 144,
+      "SID": "",
+      "Volume": 0.55,
+      "Pitch": 1.2,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-warning-popup-1",
+      "ClipCount": 1
+    },
+    {
+      "Name": "common-popup-0",
+      "ID": 145,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.05,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-common-popup-0",
+      "ClipCount": 1
+    },
+    {
+      "Name": "common-popup-1",
+      "ID": 146,
+      "SID": "",
+      "Volume": 0.8,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.05,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-common-popup-1",
+      "ClipCount": 1
+    },
+    {
+      "Name": "common-popup-2",
+      "ID": 147,
+      "SID": "",
+      "Volume": 0.65,
+      "Pitch": 1.1,
+      "PitchRandomness": 0.02,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-common-popup-2",
+      "ClipCount": 1
+    },
+    {
+      "Name": "common-popup-3",
+      "ID": 148,
+      "SID": "",
+      "Volume": 0.8,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.05,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-common-popup-3",
+      "ClipCount": 1
+    },
+    {
+      "Name": "common-popup-4",
+      "ID": 149,
+      "SID": "",
+      "Volume": 0.5,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-common-popup-4",
+      "ClipCount": 1
+    },
+    {
+      "Name": "common-popup-5",
+      "ID": 150,
+      "SID": "",
+      "Volume": 0.5,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-common-popup-5",
+      "ClipCount": 1
+    },
+    {
+      "Name": "common-popup-6",
+      "ID": 151,
+      "SID": "",
+      "Volume": 0.5,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-common-popup-6",
+      "ClipCount": 1
+    },
+    {
+      "Name": "common-popup-7",
+      "ID": 152,
+      "SID": "",
+      "Volume": 0.5,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-common-popup-7",
+      "ClipCount": 1
+    },
+    {
+      "Name": "cancel-0",
+      "ID": 153,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-cancel-0",
+      "ClipCount": 1
+    },
+    {
+      "Name": "switch-0",
+      "ID": 154,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.1,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-switch-0",
+      "ClipCount": 1
+    },
+    {
+      "Name": "destroy-small",
+      "ID": 155,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.1,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-destroy-small",
+      "ClipCount": 5
+    },
+    {
+      "Name": "destroy-large",
+      "ID": 156,
+      "SID": "",
+      "Volume": 0.5,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.1,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-destroy-large",
+      "ClipCount": 4
+    },
+    {
+      "Name": "encounter-df",
+      "ID": 157,
+      "SID": "",
+      "Volume": 0.9,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-encounter-df",
+      "ClipCount": 1
+    },
+    {
+      "Name": "prologue-scan",
+      "ID": 158,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-prologue-scan",
+      "ClipCount": 1
+    },
+    {
+      "Name": "prologue-transforming",
+      "ID": 159,
+      "SID": "",
+      "Volume": 0.65,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-prologue-transforming",
+      "ClipCount": 1
+    },
+    {
+      "Name": "prologue-typewriter",
+      "ID": 160,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-prologue-typewriter",
+      "ClipCount": 1
+    },
+    {
+      "Name": "df-alarm",
+      "ID": 161,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-df-alarm",
+      "ClipCount": 1
+    },
+    {
+      "Name": "wipeout-dfbase",
+      "ID": 162,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.05,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-wipeout-dfbase",
+      "ClipCount": 1
+    },
+    {
+      "Name": "zscreen-enter",
+      "ID": 163,
+      "SID": "",
+      "Volume": 0.8,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.05,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-zscreen-enter",
+      "ClipCount": 1
+    },
+    {
+      "Name": "zscreen-exit",
+      "ID": 164,
+      "SID": "",
+      "Volume": 0.8,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.05,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-zscreen-exit",
+      "ClipCount": 1
+    },
+    {
+      "Name": "mecha-death",
+      "ID": 165,
+      "SID": "",
+      "Volume": 0.8,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-mecha-death",
+      "ClipCount": 1
+    },
+    {
+      "Name": "mecha-fleet-eject",
+      "ID": 166,
+      "SID": "",
+      "Volume": 0.8,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-mecha-fleet-eject",
+      "ClipCount": 1
+    },
+    {
+      "Name": "energy-warning",
+      "ID": 167,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-energy-warning",
+      "ClipCount": 1
+    },
+    {
+      "Name": "mecha-shield-erupt",
+      "ID": 168,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-mecha-shield-erupt",
+      "ClipCount": 1
+    },
+    {
+      "Name": "df-unit-destroyed",
+      "ID": 169,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 0.8,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 6,
+        "end": 10
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-df-unit-destroyed",
+      "ClipCount": 5
+    },
+    {
+      "Name": "df-ground-destroyed",
+      "ID": 170,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 0.7,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 6,
+        "end": 10
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-df-ground-destroyed",
+      "ClipCount": 3
+    },
+    {
+      "Name": "df-space-destroyed",
+      "ID": 171,
+      "SID": "",
+      "Volume": 0.3,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 6,
+        "end": 10
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-df-space-destroyed",
+      "ClipCount": 3
+    },
+    {
+      "Name": "small-drone-destroyed",
+      "ID": 172,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-small-drone-destroyed",
+      "ClipCount": 3
+    },
+    {
+      "Name": "medium-drone-destroyed",
+      "ID": 173,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-medium-drone-destroyed",
+      "ClipCount": 2
+    },
+    {
+      "Name": "mecha-shield-erupt-prepare",
+      "ID": 174,
+      "SID": "",
+      "Volume": 0.4,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-mecha-shield-erupt-prepare",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tab-switch",
+      "ID": 175,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-tab-switch",
+      "ClipCount": 1
+    },
+    {
+      "Name": "supernova-click",
+      "ID": 176,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-supernova-click",
+      "ClipCount": 1
+    },
+    {
+      "Name": "supernova-accumulate",
+      "ID": 177,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-supernova-accumulate",
+      "ClipCount": 1
+    },
+    {
+      "Name": "supernova-unleash",
+      "ID": 178,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-supernova-unleash",
+      "ClipCount": 1
+    },
+    {
+      "Name": "light-ammo",
+      "ID": 179,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-light-ammo",
+      "ClipCount": 1
+    },
+    {
+      "Name": "heavy-ammo",
+      "ID": 180,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/sfx-heavy-ammo",
+      "ClipCount": 1
+    },
+    {
+      "Name": "common-popup-8",
+      "ID": 181,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": true,
+      "ClipPath": "SFX/sfx-common-popup-8",
+      "ClipCount": 1
+    },
+    {
+      "Name": "wind-turbine",
+      "ID": 238,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-wind-turbine",
+      "ClipCount": 1
+    },
+    {
+      "Name": "accumulator",
+      "ID": 247,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-accumulator",
+      "ClipCount": 1
+    },
+    {
+      "Name": "fractionator",
+      "ID": 248,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-fractionator",
+      "ClipCount": 1
+    },
+    {
+      "Name": "energy-hub",
+      "ID": 251,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-energy-hub",
+      "ClipCount": 1
+    },
+    {
+      "Name": "mini-sun",
+      "ID": 253,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-mini-sun",
+      "ClipCount": 1
+    },
+    {
+      "Name": "mining-machine",
+      "ID": 255,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-mining-machine",
+      "ClipCount": 1
+    },
+    {
+      "Name": "smelter",
+      "ID": 256,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-smelter",
+      "ClipCount": 1
+    },
+    {
+      "Name": "assembler-1",
+      "ID": 257,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-assembler-1",
+      "ClipCount": 1
+    },
+    {
+      "Name": "assembler-2",
+      "ID": 258,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-assembler-2",
+      "ClipCount": 1
+    },
+    {
+      "Name": "assembler-3",
+      "ID": 259,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-assembler-3",
+      "ClipCount": 1
+    },
+    {
+      "Name": "water-pump",
+      "ID": 260,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-water-pump",
+      "ClipCount": 1
+    },
+    {
+      "Name": "oil-extractor",
+      "ID": 261,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-oil-extractor",
+      "ClipCount": 1
+    },
+    {
+      "Name": "oil-refinery",
+      "ID": 262,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-oil-refinery",
+      "ClipCount": 1
+    },
+    {
+      "Name": "chemical-plant",
+      "ID": 263,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-chemical-plant",
+      "ClipCount": 1
+    },
+    {
+      "Name": "lab-a",
+      "ID": 267,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-lab-a",
+      "ClipCount": 1
+    },
+    {
+      "Name": "lab-b",
+      "ID": 268,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-lab-b",
+      "ClipCount": 1
+    },
+    {
+      "Name": "hadron-collider",
+      "ID": 269,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-hadron-collider",
+      "ClipCount": 1
+    },
+    {
+      "Name": "ray-receiver-0",
+      "ID": 272,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-ray-receiver-0",
+      "ClipCount": 1
+    },
+    {
+      "Name": "ray-receiver-1",
+      "ID": 273,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-ray-receiver-1",
+      "ClipCount": 1
+    },
+    {
+      "Name": "orbit-collector",
+      "ID": 281,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-orbit-collector",
+      "ClipCount": 1
+    },
+    {
+      "Name": "storage-tank",
+      "ID": 291,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-storage-tank",
+      "ClipCount": 1
+    },
+    {
+      "Name": "lighthouse",
+      "ID": 295,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-lighthouse",
+      "ClipCount": 1
+    },
+    {
+      "Name": "turret-gauss",
+      "ID": 301,
+      "SID": "",
+      "Volume": 0.66,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.05,
+      "MixLimit": {
+        "start": 2,
+        "end": 4
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-turret-gauss",
+      "ClipCount": 5
+    },
+    {
+      "Name": "turret-laser",
+      "ID": 302,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.06,
+      "MixLimit": {
+        "start": 3,
+        "end": 6
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-turret-laser",
+      "ClipCount": 1
+    },
+    {
+      "Name": "turret-missile",
+      "ID": 303,
+      "SID": "",
+      "Volume": 0.75,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.15,
+      "MixLimit": {
+        "start": 3,
+        "end": 5
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-turret-missile",
+      "ClipCount": 5
+    },
+    {
+      "Name": "turret-missile-cooldown",
+      "ID": 304,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.1,
+      "MixLimit": {
+        "start": 1,
+        "end": 2
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-turret-missile-cooldown",
+      "ClipCount": 1
+    },
+    {
+      "Name": "turret-cannon-close",
+      "ID": 305,
+      "SID": "",
+      "Volume": 0.5,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.15,
+      "MixLimit": {
+        "start": 1,
+        "end": 1
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-turret-cannon-close",
+      "ClipCount": 5
+    },
+    {
+      "Name": "turret-cannon-far",
+      "ID": 306,
+      "SID": "",
+      "Volume": 0.22,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.15,
+      "MixLimit": {
+        "start": 1,
+        "end": 2
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-turret-cannon-far",
+      "ClipCount": 5
+    },
+    {
+      "Name": "turret-cannon-cooldown",
+      "ID": 307,
+      "SID": "",
+      "Volume": 0.75,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.1,
+      "MixLimit": {
+        "start": 1,
+        "end": 1
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-turret-cannon-cooldown",
+      "ClipCount": 1
+    },
+    {
+      "Name": "turret-cannon-prepare",
+      "ID": 308,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.07,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-turret-cannon-prepare",
+      "ClipCount": 1
+    },
+    {
+      "Name": "turret-plasma-close",
+      "ID": 309,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.1,
+      "MixLimit": {
+        "start": 2,
+        "end": 2
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-turret-plasma-close",
+      "ClipCount": 3
+    },
+    {
+      "Name": "turret-plasma-far",
+      "ID": 310,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.15,
+      "MixLimit": {
+        "start": 2,
+        "end": 2
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-turret-plasma-far",
+      "ClipCount": 3
+    },
+    {
+      "Name": "turret-plasma-prepare",
+      "ID": 311,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.07,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-turret-plasma-prepare",
+      "ClipCount": 1
+    },
+    {
+      "Name": "mecha-laser",
+      "ID": 312,
+      "SID": "",
+      "Volume": 0.6,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-mecha-laser",
+      "ClipCount": 3
+    },
+    {
+      "Name": "mecha-gauss",
+      "ID": 313,
+      "SID": "",
+      "Volume": 0.66,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.05,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-mecha-gauss",
+      "ClipCount": 3
+    },
+    {
+      "Name": "mecha-cannon",
+      "ID": 314,
+      "SID": "",
+      "Volume": 0.55,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.15,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-mecha-cannon",
+      "ClipCount": 1
+    },
+    {
+      "Name": "mecha-missile",
+      "ID": 315,
+      "SID": "",
+      "Volume": 0.6,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.15,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-mecha-missile",
+      "ClipCount": 2
+    },
+    {
+      "Name": "mecha-plasma",
+      "ID": 316,
+      "SID": "",
+      "Volume": 0.65,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.1,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-mecha-plasma",
+      "ClipCount": 1
+    },
+    {
+      "Name": "df-tower2-prepare",
+      "ID": 317,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-df-tower2-prepare",
+      "ClipCount": 1
+    },
+    {
+      "Name": "df-tower2-shoot",
+      "ID": 318,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 1,
+        "end": 3
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-df-tower2-shoot",
+      "ClipCount": 3
+    },
+    {
+      "Name": "df-tower1-prepare",
+      "ID": 319,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-df-tower1-prepare",
+      "ClipCount": 1
+    },
+    {
+      "Name": "df-tower1-shoot",
+      "ID": 320,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 1,
+        "end": 3
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-df-tower1-shoot",
+      "ClipCount": 3
+    },
+    {
+      "Name": "df-camp",
+      "ID": 321,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-df-camp",
+      "ClipCount": 1
+    },
+    {
+      "Name": "df-ranger-shoot",
+      "ID": 322,
+      "SID": "",
+      "Volume": 0.35,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 4,
+        "end": 8
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-df-ranger-shoot",
+      "ClipCount": 5
+    },
+    {
+      "Name": "df-raider-prepare",
+      "ID": 323,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-df-raider-prepare",
+      "ClipCount": 1
+    },
+    {
+      "Name": "df-raider-shoot",
+      "ID": 324,
+      "SID": "",
+      "Volume": 0.65,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 3,
+        "end": 6
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-df-raider-shoot",
+      "ClipCount": 5
+    },
+    {
+      "Name": "turret-signal-start",
+      "ID": 325,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-turret-signal-start",
+      "ClipCount": 1
+    },
+    {
+      "Name": "turret-signal-working",
+      "ID": 326,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-turret-signal-working",
+      "ClipCount": 1
+    },
+    {
+      "Name": "turret-shield-start",
+      "ID": 327,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-turret-shield-start",
+      "ClipCount": 1
+    },
+    {
+      "Name": "turret-shield-working",
+      "ID": 328,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-turret-shield-working",
+      "ClipCount": 1
+    },
+    {
+      "Name": "turret-shield-end",
+      "ID": 329,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-turret-shield-end",
+      "ClipCount": 1
+    },
+    {
+      "Name": "df-lancer-idle",
+      "ID": 330,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-df-lancer-idle",
+      "ClipCount": 1
+    },
+    {
+      "Name": "df-humpback-idle",
+      "ID": 331,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-df-humpback-idle",
+      "ClipCount": 1
+    },
+    {
+      "Name": "df-humpback-shoot",
+      "ID": 332,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 3,
+        "end": 5
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-df-humpback-shoot",
+      "ClipCount": 2
+    },
+    {
+      "Name": "small-drone-ground-fly",
+      "ID": 333,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-small-drone-ground-fly",
+      "ClipCount": 2
+    },
+    {
+      "Name": "small-drone-space-fly",
+      "ID": 334,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-small-drone-space-fly",
+      "ClipCount": 2
+    },
+    {
+      "Name": "small-drone-plasma",
+      "ID": 335,
+      "SID": "",
+      "Volume": 0.4,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 4,
+        "end": 8
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-small-drone-plasma",
+      "ClipCount": 3
+    },
+    {
+      "Name": "small-drone-laser",
+      "ID": 336,
+      "SID": "",
+      "Volume": 0.45,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 4,
+        "end": 8
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-small-drone-laser",
+      "ClipCount": 3
+    },
+    {
+      "Name": "medium-drone-fly",
+      "ID": 337,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-medium-drone-fly",
+      "ClipCount": 1
+    },
+    {
+      "Name": "medium-drone-laser",
+      "ID": 338,
+      "SID": "",
+      "Volume": 0.35,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 4,
+        "end": 8
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-medium-drone-laser",
+      "ClipCount": 3
+    },
+    {
+      "Name": "geothermal",
+      "ID": 339,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-geothermal",
+      "ClipCount": 1
+    },
+    {
+      "Name": "smelter-2",
+      "ID": 340,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-smelter-2",
+      "ClipCount": 1
+    },
+    {
+      "Name": "large-mining-machine",
+      "ID": 341,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-large-mining-machine",
+      "ClipCount": 1
+    },
+    {
+      "Name": "satellite-station-prepare",
+      "ID": 342,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-satellite-station-prepare",
+      "ClipCount": 1
+    },
+    {
+      "Name": "satellite-station-working",
+      "ID": 343,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-satellite-station-working",
+      "ClipCount": 1
+    },
+    {
+      "Name": "quantchem-plant",
+      "ID": 344,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-quantchem-plant",
+      "ClipCount": 1
+    },
+    {
+      "Name": "df-lancer-shoot",
+      "ID": 345,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-df-lancer-shoot",
+      "ClipCount": 3
+    },
+    {
+      "Name": "delivery-drone-enter",
+      "ID": 346,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 5,
+        "end": 8
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-delivery-drone-enter",
+      "ClipCount": 3
+    },
+    {
+      "Name": "delivery-drone-fly",
+      "ID": 347,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-delivery-drone-fly",
+      "ClipCount": 3
+    },
+    {
+      "Name": "df-relay-expand",
+      "ID": 348,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-df-relay-expand",
+      "ClipCount": 1
+    },
+    {
+      "Name": "df-relay-laser",
+      "ID": 349,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-df-relay-laser",
+      "ClipCount": 1
+    },
+    {
+      "Name": "df-space-assembler",
+      "ID": 350,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-df-space-assembler",
+      "ClipCount": 1
+    },
+    {
+      "Name": "df-space-photon",
+      "ID": 351,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-df-space-photon",
+      "ClipCount": 1
+    },
+    {
+      "Name": "df-space-bridge",
+      "ID": 352,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-df-space-bridge",
+      "ClipCount": 1
+    },
+    {
+      "Name": "df-space-seed",
+      "ID": 353,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-df-space-seed",
+      "ClipCount": 1
+    },
+    {
+      "Name": "df-guardian-prepare",
+      "ID": 354,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-df-guardian-prepare",
+      "ClipCount": 1
+    },
+    {
+      "Name": "df-guardian-shoot",
+      "ID": 355,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-df-guardian-shoot",
+      "ClipCount": 4
+    },
+    {
+      "Name": "df-guardian-block",
+      "ID": 356,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-df-guardian-block",
+      "ClipCount": 4
+    },
+    {
+      "Name": "smelter-3",
+      "ID": 357,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Entity/sfx-smelter-3",
+      "ClipCount": 1
+    },
+    {
+      "Name": "bullet-hit",
+      "ID": 401,
+      "SID": "",
+      "Volume": 0.25,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.1,
+      "MixLimit": {
+        "start": 4,
+        "end": 9
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-bullet-hit",
+      "ClipCount": 6
+    },
+    {
+      "Name": "cannon-hit",
+      "ID": 402,
+      "SID": "",
+      "Volume": 0.5,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.2,
+      "MixLimit": {
+        "start": 1,
+        "end": 1
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-cannon-hit",
+      "ClipCount": 4
+    },
+    {
+      "Name": "missile-hit",
+      "ID": 403,
+      "SID": "",
+      "Volume": 0.6,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-missile-hit",
+      "ClipCount": 3
+    },
+    {
+      "Name": "plasma-hit",
+      "ID": 404,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-plasma-hit",
+      "ClipCount": 3
+    },
+    {
+      "Name": "shield-light",
+      "ID": 405,
+      "SID": "",
+      "Volume": 0.42,
+      "Pitch": 0.85,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 3,
+        "end": 5
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-shield-light",
+      "ClipCount": 3
+    },
+    {
+      "Name": "df-ranger-hit-mecha",
+      "ID": 406,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 2,
+        "end": 4
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-df-ranger-hit-mecha",
+      "ClipCount": 3
+    },
+    {
+      "Name": "shield-heavy",
+      "ID": 407,
+      "SID": "",
+      "Volume": 0.42,
+      "Pitch": 0.85,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 3,
+        "end": 5
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Combat/sfx-shield-heavy",
+      "ClipCount": 3
+    },
+    {
+      "Name": "iris-cosmic",
+      "ID": 501,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Doodad/iris-cosmic",
+      "ClipCount": 1
+    },
+    {
+      "Name": "vc-broadcast-1",
+      "ID": 601,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/1-cutscene",
+      "ClipCount": 4
+    },
+    {
+      "Name": "vc-broadcast-2",
+      "ID": 602,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/2-reaching-planet",
+      "ClipCount": 4
+    },
+    {
+      "Name": "vc-broadcast-3",
+      "ID": 603,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/3-deviate-target",
+      "ClipCount": 4
+    },
+    {
+      "Name": "vc-broadcast-4",
+      "ID": 604,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/4-flight-mode",
+      "ClipCount": 4
+    },
+    {
+      "Name": "vc-broadcast-5",
+      "ID": 605,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/5-navi-mode-start",
+      "ClipCount": 4
+    },
+    {
+      "Name": "vc-broadcast-6",
+      "ID": 606,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/6-navi-mode-end",
+      "ClipCount": 4
+    },
+    {
+      "Name": "vc-broadcast-7",
+      "ID": 607,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/7-warp-engine-on",
+      "ClipCount": 4
+    },
+    {
+      "Name": "vc-broadcast-8",
+      "ID": 608,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/8-warp-engine-off",
+      "ClipCount": 4
+    },
+    {
+      "Name": "vc-broadcast-9",
+      "ID": 609,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/9-df-assault-local",
+      "ClipCount": 4
+    },
+    {
+      "Name": "vc-broadcast-10",
+      "ID": 610,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/10-df-assault-exosystem",
+      "ClipCount": 4
+    },
+    {
+      "Name": "vc-broadcast-11",
+      "ID": 611,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/11-landing-relay",
+      "ClipCount": 4
+    },
+    {
+      "Name": "vc-broadcast-12",
+      "ID": 612,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/12-planetary-shield-broke",
+      "ClipCount": 4
+    },
+    {
+      "Name": "vc-broadcast-13",
+      "ID": 613,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/13-reaching-seed",
+      "ClipCount": 4
+    },
+    {
+      "Name": "vc-broadcast-14",
+      "ID": 614,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/14-supernova-on",
+      "ClipCount": 4
+    },
+    {
+      "Name": "vc-broadcast-15",
+      "ID": 615,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/15-mecha-shield-broke",
+      "ClipCount": 4
+    },
+    {
+      "Name": "vc-broadcast-16",
+      "ID": 616,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/16-mecha-damaged",
+      "ClipCount": 4
+    },
+    {
+      "Name": "vc-broadcast-17",
+      "ID": 617,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/17-building-destroyed",
+      "ClipCount": 4
+    },
+    {
+      "Name": "vc-broadcast-18",
+      "ID": 618,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/18-df-planet-broke",
+      "ClipCount": 4
+    },
+    {
+      "Name": "vc-broadcast-19",
+      "ID": 619,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/19-df-hive-broke",
+      "ClipCount": 4
+    },
+    {
+      "Name": "vc-broadcast-20",
+      "ID": 620,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/20-vein-depleted",
+      "ClipCount": 4
+    },
+    {
+      "Name": "vc-broadcast-21",
+      "ID": 621,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/21-oil-depleted",
+      "ClipCount": 4
+    },
+    {
+      "Name": "vc-broadcast-22",
+      "ID": 622,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/22-material-insufficient",
+      "ClipCount": 4
+    },
+    {
+      "Name": "vc-broadcast-23",
+      "ID": 623,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/23-tech-unlock",
+      "ClipCount": 4
+    },
+    {
+      "Name": "vc-broadcast-24",
+      "ID": 624,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/24-upgrade-unlock",
+      "ClipCount": 4
+    },
+    {
+      "Name": "vc-broadcast-25",
+      "ID": 625,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/25-replicate-finish",
+      "ClipCount": 4
+    },
+    {
+      "Name": "tip-1",
+      "ID": 701,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-1",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-2",
+      "ID": 702,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-2",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-3",
+      "ID": 703,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-3",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-4",
+      "ID": 704,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-4",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-5",
+      "ID": 705,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-5",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-6",
+      "ID": 706,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-6",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-7",
+      "ID": 707,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-7",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-8",
+      "ID": 708,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-8",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-9",
+      "ID": 709,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-9",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-10",
+      "ID": 710,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-10",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-11",
+      "ID": 711,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-11",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-12",
+      "ID": 712,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-12",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-13",
+      "ID": 713,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-13",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-14",
+      "ID": 714,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-14",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-15",
+      "ID": 715,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-15",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-16",
+      "ID": 716,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-16",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-17",
+      "ID": 717,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-17",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-18",
+      "ID": 718,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-18",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-19",
+      "ID": 719,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-19",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-20",
+      "ID": 720,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-20",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-21",
+      "ID": 721,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-21",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-22",
+      "ID": 722,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-22",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-23",
+      "ID": 723,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-23",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-24",
+      "ID": 724,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-24",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-25",
+      "ID": 725,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-25",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-26",
+      "ID": 726,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-26",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-27",
+      "ID": 727,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-27",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-28",
+      "ID": 728,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-28",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-29",
+      "ID": 729,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-29",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-30",
+      "ID": 730,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-30",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-31",
+      "ID": 731,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-31",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-32",
+      "ID": 732,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-32",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-33",
+      "ID": 733,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-33",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-34",
+      "ID": 734,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-34",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-35",
+      "ID": 735,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-35",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-36",
+      "ID": 736,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-36",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-37",
+      "ID": 737,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-37",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-38",
+      "ID": 738,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-38",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-39",
+      "ID": 739,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-39",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-40",
+      "ID": 740,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-40",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-41",
+      "ID": 741,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-41",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-42",
+      "ID": 742,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-42",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-43",
+      "ID": 743,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-43",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-44",
+      "ID": 744,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-44",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-45",
+      "ID": 745,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-45",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-46",
+      "ID": 746,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-46",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-47",
+      "ID": 747,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-47",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-48",
+      "ID": 748,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-48",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-49",
+      "ID": 749,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-49",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-50",
+      "ID": 750,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-50",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-51",
+      "ID": 751,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-51",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-52",
+      "ID": 752,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-52",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-53",
+      "ID": 753,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-53",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-54",
+      "ID": 754,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-54",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-55",
+      "ID": 755,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-55",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-56",
+      "ID": 756,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-56",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-57",
+      "ID": 757,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-57",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-58",
+      "ID": 758,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-58",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-59",
+      "ID": 759,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-59",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-60",
+      "ID": 760,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-60",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-61",
+      "ID": 761,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-61",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-62",
+      "ID": 762,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-62",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-63",
+      "ID": 763,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-63",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-64",
+      "ID": 764,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-64",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-65",
+      "ID": 765,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-65",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-66",
+      "ID": 766,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-66",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-67",
+      "ID": 767,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-67",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-68",
+      "ID": 768,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-68",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-69",
+      "ID": 769,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-69",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-70",
+      "ID": 770,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-70",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-71",
+      "ID": 771,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-71",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-72",
+      "ID": 772,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-72",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-73",
+      "ID": 773,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-73",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-74",
+      "ID": 774,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-74",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-75",
+      "ID": 775,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-75",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-76",
+      "ID": 776,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-76",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-77",
+      "ID": 777,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-77",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-78",
+      "ID": 778,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-78",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-79",
+      "ID": 779,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-79",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-80",
+      "ID": 780,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-80",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-81",
+      "ID": 781,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-81",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-82",
+      "ID": 782,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-82",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-83",
+      "ID": 783,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-83",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-84",
+      "ID": 784,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-84",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-85",
+      "ID": 785,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-85",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-86",
+      "ID": 786,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-86",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-87",
+      "ID": 787,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-87",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-88",
+      "ID": 788,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-88",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-89",
+      "ID": 789,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-89",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-90",
+      "ID": 790,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-90",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-91",
+      "ID": 791,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-91",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-92",
+      "ID": 792,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-92",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-93",
+      "ID": 793,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-93",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-94",
+      "ID": 794,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-94",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-95",
+      "ID": 795,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-95",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-96",
+      "ID": 796,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-96",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-97",
+      "ID": 797,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-97",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-98",
+      "ID": 798,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-98",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-99",
+      "ID": 799,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-99",
+      "ClipCount": 1
+    },
+    {
+      "Name": "tip-100",
+      "ID": 800,
+      "SID": "",
+      "Volume": 0.7,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 0.0,
+      "Loop": false,
+      "Localized": true,
+      "BypassEffect": true,
+      "ClipPath": "SFX/Voice/Advisor/tip-100",
+      "ClipCount": 1
+    },
+    {
+      "Name": "piano-1",
+      "ID": 1001,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Speaker/Piano 1/piano-1",
+      "ClipCount": 32
+    },
+    {
+      "Name": "piano-2",
+      "ID": 1002,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Speaker/Piano 2/piano-2",
+      "ClipCount": 32
+    },
+    {
+      "Name": "bass-1",
+      "ID": 1003,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Speaker/Bass 1/bass-1",
+      "ClipCount": 32
+    },
+    {
+      "Name": "bass-2",
+      "ID": 1004,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Speaker/Bass 2/bass-2",
+      "ClipCount": 32
+    },
+    {
+      "Name": "organ-1",
+      "ID": 1005,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Speaker/Organ 1/organ-1",
+      "ClipCount": 32
+    },
+    {
+      "Name": "organ-2",
+      "ID": 1006,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Speaker/Organ 2/organ-2",
+      "ClipCount": 32
+    },
+    {
+      "Name": "pad-1",
+      "ID": 1007,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Speaker/Pad 1/pad-1",
+      "ClipCount": 32
+    },
+    {
+      "Name": "pad-2",
+      "ID": 1008,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Speaker/Pad 2/pad-2",
+      "ClipCount": 32
+    },
+    {
+      "Name": "pad-3",
+      "ID": 1009,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Speaker/Pad 3/pad-3",
+      "ClipCount": 32
+    },
+    {
+      "Name": "brass",
+      "ID": 1010,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Speaker/Brass/brass",
+      "ClipCount": 32
+    },
+    {
+      "Name": "dream-bell",
+      "ID": 1011,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Speaker/Dream Bell/dream-bell",
+      "ClipCount": 32
+    },
+    {
+      "Name": "glass",
+      "ID": 1012,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Speaker/Glass/glass",
+      "ClipCount": 32
+    },
+    {
+      "Name": "guitar",
+      "ID": 1013,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Speaker/Guitar/guitar",
+      "ClipCount": 32
+    },
+    {
+      "Name": "music-box",
+      "ID": 1014,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Speaker/Music Box/music-box",
+      "ClipCount": 32
+    },
+    {
+      "Name": "rhodes",
+      "ID": 1015,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Speaker/Rhodes/rhodes",
+      "ClipCount": 32
+    },
+    {
+      "Name": "trumpet",
+      "ID": 1016,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Speaker/Trumpet/trumpet",
+      "ClipCount": 32
+    },
+    {
+      "Name": "violin",
+      "ID": 1017,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Speaker/Violin/violin",
+      "ClipCount": 32
+    },
+    {
+      "Name": "sub-bass",
+      "ID": 1018,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Speaker/Sub Bass/sub-bass",
+      "ClipCount": 26
+    },
+    {
+      "Name": "drumpad",
+      "ID": 1019,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": false,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Speaker/Drumpad/drumpad",
+      "ClipCount": 36
+    },
+    {
+      "Name": "alarm-1",
+      "ID": 1020,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Speaker/Alarm/sfx-speaker-alarm-1",
+      "ClipCount": 1
+    },
+    {
+      "Name": "alarm-2",
+      "ID": 1021,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Speaker/Alarm/sfx-speaker-alarm-2",
+      "ClipCount": 1
+    },
+    {
+      "Name": "alarm-3",
+      "ID": 1022,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Speaker/Alarm/sfx-speaker-alarm-3",
+      "ClipCount": 1
+    },
+    {
+      "Name": "alarm-4",
+      "ID": 1023,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Speaker/Alarm/sfx-speaker-alarm-4",
+      "ClipCount": 1
+    },
+    {
+      "Name": "alarm-5",
+      "ID": 1024,
+      "SID": "",
+      "Volume": 1.0,
+      "Pitch": 1.0,
+      "PitchRandomness": 0.0,
+      "MixLimit": {
+        "start": 0,
+        "end": 0
+      },
+      "SpatialBlend": 1.0,
+      "Loop": true,
+      "Localized": false,
+      "BypassEffect": false,
+      "ClipPath": "SFX/Speaker/Alarm/sfx-speaker-alarm-5",
+      "ClipCount": 1
+    }
+  ]
+}

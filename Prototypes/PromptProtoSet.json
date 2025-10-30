@@ -1,0 +1,184 @@
+{
+  "m_GameObject": {
+    "m_FileID": 0,
+    "m_PathID": 0
+  },
+  "m_Enabled": 1,
+  "m_Script": {
+    "m_FileID": 1,
+    "m_PathID": 1585
+  },
+  "m_Name": "PromptProtoSet",
+  "TableName": "Prompt",
+  "Signature": "",
+  "dataArray": [
+    {
+      "Name": "Prompt1",
+      "ID": 1,
+      "SID": "",
+      "Text": "prompt1"
+    },
+    {
+      "Name": "Prompt2",
+      "ID": 2,
+      "SID": "",
+      "Text": "prompt2"
+    },
+    {
+      "Name": "Prompt3",
+      "ID": 3,
+      "SID": "",
+      "Text": "prompt3"
+    },
+    {
+      "Name": "Prompt4",
+      "ID": 4,
+      "SID": "",
+      "Text": "prompt4"
+    },
+    {
+      "Name": "Prompt5",
+      "ID": 5,
+      "SID": "",
+      "Text": "prompt5"
+    },
+    {
+      "Name": "Prompt6",
+      "ID": 6,
+      "SID": "",
+      "Text": "prompt6"
+    },
+    {
+      "Name": "Prompt7",
+      "ID": 7,
+      "SID": "",
+      "Text": "prompt7"
+    },
+    {
+      "Name": "Prompt8",
+      "ID": 8,
+      "SID": "",
+      "Text": "prompt8"
+    },
+    {
+      "Name": "Prompt9",
+      "ID": 9,
+      "SID": "",
+      "Text": "prompt9"
+    },
+    {
+      "Name": "Prompt10",
+      "ID": 10,
+      "SID": "",
+      "Text": "prompt10"
+    },
+    {
+      "Name": "Prompt11",
+      "ID": 11,
+      "SID": "",
+      "Text": "prompt11"
+    },
+    {
+      "Name": "Prompt12",
+      "ID": 12,
+      "SID": "",
+      "Text": "prompt12"
+    },
+    {
+      "Name": "Prompt13",
+      "ID": 13,
+      "SID": "",
+      "Text": "prompt13"
+    },
+    {
+      "Name": "Prompt14",
+      "ID": 14,
+      "SID": "",
+      "Text": "prompt14"
+    },
+    {
+      "Name": "Prompt15",
+      "ID": 15,
+      "SID": "",
+      "Text": "prompt15"
+    },
+    {
+      "Name": "Prompt16",
+      "ID": 16,
+      "SID": "",
+      "Text": "prompt16"
+    },
+    {
+      "Name": "Prompt17",
+      "ID": 17,
+      "SID": "",
+      "Text": "prompt17"
+    },
+    {
+      "Name": "Prompt18",
+      "ID": 18,
+      "SID": "",
+      "Text": "prompt18"
+    },
+    {
+      "Name": "Prompt19",
+      "ID": 19,
+      "SID": "",
+      "Text": "prompt19"
+    },
+    {
+      "Name": "Prompt20",
+      "ID": 20,
+      "SID": "",
+      "Text": "prompt20"
+    },
+    {
+      "Name": "Prompt21",
+      "ID": 21,
+      "SID": "",
+      "Text": "prompt21"
+    },
+    {
+      "Name": "Prompt22",
+      "ID": 22,
+      "SID": "",
+      "Text": "prompt22"
+    },
+    {
+      "Name": "Prompt23",
+      "ID": 23,
+      "SID": "",
+      "Text": "prompt23"
+    },
+    {
+      "Name": "Prompt24",
+      "ID": 24,
+      "SID": "",
+      "Text": "prompt24"
+    },
+    {
+      "Name": "Prompt25",
+      "ID": 25,
+      "SID": "",
+      "Text": "prompt25"
+    },
+    {
+      "Name": "Prompt26",
+      "ID": 26,
+      "SID": "",
+      "Text": "prompt26"
+    },
+    {
+      "Name": "Prompt27",
+      "ID": 27,
+      "SID": "",
+      "Text": "prompt27"
+    },
+    {
+      "Name": "Prompt28",
+      "ID": 28,
+      "SID": "",
+      "Text": "prompt28"
+    }
+  ]
+}

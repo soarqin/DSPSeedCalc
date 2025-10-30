@@ -1,0 +1,76 @@
+{
+  "m_GameObject": {
+    "m_FileID": 0,
+    "m_PathID": 0
+  },
+  "m_Enabled": 1,
+  "m_Script": {
+    "m_FileID": 1,
+    "m_PathID": 1170
+  },
+  "m_Name": "DoodadProtoSet",
+  "TableName": "Doodad",
+  "Signature": "",
+  "dataArray": [
+    {
+      "Name": "伊卡洛斯原型机",
+      "ID": 1,
+      "SID": "",
+      "PrefabPath": "Doodads/Daedalus/daedalus",
+      "Description": "伊卡洛斯原型机描述",
+      "BaseSpeed": 2.0,
+      "SpeedRange": 1.0,
+      "BaseRadius": 500.0,
+      "RadiusRange": 20.0,
+      "TextureDirPath": "Doodads/Daedalus/Texts/daedalus-text-"
+    },
+    {
+      "Name": "月球残骸",
+      "ID": 2,
+      "SID": "",
+      "PrefabPath": "Doodads/Moon/moon",
+      "Description": "月球残骸描述",
+      "BaseSpeed": 2.0,
+      "SpeedRange": 1.0,
+      "BaseRadius": 800.0,
+      "RadiusRange": 100.0,
+      "TextureDirPath": "Doodads/Moon/Texts/moon-text-"
+    },
+    {
+      "Name": "彩虹猫",
+      "ID": 3,
+      "SID": "",
+      "PrefabPath": "Doodads/Iris/iris",
+      "Description": "彩虹猫描述",
+      "BaseSpeed": 12.0,
+      "SpeedRange": 2.0,
+      "BaseRadius": 2000.0,
+      "RadiusRange": 200.0,
+      "TextureDirPath": "Doodads/Iris/Texts/iris-text-"
+    },
+    {
+      "Name": "echo",
+      "ID": 4,
+      "SID": "",
+      "PrefabPath": "Doodads/Echo/echo",
+      "Description": "echo",
+      "BaseSpeed": 20.0,
+      "SpeedRange": 4.0,
+      "BaseRadius": 3000.0,
+      "RadiusRange": 500.0,
+      "TextureDirPath": "Doodads/Echo/Texts/echo-text-"
+    },
+    {
+      "Name": "黑雾通讯器",
+      "ID": 5,
+      "SID": "",
+      "PrefabPath": "Doodads/Df Communicator/df-communicator",
+      "Description": "黑雾通讯器描述",
+      "BaseSpeed": 0.0,
+      "SpeedRange": 4.0,
+      "BaseRadius": 32000.0,
+      "RadiusRange": 2000.0,
+      "TextureDirPath": ""
+    }
+  ]
+}

@@ -6,7 +6,7 @@
   "m_Enabled": 1,
   "m_Script": {
     "m_FileID": 1,
-    "m_PathID": 274
+    "m_PathID": 352
   },
   "m_Name": "ThemeProtoSet",
   "TableName": "Theme",
@@ -17,6 +17,7 @@
       "ID": 1,
       "SID": "",
       "DisplayName": "地中海",
+      "BriefIntroduction": "地中海介绍",
       "PlanetType": 2,
       "MaterialPath": "Universe/Materials/Planets/Ocean 1/",
       "Temperature": 0.0,
@@ -32,6 +33,7 @@
         "x": 0.0,
         "y": 0.0
       },
+      "EigenBit": 1,
       "Vegetables0": [
         604,
         605,
@@ -130,6 +132,7 @@
       "ID": 2,
       "SID": "",
       "DisplayName": "气态巨星",
+      "BriefIntroduction": "气巨星介绍1;气巨星介绍2",
       "PlanetType": 5,
       "MaterialPath": "Universe/Materials/Planets/Gas 1/",
       "Temperature": 2.0,
@@ -145,6 +148,7 @@
         "x": 0.0,
         "y": 0.0
       },
+      "EigenBit": 0,
       "Vegetables0": [],
       "Vegetables1": [],
       "Vegetables2": [],
@@ -180,6 +184,7 @@
       "ID": 3,
       "SID": "",
       "DisplayName": "气态巨星",
+      "BriefIntroduction": "气巨星介绍3;气巨星介绍4",
       "PlanetType": 5,
       "MaterialPath": "Universe/Materials/Planets/Gas 2/",
       "Temperature": 1.0,
@@ -195,6 +200,7 @@
         "x": 0.0,
         "y": 0.0
       },
+      "EigenBit": 0,
       "Vegetables0": [],
       "Vegetables1": [],
       "Vegetables2": [],
@@ -230,6 +236,7 @@
       "ID": 4,
       "SID": "",
       "DisplayName": "冰巨星",
+      "BriefIntroduction": "冰巨星介绍6;冰巨星介绍8",
       "PlanetType": 5,
       "MaterialPath": "Universe/Materials/Planets/Gas 3/",
       "Temperature": -1.0,
@@ -245,6 +252,7 @@
         "x": 0.0,
         "y": 0.0
       },
+      "EigenBit": 0,
       "Vegetables0": [],
       "Vegetables1": [],
       "Vegetables2": [],
@@ -280,6 +288,7 @@
       "ID": 5,
       "SID": "",
       "DisplayName": "冰巨星",
+      "BriefIntroduction": "冰巨星介绍7;冰巨星介绍9",
       "PlanetType": 5,
       "MaterialPath": "Universe/Materials/Planets/Gas 4/",
       "Temperature": -2.0,
@@ -295,6 +304,7 @@
         "x": 0.0,
         "y": 0.0
       },
+      "EigenBit": 0,
       "Vegetables0": [],
       "Vegetables1": [],
       "Vegetables2": [],
@@ -330,6 +340,7 @@
       "ID": 6,
       "SID": "",
       "DisplayName": "干旱荒漠",
+      "BriefIntroduction": "干旱荒漠介绍A;干旱荒漠介绍B",
       "PlanetType": 3,
       "MaterialPath": "Universe/Materials/Planets/Desert 1/",
       "Temperature": 2.0,
@@ -345,6 +356,7 @@
         "x": 0.0,
         "y": 0.0
       },
+      "EigenBit": 2,
       "Vegetables0": [
         617,
         619,
@@ -437,6 +449,7 @@
       "ID": 7,
       "SID": "",
       "DisplayName": "灰烬冻土",
+      "BriefIntroduction": "灰烬冻土介绍",
       "PlanetType": 3,
       "MaterialPath": "Universe/Materials/Planets/Desert 2/",
       "Temperature": -1.0,
@@ -452,6 +465,7 @@
         "x": 1.0,
         "y": 1.0
       },
+      "EigenBit": 3,
       "Vegetables0": [
         629,
         628,
@@ -546,6 +560,7 @@
       "ID": 8,
       "SID": "",
       "DisplayName": "海洋丛林",
+      "BriefIntroduction": "海洋丛林介绍",
       "PlanetType": 2,
       "MaterialPath": "Universe/Materials/Planets/Ocean 2/",
       "Temperature": 0.0,
@@ -561,6 +576,7 @@
         "x": 0.0,
         "y": 0.0
       },
+      "EigenBit": 4,
       "Vegetables0": [
         1023,
         124,
@@ -633,7 +649,7 @@
         0.0,
         0.5,
         0.2,
-        0.8
+        1.0
       ],
       "GasItems": [],
       "GasSpeeds": [],
@@ -655,6 +671,7 @@
       "ID": 9,
       "SID": "",
       "DisplayName": "熔岩",
+      "BriefIntroduction": "熔岩介绍",
       "PlanetType": 1,
       "MaterialPath": "Universe/Materials/Planets/Lava 1/",
       "Temperature": 5.0,
@@ -670,6 +687,7 @@
         "x": 0.0,
         "y": 0.0
       },
+      "EigenBit": 5,
       "Vegetables0": [
         647,
         646,
@@ -779,6 +797,7 @@
       "ID": 10,
       "SID": "",
       "DisplayName": "冰原冻土",
+      "BriefIntroduction": "冰原冻土介绍A;冰原冻土介绍C;冰原冻土介绍B",
       "PlanetType": 4,
       "MaterialPath": "Universe/Materials/Planets/Ice 1/",
       "Temperature": -5.0,
@@ -794,6 +813,7 @@
         "x": 0.34,
         "y": -0.15
       },
+      "EigenBit": 6,
       "Vegetables0": [
         669,
         670,
@@ -892,6 +912,7 @@
       "ID": 11,
       "SID": "",
       "DisplayName": "贫瘠荒漠",
+      "BriefIntroduction": "贫瘠荒漠介绍",
       "PlanetType": 3,
       "MaterialPath": "Universe/Materials/Planets/Desert 3/",
       "Temperature": -2.0,
@@ -907,6 +928,7 @@
         "x": 1.0,
         "y": 1.0
       },
+      "EigenBit": 7,
       "Vegetables0": [],
       "Vegetables1": [],
       "Vegetables2": [],
@@ -981,6 +1003,7 @@
       "ID": 12,
       "SID": "",
       "DisplayName": "戈壁",
+      "BriefIntroduction": "戈壁介绍",
       "PlanetType": 3,
       "MaterialPath": "Universe/Materials/Planets/Desert 4/",
       "Temperature": 1.0,
@@ -996,6 +1019,7 @@
         "x": 1.0,
         "y": 1.0
       },
+      "EigenBit": 8,
       "Vegetables0": [],
       "Vegetables1": [],
       "Vegetables2": [],
@@ -1069,6 +1093,7 @@
       "ID": 13,
       "SID": "",
       "DisplayName": "火山灰",
+      "BriefIntroduction": "火山灰介绍",
       "PlanetType": 1,
       "MaterialPath": "Universe/Materials/Planets/Volcanic 1/",
       "Temperature": 4.0,
@@ -1084,6 +1109,7 @@
         "x": 1.0,
         "y": 1.0
       },
+      "EigenBit": 9,
       "Vegetables0": [],
       "Vegetables1": [],
       "Vegetables2": [],
@@ -1141,6 +1167,7 @@
       "ID": 14,
       "SID": "",
       "DisplayName": "红石",
+      "BriefIntroduction": "红石介绍",
       "PlanetType": 2,
       "MaterialPath": "Universe/Materials/Planets/Ocean 3/",
       "Temperature": 0.0,
@@ -1156,6 +1183,7 @@
         "x": 0.0,
         "y": 0.0
       },
+      "EigenBit": 10,
       "Vegetables0": [
         604,
         114,
@@ -1235,7 +1263,7 @@
         0.0,
         0.5,
         0.2,
-        0.5
+        0.8
       ],
       "GasItems": [],
       "GasSpeeds": [],
@@ -1257,6 +1285,7 @@
       "ID": 15,
       "SID": "",
       "DisplayName": "草原",
+      "BriefIntroduction": "草原介绍",
       "PlanetType": 2,
       "MaterialPath": "Universe/Materials/Planets/Ocean 4/",
       "Temperature": 0.0,
@@ -1272,6 +1301,7 @@
         "x": 1.0,
         "y": 1.0
       },
+      "EigenBit": 11,
       "Vegetables0": [
         1001,
         1001,
@@ -1372,6 +1402,7 @@
       "ID": 16,
       "SID": "",
       "DisplayName": "水世界",
+      "BriefIntroduction": "水世界介绍",
       "PlanetType": 2,
       "MaterialPath": "Universe/Materials/Planets/Ocean 5/",
       "Temperature": 0.0,
@@ -1387,6 +1418,7 @@
         "x": 1.0,
         "y": 1.0
       },
+      "EigenBit": 12,
       "Vegetables0": [],
       "Vegetables1": [],
       "Vegetables2": [],
@@ -1427,7 +1459,7 @@
         1.0,
         1.0,
         1.0,
-        0.6
+        0.9
       ],
       "GasItems": [],
       "GasSpeeds": [],
@@ -1451,6 +1483,7 @@
       "ID": 17,
       "SID": "",
       "DisplayName": "红土荒漠",
+      "BriefIntroduction": "黑石岩滩介绍",
       "PlanetType": 3,
       "MaterialPath": "Universe/Materials/Planets/Desert 5/",
       "Temperature": 1.0,
@@ -1466,6 +1499,7 @@
         "x": 1.0,
         "y": 1.0
       },
+      "EigenBit": 13,
       "Vegetables0": [
         6,
         7,
@@ -1548,6 +1582,7 @@
       "ID": 18,
       "SID": "",
       "DisplayName": "白色海洋",
+      "BriefIntroduction": "樱林海介绍",
       "PlanetType": 2,
       "MaterialPath": "Universe/Materials/Planets/Ocean 6/",
       "Temperature": 0.0,
@@ -1563,6 +1598,7 @@
         "x": 0.0,
         "y": 0.0
       },
+      "EigenBit": 14,
       "Vegetables0": [
         605,
         602,
@@ -1644,7 +1680,7 @@
         0.0,
         0.5,
         0.2,
-        0.8
+        1.0
       ],
       "GasItems": [],
       "GasSpeeds": [],
@@ -1667,6 +1703,7 @@
       "ID": 19,
       "SID": "",
       "DisplayName": "三色荒漠",
+      "BriefIntroduction": "飓风石林介绍",
       "PlanetType": 3,
       "MaterialPath": "Universe/Materials/Planets/Desert 6/",
       "Temperature": 1.0,
@@ -1682,6 +1719,7 @@
         "x": -5.0,
         "y": -5.0
       },
+      "EigenBit": 15,
       "Vegetables0": [
         1061,
         1062,
@@ -1772,6 +1810,7 @@
       "ID": 20,
       "SID": "",
       "DisplayName": "红冰荒漠",
+      "BriefIntroduction": "猩红冰湖介绍",
       "PlanetType": 3,
       "MaterialPath": "Universe/Materials/Planets/Desert 7/",
       "Temperature": -2.0,
@@ -1787,21 +1826,19 @@
         "x": 8.0,
         "y": 8.0
       },
-      "Vegetables0": [
-        6,
-        7,
-        8,
-        9,
-        10,
-        11,
-        12
-      ],
+      "EigenBit": 16,
+      "Vegetables0": [],
       "Vegetables1": [
-        1,
-        2,
-        3,
-        4,
-        5
+        748,
+        749,
+        750,
+        743,
+        744,
+        745,
+        746,
+        747,
+        741,
+        742
       ],
       "Vegetables2": [],
       "Vegetables3": [],
@@ -1875,6 +1912,7 @@
       "ID": 21,
       "SID": "",
       "DisplayName": "气态巨星",
+      "BriefIntroduction": "气巨星介绍5",
       "PlanetType": 5,
       "MaterialPath": "Universe/Materials/Planets/Gas 5/",
       "Temperature": 1.0,
@@ -1890,6 +1928,7 @@
         "x": 0.0,
         "y": 0.0
       },
+      "EigenBit": 0,
       "Vegetables0": [],
       "Vegetables1": [],
       "Vegetables2": [],
@@ -1925,6 +1964,7 @@
       "ID": 22,
       "SID": "",
       "DisplayName": "草原荒漠",
+      "BriefIntroduction": "热带草原介绍",
       "PlanetType": 2,
       "MaterialPath": "Universe/Materials/Planets/Desert 8/",
       "Temperature": 0.0,
@@ -1940,6 +1980,7 @@
         "x": 1.0,
         "y": 1.0
       },
+      "EigenBit": 11,
       "Vegetables0": [
         1093,
         1093,
@@ -2039,6 +2080,7 @@
       "ID": 23,
       "SID": "",
       "DisplayName": "橙晶荒漠",
+      "BriefIntroduction": "橙晶荒漠介绍",
       "PlanetType": 3,
       "MaterialPath": "Universe/Materials/Planets/Desert 9/",
       "Temperature": 0.08,
@@ -2054,6 +2096,7 @@
         "x": 1.0,
         "y": 1.0
       },
+      "EigenBit": 17,
       "Vegetables0": [
         701,
         702,
@@ -2138,6 +2181,7 @@
       "ID": 24,
       "SID": "",
       "DisplayName": "极寒荒漠",
+      "BriefIntroduction": "极寒冻土介绍",
       "PlanetType": 4,
       "MaterialPath": "Universe/Materials/Planets/Desert 10/",
       "Temperature": -4.0,
@@ -2153,6 +2197,7 @@
         "x": 1.0,
         "y": 1.0
       },
+      "EigenBit": 18,
       "Vegetables0": [
         734,
         733,
@@ -2242,6 +2287,7 @@
       "ID": 25,
       "SID": "",
       "DisplayName": "潘多拉荒漠",
+      "BriefIntroduction": "潘多拉沼泽介绍A;潘多拉沼泽介绍B",
       "PlanetType": 2,
       "MaterialPath": "Universe/Materials/Planets/Desert 11/",
       "Temperature": 0.0,
@@ -2257,6 +2303,7 @@
         "x": 3.0,
         "y": 3.0
       },
+      "EigenBit": 19,
       "Vegetables0": [
         681,
         682,

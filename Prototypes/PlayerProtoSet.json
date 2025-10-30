@@ -1,0 +1,23 @@
+{
+  "m_GameObject": {
+    "m_FileID": 0,
+    "m_PathID": 0
+  },
+  "m_Enabled": 1,
+  "m_Script": {
+    "m_FileID": 1,
+    "m_PathID": 1083
+  },
+  "m_Name": "PlayerProtoSet",
+  "TableName": "Player",
+  "Signature": "",
+  "dataArray": [
+    {
+      "Name": "Icarus 1",
+      "ID": 1,
+      "SID": "P1",
+      "PrefabPath": "Characters/Icarus 1/Player (Icarus 1)",
+      "DIYPath": "Characters/Icarus 1/Mecha DIY (Icarus 1)"
+    }
+  ]
+}

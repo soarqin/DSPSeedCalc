@@ -1,0 +1,240 @@
+{
+  "m_GameObject": {
+    "m_FileID": 0,
+    "m_PathID": 0
+  },
+  "m_Enabled": 1,
+  "m_Script": {
+    "m_FileID": 1,
+    "m_PathID": 1749
+  },
+  "m_Name": "SignalProtoSet",
+  "TableName": "Signal",
+  "Signature": "",
+  "dataArray": [
+    {
+      "Name": "SIGNAL-501",
+      "ID": 501,
+      "SID": "",
+      "GridIndex": 3201,
+      "IconPath": "Icons/Signal/signal-501"
+    },
+    {
+      "Name": "SIGNAL-502",
+      "ID": 502,
+      "SID": "",
+      "GridIndex": 3202,
+      "IconPath": "Icons/Signal/signal-502"
+    },
+    {
+      "Name": "SIGNAL-503",
+      "ID": 503,
+      "SID": "",
+      "GridIndex": 3203,
+      "IconPath": "Icons/Signal/signal-503"
+    },
+    {
+      "Name": "SIGNAL-504",
+      "ID": 504,
+      "SID": "",
+      "GridIndex": 3204,
+      "IconPath": "Icons/Signal/signal-504"
+    },
+    {
+      "Name": "SIGNAL-506",
+      "ID": 506,
+      "SID": "",
+      "GridIndex": 3205,
+      "IconPath": "Icons/Signal/signal-506"
+    },
+    {
+      "Name": "SIGNAL-507",
+      "ID": 507,
+      "SID": "",
+      "GridIndex": 3206,
+      "IconPath": "Icons/Signal/signal-507"
+    },
+    {
+      "Name": "SIGNAL-508",
+      "ID": 508,
+      "SID": "",
+      "GridIndex": 3207,
+      "IconPath": "Icons/Signal/signal-508"
+    },
+    {
+      "Name": "SIGNAL-509",
+      "ID": 509,
+      "SID": "",
+      "GridIndex": 3208,
+      "IconPath": "Icons/Signal/signal-509"
+    },
+    {
+      "Name": "SIGNAL-510",
+      "ID": 510,
+      "SID": "",
+      "GridIndex": 3209,
+      "IconPath": "Icons/Signal/signal-510"
+    },
+    {
+      "Name": "SIGNAL-511",
+      "ID": 511,
+      "SID": "",
+      "GridIndex": 3210,
+      "IconPath": "Icons/Signal/signal-511"
+    },
+    {
+      "Name": "SIGNAL-512",
+      "ID": 512,
+      "SID": "",
+      "GridIndex": 3211,
+      "IconPath": "Icons/Signal/signal-512"
+    },
+    {
+      "Name": "SIGNAL-513",
+      "ID": 513,
+      "SID": "",
+      "GridIndex": 3212,
+      "IconPath": "Icons/Signal/signal-513"
+    },
+    {
+      "Name": "SIGNAL-514",
+      "ID": 514,
+      "SID": "",
+      "GridIndex": 3213,
+      "IconPath": "Icons/Signal/signal-514"
+    },
+    {
+      "Name": "SIGNAL-515",
+      "ID": 515,
+      "SID": "",
+      "GridIndex": 3214,
+      "IconPath": "Icons/Signal/signal-515"
+    },
+    {
+      "Name": "SIGNAL-516",
+      "ID": 516,
+      "SID": "",
+      "GridIndex": 3301,
+      "IconPath": "Icons/Signal/signal-516"
+    },
+    {
+      "Name": "SIGNAL-517",
+      "ID": 517,
+      "SID": "",
+      "GridIndex": 3302,
+      "IconPath": "Icons/Signal/signal-517"
+    },
+    {
+      "Name": "SIGNAL-401",
+      "ID": 401,
+      "SID": "",
+      "GridIndex": 3101,
+      "IconPath": "Icons/Signal/signal-401"
+    },
+    {
+      "Name": "SIGNAL-402",
+      "ID": 402,
+      "SID": "",
+      "GridIndex": 3102,
+      "IconPath": "Icons/Signal/signal-402"
+    },
+    {
+      "Name": "SIGNAL-403",
+      "ID": 403,
+      "SID": "",
+      "GridIndex": 3103,
+      "IconPath": "Icons/Signal/signal-403"
+    },
+    {
+      "Name": "SIGNAL-404",
+      "ID": 404,
+      "SID": "",
+      "GridIndex": 3104,
+      "IconPath": "Icons/Signal/signal-404"
+    },
+    {
+      "Name": "SIGNAL-405",
+      "ID": 405,
+      "SID": "",
+      "GridIndex": 3105,
+      "IconPath": "Icons/Signal/signal-405"
+    },
+    {
+      "Name": "SIGNAL-406",
+      "ID": 406,
+      "SID": "",
+      "GridIndex": 3106,
+      "IconPath": "Icons/Signal/signal-406"
+    },
+    {
+      "Name": "SIGNAL-600",
+      "ID": 600,
+      "SID": "",
+      "GridIndex": 3401,
+      "IconPath": "Icons/Signal/signal-600"
+    },
+    {
+      "Name": "SIGNAL-601",
+      "ID": 601,
+      "SID": "",
+      "GridIndex": 3402,
+      "IconPath": "Icons/Signal/signal-601"
+    },
+    {
+      "Name": "SIGNAL-602",
+      "ID": 602,
+      "SID": "",
+      "GridIndex": 3403,
+      "IconPath": "Icons/Signal/signal-602"
+    },
+    {
+      "Name": "SIGNAL-603",
+      "ID": 603,
+      "SID": "",
+      "GridIndex": 3404,
+      "IconPath": "Icons/Signal/signal-603"
+    },
+    {
+      "Name": "SIGNAL-604",
+      "ID": 604,
+      "SID": "",
+      "GridIndex": 3405,
+      "IconPath": "Icons/Signal/signal-604"
+    },
+    {
+      "Name": "SIGNAL-605",
+      "ID": 605,
+      "SID": "",
+      "GridIndex": 3406,
+      "IconPath": "Icons/Signal/signal-605"
+    },
+    {
+      "Name": "SIGNAL-606",
+      "ID": 606,
+      "SID": "",
+      "GridIndex": 3407,
+      "IconPath": "Icons/Signal/signal-606"
+    },
+    {
+      "Name": "SIGNAL-607",
+      "ID": 607,
+      "SID": "",
+      "GridIndex": 3408,
+      "IconPath": "Icons/Signal/signal-607"
+    },
+    {
+      "Name": "SIGNAL-608",
+      "ID": 608,
+      "SID": "",
+      "GridIndex": 3409,
+      "IconPath": "Icons/Signal/signal-608"
+    },
+    {
+      "Name": "SIGNAL-609",
+      "ID": 609,
+      "SID": "",
+      "GridIndex": 3410,
+      "IconPath": "Icons/Signal/signal-609"
+    }
+  ]
+}

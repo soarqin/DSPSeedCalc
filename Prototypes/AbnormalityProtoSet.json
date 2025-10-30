@@ -1,0 +1,251 @@
+{
+  "m_GameObject": {
+    "m_FileID": 0,
+    "m_PathID": 0
+  },
+  "m_Enabled": 1,
+  "m_Script": {
+    "m_FileID": 1,
+    "m_PathID": 1886
+  },
+  "m_Name": "AbnormalityProtoSet",
+  "TableName": "Abnormality",
+  "Signature": "",
+  "dataArray": [
+    {
+      "Name": "Free Mode异常",
+      "ID": 1,
+      "SID": "",
+      "TipDesc": "配置异常",
+      "DeterminatorName": "ABN_FreeModeConfig",
+      "DeterminatorParams": [],
+      "AbnormalityDetail": "sub type:{0}, cur value:{1}, proto value:{2}"
+    },
+    {
+      "Name": "Item Proto异常",
+      "ID": 2,
+      "SID": "",
+      "TipDesc": "原型异常",
+      "DeterminatorName": "ABN_ProtoData",
+      "DeterminatorParams": [
+        1
+      ],
+      "AbnormalityDetail": "{0}"
+    },
+    {
+      "Name": " Tech Proto异常",
+      "ID": 3,
+      "SID": "",
+      "TipDesc": "原型异常",
+      "DeterminatorName": "ABN_ProtoData",
+      "DeterminatorParams": [
+        2
+      ],
+      "AbnormalityDetail": "{0}"
+    },
+    {
+      "Name": " Recipe Proto异常",
+      "ID": 4,
+      "SID": "",
+      "TipDesc": "原型异常",
+      "DeterminatorName": "ABN_ProtoData",
+      "DeterminatorParams": [
+        3
+      ],
+      "AbnormalityDetail": "{0}"
+    },
+    {
+      "Name": "Vege Proto异常",
+      "ID": 5,
+      "SID": "",
+      "TipDesc": "原型异常",
+      "DeterminatorName": "ABN_ProtoData",
+      "DeterminatorParams": [
+        4
+      ],
+      "AbnormalityDetail": "{0}"
+    },
+    {
+      "Name": "Vein Proto异常",
+      "ID": 6,
+      "SID": "",
+      "TipDesc": "原型异常",
+      "DeterminatorName": "ABN_ProtoData",
+      "DeterminatorParams": [
+        5
+      ],
+      "AbnormalityDetail": "{0}"
+    },
+    {
+      "Name": "物品产量与消耗量异常",
+      "ID": 7,
+      "SID": "",
+      "TipDesc": "产量数据异常",
+      "DeterminatorName": "",
+      "DeterminatorParams": [],
+      "AbnormalityDetail": "sub type:{0}, {1}:{2}, {3}:{4}, {5}:{6}, {7}:{8}, {9}:{10}, {11}:{12}"
+    },
+    {
+      "Name": "矿物利用数值异常",
+      "ID": 8,
+      "SID": "",
+      "TipDesc": "矿物采集数值异常",
+      "DeterminatorName": "ABN_VeinsUtil",
+      "DeterminatorParams": [],
+      "AbnormalityDetail": "cost rate:{0:0.0000}, theory cost rate:{1:0.0000}, mining speed:{2:0.0000}, theory mining speed:{3:0.0000}"
+    },
+    {
+      "Name": "机械框架数值异常",
+      "ID": 9,
+      "SID": "",
+      "TipDesc": "机甲移速异常",
+      "DeterminatorName": "ABN_MechaFrame",
+      "DeterminatorParams": [],
+      "AbnormalityDetail": "walk speed:{0}, theory walk speed:{1}"
+    },
+    {
+      "Name": "无人机引擎数值异常",
+      "ID": 10,
+      "SID": "",
+      "TipDesc": "无人机异常",
+      "DeterminatorName": "ABN_DroneEngine",
+      "DeterminatorParams": [],
+      "AbnormalityDetail": "drone speed:{0}, theory drone speed:{1}"
+    },
+    {
+      "Name": "通讯控制数值异常",
+      "ID": 11,
+      "SID": "",
+      "TipDesc": "无人机异常",
+      "DeterminatorName": "ABN_CommunicationControl",
+      "DeterminatorParams": [],
+      "AbnormalityDetail": "drone count:{0}, theory drone count:{1}, task count:{2}, theory task count:{3}"
+    },
+    {
+      "Name": "机甲核心数值异常",
+      "ID": 12,
+      "SID": "",
+      "TipDesc": "最大核心能量异常",
+      "DeterminatorName": "ABN_MechaCore",
+      "DeterminatorParams": [],
+      "AbnormalityDetail": "max core energy:{0}, theory max core energy:{1}"
+    },
+    {
+      "Name": "前置科技解锁异常",
+      "ID": 13,
+      "SID": "",
+      "TipDesc": "科技解锁异常",
+      "DeterminatorName": "ABN_PreTechUnlocked",
+      "DeterminatorParams": [],
+      "AbnormalityDetail": "tech:{0}, pre tech:{1}"
+    },
+    {
+      "Name": "科技解锁物品消耗异常",
+      "ID": 14,
+      "SID": "",
+      "TipDesc": "科技解锁异常",
+      "DeterminatorName": "ABN_ItemForUnlockTech",
+      "DeterminatorParams": [],
+      "AbnormalityDetail": "tech:{0}, item:{1}, need count:{2}, total consumption:{3}"
+    },
+    {
+      "Name": "科技宇宙块消耗异常",
+      "ID": 15,
+      "SID": "",
+      "TipDesc": "科技解锁异常",
+      "DeterminatorName": "ABN_ConsumptionForUpgrade",
+      "DeterminatorParams": [],
+      "AbnormalityDetail": "total unv mat consumption:{0}, veins util:{1}, reaserch speed:{2}, ship engine:{3}, ray trans:{4}, driver engine:{5}, drone engine:{6}, energy circuit:{7}, comunication ctrl:{8}, mecha core:{9}"
+    },
+    {
+      "Name": "公式解锁条件异常",
+      "ID": 16,
+      "SID": "",
+      "TipDesc": "公式解锁异常",
+      "DeterminatorName": "ABN_RecipeUnlockCondition",
+      "DeterminatorParams": [],
+      "AbnormalityDetail": "sub type:{0}, recipe:{1}, pre tech:{2}"
+    },
+    {
+      "Name": "机甲制造台公式异常",
+      "ID": 17,
+      "SID": "",
+      "TipDesc": "公式数据异常",
+      "DeterminatorName": "ABN_MechaForgeRecipeData",
+      "DeterminatorParams": [],
+      "AbnormalityDetail": "sub type:{0}, recipe id:{1}, arr type:{2}, index:{3}, proto val:{4}, cur val:{5}"
+    },
+    {
+      "Name": "制造设备公式异常",
+      "ID": 18,
+      "SID": "",
+      "TipDesc": "公式数据异常",
+      "DeterminatorName": "ABN_AssemblerRecipeData",
+      "DeterminatorParams": [],
+      "AbnormalityDetail": "sub type:{0}, factory id:{1}, assembler id:{2}, recipe id:{3}, arr type:{4}, index:{5}, proto val:{6}, cur val:{7}"
+    },
+    {
+      "Name": "背包物品数量变化异常",
+      "ID": 19,
+      "SID": "",
+      "TipDesc": "背包物品异常",
+      "DeterminatorName": "",
+      "DeterminatorParams": [],
+      "AbnormalityDetail": "grid index:{0}, item id:{1}, snap shot count:{2}, cur count:{3}"
+    },
+    {
+      "Name": "机甲位置异常",
+      "ID": 20,
+      "SID": "",
+      "TipDesc": "机甲位置异常",
+      "DeterminatorName": "ABN_MechaPosition",
+      "DeterminatorParams": [],
+      "AbnormalityDetail": "sub type:{0}, cur displacement val:{1}, threshold val:{2}"
+    },
+    {
+      "Name": "恒星数据异常",
+      "ID": 21,
+      "SID": "",
+      "TipDesc": "恒星数据异常",
+      "DeterminatorName": "ABN_StarValue",
+      "DeterminatorParams": [],
+      "AbnormalityDetail": "sub type:{0}, star id:{1}, star type:{2}, star mass:{3}, star lum:{4}, threshold lum:{5}"
+    },
+    {
+      "Name": "戴森球构造异常",
+      "ID": 22,
+      "SID": "",
+      "TipDesc": "戴森球数据异常",
+      "DeterminatorName": "",
+      "DeterminatorParams": [],
+      "AbnormalityDetail": "star id:{0}, constructed sp:{1}, rocket consumption:{2}"
+    },
+    {
+      "Name": "发电设备异常",
+      "ID": 23,
+      "SID": "",
+      "TipDesc": "发电设施异常",
+      "DeterminatorName": "ABN_PowerGenerator",
+      "DeterminatorParams": [],
+      "AbnormalityDetail": "factory id:{0}, gen id:{1}, building id:{2}, fac gen energy:{3}, fac use fuel:{4}, theory gen energy:{5}, theory use fuel:{6}"
+    },
+    {
+      "Name": "挖矿设备异常",
+      "ID": 24,
+      "SID": "",
+      "TipDesc": "采集设施异常",
+      "DeterminatorName": "ABN_Miner",
+      "DeterminatorParams": [],
+      "AbnormalityDetail": "factory id:{0}, miner id:{1}, building id:{2}, speed:{3}"
+    },
+    {
+      "Name": "使用控制台",
+      "ID": 25,
+      "SID": "",
+      "TipDesc": "使用控制台",
+      "DeterminatorName": "ABN_UseConsole",
+      "DeterminatorParams": [],
+      "AbnormalityDetail": "sub type:{0}, value 1:{1}, value 2:{2}, value 3:{3}, value 4:{4}, value 5:{5}"
+    }
+  ]
+}

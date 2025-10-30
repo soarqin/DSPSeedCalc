@@ -1,0 +1,283 @@
+{
+  "m_GameObject": {
+    "m_FileID": 0,
+    "m_PathID": 0
+  },
+  "m_Enabled": 1,
+  "m_Script": {
+    "m_FileID": 1,
+    "m_PathID": 2119
+  },
+  "m_Name": "TutorialProtoSet",
+  "TableName": "Tutorial",
+  "Signature": "",
+  "dataArray": [
+    {
+      "Name": "前情介绍标题",
+      "ID": 1,
+      "SID": "",
+      "PreText": "前情介绍前字",
+      "PostText": "前情介绍后字",
+      "Video": "",
+      "DeterminatorName": "TOR_GameSecond",
+      "DeterminatorParams": [
+        1
+      ]
+    },
+    {
+      "Name": "戴森球介绍标题",
+      "ID": 2,
+      "SID": "",
+      "PreText": "戴森球介绍前字",
+      "PostText": "戴森球介绍后字",
+      "Video": "Videos/tutorial-2-ld",
+      "DeterminatorName": "TOR_GameSecond",
+      "DeterminatorParams": [
+        2
+      ]
+    },
+    {
+      "Name": "沙盒模式指引标题",
+      "ID": 15,
+      "SID": "",
+      "PreText": "沙盒模式指引前字",
+      "PostText": "沙盒模式指引后字",
+      "Video": "Videos/tutorial-15-ld",
+      "DeterminatorName": "TOR_SandboxMode",
+      "DeterminatorParams": []
+    },
+    {
+      "Name": "战斗系统前情介绍标题",
+      "ID": 17,
+      "SID": "",
+      "PreText": "战斗系统前情介绍前字",
+      "PostText": "战斗系统前情介绍后字",
+      "Video": "Videos/tutorial-17-ld",
+      "DeterminatorName": "TOR_CombatMode",
+      "DeterminatorParams": []
+    },
+    {
+      "Name": "采集资源指令标题",
+      "ID": 3,
+      "SID": "",
+      "PreText": "采集资源指令前字",
+      "PostText": "采集资源指令后字",
+      "Video": "Videos/tutorial-3-ld",
+      "DeterminatorName": "TOR_GameSecond",
+      "DeterminatorParams": [
+        26
+      ]
+    },
+    {
+      "Name": "采矿机搭建及矿脉覆盖标题",
+      "ID": 4,
+      "SID": "",
+      "PreText": "采矿机搭建及矿脉覆盖前字",
+      "PostText": "采矿机搭建及矿脉覆盖后字",
+      "Video": "Videos/tutorial-4-ld",
+      "DeterminatorName": "TOR_TechUnlocked",
+      "DeterminatorParams": [
+        1001,
+        4
+      ]
+    },
+    {
+      "Name": "电网建立指南标题",
+      "ID": 5,
+      "SID": "",
+      "PreText": "电网建立指南前字",
+      "PostText": "电网建立指南后字",
+      "Video": "Videos/tutorial-5-ld",
+      "DeterminatorName": "TOR_OnBuild",
+      "DeterminatorParams": [
+        2201,
+        2203
+      ]
+    },
+    {
+      "Name": "机甲核心能量标题",
+      "ID": 6,
+      "SID": "",
+      "PreText": "机甲核心能量前字",
+      "PostText": "机甲核心能量后字",
+      "Video": "Videos/tutorial-6-ld",
+      "DeterminatorName": "TOR_LowFuel",
+      "DeterminatorParams": []
+    },
+    {
+      "Name": "机甲基本操作标题",
+      "ID": 11,
+      "SID": "",
+      "PreText": "机甲基本操作前字",
+      "PostText": "机甲基本操作后字",
+      "Video": "Videos/tutorial-11-ld",
+      "DeterminatorName": "TOR_GameSecond",
+      "DeterminatorParams": [
+        6
+      ]
+    },
+    {
+      "Name": "机甲航行操作标题",
+      "ID": 12,
+      "SID": "",
+      "PreText": "机甲航行操作前字",
+      "PostText": "机甲航行操作后字",
+      "Video": "Videos/tutorial-12-ld",
+      "DeterminatorName": "TOR_TechUnlocked",
+      "DeterminatorParams": [
+        2902,
+        7
+      ]
+    },
+    {
+      "Name": "矩阵研究站介绍标题",
+      "ID": 7,
+      "SID": "",
+      "PreText": "矩阵研究站介绍前字",
+      "PostText": "矩阵研究站介绍后字",
+      "Video": "Videos/tutorial-7-ld",
+      "DeterminatorName": "TOR_OnBuild",
+      "DeterminatorParams": [
+        2901
+      ]
+    },
+    {
+      "Name": "配方复制操作标题",
+      "ID": 8,
+      "SID": "",
+      "PreText": "配方复制操作前字",
+      "PostText": "配方复制操作后字",
+      "Video": "Videos/tutorial-8-ld",
+      "DeterminatorName": "TOR_RecipeCopyTip",
+      "DeterminatorParams": []
+    },
+    {
+      "Name": "传送带和分拣器标题",
+      "ID": 9,
+      "SID": "",
+      "PreText": "传送带和分拣器前字",
+      "PostText": "传送带和分拣器后字",
+      "Video": "Videos/tutorial-9-ld",
+      "DeterminatorName": "TOR_TechUnlocked",
+      "DeterminatorParams": [
+        1601,
+        4
+      ]
+    },
+    {
+      "Name": "喷涂机和增产剂工作机制标题",
+      "ID": 14,
+      "SID": "",
+      "PreText": "喷涂机和增产剂工作机制前字",
+      "PostText": "喷涂机和增产剂工作机制后字",
+      "Video": "Videos/tutorial-14-ld",
+      "DeterminatorName": "TOR_TechUnlocked",
+      "DeterminatorParams": [
+        1151,
+        7
+      ]
+    },
+    {
+      "Name": "自动集装机标题",
+      "ID": 13,
+      "SID": "",
+      "PreText": "自动集装机前字",
+      "PostText": "",
+      "Video": "Videos/tutorial-13-ld",
+      "DeterminatorName": "TOR_TechUnlocked",
+      "DeterminatorParams": [
+        1607,
+        7
+      ]
+    },
+    {
+      "Name": "射线接收站工作机制标题",
+      "ID": 10,
+      "SID": "",
+      "PreText": "射线接收站工作机制前字",
+      "PostText": "射线接收站工作机制后字",
+      "Video": "",
+      "DeterminatorName": "TOR_OnBuild",
+      "DeterminatorParams": [
+        2208
+      ]
+    },
+    {
+      "Name": "物流配送器指引标题",
+      "ID": 16,
+      "SID": "",
+      "PreText": "物流配送器指引前字",
+      "PostText": "物流配送器指引后字",
+      "Video": "Videos/tutorial-16-ld",
+      "DeterminatorName": "TOR_TechUnlocked",
+      "DeterminatorParams": [
+        1608,
+        7
+      ]
+    },
+    {
+      "Name": "防御塔介绍标题",
+      "ID": 18,
+      "SID": "",
+      "PreText": "防御塔介绍前字",
+      "PostText": "防御塔介绍后字",
+      "Video": "Videos/tutorial-18-ld",
+      "DeterminatorName": "TOR_TechUnlocked",
+      "DeterminatorParams": [
+        1801,
+        7
+      ]
+    },
+    {
+      "Name": "战场分析基站标题",
+      "ID": 19,
+      "SID": "",
+      "PreText": "战场分析基站前字",
+      "PostText": "战场分析基站后字",
+      "Video": "Videos/tutorial-19-ld",
+      "DeterminatorName": "TOR_TechUnlocked",
+      "DeterminatorParams": [
+        1826,
+        7
+      ]
+    },
+    {
+      "Name": "信号塔标题",
+      "ID": 20,
+      "SID": "",
+      "PreText": "信号塔前字",
+      "PostText": "信号塔后字",
+      "Video": "Videos/tutorial-20-ld",
+      "DeterminatorName": "TOR_TechUnlocked",
+      "DeterminatorParams": [
+        1808,
+        7
+      ]
+    },
+    {
+      "Name": "行星护盾标题",
+      "ID": 21,
+      "SID": "",
+      "PreText": "行星护盾前字",
+      "PostText": "行星护盾后字",
+      "Video": "Videos/tutorial-21-ld",
+      "DeterminatorName": "TOR_OnBuild",
+      "DeterminatorParams": [
+        3008
+      ]
+    },
+    {
+      "Name": "无人机编队标题",
+      "ID": 22,
+      "SID": "",
+      "PreText": "无人机编队前字",
+      "PostText": "无人机编队后字",
+      "Video": "Videos/tutorial-22-ld",
+      "DeterminatorName": "TOR_TechUnlocked",
+      "DeterminatorParams": [
+        1819,
+        7
+      ]
+    }
+  ]
+}

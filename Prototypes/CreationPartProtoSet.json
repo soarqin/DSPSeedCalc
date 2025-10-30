@@ -1,0 +1,5885 @@
+{
+  "m_GameObject": {
+    "m_FileID": 0,
+    "m_PathID": 0
+  },
+  "m_Enabled": 1,
+  "m_Script": {
+    "m_FileID": 1,
+    "m_PathID": 2048
+  },
+  "m_Name": "CreationPartProtoSet",
+  "TableName": "CreationPart",
+  "Signature": "",
+  "dataArray": [
+    {
+      "Name": "V立方体-1",
+      "ID": 1,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/1",
+      "ModelIndex": 495,
+      "BuildPath": "载具/载具结构件/基础形状/001",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 1.0,
+        "z": 4.0
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 1.0,
+        "z": 4.0
+      },
+      "MaxStretch": {
+        "x": 5.0,
+        "y": 3.0,
+        "z": 6.0
+      },
+      "Description": "DV立方体",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        100
+      ],
+      "ItemCountsMax": [
+        300
+      ]
+    },
+    {
+      "Name": "V立方体-2",
+      "ID": 2,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/2",
+      "ModelIndex": 496,
+      "BuildPath": "载具/载具结构件/基础形状/002",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 1.0,
+        "z": 3.0
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 1.0,
+        "z": 4.0
+      },
+      "MaxStretch": {
+        "x": 3.5,
+        "y": 3.0,
+        "z": 6.0
+      },
+      "Description": "DV立方体",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        100
+      ],
+      "ItemCountsMax": [
+        220
+      ]
+    },
+    {
+      "Name": "V立方体-3",
+      "ID": 3,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/3",
+      "ModelIndex": 497,
+      "BuildPath": "载具/载具结构件/基础形状/003",
+      "MinStretch": {
+        "x": 2.5,
+        "y": 1.0,
+        "z": 4.0
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 1.0,
+        "z": 4.0
+      },
+      "MaxStretch": {
+        "x": 4.0,
+        "y": 4.0,
+        "z": 6.0
+      },
+      "Description": "DV立方体",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        100
+      ],
+      "ItemCountsMax": [
+        320
+      ]
+    },
+    {
+      "Name": "V立方体-4",
+      "ID": 4,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/4",
+      "ModelIndex": 498,
+      "BuildPath": "载具/载具结构件/基础形状/004",
+      "MinStretch": {
+        "x": 1.5,
+        "y": 1.0,
+        "z": 4.0
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 1.0,
+        "z": 4.0
+      },
+      "MaxStretch": {
+        "x": 6.0,
+        "y": 6.0,
+        "z": 6.0
+      },
+      "Description": "DV立方体",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        100
+      ],
+      "ItemCountsMax": [
+        650
+      ]
+    },
+    {
+      "Name": "V甲板-1",
+      "ID": 21,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/21",
+      "ModelIndex": 499,
+      "BuildPath": "载具/载具结构件/基础形状/005",
+      "MinStretch": {
+        "x": 6.0,
+        "y": 2.0,
+        "z": 12.0
+      },
+      "DefStretch": {
+        "x": 10.0,
+        "y": 2.0,
+        "z": 16.0
+      },
+      "MaxStretch": {
+        "x": 20.0,
+        "y": 4.0,
+        "z": 32.0
+      },
+      "Description": "DV甲板",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        2670
+      ],
+      "ItemCountsMax": [
+        5560
+      ]
+    },
+    {
+      "Name": "V甲板-2",
+      "ID": 22,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/22",
+      "ModelIndex": 500,
+      "BuildPath": "载具/载具结构件/基础形状/006",
+      "MinStretch": {
+        "x": 6.0,
+        "y": 2.0,
+        "z": 12.0
+      },
+      "DefStretch": {
+        "x": 10.0,
+        "y": 2.0,
+        "z": 16.0
+      },
+      "MaxStretch": {
+        "x": 20.0,
+        "y": 4.0,
+        "z": 32.0
+      },
+      "Description": "DV甲板",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        2670
+      ],
+      "ItemCountsMax": [
+        5560
+      ]
+    },
+    {
+      "Name": "V甲板-3",
+      "ID": 23,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/23",
+      "ModelIndex": 501,
+      "BuildPath": "载具/载具结构件/基础形状/007",
+      "MinStretch": {
+        "x": 10.0,
+        "y": 2.0,
+        "z": 16.0
+      },
+      "DefStretch": {
+        "x": 10.0,
+        "y": 2.0,
+        "z": 16.0
+      },
+      "MaxStretch": {
+        "x": 20.0,
+        "y": 4.0,
+        "z": 32.0
+      },
+      "Description": "DV甲板",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        2670
+      ],
+      "ItemCountsMax": [
+        5560
+      ]
+    },
+    {
+      "Name": "V倒角立方体-1",
+      "ID": 41,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/41",
+      "ModelIndex": 502,
+      "BuildPath": "载具/载具结构件/基础形状/008",
+      "MinStretch": {
+        "x": 4.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "DefStretch": {
+        "x": 4.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "MaxStretch": {
+        "x": 8.0,
+        "y": 6.0,
+        "z": 8.0
+      },
+      "Description": "DV倒角立方体",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        270
+      ],
+      "ItemCountsMax": [
+        1080
+      ]
+    },
+    {
+      "Name": "V倒角立方体-2",
+      "ID": 42,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/42",
+      "ModelIndex": 503,
+      "BuildPath": "载具/载具结构件/基础形状/009",
+      "MinStretch": {
+        "x": 5.0,
+        "y": 2.5,
+        "z": 4.0
+      },
+      "DefStretch": {
+        "x": 5.0,
+        "y": 2.5,
+        "z": 4.0
+      },
+      "MaxStretch": {
+        "x": 10.0,
+        "y": 2.5,
+        "z": 8.0
+      },
+      "Description": "DV倒角立方体",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        420
+      ],
+      "ItemCountsMax": [
+        610
+      ]
+    },
+    {
+      "Name": "V倒角立方体-3",
+      "ID": 43,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/43",
+      "ModelIndex": 504,
+      "BuildPath": "载具/载具结构件/基础形状/010",
+      "MinStretch": {
+        "x": 4.0,
+        "y": 2.5,
+        "z": 4.0
+      },
+      "DefStretch": {
+        "x": 4.0,
+        "y": 2.5,
+        "z": 4.0
+      },
+      "MaxStretch": {
+        "x": 8.0,
+        "y": 5.0,
+        "z": 8.0
+      },
+      "Description": "DV倒角立方体",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        340
+      ],
+      "ItemCountsMax": [
+        930
+      ]
+    },
+    {
+      "Name": "V倒角立方体-4",
+      "ID": 44,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/44",
+      "ModelIndex": 505,
+      "BuildPath": "载具/载具结构件/基础形状/011",
+      "MinStretch": {
+        "x": 4.0,
+        "y": 2.5,
+        "z": 4.0
+      },
+      "DefStretch": {
+        "x": 4.0,
+        "y": 2.5,
+        "z": 4.0
+      },
+      "MaxStretch": {
+        "x": 8.0,
+        "y": 5.0,
+        "z": 8.0
+      },
+      "Description": "DV倒角立方体",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        340
+      ],
+      "ItemCountsMax": [
+        930
+      ]
+    },
+    {
+      "Name": "V倒角立方体-5",
+      "ID": 45,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/45",
+      "ModelIndex": 506,
+      "BuildPath": "载具/载具结构件/基础形状/012",
+      "MinStretch": {
+        "x": 4.0,
+        "y": 1.0,
+        "z": 3.0
+      },
+      "DefStretch": {
+        "x": 4.0,
+        "y": 1.0,
+        "z": 3.0
+      },
+      "MaxStretch": {
+        "x": 8.0,
+        "y": 2.0,
+        "z": 6.0
+      },
+      "Description": "DV倒角立方体",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        100
+      ],
+      "ItemCountsMax": [
+        320
+      ]
+    },
+    {
+      "Name": "V倒角立方体-6",
+      "ID": 46,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/46",
+      "ModelIndex": 507,
+      "BuildPath": "载具/载具结构件/基础形状/013",
+      "MinStretch": {
+        "x": 4.0,
+        "y": 2.0,
+        "z": 3.5
+      },
+      "DefStretch": {
+        "x": 4.0,
+        "y": 2.0,
+        "z": 3.5
+      },
+      "MaxStretch": {
+        "x": 6.0,
+        "y": 3.0,
+        "z": 8.0
+      },
+      "Description": "DV倒角立方体",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        240
+      ],
+      "ItemCountsMax": [
+        470
+      ]
+    },
+    {
+      "Name": "V梯形块-1",
+      "ID": 61,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/61",
+      "ModelIndex": 508,
+      "BuildPath": "载具/载具结构件/基础形状/014",
+      "MinStretch": {
+        "x": 4.0,
+        "y": 1.5,
+        "z": 3.0
+      },
+      "DefStretch": {
+        "x": 4.0,
+        "y": 1.5,
+        "z": 3.0
+      },
+      "MaxStretch": {
+        "x": 6.0,
+        "y": 2.5,
+        "z": 3.0
+      },
+      "Description": "DV梯形块",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        150
+      ],
+      "ItemCountsMax": [
+        370
+      ]
+    },
+    {
+      "Name": "V梯形块-2",
+      "ID": 62,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/62",
+      "ModelIndex": 509,
+      "BuildPath": "载具/载具结构件/基础形状/015",
+      "MinStretch": {
+        "x": 4.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "DefStretch": {
+        "x": 4.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "MaxStretch": {
+        "x": 8.0,
+        "y": 3.0,
+        "z": 4.0
+      },
+      "Description": "DV梯形块",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        270
+      ],
+      "ItemCountsMax": [
+        810
+      ]
+    },
+    {
+      "Name": "V梯形块-3",
+      "ID": 63,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/63",
+      "ModelIndex": 510,
+      "BuildPath": "载具/载具结构件/基础形状/016",
+      "MinStretch": {
+        "x": 5.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "DefStretch": {
+        "x": 5.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "MaxStretch": {
+        "x": 8.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "Description": "DV梯形块",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        340
+      ],
+      "ItemCountsMax": [
+        540
+      ]
+    },
+    {
+      "Name": "V梯形块-4",
+      "ID": 64,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/64",
+      "ModelIndex": 511,
+      "BuildPath": "载具/载具结构件/基础形状/017",
+      "MinStretch": {
+        "x": 4.0,
+        "y": 1.0,
+        "z": 5.0
+      },
+      "DefStretch": {
+        "x": 4.0,
+        "y": 1.0,
+        "z": 5.0
+      },
+      "MaxStretch": {
+        "x": 8.0,
+        "y": 2.0,
+        "z": 5.0
+      },
+      "Description": "DV梯形块",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        170
+      ],
+      "ItemCountsMax": [
+        280
+      ]
+    },
+    {
+      "Name": "V梯形块-5",
+      "ID": 65,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/65",
+      "ModelIndex": 512,
+      "BuildPath": "载具/载具结构件/基础形状/018",
+      "MinStretch": {
+        "x": 4.0,
+        "y": 1.0,
+        "z": 5.0
+      },
+      "DefStretch": {
+        "x": 4.0,
+        "y": 1.0,
+        "z": 5.0
+      },
+      "MaxStretch": {
+        "x": 8.0,
+        "y": 2.0,
+        "z": 5.0
+      },
+      "Description": "DV梯形块",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        170
+      ],
+      "ItemCountsMax": [
+        280
+      ]
+    },
+    {
+      "Name": "V梯形块-6",
+      "ID": 66,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/66",
+      "ModelIndex": 513,
+      "BuildPath": "载具/载具结构件/基础形状/019",
+      "MinStretch": {
+        "x": 5.0,
+        "y": 2.25,
+        "z": 5.0
+      },
+      "DefStretch": {
+        "x": 5.0,
+        "y": 2.25,
+        "z": 5.0
+      },
+      "MaxStretch": {
+        "x": 8.0,
+        "y": 5.0,
+        "z": 10.0
+      },
+      "Description": "DV梯形块",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        470
+      ],
+      "ItemCountsMax": [
+        1110
+      ]
+    },
+    {
+      "Name": "V锥体-1",
+      "ID": 81,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/81",
+      "ModelIndex": 514,
+      "BuildPath": "载具/载具结构件/基础形状/020",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 2.5,
+        "z": 10.0
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 2.5,
+        "z": 10.0
+      },
+      "MaxStretch": {
+        "x": 4.0,
+        "y": 2.5,
+        "z": 10.0
+      },
+      "Description": "DV锥体",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        630
+      ],
+      "ItemCountsMax": [
+        840
+      ]
+    },
+    {
+      "Name": "V锥体-2",
+      "ID": 82,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/82",
+      "ModelIndex": 515,
+      "BuildPath": "载具/载具结构件/基础形状/021",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 10.0
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 10.0
+      },
+      "MaxStretch": {
+        "x": 4.0,
+        "y": 2.0,
+        "z": 10.0
+      },
+      "Description": "DV锥体",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        500
+      ],
+      "ItemCountsMax": [
+        660
+      ]
+    },
+    {
+      "Name": "V锥体-3",
+      "ID": 83,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/83",
+      "ModelIndex": 516,
+      "BuildPath": "载具/载具结构件/基础形状/022",
+      "MinStretch": {
+        "x": 5.0,
+        "y": 1.5,
+        "z": 8.0
+      },
+      "DefStretch": {
+        "x": 5.0,
+        "y": 1.5,
+        "z": 8.0
+      },
+      "MaxStretch": {
+        "x": 6.0,
+        "y": 1.5,
+        "z": 8.0
+      },
+      "Description": "DV锥体",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        500
+      ],
+      "ItemCountsMax": [
+        600
+      ]
+    },
+    {
+      "Name": "V锥体-4",
+      "ID": 84,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/84",
+      "ModelIndex": 517,
+      "BuildPath": "载具/载具结构件/基础形状/023",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 1.5,
+        "z": 8.0
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 1.5,
+        "z": 8.0
+      },
+      "MaxStretch": {
+        "x": 3.0,
+        "y": 1.5,
+        "z": 8.0
+      },
+      "Description": "DV锥体",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        300
+      ],
+      "ItemCountsMax": [
+        300
+      ]
+    },
+    {
+      "Name": "V三角形-1",
+      "ID": 91,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/91",
+      "ModelIndex": 658,
+      "BuildPath": "载具/载具结构件/基础形状/024",
+      "MinStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 2.0
+      },
+      "DefStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 2.0
+      },
+      "MaxStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 2.0
+      },
+      "Description": "DV三角形",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        20
+      ],
+      "ItemCountsMax": [
+        20
+      ]
+    },
+    {
+      "Name": "V三角形-2",
+      "ID": 92,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/92",
+      "ModelIndex": 659,
+      "BuildPath": "载具/载具结构件/基础形状/025",
+      "MinStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "DefStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "MaxStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "Description": "DV三角形",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        10
+      ],
+      "ItemCountsMax": [
+        10
+      ]
+    },
+    {
+      "Name": "V三角形-3",
+      "ID": 93,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/93",
+      "ModelIndex": 660,
+      "BuildPath": "载具/载具结构件/基础形状/026",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "MaxStretch": {
+        "x": 2.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "Description": "DV三角形",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        20
+      ],
+      "ItemCountsMax": [
+        20
+      ]
+    },
+    {
+      "Name": "V三角形-4",
+      "ID": 94,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/94",
+      "ModelIndex": 661,
+      "BuildPath": "载具/载具结构件/基础形状/027",
+      "MinStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 2.0
+      },
+      "DefStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 2.0
+      },
+      "MaxStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 2.0
+      },
+      "Description": "DV三角形",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        20
+      ],
+      "ItemCountsMax": [
+        20
+      ]
+    },
+    {
+      "Name": "V三角形-5",
+      "ID": 95,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/95",
+      "ModelIndex": 662,
+      "BuildPath": "载具/载具结构件/基础形状/028",
+      "MinStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "DefStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "MaxStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "Description": "DV三角形",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        10
+      ],
+      "ItemCountsMax": [
+        10
+      ]
+    },
+    {
+      "Name": "V控制室-1",
+      "ID": 101,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/101",
+      "ModelIndex": 518,
+      "BuildPath": "载具/载具结构件/基础形状/029",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 3.0,
+        "z": 5.0
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 3.0,
+        "z": 5.0
+      },
+      "MaxStretch": {
+        "x": 6.0,
+        "y": 6.0,
+        "z": 10.0
+      },
+      "Description": "DV控制室",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        380,
+        380
+      ],
+      "ItemCountsMax": [
+        1020,
+        1020
+      ]
+    },
+    {
+      "Name": "V控制室-2",
+      "ID": 102,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/102",
+      "ModelIndex": 519,
+      "BuildPath": "载具/载具结构件/基础形状/030",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 3.0,
+        "z": 4.0
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 3.0,
+        "z": 4.0
+      },
+      "MaxStretch": {
+        "x": 6.0,
+        "y": 3.0,
+        "z": 8.0
+      },
+      "Description": "DV控制室",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        300,
+        300
+      ],
+      "ItemCountsMax": [
+        460,
+        460
+      ]
+    },
+    {
+      "Name": "V控制室-3",
+      "ID": 103,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/103",
+      "ModelIndex": 520,
+      "BuildPath": "载具/载具结构件/基础形状/031",
+      "MinStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 3.0
+      },
+      "DefStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 3.0
+      },
+      "MaxStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 6.0
+      },
+      "Description": "DV控制室",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        30,
+        30
+      ],
+      "ItemCountsMax": [
+        110,
+        110
+      ]
+    },
+    {
+      "Name": "V控制室-4",
+      "ID": 104,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/104",
+      "ModelIndex": 521,
+      "BuildPath": "载具/载具结构件/基础形状/032",
+      "MinStretch": {
+        "x": 1.5,
+        "y": 1.0,
+        "z": 3.0
+      },
+      "DefStretch": {
+        "x": 1.5,
+        "y": 1.0,
+        "z": 3.0
+      },
+      "MaxStretch": {
+        "x": 1.5,
+        "y": 1.0,
+        "z": 4.0
+      },
+      "Description": "DV控制室",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        40,
+        40
+      ],
+      "ItemCountsMax": [
+        50,
+        50
+      ]
+    },
+    {
+      "Name": "V侧臂-1",
+      "ID": 121,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/121",
+      "ModelIndex": 522,
+      "BuildPath": "载具/载具结构件/高级形状/001",
+      "MinStretch": {
+        "x": 0.5,
+        "y": 2.0,
+        "z": 7.0
+      },
+      "DefStretch": {
+        "x": 0.5,
+        "y": 2.0,
+        "z": 10.0
+      },
+      "MaxStretch": {
+        "x": 0.5,
+        "y": 2.0,
+        "z": 16.0
+      },
+      "Description": "DV侧臂",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        90
+      ],
+      "ItemCountsMax": [
+        140
+      ]
+    },
+    {
+      "Name": "V侧臂-2",
+      "ID": 122,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/122",
+      "ModelIndex": 523,
+      "BuildPath": "载具/载具结构件/高级形状/002",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 1.5,
+        "z": 8.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 1.5,
+        "z": 10.0
+      },
+      "MaxStretch": {
+        "x": 2.0,
+        "y": 1.5,
+        "z": 16.0
+      },
+      "Description": "DV侧臂",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        250
+      ],
+      "ItemCountsMax": [
+        400
+      ]
+    },
+    {
+      "Name": "V侧臂-3",
+      "ID": 123,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/123",
+      "ModelIndex": 524,
+      "BuildPath": "载具/载具结构件/高级形状/003",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 1.5,
+        "z": 12.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 1.5,
+        "z": 12.0
+      },
+      "MaxStretch": {
+        "x": 2.0,
+        "y": 1.5,
+        "z": 16.0
+      },
+      "Description": "DV侧臂",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        300
+      ],
+      "ItemCountsMax": [
+        400
+      ]
+    },
+    {
+      "Name": "V侧臂-4",
+      "ID": 124,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/124",
+      "ModelIndex": 525,
+      "BuildPath": "载具/载具结构件/高级形状/004",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 1.0,
+        "z": 12.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 1.0,
+        "z": 12.0
+      },
+      "MaxStretch": {
+        "x": 2.0,
+        "y": 1.0,
+        "z": 16.0
+      },
+      "Description": "DV侧臂",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        200
+      ],
+      "ItemCountsMax": [
+        260
+      ]
+    },
+    {
+      "Name": "V侧臂-5",
+      "ID": 125,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/125",
+      "ModelIndex": 526,
+      "BuildPath": "载具/载具结构件/高级形状/005",
+      "MinStretch": {
+        "x": 1.5,
+        "y": 2.0,
+        "z": 8.0
+      },
+      "DefStretch": {
+        "x": 1.5,
+        "y": 2.0,
+        "z": 10.0
+      },
+      "MaxStretch": {
+        "x": 1.5,
+        "y": 2.0,
+        "z": 16.0
+      },
+      "Description": "DV侧臂",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        250
+      ],
+      "ItemCountsMax": [
+        400
+      ]
+    },
+    {
+      "Name": "V侧臂-6",
+      "ID": 126,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/126",
+      "ModelIndex": 527,
+      "BuildPath": "载具/载具结构件/高级形状/006",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 1.5,
+        "z": 8.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 1.5,
+        "z": 10.0
+      },
+      "MaxStretch": {
+        "x": 2.0,
+        "y": 1.5,
+        "z": 16.0
+      },
+      "Description": "DV侧臂",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        250
+      ],
+      "ItemCountsMax": [
+        400
+      ]
+    },
+    {
+      "Name": "V侧臂-7",
+      "ID": 127,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/127",
+      "ModelIndex": 528,
+      "BuildPath": "载具/载具结构件/高级形状/007",
+      "MinStretch": {
+        "x": 3.5,
+        "y": 2.0,
+        "z": 10.0
+      },
+      "DefStretch": {
+        "x": 3.5,
+        "y": 2.0,
+        "z": 10.0
+      },
+      "MaxStretch": {
+        "x": 3.5,
+        "y": 2.0,
+        "z": 14.0
+      },
+      "Description": "DV侧臂",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        590
+      ],
+      "ItemCountsMax": [
+        820
+      ]
+    },
+    {
+      "Name": "V侧臂-8",
+      "ID": 128,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/128",
+      "ModelIndex": 529,
+      "BuildPath": "载具/载具结构件/高级形状/008",
+      "MinStretch": {
+        "x": 1.5,
+        "y": 2.0,
+        "z": 10.0
+      },
+      "DefStretch": {
+        "x": 1.5,
+        "y": 2.0,
+        "z": 10.0
+      },
+      "MaxStretch": {
+        "x": 1.5,
+        "y": 2.0,
+        "z": 14.0
+      },
+      "Description": "DV侧臂",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        250
+      ],
+      "ItemCountsMax": [
+        350
+      ]
+    },
+    {
+      "Name": "V侧板-1",
+      "ID": 141,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/141",
+      "ModelIndex": 530,
+      "BuildPath": "载具/载具结构件/高级形状/009",
+      "MinStretch": {
+        "x": 0.5,
+        "y": 3.0,
+        "z": 12.0
+      },
+      "DefStretch": {
+        "x": 0.5,
+        "y": 3.0,
+        "z": 12.0
+      },
+      "MaxStretch": {
+        "x": 0.5,
+        "y": 3.0,
+        "z": 20.0
+      },
+      "Description": "DV侧板",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        150
+      ],
+      "ItemCountsMax": [
+        250
+      ]
+    },
+    {
+      "Name": "V侧板-2",
+      "ID": 142,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/142",
+      "ModelIndex": 531,
+      "BuildPath": "载具/载具结构件/高级形状/010",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 4.0,
+        "z": 7.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 4.0,
+        "z": 7.0
+      },
+      "MaxStretch": {
+        "x": 2.0,
+        "y": 4.0,
+        "z": 12.0
+      },
+      "Description": "DV侧板",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        470
+      ],
+      "ItemCountsMax": [
+        800
+      ]
+    },
+    {
+      "Name": "V侧板-3",
+      "ID": 143,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/143",
+      "ModelIndex": 532,
+      "BuildPath": "载具/载具结构件/高级形状/011",
+      "MinStretch": {
+        "x": 1.5,
+        "y": 4.0,
+        "z": 12.0
+      },
+      "DefStretch": {
+        "x": 1.5,
+        "y": 4.0,
+        "z": 12.0
+      },
+      "MaxStretch": {
+        "x": 1.5,
+        "y": 4.0,
+        "z": 20.0
+      },
+      "Description": "DV侧板",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        600
+      ],
+      "ItemCountsMax": [
+        1000
+      ]
+    },
+    {
+      "Name": "V侧板-4",
+      "ID": 144,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/144",
+      "ModelIndex": 533,
+      "BuildPath": "载具/载具结构件/高级形状/012",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 8.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 8.0
+      },
+      "MaxStretch": {
+        "x": 2.0,
+        "y": 4.0,
+        "z": 8.0
+      },
+      "Description": "DV侧板",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        270
+      ],
+      "ItemCountsMax": [
+        540
+      ]
+    },
+    {
+      "Name": "V侧板-5",
+      "ID": 145,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/145",
+      "ModelIndex": 534,
+      "BuildPath": "载具/载具结构件/高级形状/013",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 3.0,
+        "z": 8.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 3.0,
+        "z": 8.0
+      },
+      "MaxStretch": {
+        "x": 3.0,
+        "y": 3.0,
+        "z": 12.0
+      },
+      "Description": "DV侧板",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        400
+      ],
+      "ItemCountsMax": [
+        900
+      ]
+    },
+    {
+      "Name": "V机翼-1",
+      "ID": 161,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/161",
+      "ModelIndex": 535,
+      "BuildPath": "载具/载具结构件/高级形状/014",
+      "MinStretch": {
+        "x": 7.5,
+        "y": 1.5,
+        "z": 3.5
+      },
+      "DefStretch": {
+        "x": 7.5,
+        "y": 1.5,
+        "z": 3.5
+      },
+      "MaxStretch": {
+        "x": 7.5,
+        "y": 1.5,
+        "z": 5.0
+      },
+      "Description": "DV机翼",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        330
+      ],
+      "ItemCountsMax": [
+        470
+      ]
+    },
+    {
+      "Name": "V机翼-2",
+      "ID": 162,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/162",
+      "ModelIndex": 536,
+      "BuildPath": "载具/载具结构件/高级形状/015",
+      "MinStretch": {
+        "x": 7.0,
+        "y": 0.5,
+        "z": 3.0
+      },
+      "DefStretch": {
+        "x": 7.0,
+        "y": 0.5,
+        "z": 3.0
+      },
+      "MaxStretch": {
+        "x": 7.0,
+        "y": 1.0,
+        "z": 3.0
+      },
+      "Description": "DV机翼",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        90
+      ],
+      "ItemCountsMax": [
+        180
+      ]
+    },
+    {
+      "Name": "V机翼-3",
+      "ID": 163,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/163",
+      "ModelIndex": 537,
+      "BuildPath": "载具/载具结构件/高级形状/016",
+      "MinStretch": {
+        "x": 7.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "DefStretch": {
+        "x": 7.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "MaxStretch": {
+        "x": 7.0,
+        "y": 2.5,
+        "z": 5.0
+      },
+      "Description": "DV机翼",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        470
+      ],
+      "ItemCountsMax": [
+        730
+      ]
+    },
+    {
+      "Name": "V机翼-4",
+      "ID": 164,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/164",
+      "ModelIndex": 538,
+      "BuildPath": "载具/载具结构件/高级形状/017",
+      "MinStretch": {
+        "x": 8.0,
+        "y": 1.0,
+        "z": 3.0
+      },
+      "DefStretch": {
+        "x": 8.0,
+        "y": 1.0,
+        "z": 3.0
+      },
+      "MaxStretch": {
+        "x": 8.0,
+        "y": 1.0,
+        "z": 5.0
+      },
+      "Description": "DV机翼",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        200
+      ],
+      "ItemCountsMax": [
+        330
+      ]
+    },
+    {
+      "Name": "V机翼-5",
+      "ID": 165,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/165",
+      "ModelIndex": 539,
+      "BuildPath": "载具/载具结构件/高级形状/018",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 0.5,
+        "z": 8.0
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 0.5,
+        "z": 8.0
+      },
+      "MaxStretch": {
+        "x": 4.0,
+        "y": 0.5,
+        "z": 8.0
+      },
+      "Description": "DV机翼",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        100
+      ],
+      "ItemCountsMax": [
+        130
+      ]
+    },
+    {
+      "Name": "V尾翼-1",
+      "ID": 181,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/181",
+      "ModelIndex": 540,
+      "BuildPath": "载具/载具结构件/高级形状/019",
+      "MinStretch": {
+        "x": 1.0,
+        "y": 9.0,
+        "z": 9.0
+      },
+      "DefStretch": {
+        "x": 1.0,
+        "y": 9.0,
+        "z": 9.0
+      },
+      "MaxStretch": {
+        "x": 2.0,
+        "y": 15.0,
+        "z": 12.0
+      },
+      "Description": "DV尾翼",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        680
+      ],
+      "ItemCountsMax": [
+        1020
+      ]
+    },
+    {
+      "Name": "V尾翼-2",
+      "ID": 182,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/182",
+      "ModelIndex": 541,
+      "BuildPath": "载具/载具结构件/高级形状/020",
+      "MinStretch": {
+        "x": 1.0,
+        "y": 9.0,
+        "z": 9.0
+      },
+      "DefStretch": {
+        "x": 1.0,
+        "y": 9.0,
+        "z": 9.0
+      },
+      "MaxStretch": {
+        "x": 2.0,
+        "y": 9.0,
+        "z": 20.0
+      },
+      "Description": "DV尾翼",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        680
+      ],
+      "ItemCountsMax": [
+        1020
+      ]
+    },
+    {
+      "Name": "V尾翼-3",
+      "ID": 183,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/183",
+      "ModelIndex": 542,
+      "BuildPath": "载具/载具结构件/高级形状/021",
+      "MinStretch": {
+        "x": 1.0,
+        "y": 9.0,
+        "z": 6.0
+      },
+      "DefStretch": {
+        "x": 1.0,
+        "y": 9.0,
+        "z": 6.0
+      },
+      "MaxStretch": {
+        "x": 2.0,
+        "y": 9.0,
+        "z": 8.0
+      },
+      "Description": "DV尾翼",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        450
+      ],
+      "ItemCountsMax": [
+        1200
+      ]
+    },
+    {
+      "Name": "V尾翼-4",
+      "ID": 184,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/184",
+      "ModelIndex": 543,
+      "BuildPath": "载具/载具结构件/高级形状/022",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 10.0,
+        "z": 6.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 10.0,
+        "z": 6.0
+      },
+      "MaxStretch": {
+        "x": 2.0,
+        "y": 10.0,
+        "z": 7.0
+      },
+      "Description": "DV尾翼",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        1000
+      ],
+      "ItemCountsMax": [
+        1160
+      ]
+    },
+    {
+      "Name": "V翼梢板-1",
+      "ID": 201,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/201",
+      "ModelIndex": 544,
+      "BuildPath": "载具/载具结构件/高级形状/023",
+      "MinStretch": {
+        "x": 0.5,
+        "y": 2.5,
+        "z": 4.0
+      },
+      "DefStretch": {
+        "x": 0.5,
+        "y": 2.5,
+        "z": 4.0
+      },
+      "MaxStretch": {
+        "x": 0.5,
+        "y": 5.0,
+        "z": 5.0
+      },
+      "Description": "DV翼梢板",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        50
+      ],
+      "ItemCountsMax": [
+        120
+      ]
+    },
+    {
+      "Name": "V翼梢板-2",
+      "ID": 202,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/202",
+      "ModelIndex": 545,
+      "BuildPath": "载具/载具结构件/高级形状/024",
+      "MinStretch": {
+        "x": 1.5,
+        "y": 3.5,
+        "z": 7.0
+      },
+      "DefStretch": {
+        "x": 1.5,
+        "y": 3.5,
+        "z": 7.0
+      },
+      "MaxStretch": {
+        "x": 1.5,
+        "y": 5.0,
+        "z": 9.0
+      },
+      "Description": "DV翼梢板",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        310
+      ],
+      "ItemCountsMax": [
+        560
+      ]
+    },
+    {
+      "Name": "V翼梢板-3",
+      "ID": 203,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/203",
+      "ModelIndex": 546,
+      "BuildPath": "载具/载具结构件/高级形状/025",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 4.0,
+        "z": 7.5
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 4.0,
+        "z": 7.5
+      },
+      "MaxStretch": {
+        "x": 2.0,
+        "y": 6.0,
+        "z": 9.0
+      },
+      "Description": "DV翼梢板",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        500
+      ],
+      "ItemCountsMax": [
+        900
+      ]
+    },
+    {
+      "Name": "V翼梢板-4",
+      "ID": 204,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/204",
+      "ModelIndex": 547,
+      "BuildPath": "载具/载具结构件/高级形状/026",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 7.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 7.0
+      },
+      "MaxStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 9.0
+      },
+      "Description": "DV翼梢板",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        240
+      ],
+      "ItemCountsMax": [
+        300
+      ]
+    },
+    {
+      "Name": "V进气系统-1",
+      "ID": 221,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/221",
+      "ModelIndex": 548,
+      "BuildPath": "载具/载具结构件/高级形状/027",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 3.0,
+        "z": 4.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 3.0,
+        "z": 4.0
+      },
+      "MaxStretch": {
+        "x": 2.0,
+        "y": 3.0,
+        "z": 6.0
+      },
+      "Description": "DV进气系统",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        200
+      ],
+      "ItemCountsMax": [
+        300
+      ]
+    },
+    {
+      "Name": "V进气系统-2",
+      "ID": 222,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/222",
+      "ModelIndex": 549,
+      "BuildPath": "载具/载具结构件/高级形状/028",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 2.5,
+        "z": 6.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 2.5,
+        "z": 6.0
+      },
+      "MaxStretch": {
+        "x": 2.0,
+        "y": 2.5,
+        "z": 7.0
+      },
+      "Description": "DV进气系统",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        250
+      ],
+      "ItemCountsMax": [
+        290
+      ]
+    },
+    {
+      "Name": "V进气系统-3",
+      "ID": 223,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/223",
+      "ModelIndex": 550,
+      "BuildPath": "载具/载具结构件/高级形状/029",
+      "MinStretch": {
+        "x": 1.5,
+        "y": 1.0,
+        "z": 3.5
+      },
+      "DefStretch": {
+        "x": 1.5,
+        "y": 1.0,
+        "z": 3.5
+      },
+      "MaxStretch": {
+        "x": 1.5,
+        "y": 1.0,
+        "z": 3.5
+      },
+      "Description": "DV进气系统",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        50
+      ],
+      "ItemCountsMax": [
+        50
+      ]
+    },
+    {
+      "Name": "V进气系统-4",
+      "ID": 224,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/224",
+      "ModelIndex": 551,
+      "BuildPath": "载具/载具结构件/高级形状/030",
+      "MinStretch": {
+        "x": 1.5,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "DefStretch": {
+        "x": 1.5,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "MaxStretch": {
+        "x": 3.0,
+        "y": 4.0,
+        "z": 6.0
+      },
+      "Description": "DV进气系统",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        100
+      ],
+      "ItemCountsMax": [
+        250
+      ]
+    },
+    {
+      "Name": "V进气系统-5",
+      "ID": 225,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/225",
+      "ModelIndex": 552,
+      "BuildPath": "载具/载具结构件/高级形状/031",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 5.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 5.0
+      },
+      "MaxStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 6.0
+      },
+      "Description": "DV进气系统",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        170
+      ],
+      "ItemCountsMax": [
+        300
+      ]
+    },
+    {
+      "Name": "V环形结构-1",
+      "ID": 241,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/241",
+      "ModelIndex": 553,
+      "BuildPath": "载具/载具结构件/高级形状/032",
+      "MinStretch": {
+        "x": 4.0,
+        "y": 4.0,
+        "z": 1.0
+      },
+      "DefStretch": {
+        "x": 4.0,
+        "y": 4.0,
+        "z": 1.0
+      },
+      "MaxStretch": {
+        "x": 6.0,
+        "y": 6.0,
+        "z": 2.0
+      },
+      "Description": "DV环形结构",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        140
+      ],
+      "ItemCountsMax": [
+        260
+      ]
+    },
+    {
+      "Name": "V环形结构-2",
+      "ID": 242,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/242",
+      "ModelIndex": 554,
+      "BuildPath": "载具/载具结构件/高级形状/033",
+      "MinStretch": {
+        "x": 4.5,
+        "y": 4.0,
+        "z": 2.0
+      },
+      "DefStretch": {
+        "x": 4.5,
+        "y": 4.0,
+        "z": 2.0
+      },
+      "MaxStretch": {
+        "x": 8.0,
+        "y": 4.0,
+        "z": 3.0
+      },
+      "Description": "DV环形结构",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        300
+      ],
+      "ItemCountsMax": [
+        800
+      ]
+    },
+    {
+      "Name": "V环形结构-3",
+      "ID": 243,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/243",
+      "ModelIndex": 555,
+      "BuildPath": "载具/载具结构件/高级形状/034",
+      "MinStretch": {
+        "x": 4.0,
+        "y": 4.0,
+        "z": 2.0
+      },
+      "DefStretch": {
+        "x": 4.0,
+        "y": 4.0,
+        "z": 2.0
+      },
+      "MaxStretch": {
+        "x": 4.0,
+        "y": 4.0,
+        "z": 3.0
+      },
+      "Description": "DV环形结构",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        270
+      ],
+      "ItemCountsMax": [
+        400
+      ]
+    },
+    {
+      "Name": "V环形结构-4",
+      "ID": 244,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/244",
+      "ModelIndex": 556,
+      "BuildPath": "载具/载具结构件/高级形状/035",
+      "MinStretch": {
+        "x": 4.0,
+        "y": 4.0,
+        "z": 1.0
+      },
+      "DefStretch": {
+        "x": 4.0,
+        "y": 4.0,
+        "z": 1.0
+      },
+      "MaxStretch": {
+        "x": 4.0,
+        "y": 4.0,
+        "z": 2.0
+      },
+      "Description": "DV环形结构",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        140
+      ],
+      "ItemCountsMax": [
+        280
+      ]
+    },
+    {
+      "Name": "V环形结构-5",
+      "ID": 245,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/245",
+      "ModelIndex": 557,
+      "BuildPath": "载具/载具结构件/高级形状/036",
+      "MinStretch": {
+        "x": 4.0,
+        "y": 4.0,
+        "z": 1.0
+      },
+      "DefStretch": {
+        "x": 4.0,
+        "y": 4.0,
+        "z": 1.0
+      },
+      "MaxStretch": {
+        "x": 4.0,
+        "y": 4.0,
+        "z": 2.0
+      },
+      "Description": "DV环形结构",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        140
+      ],
+      "ItemCountsMax": [
+        280
+      ]
+    },
+    {
+      "Name": "V环形结构-6",
+      "ID": 246,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/246",
+      "ModelIndex": 558,
+      "BuildPath": "载具/载具结构件/高级形状/037",
+      "MinStretch": {
+        "x": 4.0,
+        "y": 4.0,
+        "z": 2.0
+      },
+      "DefStretch": {
+        "x": 4.0,
+        "y": 4.0,
+        "z": 2.0
+      },
+      "MaxStretch": {
+        "x": 4.0,
+        "y": 4.0,
+        "z": 3.0
+      },
+      "Description": "DV环形结构",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        270
+      ],
+      "ItemCountsMax": [
+        400
+      ]
+    },
+    {
+      "Name": "V环形结构-7",
+      "ID": 247,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/247",
+      "ModelIndex": 559,
+      "BuildPath": "载具/载具结构件/高级形状/038",
+      "MinStretch": {
+        "x": 4.0,
+        "y": 4.0,
+        "z": 0.5
+      },
+      "DefStretch": {
+        "x": 4.0,
+        "y": 4.0,
+        "z": 0.5
+      },
+      "MaxStretch": {
+        "x": 4.0,
+        "y": 4.0,
+        "z": 2.0
+      },
+      "Description": "DV环形结构",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        70
+      ],
+      "ItemCountsMax": [
+        130
+      ]
+    },
+    {
+      "Name": "V环形结构-8",
+      "ID": 248,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/248",
+      "ModelIndex": 560,
+      "BuildPath": "载具/载具结构件/高级形状/039",
+      "MinStretch": {
+        "x": 4.0,
+        "y": 4.0,
+        "z": 0.5
+      },
+      "DefStretch": {
+        "x": 4.0,
+        "y": 4.0,
+        "z": 0.5
+      },
+      "MaxStretch": {
+        "x": 4.0,
+        "y": 4.0,
+        "z": 2.0
+      },
+      "Description": "DV环形结构",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        70
+      ],
+      "ItemCountsMax": [
+        130
+      ]
+    },
+    {
+      "Name": "V环形结构-9",
+      "ID": 249,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/249",
+      "ModelIndex": 561,
+      "BuildPath": "载具/载具结构件/高级形状/040",
+      "MinStretch": {
+        "x": 4.0,
+        "y": 4.0,
+        "z": 0.5
+      },
+      "DefStretch": {
+        "x": 4.0,
+        "y": 4.0,
+        "z": 0.5
+      },
+      "MaxStretch": {
+        "x": 4.0,
+        "y": 4.0,
+        "z": 2.0
+      },
+      "Description": "DV环形结构",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        70
+      ],
+      "ItemCountsMax": [
+        130
+      ]
+    },
+    {
+      "Name": "V圆弧-1",
+      "ID": 261,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/261",
+      "ModelIndex": 562,
+      "BuildPath": "载具/载具结构件/高级形状/041",
+      "MinStretch": {
+        "x": 1.24,
+        "y": 3.0,
+        "z": 1.0
+      },
+      "DefStretch": {
+        "x": 1.24,
+        "y": 3.0,
+        "z": 1.0
+      },
+      "MaxStretch": {
+        "x": 1.24,
+        "y": 3.0,
+        "z": 3.0
+      },
+      "Description": "DV圆弧",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        40
+      ],
+      "ItemCountsMax": [
+        120
+      ]
+    },
+    {
+      "Name": "V圆弧-2",
+      "ID": 262,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/262",
+      "ModelIndex": 563,
+      "BuildPath": "载具/载具结构件/高级形状/042",
+      "MinStretch": {
+        "x": 1.5,
+        "y": 1.0,
+        "z": 1.5
+      },
+      "DefStretch": {
+        "x": 1.5,
+        "y": 1.0,
+        "z": 1.5
+      },
+      "MaxStretch": {
+        "x": 1.5,
+        "y": 1.0,
+        "z": 3.0
+      },
+      "Description": "DV圆弧",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        20
+      ],
+      "ItemCountsMax": [
+        40
+      ]
+    },
+    {
+      "Name": "V底盘-1",
+      "ID": 281,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/281",
+      "ModelIndex": 564,
+      "BuildPath": "载具/载具结构件/高级形状/043",
+      "MinStretch": {
+        "x": 5.0,
+        "y": 1.5,
+        "z": 8.0
+      },
+      "DefStretch": {
+        "x": 6.0,
+        "y": 1.5,
+        "z": 11.0
+      },
+      "MaxStretch": {
+        "x": 11.0,
+        "y": 1.5,
+        "z": 20.0
+      },
+      "Description": "DV底盘",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        830
+      ],
+      "ItemCountsMax": [
+        940
+      ]
+    },
+    {
+      "Name": "V底盘-2",
+      "ID": 282,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/282",
+      "ModelIndex": 565,
+      "BuildPath": "载具/载具结构件/高级形状/044",
+      "MinStretch": {
+        "x": 5.0,
+        "y": 1.5,
+        "z": 8.0
+      },
+      "DefStretch": {
+        "x": 6.0,
+        "y": 1.5,
+        "z": 11.0
+      },
+      "MaxStretch": {
+        "x": 11.0,
+        "y": 1.5,
+        "z": 20.0
+      },
+      "Description": "DV底盘",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        830
+      ],
+      "ItemCountsMax": [
+        940
+      ]
+    },
+    {
+      "Name": "V底盘-3",
+      "ID": 283,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/283",
+      "ModelIndex": 566,
+      "BuildPath": "载具/载具结构件/高级形状/045",
+      "MinStretch": {
+        "x": 5.0,
+        "y": 1.5,
+        "z": 8.0
+      },
+      "DefStretch": {
+        "x": 6.0,
+        "y": 1.5,
+        "z": 11.0
+      },
+      "MaxStretch": {
+        "x": 11.0,
+        "y": 1.5,
+        "z": 20.0
+      },
+      "Description": "DV底盘",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        830
+      ],
+      "ItemCountsMax": [
+        940
+      ]
+    },
+    {
+      "Name": "V底盘-4",
+      "ID": 284,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/284",
+      "ModelIndex": 567,
+      "BuildPath": "载具/载具结构件/高级形状/046",
+      "MinStretch": {
+        "x": 5.0,
+        "y": 1.5,
+        "z": 10.0
+      },
+      "DefStretch": {
+        "x": 5.0,
+        "y": 1.5,
+        "z": 10.0
+      },
+      "MaxStretch": {
+        "x": 10.0,
+        "y": 2.5,
+        "z": 20.0
+      },
+      "Description": "DV底盘",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        630
+      ],
+      "ItemCountsMax": [
+        1360
+      ]
+    },
+    {
+      "Name": "V底盘-5",
+      "ID": 285,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/285",
+      "ModelIndex": 568,
+      "BuildPath": "载具/载具结构件/高级形状/047",
+      "MinStretch": {
+        "x": 6.0,
+        "y": 2.0,
+        "z": 10.0
+      },
+      "DefStretch": {
+        "x": 6.0,
+        "y": 2.0,
+        "z": 10.0
+      },
+      "MaxStretch": {
+        "x": 12.0,
+        "y": 2.0,
+        "z": 20.0
+      },
+      "Description": "DV底盘",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        1000
+      ],
+      "ItemCountsMax": [
+        1300
+      ]
+    },
+    {
+      "Name": "V底盘-6",
+      "ID": 286,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/286",
+      "ModelIndex": 569,
+      "BuildPath": "载具/载具结构件/高级形状/048",
+      "MinStretch": {
+        "x": 5.0,
+        "y": 2.0,
+        "z": 10.0
+      },
+      "DefStretch": {
+        "x": 5.0,
+        "y": 2.0,
+        "z": 10.0
+      },
+      "MaxStretch": {
+        "x": 10.0,
+        "y": 2.0,
+        "z": 20.0
+      },
+      "Description": "DV底盘",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        840
+      ],
+      "ItemCountsMax": [
+        1120
+      ]
+    },
+    {
+      "Name": "V底盘-7",
+      "ID": 287,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/287",
+      "ModelIndex": 570,
+      "BuildPath": "载具/载具结构件/高级形状/049",
+      "MinStretch": {
+        "x": 5.5,
+        "y": 2.0,
+        "z": 8.5
+      },
+      "DefStretch": {
+        "x": 5.5,
+        "y": 2.0,
+        "z": 8.5
+      },
+      "MaxStretch": {
+        "x": 14.0,
+        "y": 2.0,
+        "z": 20.0
+      },
+      "Description": "DV底盘",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        780
+      ],
+      "ItemCountsMax": [
+        1490
+      ]
+    },
+    {
+      "Name": "V装甲板-1",
+      "ID": 301,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/301",
+      "ModelIndex": 571,
+      "BuildPath": "载具/载具结构件/高级形状/050",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 5.0,
+        "z": 1.5
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 5.0,
+        "z": 1.5
+      },
+      "MaxStretch": {
+        "x": 6.0,
+        "y": 5.0,
+        "z": 1.5
+      },
+      "Description": "DV装甲板",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        190
+      ],
+      "ItemCountsMax": [
+        380
+      ]
+    },
+    {
+      "Name": "V装甲板-2",
+      "ID": 302,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/302",
+      "ModelIndex": 572,
+      "BuildPath": "载具/载具结构件/高级形状/051",
+      "MinStretch": {
+        "x": 4.0,
+        "y": 4.0,
+        "z": 2.0
+      },
+      "DefStretch": {
+        "x": 4.0,
+        "y": 4.0,
+        "z": 2.0
+      },
+      "MaxStretch": {
+        "x": 8.0,
+        "y": 8.0,
+        "z": 4.0
+      },
+      "Description": "DV装甲板",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        270
+      ],
+      "ItemCountsMax": [
+        760
+      ]
+    },
+    {
+      "Name": "V装甲板-3",
+      "ID": 303,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/303",
+      "ModelIndex": 573,
+      "BuildPath": "载具/载具结构件/高级形状/052",
+      "MinStretch": {
+        "x": 5.0,
+        "y": 1.0,
+        "z": 3.5
+      },
+      "DefStretch": {
+        "x": 5.0,
+        "y": 1.0,
+        "z": 3.5
+      },
+      "MaxStretch": {
+        "x": 6.5,
+        "y": 1.0,
+        "z": 7.0
+      },
+      "Description": "DV装甲板",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        150
+      ],
+      "ItemCountsMax": [
+        390
+      ]
+    },
+    {
+      "Name": "V装甲板-4",
+      "ID": 304,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/304",
+      "ModelIndex": 574,
+      "BuildPath": "载具/载具结构件/高级形状/053",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 3.0,
+        "z": 7.0
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 3.0,
+        "z": 7.0
+      },
+      "MaxStretch": {
+        "x": 6.0,
+        "y": 6.0,
+        "z": 16.0
+      },
+      "Description": "DV装甲板",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        530
+      ],
+      "ItemCountsMax": [
+        1540
+      ]
+    },
+    {
+      "Name": "V补充结构件-1",
+      "ID": 321,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/321",
+      "ModelIndex": 575,
+      "BuildPath": "载具/载具结构件/高级形状/054",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 5.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 5.0
+      },
+      "MaxStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 7.0
+      },
+      "Description": "DV补充结构件",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        170
+      ],
+      "ItemCountsMax": [
+        230
+      ]
+    },
+    {
+      "Name": "V补充结构件-2",
+      "ID": 322,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/322",
+      "ModelIndex": 576,
+      "BuildPath": "载具/载具结构件/高级形状/055",
+      "MinStretch": {
+        "x": 4.0,
+        "y": 4.0,
+        "z": 4.0
+      },
+      "DefStretch": {
+        "x": 4.0,
+        "y": 4.0,
+        "z": 4.0
+      },
+      "MaxStretch": {
+        "x": 4.0,
+        "y": 6.0,
+        "z": 4.0
+      },
+      "Description": "DV补充结构件",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        540
+      ],
+      "ItemCountsMax": [
+        810
+      ]
+    },
+    {
+      "Name": "V补充结构件-3",
+      "ID": 323,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/323",
+      "ModelIndex": 577,
+      "BuildPath": "载具/载具结构件/高级形状/056",
+      "MinStretch": {
+        "x": 3.5,
+        "y": 3.0,
+        "z": 5.5
+      },
+      "DefStretch": {
+        "x": 3.5,
+        "y": 3.0,
+        "z": 5.5
+      },
+      "MaxStretch": {
+        "x": 6.0,
+        "y": 3.0,
+        "z": 5.5
+      },
+      "Description": "DV补充结构件",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        490
+      ],
+      "ItemCountsMax": [
+        840
+      ]
+    },
+    {
+      "Name": "V补充结构件-4",
+      "ID": 324,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/324",
+      "ModelIndex": 578,
+      "BuildPath": "载具/载具结构件/高级形状/057",
+      "MinStretch": {
+        "x": 7.0,
+        "y": 2.5,
+        "z": 13.0
+      },
+      "DefStretch": {
+        "x": 7.0,
+        "y": 2.5,
+        "z": 13.0
+      },
+      "MaxStretch": {
+        "x": 9.0,
+        "y": 2.5,
+        "z": 15.0
+      },
+      "Description": "DV补充结构件",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        1900
+      ],
+      "ItemCountsMax": [
+        2810
+      ]
+    },
+    {
+      "Name": "V补充结构件-5",
+      "ID": 325,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/325",
+      "ModelIndex": 579,
+      "BuildPath": "载具/载具结构件/高级形状/058",
+      "MinStretch": {
+        "x": 1.5,
+        "y": 2.0,
+        "z": 6.0
+      },
+      "DefStretch": {
+        "x": 1.5,
+        "y": 2.0,
+        "z": 6.0
+      },
+      "MaxStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 8.0
+      },
+      "Description": "DV补充结构件",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        150
+      ],
+      "ItemCountsMax": [
+        400
+      ]
+    },
+    {
+      "Name": "V补充结构件-6",
+      "ID": 326,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/326",
+      "ModelIndex": 580,
+      "BuildPath": "载具/载具结构件/高级形状/059",
+      "MinStretch": {
+        "x": 2.5,
+        "y": 2.5,
+        "z": 6.0
+      },
+      "DefStretch": {
+        "x": 2.5,
+        "y": 2.5,
+        "z": 6.0
+      },
+      "MaxStretch": {
+        "x": 3.0,
+        "y": 3.0,
+        "z": 10.0
+      },
+      "Description": "DV补充结构件",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        320
+      ],
+      "ItemCountsMax": [
+        760
+      ]
+    },
+    {
+      "Name": "V补充结构件-7",
+      "ID": 327,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/327",
+      "ModelIndex": 581,
+      "BuildPath": "载具/载具结构件/高级形状/060",
+      "MinStretch": {
+        "x": 1.0,
+        "y": 1.5,
+        "z": 4.5
+      },
+      "DefStretch": {
+        "x": 1.0,
+        "y": 1.5,
+        "z": 4.5
+      },
+      "MaxStretch": {
+        "x": 1.5,
+        "y": 2.0,
+        "z": 6.0
+      },
+      "Description": "DV补充结构件",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        60
+      ],
+      "ItemCountsMax": [
+        160
+      ]
+    },
+    {
+      "Name": "V补充结构件-8",
+      "ID": 328,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/328",
+      "ModelIndex": 582,
+      "BuildPath": "载具/载具结构件/高级形状/061",
+      "MinStretch": {
+        "x": 7.0,
+        "y": 2.0,
+        "z": 8.0
+      },
+      "DefStretch": {
+        "x": 7.0,
+        "y": 2.0,
+        "z": 8.0
+      },
+      "MaxStretch": {
+        "x": 8.0,
+        "y": 2.0,
+        "z": 10.0
+      },
+      "Description": "DV补充结构件",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        940
+      ],
+      "ItemCountsMax": [
+        1340
+      ]
+    },
+    {
+      "Name": "V补充结构件-9",
+      "ID": 329,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/329",
+      "ModelIndex": 583,
+      "BuildPath": "载具/载具结构件/高级形状/062",
+      "MinStretch": {
+        "x": 5.0,
+        "y": 2.5,
+        "z": 10.0
+      },
+      "DefStretch": {
+        "x": 5.0,
+        "y": 2.5,
+        "z": 10.0
+      },
+      "MaxStretch": {
+        "x": 5.0,
+        "y": 2.5,
+        "z": 15.0
+      },
+      "Description": "DV补充结构件",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        1050
+      ],
+      "ItemCountsMax": [
+        1570
+      ]
+    },
+    {
+      "Name": "V补充结构件-10",
+      "ID": 330,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/330",
+      "ModelIndex": 584,
+      "BuildPath": "载具/载具结构件/高级形状/063",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 4.0,
+        "z": 6.0
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 4.0,
+        "z": 6.0
+      },
+      "MaxStretch": {
+        "x": 7.0,
+        "y": 4.0,
+        "z": 9.0
+      },
+      "Description": "DV补充结构件",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        600
+      ],
+      "ItemCountsMax": [
+        740
+      ]
+    },
+    {
+      "Name": "V补充结构件-11",
+      "ID": 331,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/331",
+      "ModelIndex": 585,
+      "BuildPath": "载具/载具结构件/高级形状/064",
+      "MinStretch": {
+        "x": 4.0,
+        "y": 2.0,
+        "z": 5.0
+      },
+      "DefStretch": {
+        "x": 4.0,
+        "y": 2.0,
+        "z": 5.0
+      },
+      "MaxStretch": {
+        "x": 4.0,
+        "y": 2.5,
+        "z": 7.0
+      },
+      "Description": "DV补充结构件",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        340
+      ],
+      "ItemCountsMax": [
+        590
+      ]
+    },
+    {
+      "Name": "V补充结构件-12",
+      "ID": 332,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/332",
+      "ModelIndex": 586,
+      "BuildPath": "载具/载具结构件/高级形状/065",
+      "MinStretch": {
+        "x": 2.5,
+        "y": 3.0,
+        "z": 4.5
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 3.0,
+        "z": 6.0
+      },
+      "MaxStretch": {
+        "x": 5.0,
+        "y": 5.0,
+        "z": 10.0
+      },
+      "Description": "DV补充结构件",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        450
+      ],
+      "ItemCountsMax": [
+        740
+      ]
+    },
+    {
+      "Name": "V补充结构件-13",
+      "ID": 333,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/333",
+      "ModelIndex": 587,
+      "BuildPath": "载具/载具结构件/高级形状/066",
+      "MinStretch": {
+        "x": 3.5,
+        "y": 2.0,
+        "z": 6.0
+      },
+      "DefStretch": {
+        "x": 3.5,
+        "y": 2.0,
+        "z": 6.0
+      },
+      "MaxStretch": {
+        "x": 5.0,
+        "y": 2.5,
+        "z": 6.0
+      },
+      "Description": "DV补充结构件",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        350
+      ],
+      "ItemCountsMax": [
+        620
+      ]
+    },
+    {
+      "Name": "V补充结构件-14",
+      "ID": 334,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/334",
+      "ModelIndex": 588,
+      "BuildPath": "载具/载具结构件/高级形状/067",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 1.0,
+        "z": 7.0
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 1.0,
+        "z": 7.0
+      },
+      "MaxStretch": {
+        "x": 6.0,
+        "y": 1.0,
+        "z": 7.0
+      },
+      "Description": "DV补充结构件",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        180
+      ],
+      "ItemCountsMax": [
+        360
+      ]
+    },
+    {
+      "Name": "V补充结构件-15",
+      "ID": 335,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/335",
+      "ModelIndex": 589,
+      "BuildPath": "载具/载具结构件/高级形状/068",
+      "MinStretch": {
+        "x": 4.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "DefStretch": {
+        "x": 4.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "MaxStretch": {
+        "x": 6.0,
+        "y": 3.0,
+        "z": 4.0
+      },
+      "Description": "DV补充结构件",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        270
+      ],
+      "ItemCountsMax": [
+        600
+      ]
+    },
+    {
+      "Name": "V补充结构件-16",
+      "ID": 336,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/336",
+      "ModelIndex": 590,
+      "BuildPath": "载具/载具结构件/高级形状/069",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 0.5,
+        "z": 2.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 0.5,
+        "z": 2.0
+      },
+      "MaxStretch": {
+        "x": 2.0,
+        "y": 1.0,
+        "z": 2.0
+      },
+      "Description": "DV补充结构件",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        20
+      ],
+      "ItemCountsMax": [
+        40
+      ]
+    },
+    {
+      "Name": "V补充结构件-17",
+      "ID": 337,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/337",
+      "ModelIndex": 591,
+      "BuildPath": "载具/载具结构件/高级形状/070",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 4.0,
+        "z": 6.0
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 4.0,
+        "z": 6.0
+      },
+      "MaxStretch": {
+        "x": 7.0,
+        "y": 4.0,
+        "z": 9.0
+      },
+      "Description": "DV补充结构件",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        600
+      ],
+      "ItemCountsMax": [
+        740
+      ]
+    },
+    {
+      "Name": "V补充结构件-18",
+      "ID": 338,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/338",
+      "ModelIndex": 592,
+      "BuildPath": "载具/载具结构件/高级形状/071",
+      "MinStretch": {
+        "x": 4.0,
+        "y": 2.0,
+        "z": 6.0
+      },
+      "DefStretch": {
+        "x": 4.0,
+        "y": 2.0,
+        "z": 6.0
+      },
+      "MaxStretch": {
+        "x": 6.0,
+        "y": 2.0,
+        "z": 6.0
+      },
+      "Description": "DV补充结构件",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        400
+      ],
+      "ItemCountsMax": [
+        600
+      ]
+    },
+    {
+      "Name": "V补充结构件-19",
+      "ID": 339,
+      "SID": "",
+      "Type": 1,
+      "IconPath": "Icons/Creation/339",
+      "ModelIndex": 663,
+      "BuildPath": "载具/载具结构件/高级形状/072",
+      "MinStretch": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 3.0
+      },
+      "DefStretch": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 5.0
+      },
+      "MaxStretch": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 9.0
+      },
+      "Description": "DV补充结构件",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        10
+      ],
+      "ItemCountsMax": [
+        10
+      ]
+    },
+    {
+      "Name": "V驾驶舱-1",
+      "ID": 601,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/601",
+      "ModelIndex": 593,
+      "BuildPath": "载具/载具装备/驾驶仓/001",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "MaxStretch": {
+        "x": 5.0,
+        "y": 2.0,
+        "z": 6.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        200,
+        200
+      ],
+      "ItemCountsMax": [
+        500,
+        500
+      ]
+    },
+    {
+      "Name": "V驾驶舱-2",
+      "ID": 602,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/602",
+      "ModelIndex": 594,
+      "BuildPath": "载具/载具装备/驾驶仓/002",
+      "MinStretch": {
+        "x": 3.5,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "DefStretch": {
+        "x": 3.5,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "MaxStretch": {
+        "x": 5.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        240,
+        240
+      ],
+      "ItemCountsMax": [
+        340,
+        340
+      ]
+    },
+    {
+      "Name": "V驾驶舱-3",
+      "ID": 603,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/603",
+      "ModelIndex": 595,
+      "BuildPath": "载具/载具装备/驾驶仓/003",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "MaxStretch": {
+        "x": 4.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        200,
+        200
+      ],
+      "ItemCountsMax": [
+        260,
+        260
+      ]
+    },
+    {
+      "Name": "V驾驶舱-4",
+      "ID": 604,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/604",
+      "ModelIndex": 596,
+      "BuildPath": "载具/载具装备/驾驶仓/004",
+      "MinStretch": {
+        "x": 2.5,
+        "y": 1.5,
+        "z": 5.5
+      },
+      "DefStretch": {
+        "x": 2.5,
+        "y": 1.5,
+        "z": 5.5
+      },
+      "MaxStretch": {
+        "x": 2.5,
+        "y": 1.5,
+        "z": 6.5
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        180,
+        180
+      ],
+      "ItemCountsMax": [
+        210,
+        210
+      ]
+    },
+    {
+      "Name": "V驾驶舱-5",
+      "ID": 605,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/605",
+      "ModelIndex": 597,
+      "BuildPath": "载具/载具装备/驾驶仓/005",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 3.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 3.0
+      },
+      "MaxStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        100,
+        100
+      ],
+      "ItemCountsMax": [
+        200,
+        200
+      ]
+    },
+    {
+      "Name": "V驾驶舱-6",
+      "ID": 606,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/606",
+      "ModelIndex": 598,
+      "BuildPath": "载具/载具装备/驾驶仓/006",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 1.5,
+        "z": 4.0
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 1.5,
+        "z": 4.0
+      },
+      "MaxStretch": {
+        "x": 4.0,
+        "y": 1.5,
+        "z": 5.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        150,
+        150
+      ],
+      "ItemCountsMax": [
+        250,
+        250
+      ]
+    },
+    {
+      "Name": "V驾驶舱-7",
+      "ID": 607,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/607",
+      "ModelIndex": 599,
+      "BuildPath": "载具/载具装备/驾驶仓/007",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 1.5,
+        "z": 4.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 1.5,
+        "z": 4.0
+      },
+      "MaxStretch": {
+        "x": 4.0,
+        "y": 1.5,
+        "z": 4.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        100,
+        100
+      ],
+      "ItemCountsMax": [
+        200,
+        200
+      ]
+    },
+    {
+      "Name": "V驾驶舱-8",
+      "ID": 608,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/608",
+      "ModelIndex": 600,
+      "BuildPath": "载具/载具装备/驾驶仓/008",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "MaxStretch": {
+        "x": 4.0,
+        "y": 2.0,
+        "z": 6.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        140,
+        140
+      ],
+      "ItemCountsMax": [
+        420,
+        420
+      ]
+    },
+    {
+      "Name": "V驾驶舱-9",
+      "ID": 609,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/609",
+      "ModelIndex": 601,
+      "BuildPath": "载具/载具装备/驾驶仓/009",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "MaxStretch": {
+        "x": 4.0,
+        "y": 2.0,
+        "z": 5.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        200,
+        200
+      ],
+      "ItemCountsMax": [
+        330,
+        330
+      ]
+    },
+    {
+      "Name": "V驾驶舱-10",
+      "ID": 610,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/610",
+      "ModelIndex": 602,
+      "BuildPath": "载具/载具装备/驾驶仓/010",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 1.75,
+        "z": 3.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 1.75,
+        "z": 3.0
+      },
+      "MaxStretch": {
+        "x": 3.0,
+        "y": 1.75,
+        "z": 3.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        90,
+        90
+      ],
+      "ItemCountsMax": [
+        130,
+        130
+      ]
+    },
+    {
+      "Name": "V驾驶舱-11",
+      "ID": 611,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/611",
+      "ModelIndex": 603,
+      "BuildPath": "载具/载具装备/驾驶仓/011",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "MaxStretch": {
+        "x": 4.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        140,
+        140
+      ],
+      "ItemCountsMax": [
+        280,
+        280
+      ]
+    },
+    {
+      "Name": "V驾驶舱-12",
+      "ID": 612,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/612",
+      "ModelIndex": 604,
+      "BuildPath": "载具/载具装备/驾驶仓/012",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "MaxStretch": {
+        "x": 4.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        140,
+        140
+      ],
+      "ItemCountsMax": [
+        280,
+        280
+      ]
+    },
+    {
+      "Name": "V驾驶舱-13",
+      "ID": 613,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/613",
+      "ModelIndex": 605,
+      "BuildPath": "载具/载具装备/驾驶仓/013",
+      "MinStretch": {
+        "x": 3.5,
+        "y": 1.75,
+        "z": 5.0
+      },
+      "DefStretch": {
+        "x": 3.5,
+        "y": 1.75,
+        "z": 5.0
+      },
+      "MaxStretch": {
+        "x": 3.5,
+        "y": 1.75,
+        "z": 5.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        260,
+        260
+      ],
+      "ItemCountsMax": [
+        260,
+        260
+      ]
+    },
+    {
+      "Name": "V驾驶舱-14",
+      "ID": 614,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/614",
+      "ModelIndex": 606,
+      "BuildPath": "载具/载具装备/驾驶仓/014",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 5.0
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 5.0
+      },
+      "MaxStretch": {
+        "x": 4.0,
+        "y": 2.0,
+        "z": 5.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        250,
+        250
+      ],
+      "ItemCountsMax": [
+        330,
+        330
+      ]
+    },
+    {
+      "Name": "V驾驶舱-15",
+      "ID": 615,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/615",
+      "ModelIndex": 607,
+      "BuildPath": "载具/载具装备/驾驶仓/015",
+      "MinStretch": {
+        "x": 3.5,
+        "y": 2.25,
+        "z": 4.0
+      },
+      "DefStretch": {
+        "x": 3.5,
+        "y": 2.25,
+        "z": 4.0
+      },
+      "MaxStretch": {
+        "x": 4.5,
+        "y": 2.25,
+        "z": 5.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        270,
+        270
+      ],
+      "ItemCountsMax": [
+        430,
+        430
+      ]
+    },
+    {
+      "Name": "V驾驶舱-16",
+      "ID": 616,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/616",
+      "ModelIndex": 608,
+      "BuildPath": "载具/载具装备/驾驶仓/016",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 6.0
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 6.0
+      },
+      "MaxStretch": {
+        "x": 5.0,
+        "y": 3.0,
+        "z": 8.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        300,
+        300
+      ],
+      "ItemCountsMax": [
+        390,
+        390
+      ]
+    },
+    {
+      "Name": "V驾驶舱-17",
+      "ID": 617,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/617",
+      "ModelIndex": 609,
+      "BuildPath": "载具/载具装备/驾驶仓/017",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 5.0
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 6.0
+      },
+      "MaxStretch": {
+        "x": 5.0,
+        "y": 2.0,
+        "z": 8.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        300,
+        300
+      ],
+      "ItemCountsMax": [
+        660,
+        660
+      ]
+    },
+    {
+      "Name": "V驾驶舱-18",
+      "ID": 618,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/618",
+      "ModelIndex": 610,
+      "BuildPath": "载具/载具装备/驾驶仓/018",
+      "MinStretch": {
+        "x": 4.0,
+        "y": 2.0,
+        "z": 5.0
+      },
+      "DefStretch": {
+        "x": 4.0,
+        "y": 2.0,
+        "z": 5.0
+      },
+      "MaxStretch": {
+        "x": 6.0,
+        "y": 2.0,
+        "z": 8.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        340,
+        340
+      ],
+      "ItemCountsMax": [
+        810,
+        810
+      ]
+    },
+    {
+      "Name": "V驾驶舱-19",
+      "ID": 619,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/619",
+      "ModelIndex": 611,
+      "BuildPath": "载具/载具装备/驾驶仓/019",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 4.5
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 4.5
+      },
+      "MaxStretch": {
+        "x": 4.0,
+        "y": 2.0,
+        "z": 6.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        230,
+        230
+      ],
+      "ItemCountsMax": [
+        400,
+        400
+      ]
+    },
+    {
+      "Name": "V驾驶舱-20",
+      "ID": 620,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/620",
+      "ModelIndex": 612,
+      "BuildPath": "载具/载具装备/驾驶仓/020",
+      "MinStretch": {
+        "x": 1.5,
+        "y": 2.0,
+        "z": 3.5
+      },
+      "DefStretch": {
+        "x": 1.5,
+        "y": 2.0,
+        "z": 3.5
+      },
+      "MaxStretch": {
+        "x": 2.5,
+        "y": 2.0,
+        "z": 5.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        90,
+        90
+      ],
+      "ItemCountsMax": [
+        210,
+        210
+      ]
+    },
+    {
+      "Name": "V驾驶舱-21",
+      "ID": 621,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/621",
+      "ModelIndex": 613,
+      "BuildPath": "载具/载具装备/驾驶仓/021",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 2.5,
+        "z": 5.0
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 2.5,
+        "z": 5.0
+      },
+      "MaxStretch": {
+        "x": 4.0,
+        "y": 2.5,
+        "z": 5.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        320,
+        320
+      ],
+      "ItemCountsMax": [
+        420,
+        420
+      ]
+    },
+    {
+      "Name": "V驾驶舱-22",
+      "ID": 622,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/622",
+      "ModelIndex": 614,
+      "BuildPath": "载具/载具装备/驾驶仓/022",
+      "MinStretch": {
+        "x": 4.0,
+        "y": 2.25,
+        "z": 5.5
+      },
+      "DefStretch": {
+        "x": 4.0,
+        "y": 2.25,
+        "z": 5.5
+      },
+      "MaxStretch": {
+        "x": 6.0,
+        "y": 2.25,
+        "z": 8.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        420,
+        420
+      ],
+      "ItemCountsMax": [
+        910,
+        910
+      ]
+    },
+    {
+      "Name": "V驾驶舱-23",
+      "ID": 623,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/623",
+      "ModelIndex": 615,
+      "BuildPath": "载具/载具装备/驾驶仓/023",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 5.0
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 5.0
+      },
+      "MaxStretch": {
+        "x": 4.0,
+        "y": 2.0,
+        "z": 7.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        250,
+        250
+      ],
+      "ItemCountsMax": [
+        460,
+        460
+      ]
+    },
+    {
+      "Name": "V驾驶舱-24",
+      "ID": 624,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/624",
+      "ModelIndex": 616,
+      "BuildPath": "载具/载具装备/驾驶仓/024",
+      "MinStretch": {
+        "x": 1.5,
+        "y": 1.5,
+        "z": 2.0
+      },
+      "DefStretch": {
+        "x": 1.5,
+        "y": 1.5,
+        "z": 2.0
+      },
+      "MaxStretch": {
+        "x": 2.5,
+        "y": 1.5,
+        "z": 4.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        40,
+        40
+      ],
+      "ItemCountsMax": [
+        60,
+        60
+      ]
+    },
+    {
+      "Name": "V驾驶舱-25",
+      "ID": 625,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/625",
+      "ModelIndex": 617,
+      "BuildPath": "载具/载具装备/驾驶仓/025",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 5.0
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 5.0
+      },
+      "MaxStretch": {
+        "x": 4.0,
+        "y": 2.0,
+        "z": 7.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        250,
+        250
+      ],
+      "ItemCountsMax": [
+        460,
+        460
+      ]
+    },
+    {
+      "Name": "V驾驶舱-26",
+      "ID": 626,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/626",
+      "ModelIndex": 618,
+      "BuildPath": "载具/载具装备/驾驶仓/026",
+      "MinStretch": {
+        "x": 2.5,
+        "y": 2.0,
+        "z": 4.5
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 5.0
+      },
+      "MaxStretch": {
+        "x": 4.0,
+        "y": 3.0,
+        "z": 5.5
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        250,
+        250
+      ],
+      "ItemCountsMax": [
+        550,
+        550
+      ]
+    },
+    {
+      "Name": "V驾驶舱-27",
+      "ID": 627,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/627",
+      "ModelIndex": 619,
+      "BuildPath": "载具/载具装备/驾驶仓/027",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 4.0
+      },
+      "MaxStretch": {
+        "x": 4.0,
+        "y": 2.0,
+        "z": 5.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        200,
+        200
+      ],
+      "ItemCountsMax": [
+        330,
+        330
+      ]
+    },
+    {
+      "Name": "V驾驶舱-28",
+      "ID": 628,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/628",
+      "ModelIndex": 620,
+      "BuildPath": "载具/载具装备/驾驶仓/028",
+      "MinStretch": {
+        "x": 4.0,
+        "y": 2.0,
+        "z": 8.0
+      },
+      "DefStretch": {
+        "x": 4.0,
+        "y": 2.0,
+        "z": 8.0
+      },
+      "MaxStretch": {
+        "x": 6.0,
+        "y": 2.0,
+        "z": 10.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        540,
+        540
+      ],
+      "ItemCountsMax": [
+        1010,
+        1010
+      ]
+    },
+    {
+      "Name": "V驾驶舱-29",
+      "ID": 629,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/629",
+      "ModelIndex": 621,
+      "BuildPath": "载具/载具装备/驾驶仓/029",
+      "MinStretch": {
+        "x": 4.0,
+        "y": 3.0,
+        "z": 7.0
+      },
+      "DefStretch": {
+        "x": 4.0,
+        "y": 3.0,
+        "z": 7.0
+      },
+      "MaxStretch": {
+        "x": 5.0,
+        "y": 3.0,
+        "z": 9.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        700,
+        700
+      ],
+      "ItemCountsMax": [
+        1120,
+        1120
+      ]
+    },
+    {
+      "Name": "V驾驶舱-30",
+      "ID": 630,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/630",
+      "ModelIndex": 622,
+      "BuildPath": "载具/载具装备/驾驶仓/030",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 6.0
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 6.0
+      },
+      "MaxStretch": {
+        "x": 4.0,
+        "y": 2.0,
+        "z": 6.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        300,
+        300
+      ],
+      "ItemCountsMax": [
+        400,
+        400
+      ]
+    },
+    {
+      "Name": "V驾驶舱-31",
+      "ID": 631,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/631",
+      "ModelIndex": 623,
+      "BuildPath": "载具/载具装备/驾驶仓/031",
+      "MinStretch": {
+        "x": 2.5,
+        "y": 2.0,
+        "z": 6.0
+      },
+      "DefStretch": {
+        "x": 2.5,
+        "y": 2.0,
+        "z": 6.0
+      },
+      "MaxStretch": {
+        "x": 2.5,
+        "y": 2.0,
+        "z": 6.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        250,
+        250
+      ],
+      "ItemCountsMax": [
+        250,
+        250
+      ]
+    },
+    {
+      "Name": "V驾驶舱-32",
+      "ID": 632,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/632",
+      "ModelIndex": 624,
+      "BuildPath": "载具/载具装备/驾驶仓/032",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 1.5,
+        "z": 5.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 1.5,
+        "z": 5.0
+      },
+      "MaxStretch": {
+        "x": 2.0,
+        "y": 1.5,
+        "z": 5.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        130,
+        130
+      ],
+      "ItemCountsMax": [
+        130,
+        130
+      ]
+    },
+    {
+      "Name": "V驾驶舱-33",
+      "ID": 633,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/633",
+      "ModelIndex": 625,
+      "BuildPath": "载具/载具装备/驾驶仓/033",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 3.0,
+        "z": 7.5
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 3.0,
+        "z": 7.5
+      },
+      "MaxStretch": {
+        "x": 3.0,
+        "y": 3.0,
+        "z": 7.5
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        570,
+        570
+      ],
+      "ItemCountsMax": [
+        570,
+        570
+      ]
+    },
+    {
+      "Name": "V驾驶舱-34",
+      "ID": 634,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/634",
+      "ModelIndex": 626,
+      "BuildPath": "载具/载具装备/驾驶仓/034",
+      "MinStretch": {
+        "x": 6.0,
+        "y": 2.5,
+        "z": 6.5
+      },
+      "DefStretch": {
+        "x": 6.0,
+        "y": 2.5,
+        "z": 6.5
+      },
+      "MaxStretch": {
+        "x": 6.0,
+        "y": 2.5,
+        "z": 6.5
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        820,
+        820
+      ],
+      "ItemCountsMax": [
+        820,
+        820
+      ]
+    },
+    {
+      "Name": "V驾驶舱-35",
+      "ID": 635,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/635",
+      "ModelIndex": 627,
+      "BuildPath": "载具/载具装备/驾驶仓/035",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 2.5,
+        "z": 12.0
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 2.5,
+        "z": 12.0
+      },
+      "MaxStretch": {
+        "x": 3.0,
+        "y": 2.5,
+        "z": 12.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        750,
+        750
+      ],
+      "ItemCountsMax": [
+        750,
+        750
+      ]
+    },
+    {
+      "Name": "V驾驶舱-36",
+      "ID": 636,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/636",
+      "ModelIndex": 628,
+      "BuildPath": "载具/载具装备/驾驶仓/036",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 7.0
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 2.0,
+        "z": 7.0
+      },
+      "MaxStretch": {
+        "x": 3.5,
+        "y": 2.0,
+        "z": 9.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        350,
+        350
+      ],
+      "ItemCountsMax": [
+        520,
+        520
+      ]
+    },
+    {
+      "Name": "V驾驶舱-37",
+      "ID": 637,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/637",
+      "ModelIndex": 629,
+      "BuildPath": "载具/载具装备/驾驶仓/037",
+      "MinStretch": {
+        "x": 5.0,
+        "y": 3.5,
+        "z": 7.0
+      },
+      "DefStretch": {
+        "x": 5.0,
+        "y": 3.5,
+        "z": 7.0
+      },
+      "MaxStretch": {
+        "x": 6.0,
+        "y": 3.5,
+        "z": 7.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        1030,
+        1030
+      ],
+      "ItemCountsMax": [
+        1230,
+        1230
+      ]
+    },
+    {
+      "Name": "V驾驶舱-38",
+      "ID": 638,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/638",
+      "ModelIndex": 630,
+      "BuildPath": "载具/载具装备/驾驶仓/038",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 2.5,
+        "z": 3.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 2.5,
+        "z": 3.0
+      },
+      "MaxStretch": {
+        "x": 3.0,
+        "y": 2.5,
+        "z": 3.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        130,
+        130
+      ],
+      "ItemCountsMax": [
+        190,
+        190
+      ]
+    },
+    {
+      "Name": "V驾驶舱-39",
+      "ID": 639,
+      "SID": "",
+      "Type": 5,
+      "IconPath": "Icons/Creation/639",
+      "ModelIndex": 631,
+      "BuildPath": "载具/载具装备/驾驶仓/039",
+      "MinStretch": {
+        "x": 5.0,
+        "y": 2.25,
+        "z": 7.0
+      },
+      "DefStretch": {
+        "x": 5.0,
+        "y": 2.25,
+        "z": 7.0
+      },
+      "MaxStretch": {
+        "x": 5.5,
+        "y": 2.25,
+        "z": 7.0
+      },
+      "Description": "DV驾驶舱",
+      "Items": [
+        -1,
+        -2
+      ],
+      "ItemCountsDefault": [
+        660,
+        660
+      ],
+      "ItemCountsMax": [
+        720,
+        720
+      ]
+    },
+    {
+      "Name": "V陀螺仪",
+      "ID": 651,
+      "SID": "",
+      "Type": 6,
+      "IconPath": "Icons/Creation/651",
+      "ModelIndex": 632,
+      "BuildPath": "载具/载具装备/载具驱动/001",
+      "MinStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "DefStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "MaxStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "Description": "DV陀螺仪",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        10
+      ],
+      "ItemCountsMax": [
+        10
+      ]
+    },
+    {
+      "Name": "V轮胎",
+      "ID": 661,
+      "SID": "",
+      "Type": 10,
+      "IconPath": "Icons/Creation/661",
+      "ModelIndex": 633,
+      "BuildPath": "载具/载具装备/载具驱动/002",
+      "MinStretch": {
+        "x": 1.0,
+        "y": 3.0,
+        "z": 3.0
+      },
+      "DefStretch": {
+        "x": 1.0,
+        "y": 3.0,
+        "z": 3.0
+      },
+      "MaxStretch": {
+        "x": 3.0,
+        "y": 3.0,
+        "z": 3.0
+      },
+      "Description": "DV轮胎",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        80
+      ],
+      "ItemCountsMax": [
+        240
+      ]
+    },
+    {
+      "Name": "V悬浮器",
+      "ID": 662,
+      "SID": "",
+      "Type": 10,
+      "IconPath": "Icons/Creation/662",
+      "ModelIndex": 634,
+      "BuildPath": "载具/载具装备/载具驱动/003",
+      "MinStretch": {
+        "x": 1.5,
+        "y": 2.5,
+        "z": 1.0
+      },
+      "DefStretch": {
+        "x": 1.5,
+        "y": 2.5,
+        "z": 1.0
+      },
+      "MaxStretch": {
+        "x": 1.5,
+        "y": 2.5,
+        "z": 1.0
+      },
+      "Description": "DV悬浮器",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        40
+      ],
+      "ItemCountsMax": [
+        40
+      ]
+    },
+    {
+      "Name": "V悬挂-1",
+      "ID": 671,
+      "SID": "",
+      "Type": 15,
+      "IconPath": "Icons/Creation/671",
+      "ModelIndex": 635,
+      "BuildPath": "载具/载具装备/载具驱动/004",
+      "MinStretch": {
+        "x": 4.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "DefStretch": {
+        "x": 4.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "MaxStretch": {
+        "x": 4.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "Description": "DV悬挂",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        40
+      ],
+      "ItemCountsMax": [
+        40
+      ]
+    },
+    {
+      "Name": "V悬挂-2",
+      "ID": 672,
+      "SID": "",
+      "Type": 15,
+      "IconPath": "Icons/Creation/672",
+      "ModelIndex": 636,
+      "BuildPath": "载具/载具装备/载具驱动/005",
+      "MinStretch": {
+        "x": 2.5,
+        "y": 2.0,
+        "z": 2.0
+      },
+      "DefStretch": {
+        "x": 2.5,
+        "y": 2.0,
+        "z": 2.0
+      },
+      "MaxStretch": {
+        "x": 2.5,
+        "y": 2.0,
+        "z": 2.0
+      },
+      "Description": "DV悬挂",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        90
+      ],
+      "ItemCountsMax": [
+        90
+      ]
+    },
+    {
+      "Name": "V喷气发动机",
+      "ID": 681,
+      "SID": "",
+      "Type": 20,
+      "IconPath": "Icons/Creation/681",
+      "ModelIndex": 637,
+      "BuildPath": "载具/载具装备/载具驱动/006",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 3.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 3.0
+      },
+      "MaxStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 3.0
+      },
+      "Description": "DV喷气发动机",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        100
+      ],
+      "ItemCountsMax": [
+        100
+      ]
+    },
+    {
+      "Name": "V推进器",
+      "ID": 682,
+      "SID": "",
+      "Type": 20,
+      "IconPath": "Icons/Creation/682",
+      "ModelIndex": 638,
+      "BuildPath": "载具/载具装备/载具驱动/007",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 3.0,
+        "z": 2.5
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 3.0,
+        "z": 2.5
+      },
+      "MaxStretch": {
+        "x": 3.0,
+        "y": 3.0,
+        "z": 2.5
+      },
+      "Description": "DV推进器",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        190
+      ],
+      "ItemCountsMax": [
+        190
+      ]
+    },
+    {
+      "Name": "V曲速推进器",
+      "ID": 691,
+      "SID": "",
+      "Type": 25,
+      "IconPath": "Icons/Creation/691",
+      "ModelIndex": 639,
+      "BuildPath": "载具/载具装备/载具驱动/008",
+      "MinStretch": {
+        "x": 3.0,
+        "y": 3.0,
+        "z": 1.5
+      },
+      "DefStretch": {
+        "x": 3.0,
+        "y": 3.0,
+        "z": 1.5
+      },
+      "MaxStretch": {
+        "x": 3.0,
+        "y": 3.0,
+        "z": 1.5
+      },
+      "Description": "DV曲速推进器",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        120
+      ],
+      "ItemCountsMax": [
+        120
+      ]
+    },
+    {
+      "Name": "V电池组",
+      "ID": 701,
+      "SID": "",
+      "Type": 30,
+      "IconPath": "Icons/Creation/701",
+      "ModelIndex": 640,
+      "BuildPath": "载具/载具装备/载具仓储/001",
+      "MinStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.5
+      },
+      "DefStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.5
+      },
+      "MaxStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.5
+      },
+      "Description": "DV电池组",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        20
+      ],
+      "ItemCountsMax": [
+        20
+      ]
+    },
+    {
+      "Name": "V储物仓",
+      "ID": 711,
+      "SID": "",
+      "Type": 32,
+      "IconPath": "Icons/Creation/711",
+      "ModelIndex": 641,
+      "BuildPath": "载具/载具装备/载具仓储/002",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 3.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 3.0
+      },
+      "MaxStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 3.0
+      },
+      "Description": "DV储物仓",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        100
+      ],
+      "ItemCountsMax": [
+        100
+      ]
+    },
+    {
+      "Name": "V燃料箱",
+      "ID": 721,
+      "SID": "",
+      "Type": 33,
+      "IconPath": "Icons/Creation/721",
+      "ModelIndex": 642,
+      "BuildPath": "载具/载具装备/载具仓储/003",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 3.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 3.0
+      },
+      "MaxStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 3.0
+      },
+      "Description": "DV燃料箱",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        100
+      ],
+      "ItemCountsMax": [
+        100
+      ]
+    },
+    {
+      "Name": "V储液罐",
+      "ID": 731,
+      "SID": "",
+      "Type": 34,
+      "IconPath": "Icons/Creation/731",
+      "ModelIndex": 643,
+      "BuildPath": "载具/载具装备/载具仓储/004",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 3.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 3.0
+      },
+      "MaxStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 3.0
+      },
+      "Description": "DV储液罐",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        100
+      ],
+      "ItemCountsMax": [
+        100
+      ]
+    },
+    {
+      "Name": "V连接器-1",
+      "ID": 741,
+      "SID": "",
+      "Type": 40,
+      "IconPath": "Icons/Creation/741",
+      "ModelIndex": 644,
+      "BuildPath": "载具/载具装备/其他/001",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 1.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 1.0
+      },
+      "MaxStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 1.0
+      },
+      "Description": "DV连接器",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        40
+      ],
+      "ItemCountsMax": [
+        40
+      ]
+    },
+    {
+      "Name": "V连接器-2",
+      "ID": 742,
+      "SID": "",
+      "Type": 40,
+      "IconPath": "Icons/Creation/742",
+      "ModelIndex": 645,
+      "BuildPath": "载具/载具装备/其他/002",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 1.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 1.0
+      },
+      "MaxStretch": {
+        "x": 2.0,
+        "y": 2.0,
+        "z": 1.0
+      },
+      "Description": "DV连接器",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        40
+      ],
+      "ItemCountsMax": [
+        40
+      ]
+    },
+    {
+      "Name": "V机枪塔",
+      "ID": 801,
+      "SID": "",
+      "Type": 51,
+      "IconPath": "Icons/Creation/801",
+      "ModelIndex": 646,
+      "BuildPath": "载具/载具装备/武器/001",
+      "MinStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.5
+      },
+      "DefStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.5
+      },
+      "MaxStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.5
+      },
+      "Description": "DV机枪塔",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        20
+      ],
+      "ItemCountsMax": [
+        20
+      ]
+    },
+    {
+      "Name": "V激光塔",
+      "ID": 811,
+      "SID": "",
+      "Type": 52,
+      "IconPath": "Icons/Creation/811",
+      "ModelIndex": 647,
+      "BuildPath": "载具/载具装备/武器/002",
+      "MinStretch": {
+        "x": 2.0,
+        "y": 2.5,
+        "z": 2.0
+      },
+      "DefStretch": {
+        "x": 2.0,
+        "y": 2.5,
+        "z": 2.0
+      },
+      "MaxStretch": {
+        "x": 2.0,
+        "y": 2.5,
+        "z": 2.0
+      },
+      "Description": "DV激光塔",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        90
+      ],
+      "ItemCountsMax": [
+        90
+      ]
+    },
+    {
+      "Name": "V加农炮",
+      "ID": 821,
+      "SID": "",
+      "Type": 53,
+      "IconPath": "Icons/Creation/821",
+      "ModelIndex": 648,
+      "BuildPath": "载具/载具装备/武器/003",
+      "MinStretch": {
+        "x": 1.0,
+        "y": 1.5,
+        "z": 3.0
+      },
+      "DefStretch": {
+        "x": 1.0,
+        "y": 1.5,
+        "z": 3.0
+      },
+      "MaxStretch": {
+        "x": 1.0,
+        "y": 1.5,
+        "z": 3.0
+      },
+      "Description": "DV加农炮",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        40
+      ],
+      "ItemCountsMax": [
+        40
+      ]
+    },
+    {
+      "Name": "V导弹塔-1",
+      "ID": 831,
+      "SID": "",
+      "Type": 54,
+      "IconPath": "Icons/Creation/831",
+      "ModelIndex": 649,
+      "BuildPath": "载具/载具装备/武器/004",
+      "MinStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.5
+      },
+      "DefStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.5
+      },
+      "MaxStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.5
+      },
+      "Description": "DV导弹塔",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        20
+      ],
+      "ItemCountsMax": [
+        20
+      ]
+    },
+    {
+      "Name": "V导弹塔-2",
+      "ID": 832,
+      "SID": "",
+      "Type": 54,
+      "IconPath": "Icons/Creation/832",
+      "ModelIndex": 650,
+      "BuildPath": "载具/载具装备/武器/005",
+      "MinStretch": {
+        "x": 1.0,
+        "y": 0.5,
+        "z": 2.0
+      },
+      "DefStretch": {
+        "x": 1.0,
+        "y": 0.5,
+        "z": 2.0
+      },
+      "MaxStretch": {
+        "x": 1.0,
+        "y": 0.5,
+        "z": 2.0
+      },
+      "Description": "DV导弹塔",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        10
+      ],
+      "ItemCountsMax": [
+        10
+      ]
+    },
+    {
+      "Name": "V电浆塔",
+      "ID": 841,
+      "SID": "",
+      "Type": 55,
+      "IconPath": "Icons/Creation/841",
+      "ModelIndex": 651,
+      "BuildPath": "载具/载具装备/武器/006",
+      "MinStretch": {
+        "x": 1.0,
+        "y": 0.8,
+        "z": 1.0
+      },
+      "DefStretch": {
+        "x": 1.0,
+        "y": 0.8,
+        "z": 1.0
+      },
+      "MaxStretch": {
+        "x": 1.0,
+        "y": 0.8,
+        "z": 1.0
+      },
+      "Description": "DV电浆塔",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        10
+      ],
+      "ItemCountsMax": [
+        10
+      ]
+    },
+    {
+      "Name": "V干扰塔",
+      "ID": 851,
+      "SID": "",
+      "Type": 60,
+      "IconPath": "Icons/Creation/851",
+      "ModelIndex": 652,
+      "BuildPath": "载具/载具装备/武器/007",
+      "MinStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "DefStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "MaxStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "Description": "DV干扰塔",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        10
+      ],
+      "ItemCountsMax": [
+        10
+      ]
+    },
+    {
+      "Name": "V投弹仓-1",
+      "ID": 881,
+      "SID": "",
+      "Type": 62,
+      "IconPath": "Icons/Creation/881",
+      "ModelIndex": 653,
+      "BuildPath": "载具/载具装备/武器/008",
+      "MinStretch": {
+        "x": 1.0,
+        "y": 0.5,
+        "z": 2.0
+      },
+      "DefStretch": {
+        "x": 1.0,
+        "y": 0.5,
+        "z": 2.0
+      },
+      "MaxStretch": {
+        "x": 1.0,
+        "y": 0.5,
+        "z": 2.0
+      },
+      "Description": "DV投弹仓",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        10
+      ],
+      "ItemCountsMax": [
+        10
+      ]
+    },
+    {
+      "Name": "V投弹仓-2",
+      "ID": 882,
+      "SID": "",
+      "Type": 62,
+      "IconPath": "Icons/Creation/882",
+      "ModelIndex": 654,
+      "BuildPath": "载具/载具装备/武器/009",
+      "MinStretch": {
+        "x": 1.0,
+        "y": 0.75,
+        "z": 2.0
+      },
+      "DefStretch": {
+        "x": 1.0,
+        "y": 0.75,
+        "z": 2.0
+      },
+      "MaxStretch": {
+        "x": 1.0,
+        "y": 0.75,
+        "z": 2.0
+      },
+      "Description": "DV投弹仓",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        20
+      ],
+      "ItemCountsMax": [
+        20
+      ]
+    },
+    {
+      "Name": "V护盾-1",
+      "ID": 891,
+      "SID": "",
+      "Type": 65,
+      "IconPath": "Icons/Creation/891",
+      "ModelIndex": 655,
+      "BuildPath": "载具/载具装备/防御/001",
+      "MinStretch": {
+        "x": 1.0,
+        "y": 1.5,
+        "z": 0.2
+      },
+      "DefStretch": {
+        "x": 1.0,
+        "y": 1.5,
+        "z": 0.2
+      },
+      "MaxStretch": {
+        "x": 1.0,
+        "y": 1.5,
+        "z": 0.2
+      },
+      "Description": "DV护盾",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        10
+      ],
+      "ItemCountsMax": [
+        10
+      ]
+    },
+    {
+      "Name": "V护盾-2",
+      "ID": 892,
+      "SID": "",
+      "Type": 65,
+      "IconPath": "Icons/Creation/892",
+      "ModelIndex": 656,
+      "BuildPath": "载具/载具装备/防御/002",
+      "MinStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 0.3
+      },
+      "DefStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 0.3
+      },
+      "MaxStretch": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 0.3
+      },
+      "Description": "DV护盾",
+      "Items": [
+        -1
+      ],
+      "ItemCountsDefault": [
+        10
+      ],
+      "ItemCountsMax": [
+        10
+      ]
+    },
+    {
+      "Name": "C建造锚点",
+      "ID": 2000,
+      "SID": "",
+      "Type": 255,
+      "IconPath": "",
+      "ModelIndex": 657,
+      "BuildPath": "",
+      "MinStretch": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "DefStretch": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "MaxStretch": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Description": "DC建造锚点",
+      "Items": [],
+      "ItemCountsDefault": [],
+      "ItemCountsMax": []
+    }
+  ]
+}

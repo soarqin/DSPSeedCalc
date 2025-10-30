@@ -1,0 +1,1488 @@
+{
+  "m_GameObject": {
+    "m_FileID": 0,
+    "m_PathID": 0
+  },
+  "m_Enabled": 1,
+  "m_Script": {
+    "m_FileID": 1,
+    "m_PathID": 1049
+  },
+  "m_Name": "AdvisorTipProtoSet",
+  "TableName": "AdvisorTip",
+  "Signature": "",
+  "dataArray": [
+    {
+      "Name": "提示1",
+      "ID": 1,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕1",
+      "Voice": "tip-1",
+      "MinLength": 15.5,
+      "MaxLength": 16.5,
+      "DeterminatorName": "",
+      "DeterminatorParams": []
+    },
+    {
+      "Name": "提示2",
+      "ID": 2,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕2",
+      "Voice": "tip-2",
+      "MinLength": 29.6,
+      "MaxLength": 30.6,
+      "DeterminatorName": "",
+      "DeterminatorParams": []
+    },
+    {
+      "Name": "提示3",
+      "ID": 3,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕3",
+      "Voice": "tip-3",
+      "MinLength": 3.5,
+      "MaxLength": 4.5,
+      "DeterminatorName": "",
+      "DeterminatorParams": []
+    },
+    {
+      "Name": "提示4",
+      "ID": 4,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕4",
+      "Voice": "tip-4",
+      "MinLength": 18.0,
+      "MaxLength": 28.0,
+      "DeterminatorName": "ADV_GameStart",
+      "DeterminatorParams": []
+    },
+    {
+      "Name": "提示5",
+      "ID": 5,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕5",
+      "Voice": "tip-5",
+      "MinLength": 9.0,
+      "MaxLength": 19.0,
+      "DeterminatorName": "ADV_SpaceCapsuleRecycled",
+      "DeterminatorParams": [
+        1800
+      ]
+    },
+    {
+      "Name": "提示6",
+      "ID": 6,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕6",
+      "Voice": "tip-6",
+      "MinLength": 8.0,
+      "MaxLength": 18.0,
+      "DeterminatorName": "ADV_RecycleSpaceCapsule",
+      "DeterminatorParams": []
+    },
+    {
+      "Name": "提示7",
+      "ID": 7,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕7",
+      "Voice": "tip-7",
+      "MinLength": 14.0,
+      "MaxLength": 24.0,
+      "DeterminatorName": "ADV_CollectResource",
+      "DeterminatorParams": []
+    },
+    {
+      "Name": "提示8",
+      "ID": 8,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕8",
+      "Voice": "tip-8",
+      "MinLength": 10.0,
+      "MaxLength": 20.0,
+      "DeterminatorName": "ADV_SpaceCapsuleRecycled",
+      "DeterminatorParams": [
+        90
+      ]
+    },
+    {
+      "Name": "提示9",
+      "ID": 9,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕9",
+      "Voice": "tip-9",
+      "MinLength": 17.0,
+      "MaxLength": 120.0,
+      "DeterminatorName": "ADV_MechaNeedsPower",
+      "DeterminatorParams": [
+        20
+      ]
+    },
+    {
+      "Name": "提示10",
+      "ID": 10,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕10",
+      "Voice": "tip-10",
+      "MinLength": 14.0,
+      "MaxLength": 24.0,
+      "DeterminatorName": "ADV_BuildMenuNeedUnlock",
+      "DeterminatorParams": []
+    },
+    {
+      "Name": "提示11",
+      "ID": 11,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕11",
+      "Voice": "tip-11",
+      "MinLength": 10.0,
+      "MaxLength": 20.0,
+      "DeterminatorName": "ADV_ItemShortage",
+      "DeterminatorParams": [
+        45
+      ]
+    },
+    {
+      "Name": "提示12",
+      "ID": 12,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕12",
+      "Voice": "tip-12",
+      "MinLength": 12.0,
+      "MaxLength": 22.0,
+      "DeterminatorName": "ADV_ConfirmTechResult",
+      "DeterminatorParams": [
+        120,
+        0,
+        1001
+      ]
+    },
+    {
+      "Name": "提示13",
+      "ID": 13,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕13",
+      "Voice": "tip-13",
+      "MinLength": 15.0,
+      "MaxLength": 25.0,
+      "DeterminatorName": "ADV_ItemInHand",
+      "DeterminatorParams": [
+        60,
+        120,
+        2301
+      ]
+    },
+    {
+      "Name": "提示14",
+      "ID": 14,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕14",
+      "Voice": "tip-14",
+      "MinLength": 12.0,
+      "MaxLength": 22.0,
+      "DeterminatorName": "ADV_FactoryNoPower",
+      "DeterminatorParams": []
+    },
+    {
+      "Name": "提示15",
+      "ID": 15,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕15",
+      "Voice": "tip-15",
+      "MinLength": 14.0,
+      "MaxLength": 24.0,
+      "DeterminatorName": "ADV_OnBuild",
+      "DeterminatorParams": [
+        60,
+        2203
+      ]
+    },
+    {
+      "Name": "提示16",
+      "ID": 16,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕16",
+      "Voice": "tip-16",
+      "MinLength": 16.0,
+      "MaxLength": 26.0,
+      "DeterminatorName": "ADV_OnBuild",
+      "DeterminatorParams": [
+        60,
+        2201
+      ]
+    },
+    {
+      "Name": "提示17",
+      "ID": 17,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕17",
+      "Voice": "tip-17",
+      "MinLength": 25.0,
+      "MaxLength": 35.0,
+      "DeterminatorName": "ADV_OnBuild",
+      "DeterminatorParams": [
+        60,
+        2901
+      ]
+    },
+    {
+      "Name": "提示18",
+      "ID": 18,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕18",
+      "Voice": "tip-18",
+      "MinLength": 16.0,
+      "MaxLength": 26.0,
+      "DeterminatorName": "ADV_OnBuild",
+      "DeterminatorParams": [
+        60,
+        2302
+      ]
+    },
+    {
+      "Name": "提示19",
+      "ID": 19,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕19",
+      "Voice": "tip-19",
+      "MinLength": 17.0,
+      "MaxLength": 27.0,
+      "DeterminatorName": "ADV_AssemblerNoRecipe",
+      "DeterminatorParams": []
+    },
+    {
+      "Name": "提示20",
+      "ID": 20,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕20",
+      "Voice": "tip-20",
+      "MinLength": 17.0,
+      "MaxLength": 27.0,
+      "DeterminatorName": "ADV_ConfirmTechResult",
+      "DeterminatorParams": [
+        30,
+        0,
+        1601
+      ]
+    },
+    {
+      "Name": "提示21",
+      "ID": 21,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕21",
+      "Voice": "tip-21",
+      "MinLength": 27.0,
+      "MaxLength": 37.0,
+      "DeterminatorName": "ADV_ItemInHand",
+      "DeterminatorParams": [
+        30,
+        60,
+        2001
+      ]
+    },
+    {
+      "Name": "提示22",
+      "ID": 22,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕22",
+      "Voice": "tip-22",
+      "MinLength": 12.0,
+      "MaxLength": 22.0,
+      "DeterminatorName": "ADV_ItemInHand",
+      "DeterminatorParams": [
+        30,
+        60,
+        2011
+      ]
+    },
+    {
+      "Name": "提示23",
+      "ID": 23,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕23",
+      "Voice": "tip-23",
+      "MinLength": 15.0,
+      "MaxLength": 25.0,
+      "DeterminatorName": "ADV_OnBuild",
+      "DeterminatorParams": [
+        180,
+        2308
+      ]
+    },
+    {
+      "Name": "提示24",
+      "ID": 24,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕24",
+      "Voice": "tip-24",
+      "MinLength": 17.0,
+      "MaxLength": 27.0,
+      "DeterminatorName": "ADV_OnBuild",
+      "DeterminatorParams": [
+        60,
+        2106
+      ]
+    },
+    {
+      "Name": "提示25",
+      "ID": 25,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕25",
+      "Voice": "tip-25",
+      "MinLength": 22.0,
+      "MaxLength": 32.0,
+      "DeterminatorName": "ADV_UsePlanetView",
+      "DeterminatorParams": []
+    },
+    {
+      "Name": "提示26",
+      "ID": 26,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕26",
+      "Voice": "tip-26",
+      "MinLength": 17.0,
+      "MaxLength": 27.0,
+      "DeterminatorName": "ADV_UseStarMap",
+      "DeterminatorParams": [
+        120
+      ]
+    },
+    {
+      "Name": "提示27",
+      "ID": 27,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕27",
+      "Voice": "tip-27",
+      "MinLength": 11.0,
+      "MaxLength": 21.0,
+      "DeterminatorName": "ADV_ConfirmTechResult",
+      "DeterminatorParams": [
+        30,
+        0,
+        4101
+      ]
+    },
+    {
+      "Name": "提示28",
+      "ID": 28,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕28",
+      "Voice": "tip-28",
+      "MinLength": 12.0,
+      "MaxLength": 22.0,
+      "DeterminatorName": "ADV_OnBuild",
+      "DeterminatorParams": [
+        60,
+        2101
+      ]
+    },
+    {
+      "Name": "提示29",
+      "ID": 29,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕29",
+      "Voice": "tip-29",
+      "MinLength": 14.0,
+      "MaxLength": 24.0,
+      "DeterminatorName": "ADV_OnBuild",
+      "DeterminatorParams": [
+        60,
+        2202
+      ]
+    },
+    {
+      "Name": "提示30",
+      "ID": 30,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕30",
+      "Voice": "tip-30",
+      "MinLength": 14.0,
+      "MaxLength": 24.0,
+      "DeterminatorName": "ADV_OnBuild",
+      "DeterminatorParams": [
+        60,
+        2204
+      ]
+    },
+    {
+      "Name": "提示31",
+      "ID": 31,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕31",
+      "Voice": "tip-31",
+      "MinLength": 30.0,
+      "MaxLength": 40.0,
+      "DeterminatorName": "ADV_ItemInHand",
+      "DeterminatorParams": [
+        60,
+        120,
+        1131
+      ]
+    },
+    {
+      "Name": "提示32",
+      "ID": 32,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕32",
+      "Voice": "tip-32",
+      "MinLength": 17.0,
+      "MaxLength": 27.0,
+      "DeterminatorName": "ADV_ConfirmTechResult",
+      "DeterminatorParams": [
+        180,
+        1,
+        1501
+      ]
+    },
+    {
+      "Name": "提示33",
+      "ID": 33,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕33",
+      "Voice": "tip-33",
+      "MinLength": 15.0,
+      "MaxLength": 25.0,
+      "DeterminatorName": "ADV_ConfirmTechResult",
+      "DeterminatorParams": [
+        180,
+        1,
+        1413,
+        1112
+      ]
+    },
+    {
+      "Name": "提示34",
+      "ID": 34,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕34",
+      "Voice": "tip-34",
+      "MinLength": 25.0,
+      "MaxLength": 35.0,
+      "DeterminatorName": "ADV_OnBuild",
+      "DeterminatorParams": [
+        60,
+        2314
+      ]
+    },
+    {
+      "Name": "提示35",
+      "ID": 35,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕35",
+      "Voice": "tip-35",
+      "MinLength": 30.0,
+      "MaxLength": 40.0,
+      "DeterminatorName": "ADV_OnBuild",
+      "DeterminatorParams": [
+        60,
+        2103
+      ]
+    },
+    {
+      "Name": "提示36",
+      "ID": 36,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕36",
+      "Voice": "tip-36",
+      "MinLength": 20.0,
+      "MaxLength": 30.0,
+      "DeterminatorName": "ADV_UseStatisticPanel",
+      "DeterminatorParams": []
+    },
+    {
+      "Name": "提示37",
+      "ID": 37,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕37",
+      "Voice": "tip-37",
+      "MinLength": 31.0,
+      "MaxLength": 41.0,
+      "DeterminatorName": "ADV_OnBuild",
+      "DeterminatorParams": [
+        60,
+        2104
+      ]
+    },
+    {
+      "Name": "提示38",
+      "ID": 38,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕38",
+      "Voice": "tip-38",
+      "MinLength": 19.0,
+      "MaxLength": 29.0,
+      "DeterminatorName": "ADV_OnBuild",
+      "DeterminatorParams": [
+        60,
+        2209
+      ]
+    },
+    {
+      "Name": "提示39",
+      "ID": 39,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕39",
+      "Voice": "tip-39",
+      "MinLength": 22.0,
+      "MaxLength": 32.0,
+      "DeterminatorName": "ADV_OnBuild",
+      "DeterminatorParams": [
+        60,
+        2105
+      ]
+    },
+    {
+      "Name": "提示40",
+      "ID": 40,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕40",
+      "Voice": "tip-40",
+      "MinLength": 12.0,
+      "MaxLength": 22.0,
+      "DeterminatorName": "ADV_UnlockRecipe",
+      "DeterminatorParams": [
+        300,
+        32
+      ]
+    },
+    {
+      "Name": "提示41",
+      "ID": 41,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕41",
+      "Voice": "tip-41",
+      "MinLength": 35.0,
+      "MaxLength": 45.0,
+      "DeterminatorName": "ADV_OnBuild",
+      "DeterminatorParams": [
+        60,
+        2311
+      ]
+    },
+    {
+      "Name": "提示42",
+      "ID": 42,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕42",
+      "Voice": "tip-42",
+      "MinLength": 31.0,
+      "MaxLength": 41.0,
+      "DeterminatorName": "ADV_SolarSailCount",
+      "DeterminatorParams": [
+        1000
+      ]
+    },
+    {
+      "Name": "提示43",
+      "ID": 43,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕43",
+      "Voice": "tip-43",
+      "MinLength": 25.0,
+      "MaxLength": 35.0,
+      "DeterminatorName": "ADV_OnBuild",
+      "DeterminatorParams": [
+        60,
+        2208
+      ]
+    },
+    {
+      "Name": "提示44",
+      "ID": 44,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕44",
+      "Voice": "tip-44",
+      "MinLength": 33.0,
+      "MaxLength": 43.0,
+      "DeterminatorName": "ADV_OnBuild",
+      "DeterminatorParams": [
+        60,
+        2312
+      ]
+    },
+    {
+      "Name": "提示45",
+      "ID": 45,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕45",
+      "Voice": "tip-45",
+      "MinLength": 18.0,
+      "MaxLength": 28.0,
+      "DeterminatorName": "ADV_PlanningDysonShell",
+      "DeterminatorParams": [
+        60
+      ]
+    },
+    {
+      "Name": "提示46",
+      "ID": 46,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕46",
+      "Voice": "tip-46",
+      "MinLength": 19.0,
+      "MaxLength": 29.0,
+      "DeterminatorName": "ADV_OnBuild",
+      "DeterminatorParams": [
+        60,
+        2020
+      ]
+    },
+    {
+      "Name": "提示47",
+      "ID": 47,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕47",
+      "Voice": "tip-47",
+      "MinLength": 10.0,
+      "MaxLength": 20.0,
+      "DeterminatorName": "ADV_OutOfBuildRange",
+      "DeterminatorParams": []
+    },
+    {
+      "Name": "提示48",
+      "ID": 48,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕48",
+      "Voice": "tip-48",
+      "MinLength": 20.0,
+      "MaxLength": 30.0,
+      "DeterminatorName": "ADV_ConfirmTechResult",
+      "DeterminatorParams": [
+        120,
+        0,
+        2901
+      ]
+    },
+    {
+      "Name": "提示49",
+      "ID": 49,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕49",
+      "Voice": "tip-49",
+      "MinLength": 15.0,
+      "MaxLength": 25.0,
+      "DeterminatorName": "ADV_ConfirmTechResult",
+      "DeterminatorParams": [
+        120,
+        0,
+        2902
+      ]
+    },
+    {
+      "Name": "提示50",
+      "ID": 50,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕50",
+      "Voice": "tip-50",
+      "MinLength": 20.0,
+      "MaxLength": 30.0,
+      "DeterminatorName": "ADV_EnterSailMode",
+      "DeterminatorParams": []
+    },
+    {
+      "Name": "提示51",
+      "ID": 51,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕51",
+      "Voice": "tip-51",
+      "MinLength": 24.0,
+      "MaxLength": 34.0,
+      "DeterminatorName": "ADV_ConfirmTechResult",
+      "DeterminatorParams": [
+        120,
+        0,
+        2904
+      ]
+    },
+    {
+      "Name": "提示52",
+      "ID": 52,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕52",
+      "Voice": "tip-52",
+      "MinLength": 14.0,
+      "MaxLength": 24.0,
+      "DeterminatorName": "ADV_ConfirmTechResult",
+      "DeterminatorParams": [
+        120,
+        0,
+        3701
+      ]
+    },
+    {
+      "Name": "提示53",
+      "ID": 53,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕53",
+      "Voice": "tip-53",
+      "MinLength": 21.0,
+      "MaxLength": 31.0,
+      "DeterminatorName": "ADV_ConfirmTechResult",
+      "DeterminatorParams": [
+        120,
+        0,
+        3404
+      ]
+    },
+    {
+      "Name": "提示54",
+      "ID": 54,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕54",
+      "Voice": "tip-54",
+      "MinLength": 15.0,
+      "MaxLength": 25.0,
+      "DeterminatorName": "ADV_DeleteDysonSphereStructure",
+      "DeterminatorParams": [
+        180
+      ]
+    },
+    {
+      "Name": "提示55",
+      "ID": 55,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕55",
+      "Voice": "tip-55",
+      "MinLength": 39.0,
+      "MaxLength": 49.0,
+      "DeterminatorName": "ADV_UnlockTech",
+      "DeterminatorParams": [
+        480,
+        1508
+      ]
+    },
+    {
+      "Name": "提示56",
+      "ID": 56,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕56",
+      "Voice": "tip-56",
+      "MinLength": 12.0,
+      "MaxLength": 22.0,
+      "DeterminatorName": "ADV_CopyRecipe",
+      "DeterminatorParams": []
+    },
+    {
+      "Name": "提示57",
+      "ID": 57,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕57",
+      "Voice": "tip-57",
+      "MinLength": 15.0,
+      "MaxLength": 25.0,
+      "DeterminatorName": "ADV_PlanetViewDetail_1",
+      "DeterminatorParams": []
+    },
+    {
+      "Name": "提示58",
+      "ID": 58,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕58",
+      "Voice": "tip-58",
+      "MinLength": 7.0,
+      "MaxLength": 17.0,
+      "DeterminatorName": "ADV_PlanetViewDetail_2",
+      "DeterminatorParams": [
+        120
+      ]
+    },
+    {
+      "Name": "提示59",
+      "ID": 59,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕59",
+      "Voice": "tip-59",
+      "MinLength": 22.5,
+      "MaxLength": 23.5,
+      "DeterminatorName": "",
+      "DeterminatorParams": []
+    },
+    {
+      "Name": "提示60",
+      "ID": 60,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕60",
+      "Voice": "tip-60",
+      "MinLength": -20.0,
+      "MaxLength": 30.0,
+      "DeterminatorName": "ADV_MechaNeedEnergyForCombat",
+      "DeterminatorParams": []
+    },
+    {
+      "Name": "提示61",
+      "ID": 61,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕61",
+      "Voice": "tip-61",
+      "MinLength": 7.0,
+      "MaxLength": 17.0,
+      "DeterminatorName": "ADV_ConfirmTechResult",
+      "DeterminatorParams": [
+        120,
+        0,
+        1801
+      ]
+    },
+    {
+      "Name": "提示62",
+      "ID": 62,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕62",
+      "Voice": "tip-62",
+      "MinLength": 0.0,
+      "MaxLength": 16.0,
+      "DeterminatorName": "ADV_CloseToGroundBase",
+      "DeterminatorParams": []
+    },
+    {
+      "Name": "提示63",
+      "ID": 63,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕63",
+      "Voice": "tip-63",
+      "MinLength": 18.0,
+      "MaxLength": 28.0,
+      "DeterminatorName": "ADV_OnBuild",
+      "DeterminatorParams": [
+        60,
+        3001
+      ]
+    },
+    {
+      "Name": "提示64",
+      "ID": 64,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕64",
+      "Voice": "tip-64",
+      "MinLength": 0.0,
+      "MaxLength": 28.0,
+      "DeterminatorName": "ADV_UIPanelViewState",
+      "DeterminatorParams": [
+        60,
+        0,
+        60,
+        5
+      ]
+    },
+    {
+      "Name": "提示65",
+      "ID": 65,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕65",
+      "Voice": "tip-65",
+      "MinLength": 12.0,
+      "MaxLength": 22.0,
+      "DeterminatorName": "ADV_OnBuild",
+      "DeterminatorParams": [
+        60,
+        3005
+      ]
+    },
+    {
+      "Name": "提示66",
+      "ID": 66,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕66",
+      "Voice": "tip-66",
+      "MinLength": 12.0,
+      "MaxLength": 22.0,
+      "DeterminatorName": "ADV_OnBuild",
+      "DeterminatorParams": [
+        60,
+        3007
+      ]
+    },
+    {
+      "Name": "提示67",
+      "ID": 67,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕67",
+      "Voice": "tip-67",
+      "MinLength": 14.0,
+      "MaxLength": 24.0,
+      "DeterminatorName": "ADV_OnBuild",
+      "DeterminatorParams": [
+        60,
+        3008
+      ]
+    },
+    {
+      "Name": "提示68",
+      "ID": 68,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕68",
+      "Voice": "tip-68",
+      "MinLength": 0.0,
+      "MaxLength": 28.0,
+      "DeterminatorName": "ADV_NeedReconstruct",
+      "DeterminatorParams": [
+        120,
+        0,
+        20,
+        5
+      ]
+    },
+    {
+      "Name": "提示69",
+      "ID": 69,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕69",
+      "Voice": "tip-69",
+      "MinLength": 20.0,
+      "MaxLength": 30.0,
+      "DeterminatorName": "ADV_ConfirmTechResult",
+      "DeterminatorParams": [
+        120,
+        0,
+        2951
+      ]
+    },
+    {
+      "Name": "提示70",
+      "ID": 70,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕70",
+      "Voice": "tip-70",
+      "MinLength": 13.0,
+      "MaxLength": 23.0,
+      "DeterminatorName": "ADV_NoAmmo",
+      "DeterminatorParams": [
+        50,
+        10
+      ]
+    },
+    {
+      "Name": "提示71",
+      "ID": 71,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕71",
+      "Voice": "tip-71",
+      "MinLength": 0.0,
+      "MaxLength": 30.0,
+      "DeterminatorName": "ADV_DysonSphereEnergy",
+      "DeterminatorParams": [
+        1000000,
+        1,
+        5
+      ]
+    },
+    {
+      "Name": "提示72",
+      "ID": 72,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕72",
+      "Voice": "tip-72",
+      "MinLength": 22.0,
+      "MaxLength": 32.0,
+      "DeterminatorName": "ADV_DFEliminated",
+      "DeterminatorParams": []
+    },
+    {
+      "Name": "提示73",
+      "ID": 73,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕73",
+      "Voice": "tip-73",
+      "MinLength": 0.0,
+      "MaxLength": 28.0,
+      "DeterminatorName": "ADV_ThreatenLevel",
+      "DeterminatorParams": [
+        3
+      ]
+    },
+    {
+      "Name": "提示74",
+      "ID": 74,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕74",
+      "Voice": "tip-74",
+      "MinLength": 16.0,
+      "MaxLength": 26.0,
+      "DeterminatorName": "ADV_ConfirmTechResult",
+      "DeterminatorParams": [
+        120,
+        0,
+        1819
+      ]
+    },
+    {
+      "Name": "提示75",
+      "ID": 75,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕75",
+      "Voice": "tip-75",
+      "MinLength": 5.0,
+      "MaxLength": 5.5,
+      "DeterminatorName": "",
+      "DeterminatorParams": []
+    },
+    {
+      "Name": "提示76",
+      "ID": 76,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕76",
+      "Voice": "tip-76",
+      "MinLength": 22.0,
+      "MaxLength": 32.0,
+      "DeterminatorName": "ADV_ConfirmTechResult",
+      "DeterminatorParams": [
+        120,
+        0,
+        2801
+      ]
+    },
+    {
+      "Name": "提示77",
+      "ID": 77,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕77",
+      "Voice": "tip-77",
+      "MinLength": 7.0,
+      "MaxLength": 17.0,
+      "DeterminatorName": "ADV_ConfirmTechResult",
+      "DeterminatorParams": [
+        120,
+        0,
+        1822
+      ]
+    },
+    {
+      "Name": "提示78",
+      "ID": 78,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕78",
+      "Voice": "tip-78",
+      "MinLength": 33.0,
+      "MaxLength": 43.0,
+      "DeterminatorName": "ADV_OnBuild",
+      "DeterminatorParams": [
+        60,
+        2107
+      ]
+    },
+    {
+      "Name": "提示79",
+      "ID": 79,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕79",
+      "Voice": "tip-79",
+      "MinLength": 19.0,
+      "MaxLength": 29.0,
+      "DeterminatorName": "ADV_ConfirmTechResult",
+      "DeterminatorParams": [
+        120,
+        0,
+        1151
+      ]
+    },
+    {
+      "Name": "提示80",
+      "ID": 80,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕80",
+      "Voice": "tip-80",
+      "MinLength": 25.0,
+      "MaxLength": 35.0,
+      "DeterminatorName": "ADV_ConfirmTechResult",
+      "DeterminatorParams": [
+        120,
+        0,
+        2701
+      ]
+    },
+    {
+      "Name": "提示81",
+      "ID": 81,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕81",
+      "Voice": "tip-81",
+      "MinLength": 11.0,
+      "MaxLength": 21.0,
+      "DeterminatorName": "ADV_OnBuild",
+      "DeterminatorParams": [
+        60,
+        2206
+      ]
+    },
+    {
+      "Name": "提示82",
+      "ID": 82,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕82",
+      "Voice": "tip-82",
+      "MinLength": 17.0,
+      "MaxLength": 27.0,
+      "DeterminatorName": "ADV_ResearchSlow",
+      "DeterminatorParams": [
+        120,
+        70,
+        120,
+        5,
+        60
+      ]
+    },
+    {
+      "Name": "提示83",
+      "ID": 83,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕83",
+      "Voice": "tip-83",
+      "MinLength": 26.0,
+      "MaxLength": 36.0,
+      "DeterminatorName": "ADV_PowerNetOverLoad",
+      "DeterminatorParams": [
+        2,
+        60
+      ]
+    },
+    {
+      "Name": "提示84",
+      "ID": 84,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕84",
+      "Voice": "tip-84",
+      "MinLength": 17.0,
+      "MaxLength": 27.0,
+      "DeterminatorName": "ADV_FactoryNotWorking",
+      "DeterminatorParams": [
+        20,
+        50,
+        60
+      ]
+    },
+    {
+      "Name": "提示85",
+      "ID": 85,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕85",
+      "Voice": "tip-85",
+      "MinLength": 0.0,
+      "MaxLength": 30.0,
+      "DeterminatorName": "ADV_VeinAmountLow",
+      "DeterminatorParams": [
+        1000
+      ]
+    },
+    {
+      "Name": "提示86",
+      "ID": 86,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕86",
+      "Voice": "tip-86",
+      "MinLength": 21.0,
+      "MaxLength": 31.0,
+      "DeterminatorName": "ADV_BeltConnectSmelter",
+      "DeterminatorParams": [
+        300
+      ]
+    },
+    {
+      "Name": "提示87",
+      "ID": 87,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕87",
+      "Voice": "tip-87",
+      "MinLength": 0.0,
+      "MaxLength": 25.0,
+      "DeterminatorName": "ADV_SpaceTrash",
+      "DeterminatorParams": [
+        1
+      ]
+    },
+    {
+      "Name": "提示88",
+      "ID": 88,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕88",
+      "Voice": "tip-88",
+      "MinLength": 7.0,
+      "MaxLength": 17.0,
+      "DeterminatorName": "ADV_UIPanelViewState",
+      "DeterminatorParams": [
+        60,
+        1,
+        3,
+        3
+      ]
+    },
+    {
+      "Name": "提示89",
+      "ID": 89,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕89",
+      "Voice": "tip-89",
+      "MinLength": 14.0,
+      "MaxLength": 24.0,
+      "DeterminatorName": "ADV_OnBuildMultiLevel",
+      "DeterminatorParams": [
+        1800,
+        2020,
+        2101,
+        2102,
+        2106
+      ]
+    },
+    {
+      "Name": "提示90",
+      "ID": 90,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕90",
+      "Voice": "tip-90",
+      "MinLength": 24.0,
+      "MaxLength": 34.0,
+      "DeterminatorName": "ADV_OnBuild",
+      "DeterminatorParams": [
+        60,
+        2316
+      ]
+    },
+    {
+      "Name": "提示91",
+      "ID": 91,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕91",
+      "Voice": "tip-91",
+      "MinLength": 17.0,
+      "MaxLength": 27.0,
+      "DeterminatorName": "ADV_UIPanelViewState",
+      "DeterminatorParams": [
+        1,
+        2,
+        300,
+        0
+      ]
+    },
+    {
+      "Name": "提示92",
+      "ID": 92,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕92",
+      "Voice": "tip-92",
+      "MinLength": 0.0,
+      "MaxLength": 22.0,
+      "DeterminatorName": "ADV_BuryPitTip",
+      "DeterminatorParams": [
+        120,
+        90
+      ]
+    },
+    {
+      "Name": "提示93",
+      "ID": 93,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕93",
+      "Voice": "tip-93",
+      "MinLength": 0.0,
+      "MaxLength": 30.0,
+      "DeterminatorName": "ADV_OnPlayerKilled",
+      "DeterminatorParams": [
+        120
+      ]
+    },
+    {
+      "Name": "提示94",
+      "ID": 94,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕94",
+      "Voice": "tip-94",
+      "MinLength": 19.0,
+      "MaxLength": 29.0,
+      "DeterminatorName": "ADV_PropertyUnlock",
+      "DeterminatorParams": [
+        72000,
+        60
+      ]
+    },
+    {
+      "Name": "提示95",
+      "ID": 95,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕95",
+      "Voice": "tip-95",
+      "MinLength": 0.0,
+      "MaxLength": 17.0,
+      "DeterminatorName": "ADV_FirstAssault",
+      "DeterminatorParams": [
+        0,
+        10,
+        155
+      ]
+    },
+    {
+      "Name": "提示96",
+      "ID": 96,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕96",
+      "Voice": "tip-96",
+      "MinLength": 0.0,
+      "MaxLength": 16.0,
+      "DeterminatorName": "ADV_EnemyUnitEncounter",
+      "DeterminatorParams": [
+        70,
+        150
+      ]
+    },
+    {
+      "Name": "提示97",
+      "ID": 97,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕97",
+      "Voice": "tip-97",
+      "MinLength": 0.0,
+      "MaxLength": 12.0,
+      "DeterminatorName": "ADV_EnergyWeaponCharge",
+      "DeterminatorParams": [
+        300
+      ]
+    },
+    {
+      "Name": "提示98",
+      "ID": 98,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕98",
+      "Voice": "tip-98",
+      "MinLength": -7.0,
+      "MaxLength": 17.0,
+      "DeterminatorName": "ADV_HiveTechUnlocked",
+      "DeterminatorParams": [
+        0,
+        5202,
+        5203,
+        5204,
+        5205,
+        40
+      ]
+    },
+    {
+      "Name": "提示99",
+      "ID": 99,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕99",
+      "Voice": "tip-99",
+      "MinLength": 0.0,
+      "MaxLength": 17.0,
+      "DeterminatorName": "ADV_OnBuild",
+      "DeterminatorParams": [
+        60,
+        3009
+      ]
+    },
+    {
+      "Name": "提示100",
+      "ID": 100,
+      "SID": "",
+      "Priority": 0,
+      "Script": "顾问字幕100",
+      "Voice": "tip-100",
+      "MinLength": 0.0,
+      "MaxLength": 17.0,
+      "DeterminatorName": "ADV_HiveTechUnlocked",
+      "DeterminatorParams": [
+        5201,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

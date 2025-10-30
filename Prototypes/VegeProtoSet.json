@@ -1,0 +1,8967 @@
+{
+  "m_GameObject": {
+    "m_FileID": 0,
+    "m_PathID": 0
+  },
+  "m_Enabled": 1,
+  "m_Script": {
+    "m_FileID": 1,
+    "m_PathID": 1290
+  },
+  "m_Name": "VegeProtoSet",
+  "TableName": "Vege",
+  "Signature": "1209AEAD9CFAB439850FA0CA5C15FCA3",
+  "dataArray": [
+    {
+      "Name": "石块1",
+      "ID": 1,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.48,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        14
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 200,
+      "HpMax": 220,
+      "ModelIndex": 12,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "石块2",
+      "ID": 2,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 0.78,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        3
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 90,
+      "HpMax": 170,
+      "ModelIndex": 13,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "石块3",
+      "ID": 3,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.01,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        5
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 120,
+      "HpMax": 200,
+      "ModelIndex": 14,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "石块4",
+      "ID": 4,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 0.85,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        4
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 100,
+      "HpMax": 190,
+      "ModelIndex": 15,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "石块5",
+      "ID": 5,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 0.86,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        6
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 120,
+      "HpMax": 210,
+      "ModelIndex": 16,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "石块6",
+      "ID": 6,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 0.73,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.3,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        3
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 90,
+      "HpMax": 150,
+      "ModelIndex": 17,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "石块7",
+      "ID": 7,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 0.56,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.3,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        2
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 70,
+      "HpMax": 80,
+      "ModelIndex": 18,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "石块8",
+      "ID": 8,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.3,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        2
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 70,
+      "HpMax": 80,
+      "ModelIndex": 19,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "石块9",
+      "ID": 9,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 0.56,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.3,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        2
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 70,
+      "HpMax": 90,
+      "ModelIndex": 20,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "石块10",
+      "ID": 10,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 0.79,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.3,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        3
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 90,
+      "HpMax": 110,
+      "ModelIndex": 21,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "石块11",
+      "ID": 11,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 0.6,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.3,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        3
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 90,
+      "HpMax": 100,
+      "ModelIndex": 22,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "石块12",
+      "ID": 12,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 0.58,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.3,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        2
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 70,
+      "HpMax": 120,
+      "ModelIndex": 23,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "树1",
+      "ID": 13,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.4,
+        "y": 0.1,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1030
+      ],
+      "MiningCount": [
+        10
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 70,
+      "HpMax": 30,
+      "ModelIndex": 24,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树2",
+      "ID": 14,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.3,
+        "y": 0.1,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1030
+      ],
+      "MiningCount": [
+        4
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 50,
+      "HpMax": 30,
+      "ModelIndex": 25,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树3",
+      "ID": 15,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.25,
+        "y": 0.1,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1030
+      ],
+      "MiningCount": [
+        5
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 50,
+      "HpMax": 30,
+      "ModelIndex": 26,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树4",
+      "ID": 16,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.3,
+        "y": 0.0,
+        "z": 0.1,
+        "w": 0.1
+      },
+      "MiningItem": [
+        1030
+      ],
+      "MiningCount": [
+        16
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 200,
+      "HpMax": 30,
+      "ModelIndex": 27,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树5",
+      "ID": 17,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.4,
+        "y": 0.0,
+        "z": 0.1,
+        "w": 0.1
+      },
+      "MiningItem": [
+        1030
+      ],
+      "MiningCount": [
+        12
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 100,
+      "HpMax": 30,
+      "ModelIndex": 28,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树6",
+      "ID": 18,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.3,
+        "y": 0.0,
+        "z": 0.1,
+        "w": 0.1
+      },
+      "MiningItem": [
+        1030
+      ],
+      "MiningCount": [
+        14
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 150,
+      "HpMax": 30,
+      "ModelIndex": 29,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "冰山1",
+      "ID": 19,
+      "SID": "",
+      "Type": 2,
+      "CircleRadius": 1.4,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        10
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 150,
+      "HpMax": 230,
+      "ModelIndex": 30,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "冰山2",
+      "ID": 20,
+      "SID": "",
+      "Type": 2,
+      "CircleRadius": 1.5,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        10
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 150,
+      "HpMax": 250,
+      "ModelIndex": 31,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "冰山3",
+      "ID": 21,
+      "SID": "",
+      "Type": 2,
+      "CircleRadius": 1.25,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        10
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 150,
+      "HpMax": 210,
+      "ModelIndex": 32,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "树7",
+      "ID": 22,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.5,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1030
+      ],
+      "MiningCount": [
+        14
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 150,
+      "HpMax": 30,
+      "ModelIndex": 77,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树8",
+      "ID": 23,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.5,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1030
+      ],
+      "MiningCount": [
+        12
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 100,
+      "HpMax": 30,
+      "ModelIndex": 78,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树9",
+      "ID": 24,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.2,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1031
+      ],
+      "MiningCount": [
+        5
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 50,
+      "HpMax": 30,
+      "ModelIndex": 79,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树10",
+      "ID": 25,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.5,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1030
+      ],
+      "MiningCount": [
+        12
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 100,
+      "HpMax": 30,
+      "ModelIndex": 80,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树11",
+      "ID": 26,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.2,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1031
+      ],
+      "MiningCount": [
+        5
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 50,
+      "HpMax": 30,
+      "ModelIndex": 81,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树12",
+      "ID": 27,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.5,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1030
+      ],
+      "MiningCount": [
+        12
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 100,
+      "HpMax": 30,
+      "ModelIndex": 82,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树13",
+      "ID": 28,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 0.85,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.2,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1031
+      ],
+      "MiningCount": [
+        8
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 60,
+      "HpMax": 30,
+      "ModelIndex": 83,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树14",
+      "ID": 29,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 0.85,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.5,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1030
+      ],
+      "MiningCount": [
+        10
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 70,
+      "HpMax": 30,
+      "ModelIndex": 84,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树15",
+      "ID": 30,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.25,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.5,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1030
+      ],
+      "MiningCount": [
+        8
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 60,
+      "HpMax": 30,
+      "ModelIndex": 85,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树16",
+      "ID": 31,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.25,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.5,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1030
+      ],
+      "MiningCount": [
+        12
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 100,
+      "HpMax": 30,
+      "ModelIndex": 86,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树17",
+      "ID": 32,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.5,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.5,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1030
+      ],
+      "MiningCount": [
+        20
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 250,
+      "HpMax": 30,
+      "ModelIndex": 87,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树19",
+      "ID": 33,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 0.9,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.2,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1031
+      ],
+      "MiningCount": [
+        5
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 50,
+      "HpMax": 30,
+      "ModelIndex": 89,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树20",
+      "ID": 34,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 0.9,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.2,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1031
+      ],
+      "MiningCount": [
+        5
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 50,
+      "HpMax": 30,
+      "ModelIndex": 90,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树21",
+      "ID": 35,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 0.4,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.5,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1030
+      ],
+      "MiningCount": [
+        10
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 70,
+      "HpMax": 30,
+      "ModelIndex": 91,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树22",
+      "ID": 36,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 0.7,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.2,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1031
+      ],
+      "MiningCount": [
+        10
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 70,
+      "HpMax": 30,
+      "ModelIndex": 92,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树23",
+      "ID": 37,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 0.6,
+      "ScaleRange": {
+        "x": 0.5,
+        "y": 0.0,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1031
+      ],
+      "MiningCount": [
+        12
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 100,
+      "HpMax": 30,
+      "ModelIndex": 93,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树25",
+      "ID": 38,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 0.8,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.2,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1031
+      ],
+      "MiningCount": [
+        8
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 60,
+      "HpMax": 30,
+      "ModelIndex": 95,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树26",
+      "ID": 39,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 0.8,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.2,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1031
+      ],
+      "MiningCount": [
+        10
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 70,
+      "HpMax": 30,
+      "ModelIndex": 96,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树27",
+      "ID": 40,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 0.7,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.0,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1030
+      ],
+      "MiningCount": [
+        14
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 150,
+      "HpMax": 30,
+      "ModelIndex": 97,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树28",
+      "ID": 41,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 0.8,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.5,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1030
+      ],
+      "MiningCount": [
+        24
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 250,
+      "HpMax": 30,
+      "ModelIndex": 98,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树29",
+      "ID": 42,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 0.4,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.5,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1030
+      ],
+      "MiningCount": [
+        8
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 60,
+      "HpMax": 30,
+      "ModelIndex": 99,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树30",
+      "ID": 43,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.5,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1030
+      ],
+      "MiningCount": [
+        8
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 60,
+      "HpMax": 30,
+      "ModelIndex": 112,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树31",
+      "ID": 44,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.5,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.2,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1031
+      ],
+      "MiningCount": [
+        5
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 50,
+      "HpMax": 30,
+      "ModelIndex": 113,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树32",
+      "ID": 45,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 0.9,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1030
+      ],
+      "MiningCount": [
+        22
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 250,
+      "HpMax": 30,
+      "ModelIndex": 114,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树33",
+      "ID": 46,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.4,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1030
+      ],
+      "MiningCount": [
+        25
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 250,
+      "HpMax": 30,
+      "ModelIndex": 115,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树34",
+      "ID": 47,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.2,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1031
+      ],
+      "MiningCount": [
+        5
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 50,
+      "HpMax": 30,
+      "ModelIndex": 116,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "石块13",
+      "ID": 48,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.2,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        40
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 300,
+      "HpMax": 400,
+      "ModelIndex": 100,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "石块14",
+      "ID": 49,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.2,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        40
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 300,
+      "HpMax": 400,
+      "ModelIndex": 101,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "石块15",
+      "ID": 50,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.2,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        40
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 300,
+      "HpMax": 400,
+      "ModelIndex": 102,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "石块16",
+      "ID": 51,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.2,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        50
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 360,
+      "HpMax": 500,
+      "ModelIndex": 103,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "石块17",
+      "ID": 52,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.2,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        50
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 360,
+      "HpMax": 500,
+      "ModelIndex": 104,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "石块18",
+      "ID": 53,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.2,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        50
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 360,
+      "HpMax": 500,
+      "ModelIndex": 105,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "石块19",
+      "ID": 54,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.8,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        50
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 360,
+      "HpMax": 500,
+      "ModelIndex": 106,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "石块20",
+      "ID": 55,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.8,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        50
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 360,
+      "HpMax": 500,
+      "ModelIndex": 107,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "石块21",
+      "ID": 56,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.8,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        50
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 360,
+      "HpMax": 500,
+      "ModelIndex": 108,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "石块22",
+      "ID": 57,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.0,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        50
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 360,
+      "HpMax": 500,
+      "ModelIndex": 109,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "石块23",
+      "ID": 58,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.0,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        50
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 360,
+      "HpMax": 500,
+      "ModelIndex": 110,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "石块24",
+      "ID": 59,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.0,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        50
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 360,
+      "HpMax": 500,
+      "ModelIndex": 111,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "树35",
+      "ID": 60,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1030
+      ],
+      "MiningCount": [
+        25
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 250,
+      "HpMax": 30,
+      "ModelIndex": 122,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "草0",
+      "ID": 61,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": -0.05,
+        "y": 0.35,
+        "z": 0.1,
+        "w": 0.1
+      },
+      "MiningItem": [],
+      "MiningCount": [],
+      "MiningChance": [],
+      "MiningTime": 1,
+      "HpMax": 1,
+      "ModelIndex": 33,
+      "CollideAudio": 0,
+      "MiningAudio": 121,
+      "MiningEffect": 3,
+      "IconPath": ""
+    },
+    {
+      "Name": "草1",
+      "ID": 62,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": -0.05,
+        "y": 0.35,
+        "z": 0.1,
+        "w": 0.1
+      },
+      "MiningItem": [],
+      "MiningCount": [],
+      "MiningChance": [],
+      "MiningTime": 1,
+      "HpMax": 1,
+      "ModelIndex": 34,
+      "CollideAudio": 0,
+      "MiningAudio": 121,
+      "MiningEffect": 3,
+      "IconPath": ""
+    },
+    {
+      "Name": "草2",
+      "ID": 63,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": -0.05,
+        "y": 0.35,
+        "z": 0.1,
+        "w": 0.1
+      },
+      "MiningItem": [],
+      "MiningCount": [],
+      "MiningChance": [],
+      "MiningTime": 1,
+      "HpMax": 1,
+      "ModelIndex": 76,
+      "CollideAudio": 0,
+      "MiningAudio": 121,
+      "MiningEffect": 3,
+      "IconPath": ""
+    },
+    {
+      "Name": "树18",
+      "ID": 64,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 1.25,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.1,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [],
+      "MiningCount": [],
+      "MiningChance": [],
+      "MiningTime": 1,
+      "HpMax": 1,
+      "ModelIndex": 88,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "树24",
+      "ID": 65,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 2.0,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.1,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [],
+      "MiningCount": [],
+      "MiningChance": [],
+      "MiningTime": 1,
+      "HpMax": 1,
+      "ModelIndex": 94,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": ""
+    },
+    {
+      "Name": "外星石1",
+      "ID": 66,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 4.5,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        40
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 300,
+      "HpMax": 400,
+      "ModelIndex": 141,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "外星石2",
+      "ID": 67,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 4.3,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        40
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 300,
+      "HpMax": 400,
+      "ModelIndex": 142,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "外星石3",
+      "ID": 68,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.5,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        40
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 300,
+      "HpMax": 400,
+      "ModelIndex": 143,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "外星石4",
+      "ID": 69,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 4.0,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        40
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 300,
+      "HpMax": 400,
+      "ModelIndex": 144,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "外星石5",
+      "ID": 70,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 3.0,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        40
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 300,
+      "HpMax": 400,
+      "ModelIndex": 145,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "外星石6",
+      "ID": 71,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 4.5,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        40
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 300,
+      "HpMax": 400,
+      "ModelIndex": 146,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "外星石7",
+      "ID": 72,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.3,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        40
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 300,
+      "HpMax": 400,
+      "ModelIndex": 147,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "外星石8",
+      "ID": 73,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 3.0,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        40
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 300,
+      "HpMax": 400,
+      "ModelIndex": 148,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "外星石9",
+      "ID": 74,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 3.0,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        40
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 300,
+      "HpMax": 400,
+      "ModelIndex": 149,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "外星石10",
+      "ID": 75,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        40
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 300,
+      "HpMax": 400,
+      "ModelIndex": 150,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "外星石11",
+      "ID": 76,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 0.7,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        40
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 300,
+      "HpMax": 400,
+      "ModelIndex": 151,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "外星石12",
+      "ID": 77,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 0.6,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        40
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 300,
+      "HpMax": 400,
+      "ModelIndex": 152,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "外星石13",
+      "ID": 78,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 0.4,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        40
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 300,
+      "HpMax": 400,
+      "ModelIndex": 153,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "外星石14",
+      "ID": 79,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 0.8,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        40
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 300,
+      "HpMax": 400,
+      "ModelIndex": 154,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "外星石15",
+      "ID": 80,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 0.7,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        40
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 300,
+      "HpMax": 400,
+      "ModelIndex": 155,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "外星石16",
+      "ID": 81,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 0.4,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        40
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 300,
+      "HpMax": 400,
+      "ModelIndex": 156,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "外星石17",
+      "ID": 82,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 0.4,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        40
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 300,
+      "HpMax": 400,
+      "ModelIndex": 157,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "外星石18",
+      "ID": 83,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 0.8,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        40
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 300,
+      "HpMax": 400,
+      "ModelIndex": 158,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "外星石19",
+      "ID": 84,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.1,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        40
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 300,
+      "HpMax": 400,
+      "ModelIndex": 159,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "外星石20",
+      "ID": 85,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 0.3,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        40
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 300,
+      "HpMax": 400,
+      "ModelIndex": 160,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "外星石21",
+      "ID": 86,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.1,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        40
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 300,
+      "HpMax": 400,
+      "ModelIndex": 161,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "外星石22",
+      "ID": 87,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 0.6,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        40
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 300,
+      "HpMax": 400,
+      "ModelIndex": 162,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "外星石23",
+      "ID": 88,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 0.9,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        40
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 300,
+      "HpMax": 400,
+      "ModelIndex": 163,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "外星石24",
+      "ID": 89,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 0.6,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        40
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 300,
+      "HpMax": 400,
+      "ModelIndex": 164,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "外星石25",
+      "ID": 90,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 0.8,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        40
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 300,
+      "HpMax": 400,
+      "ModelIndex": 165,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": ""
+    },
+    {
+      "Name": "地中海树1",
+      "ID": 101,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1030,
+        1031,
+        1117,
+        1124
+      ],
+      "MiningCount": [
+        17,
+        25,
+        6,
+        6
+      ],
+      "MiningChance": [
+        1.0,
+        1.0,
+        0.1,
+        0.02
+      ],
+      "MiningTime": 180,
+      "HpMax": 30,
+      "ModelIndex": 123,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-123"
+    },
+    {
+      "Name": "地中海树2",
+      "ID": 102,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1030,
+        1031,
+        1117
+      ],
+      "MiningCount": [
+        10,
+        15,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        1.0,
+        0.25
+      ],
+      "MiningTime": 120,
+      "HpMax": 30,
+      "ModelIndex": 124,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-124"
+    },
+    {
+      "Name": "地中海树3",
+      "ID": 103,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1030,
+        1031,
+        1117
+      ],
+      "MiningCount": [
+        12,
+        18,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        1.0,
+        0.1
+      ],
+      "MiningTime": 120,
+      "HpMax": 30,
+      "ModelIndex": 125,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-125"
+    },
+    {
+      "Name": "地中海树4",
+      "ID": 104,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1031
+      ],
+      "MiningCount": [
+        10
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 45,
+      "HpMax": 30,
+      "ModelIndex": 126,
+      "CollideAudio": 0,
+      "MiningAudio": 121,
+      "MiningEffect": 3,
+      "IconPath": "Icons/Vege/model-126"
+    },
+    {
+      "Name": "地中海树5",
+      "ID": 105,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1031
+      ],
+      "MiningCount": [
+        6
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 30,
+      "HpMax": 30,
+      "ModelIndex": 127,
+      "CollideAudio": 0,
+      "MiningAudio": 121,
+      "MiningEffect": 3,
+      "IconPath": "Icons/Vege/model-127"
+    },
+    {
+      "Name": "地中海树6",
+      "ID": 106,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1030,
+        1006,
+        1007
+      ],
+      "MiningCount": [
+        9,
+        4,
+        2
+      ],
+      "MiningChance": [
+        1.0,
+        0.1,
+        0.05
+      ],
+      "MiningTime": 90,
+      "HpMax": 30,
+      "ModelIndex": 128,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-128"
+    },
+    {
+      "Name": "红石树1",
+      "ID": 111,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.5,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.0,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1030,
+        1031,
+        1117,
+        1124
+      ],
+      "MiningCount": [
+        20,
+        30,
+        8,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        1.0,
+        0.1,
+        0.02
+      ],
+      "MiningTime": 240,
+      "HpMax": 30,
+      "ModelIndex": 166,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-166"
+    },
+    {
+      "Name": "红石树2",
+      "ID": 112,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.3,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.1,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1030,
+        1117
+      ],
+      "MiningCount": [
+        12,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.4
+      ],
+      "MiningTime": 180,
+      "HpMax": 30,
+      "ModelIndex": 167,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-167"
+    },
+    {
+      "Name": "红石树4",
+      "ID": 113,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.1,
+      "ScaleRange": {
+        "x": 0.25,
+        "y": 0.0,
+        "z": 0.1,
+        "w": 0.1
+      },
+      "MiningItem": [
+        1030,
+        1117,
+        1116
+      ],
+      "MiningCount": [
+        10,
+        5,
+        15
+      ],
+      "MiningChance": [
+        1.0,
+        1.0,
+        0.3
+      ],
+      "MiningTime": 90,
+      "HpMax": 30,
+      "ModelIndex": 169,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-169"
+    },
+    {
+      "Name": "红石树5",
+      "ID": 114,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.4,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [
+        1030,
+        1117
+      ],
+      "MiningCount": [
+        12,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.4
+      ],
+      "MiningTime": 180,
+      "HpMax": 30,
+      "ModelIndex": 170,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-170"
+    },
+    {
+      "Name": "红石树6",
+      "ID": 115,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.4,
+      "ScaleRange": {
+        "x": 0.35,
+        "y": 0.0,
+        "z": 0.1,
+        "w": 0.1
+      },
+      "MiningItem": [
+        1030,
+        1031,
+        1117
+      ],
+      "MiningCount": [
+        10,
+        15,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        1.0,
+        0.25
+      ],
+      "MiningTime": 120,
+      "HpMax": 30,
+      "ModelIndex": 171,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-171"
+    },
+    {
+      "Name": "红石树7",
+      "ID": 116,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.3,
+      "ScaleRange": {
+        "x": 0.05,
+        "y": 0.1,
+        "z": 0.1,
+        "w": 0.1
+      },
+      "MiningItem": [
+        1031,
+        1117
+      ],
+      "MiningCount": [
+        5,
+        2
+      ],
+      "MiningChance": [
+        1.0,
+        0.05
+      ],
+      "MiningTime": 90,
+      "HpMax": 30,
+      "ModelIndex": 172,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-172"
+    },
+    {
+      "Name": "雨林树1",
+      "ID": 121,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 0.8,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.0,
+        "z": 0.15,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1030,
+        1031
+      ],
+      "MiningCount": [
+        20,
+        30
+      ],
+      "MiningChance": [
+        1.0,
+        1.0
+      ],
+      "MiningTime": 240,
+      "HpMax": 30,
+      "ModelIndex": 176,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-176"
+    },
+    {
+      "Name": "雨林树2",
+      "ID": 122,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.15,
+        "z": 0.1,
+        "w": 0.1
+      },
+      "MiningItem": [
+        1030,
+        1031,
+        1117,
+        1124
+      ],
+      "MiningCount": [
+        15,
+        20,
+        8,
+        6
+      ],
+      "MiningChance": [
+        1.0,
+        1.0,
+        0.3,
+        0.02
+      ],
+      "MiningTime": 180,
+      "HpMax": 30,
+      "ModelIndex": 177,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-177"
+    },
+    {
+      "Name": "雨林树4",
+      "ID": 124,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 0.2,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1030,
+        1031
+      ],
+      "MiningCount": [
+        5,
+        15
+      ],
+      "MiningChance": [
+        1.0,
+        1.0
+      ],
+      "MiningTime": 120,
+      "HpMax": 30,
+      "ModelIndex": 179,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-179"
+    },
+    {
+      "Name": "雨林树5",
+      "ID": 125,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.8,
+      "ScaleRange": {
+        "x": 0.05,
+        "y": 0.1,
+        "z": 0.1,
+        "w": 0.1
+      },
+      "MiningItem": [
+        1030,
+        1007
+      ],
+      "MiningCount": [
+        25,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.05
+      ],
+      "MiningTime": 240,
+      "HpMax": 30,
+      "ModelIndex": 180,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-180"
+    },
+    {
+      "Name": "雨林树6",
+      "ID": 126,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.1
+      },
+      "MiningItem": [
+        1031,
+        1116,
+        1117
+      ],
+      "MiningCount": [
+        10,
+        5,
+        2
+      ],
+      "MiningChance": [
+        1.0,
+        0.3,
+        0.05
+      ],
+      "MiningTime": 120,
+      "HpMax": 30,
+      "ModelIndex": 181,
+      "CollideAudio": 0,
+      "MiningAudio": 121,
+      "MiningEffect": 3,
+      "IconPath": "Icons/Vege/model-181"
+    },
+    {
+      "Name": "白地中海树1",
+      "ID": 131,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.3,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.3,
+        "z": 0.1,
+        "w": 0.3
+      },
+      "MiningItem": [
+        1030,
+        1031
+      ],
+      "MiningCount": [
+        17,
+        25
+      ],
+      "MiningChance": [
+        1.0,
+        1.0
+      ],
+      "MiningTime": 240,
+      "HpMax": 30,
+      "ModelIndex": 185,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-185"
+    },
+    {
+      "Name": "白地中海树2",
+      "ID": 132,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.3,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.3,
+        "z": 0.0,
+        "w": 0.3
+      },
+      "MiningItem": [
+        1030,
+        1031
+      ],
+      "MiningCount": [
+        10,
+        30
+      ],
+      "MiningChance": [
+        1.0,
+        1.0
+      ],
+      "MiningTime": 180,
+      "HpMax": 30,
+      "ModelIndex": 186,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-186"
+    },
+    {
+      "Name": "白地中海树3",
+      "ID": 133,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.7,
+        "z": 0.0,
+        "w": 0.5
+      },
+      "MiningItem": [
+        1030,
+        1116
+      ],
+      "MiningCount": [
+        6,
+        15
+      ],
+      "MiningChance": [
+        1.0,
+        1.0
+      ],
+      "MiningTime": 120,
+      "HpMax": 30,
+      "ModelIndex": 187,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-187"
+    },
+    {
+      "Name": "白地中海树4",
+      "ID": 134,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.3,
+        "z": 0.0,
+        "w": 0.3
+      },
+      "MiningItem": [
+        1030,
+        1031,
+        1116,
+        1117
+      ],
+      "MiningCount": [
+        6,
+        10,
+        5,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        1.0,
+        0.3,
+        0.7
+      ],
+      "MiningTime": 120,
+      "HpMax": 30,
+      "ModelIndex": 188,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-188"
+    },
+    {
+      "Name": "白地中海树5",
+      "ID": 135,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.05,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1031
+      ],
+      "MiningCount": [
+        6
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 90,
+      "HpMax": 30,
+      "ModelIndex": 189,
+      "CollideAudio": 0,
+      "MiningAudio": 121,
+      "MiningEffect": 3,
+      "IconPath": "Icons/Vege/model-189"
+    },
+    {
+      "Name": "白地中海树6",
+      "ID": 136,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1031
+      ],
+      "MiningCount": [
+        7
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 90,
+      "HpMax": 30,
+      "ModelIndex": 190,
+      "CollideAudio": 0,
+      "MiningAudio": 121,
+      "MiningEffect": 3,
+      "IconPath": "Icons/Vege/model-190"
+    },
+    {
+      "Name": "潘多拉树1",
+      "ID": 141,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1030,
+        1031
+      ],
+      "MiningCount": [
+        15,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        1.0
+      ],
+      "MiningTime": 120,
+      "HpMax": 30,
+      "ModelIndex": 309,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-309"
+    },
+    {
+      "Name": "潘多拉树2",
+      "ID": 142,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.2,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1030,
+        1031
+      ],
+      "MiningCount": [
+        15,
+        15
+      ],
+      "MiningChance": [
+        1.0,
+        1.0
+      ],
+      "MiningTime": 120,
+      "HpMax": 30,
+      "ModelIndex": 310,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-310"
+    },
+    {
+      "Name": "潘多拉树3",
+      "ID": 143,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 0.8,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1030,
+        1116
+      ],
+      "MiningCount": [
+        20,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.2
+      ],
+      "MiningTime": 120,
+      "HpMax": 30,
+      "ModelIndex": 311,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-311"
+    },
+    {
+      "Name": "潘多拉树4",
+      "ID": 144,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1030,
+        1031,
+        1114
+      ],
+      "MiningCount": [
+        30,
+        20,
+        15
+      ],
+      "MiningChance": [
+        1.0,
+        1.0,
+        0.1
+      ],
+      "MiningTime": 240,
+      "HpMax": 30,
+      "ModelIndex": 312,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-312"
+    },
+    {
+      "Name": "潘多拉树5",
+      "ID": 145,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.2,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1030,
+        1031,
+        1116
+      ],
+      "MiningCount": [
+        35,
+        20,
+        10
+      ],
+      "MiningChance": [
+        1.0,
+        1.0,
+        0.2
+      ],
+      "MiningTime": 240,
+      "HpMax": 30,
+      "ModelIndex": 313,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-313"
+    },
+    {
+      "Name": "潘多拉树6",
+      "ID": 146,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 0.6,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1030,
+        1031,
+        1014
+      ],
+      "MiningCount": [
+        10,
+        20,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        1.0,
+        0.1
+      ],
+      "MiningTime": 240,
+      "HpMax": 30,
+      "ModelIndex": 314,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-314"
+    },
+    {
+      "Name": "潘多拉树7",
+      "ID": 147,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1030,
+        1031,
+        1016
+      ],
+      "MiningCount": [
+        10,
+        20,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        1.0,
+        0.2
+      ],
+      "MiningTime": 240,
+      "HpMax": 30,
+      "ModelIndex": 315,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-315"
+    },
+    {
+      "Name": "潘多拉树8",
+      "ID": 148,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 0.8,
+      "ScaleRange": {
+        "x": 0.05,
+        "y": 0.05,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1030
+      ],
+      "MiningCount": [
+        10
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 90,
+      "HpMax": 30,
+      "ModelIndex": 316,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-316"
+    },
+    {
+      "Name": "潘多拉树9",
+      "ID": 149,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.05,
+        "y": 0.05,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1030
+      ],
+      "MiningCount": [
+        10
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 90,
+      "HpMax": 30,
+      "ModelIndex": 317,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-317"
+    },
+    {
+      "Name": "潘多拉树10",
+      "ID": 150,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1030,
+        1117
+      ],
+      "MiningCount": [
+        30,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.05
+      ],
+      "MiningTime": 240,
+      "HpMax": 30,
+      "ModelIndex": 318,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-318"
+    },
+    {
+      "Name": "潘多拉树11",
+      "ID": 151,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.5,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1030
+      ],
+      "MiningCount": [
+        5
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 90,
+      "HpMax": 30,
+      "ModelIndex": 319,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-319"
+    },
+    {
+      "Name": "草原荒漠树1",
+      "ID": 161,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1031,
+        1000,
+        1117
+      ],
+      "MiningCount": [
+        10,
+        5,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.5,
+        0.1
+      ],
+      "MiningTime": 240,
+      "HpMax": 30,
+      "ModelIndex": 334,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-334"
+    },
+    {
+      "Name": "草原荒漠树2",
+      "ID": 162,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1031,
+        1000,
+        1117
+      ],
+      "MiningCount": [
+        10,
+        5,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.5,
+        0.1
+      ],
+      "MiningTime": 240,
+      "HpMax": 30,
+      "ModelIndex": 335,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-335"
+    },
+    {
+      "Name": "草原荒漠树3",
+      "ID": 163,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1030,
+        1031,
+        1116
+      ],
+      "MiningCount": [
+        25,
+        30,
+        10
+      ],
+      "MiningChance": [
+        1.0,
+        1.0,
+        0.3
+      ],
+      "MiningTime": 240,
+      "HpMax": 30,
+      "ModelIndex": 336,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-336"
+    },
+    {
+      "Name": "草原荒漠树4",
+      "ID": 164,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1030,
+        1031
+      ],
+      "MiningCount": [
+        15,
+        15
+      ],
+      "MiningChance": [
+        1.0,
+        1.0
+      ],
+      "MiningTime": 180,
+      "HpMax": 30,
+      "ModelIndex": 337,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-337"
+    },
+    {
+      "Name": "草原荒漠树5",
+      "ID": 165,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1030,
+        1031,
+        1124
+      ],
+      "MiningCount": [
+        15,
+        15,
+        6
+      ],
+      "MiningChance": [
+        1.0,
+        1.0,
+        0.02
+      ],
+      "MiningTime": 180,
+      "HpMax": 30,
+      "ModelIndex": 338,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-338"
+    },
+    {
+      "Name": "草原荒漠树6",
+      "ID": 166,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1030,
+        1031
+      ],
+      "MiningCount": [
+        10,
+        10
+      ],
+      "MiningChance": [
+        1.0,
+        1.0
+      ],
+      "MiningTime": 90,
+      "HpMax": 30,
+      "ModelIndex": 339,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-339"
+    },
+    {
+      "Name": "草原荒漠树7",
+      "ID": 167,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1030,
+        1031
+      ],
+      "MiningCount": [
+        20,
+        10
+      ],
+      "MiningChance": [
+        1.0,
+        1.0
+      ],
+      "MiningTime": 240,
+      "HpMax": 30,
+      "ModelIndex": 340,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-340"
+    },
+    {
+      "Name": "草原荒漠树8",
+      "ID": 168,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1030
+      ],
+      "MiningCount": [
+        20
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 240,
+      "HpMax": 30,
+      "ModelIndex": 341,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-341"
+    },
+    {
+      "Name": "草原荒漠树9",
+      "ID": 169,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1030,
+        1031
+      ],
+      "MiningCount": [
+        15,
+        10
+      ],
+      "MiningChance": [
+        1.0,
+        1.0
+      ],
+      "MiningTime": 180,
+      "HpMax": 30,
+      "ModelIndex": 342,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-342"
+    },
+    {
+      "Name": "草原荒漠树10",
+      "ID": 170,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1030
+      ],
+      "MiningCount": [
+        15
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 180,
+      "HpMax": 30,
+      "ModelIndex": 343,
+      "CollideAudio": 0,
+      "MiningAudio": 119,
+      "MiningEffect": 2,
+      "IconPath": "Icons/Vege/model-343"
+    },
+    {
+      "Name": "地中海石1",
+      "ID": 601,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.6,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004,
+        1006,
+        1012
+      ],
+      "MiningCount": [
+        12,
+        20,
+        10,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        1.0,
+        0.1,
+        0.06
+      ],
+      "MiningTime": 240,
+      "HpMax": 400,
+      "ModelIndex": 133,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-133"
+    },
+    {
+      "Name": "地中海石2",
+      "ID": 602,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.2,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004,
+        1003,
+        1012
+      ],
+      "MiningCount": [
+        12,
+        12,
+        8,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.27,
+        0.2,
+        0.02
+      ],
+      "MiningTime": 150,
+      "HpMax": 400,
+      "ModelIndex": 134,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-134"
+    },
+    {
+      "Name": "地中海石3",
+      "ID": 603,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.2,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004,
+        1003,
+        1012
+      ],
+      "MiningCount": [
+        10,
+        10,
+        6,
+        4
+      ],
+      "MiningChance": [
+        1.0,
+        0.25,
+        0.2,
+        0.02
+      ],
+      "MiningTime": 150,
+      "HpMax": 400,
+      "ModelIndex": 135,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-135"
+    },
+    {
+      "Name": "地中海石4",
+      "ID": 604,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.2,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004,
+        1003
+      ],
+      "MiningCount": [
+        6,
+        6,
+        4
+      ],
+      "MiningChance": [
+        1.0,
+        0.15,
+        0.15
+      ],
+      "MiningTime": 90,
+      "HpMax": 400,
+      "ModelIndex": 136,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-136"
+    },
+    {
+      "Name": "地中海石5",
+      "ID": 605,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.2,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004,
+        1003
+      ],
+      "MiningCount": [
+        5,
+        5,
+        3
+      ],
+      "MiningChance": [
+        1.0,
+        0.15,
+        0.15
+      ],
+      "MiningTime": 90,
+      "HpMax": 400,
+      "ModelIndex": 137,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-137"
+    },
+    {
+      "Name": "干旱荒漠石1",
+      "ID": 611,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.5,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004,
+        1006,
+        1012
+      ],
+      "MiningCount": [
+        85,
+        70,
+        10,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        1.0,
+        0.1,
+        0.06
+      ],
+      "MiningTime": 360,
+      "HpMax": 800,
+      "ModelIndex": 195,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-195"
+    },
+    {
+      "Name": "干旱荒漠石2",
+      "ID": 612,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1002,
+        1006
+      ],
+      "MiningCount": [
+        60,
+        50,
+        10
+      ],
+      "MiningChance": [
+        1.0,
+        0.27,
+        0.1
+      ],
+      "MiningTime": 240,
+      "HpMax": 600,
+      "ModelIndex": 196,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-196"
+    },
+    {
+      "Name": "干旱荒漠石3",
+      "ID": 613,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1002,
+        1012
+      ],
+      "MiningCount": [
+        65,
+        10,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.15,
+        0.06
+      ],
+      "MiningTime": 240,
+      "HpMax": 600,
+      "ModelIndex": 197,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-197"
+    },
+    {
+      "Name": "干旱荒漠石4",
+      "ID": 614,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1002,
+        1012
+      ],
+      "MiningCount": [
+        70,
+        50,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.25,
+        0.06
+      ],
+      "MiningTime": 240,
+      "HpMax": 600,
+      "ModelIndex": 198,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-198"
+    },
+    {
+      "Name": "干旱荒漠石5",
+      "ID": 615,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.7,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1002,
+        1006
+      ],
+      "MiningCount": [
+        30,
+        15,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.15,
+        0.06
+      ],
+      "MiningTime": 150,
+      "HpMax": 400,
+      "ModelIndex": 199,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-199"
+    },
+    {
+      "Name": "干旱荒漠石6",
+      "ID": 616,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.5,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1012
+      ],
+      "MiningCount": [
+        30,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.06
+      ],
+      "MiningTime": 150,
+      "HpMax": 400,
+      "ModelIndex": 200,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-200"
+    },
+    {
+      "Name": "干旱荒漠石7",
+      "ID": 617,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.3,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1002
+      ],
+      "MiningCount": [
+        20,
+        10
+      ],
+      "MiningChance": [
+        1.0,
+        0.1
+      ],
+      "MiningTime": 150,
+      "HpMax": 400,
+      "ModelIndex": 201,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-201"
+    },
+    {
+      "Name": "干旱荒漠石8",
+      "ID": 618,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.25,
+      "ScaleRange": {
+        "x": -0.1,
+        "y": 0.4,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1002,
+        1012
+      ],
+      "MiningCount": [
+        8,
+        3,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.25,
+        0.02
+      ],
+      "MiningTime": 120,
+      "HpMax": 300,
+      "ModelIndex": 202,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-202"
+    },
+    {
+      "Name": "干旱荒漠石9",
+      "ID": 619,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.4,
+      "ScaleRange": {
+        "x": 0.35,
+        "y": -0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1002
+      ],
+      "MiningCount": [
+        10,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.25
+      ],
+      "MiningTime": 120,
+      "HpMax": 300,
+      "ModelIndex": 203,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-203"
+    },
+    {
+      "Name": "灰烬冻土石1",
+      "ID": 621,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.8,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004,
+        1003,
+        1012
+      ],
+      "MiningCount": [
+        120,
+        60,
+        40,
+        10
+      ],
+      "MiningChance": [
+        1.0,
+        1.0,
+        0.3,
+        0.1
+      ],
+      "MiningTime": 360,
+      "HpMax": 1200,
+      "ModelIndex": 209,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-209"
+    },
+    {
+      "Name": "灰烬冻土石2",
+      "ID": 622,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.3,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1006
+      ],
+      "MiningCount": [
+        100,
+        50,
+        10
+      ],
+      "MiningChance": [
+        1.0,
+        0.27,
+        0.1
+      ],
+      "MiningTime": 300,
+      "HpMax": 1000,
+      "ModelIndex": 210,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-210"
+    },
+    {
+      "Name": "灰烬冻土石3",
+      "ID": 623,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.5,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1003,
+        1001
+      ],
+      "MiningCount": [
+        110,
+        40,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.15,
+        0.15
+      ],
+      "MiningTime": 300,
+      "HpMax": 1000,
+      "ModelIndex": 211,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-211"
+    },
+    {
+      "Name": "灰烬冻土石4",
+      "ID": 624,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.2,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004,
+        1012
+      ],
+      "MiningCount": [
+        70,
+        50,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.25,
+        0.06
+      ],
+      "MiningTime": 240,
+      "HpMax": 800,
+      "ModelIndex": 212,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-212"
+    },
+    {
+      "Name": "灰烬冻土石5",
+      "ID": 625,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.7,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1003
+      ],
+      "MiningCount": [
+        40,
+        15,
+        15
+      ],
+      "MiningChance": [
+        1.0,
+        0.15,
+        0.15
+      ],
+      "MiningTime": 150,
+      "HpMax": 500,
+      "ModelIndex": 213,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-213"
+    },
+    {
+      "Name": "灰烬冻土石6",
+      "ID": 626,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.5,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1012
+      ],
+      "MiningCount": [
+        24,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.06
+      ],
+      "MiningTime": 150,
+      "HpMax": 400,
+      "ModelIndex": 214,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-214"
+    },
+    {
+      "Name": "灰烬冻土石7",
+      "ID": 627,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.3,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001
+      ],
+      "MiningCount": [
+        20,
+        10
+      ],
+      "MiningChance": [
+        1.0,
+        0.1
+      ],
+      "MiningTime": 150,
+      "HpMax": 400,
+      "ModelIndex": 215,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-215"
+    },
+    {
+      "Name": "灰烬冻土石8",
+      "ID": 628,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.25,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1012
+      ],
+      "MiningCount": [
+        18,
+        9,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.25,
+        0.02
+      ],
+      "MiningTime": 120,
+      "HpMax": 300,
+      "ModelIndex": 216,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-216"
+    },
+    {
+      "Name": "灰烬冻土石9",
+      "ID": 629,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.4,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001
+      ],
+      "MiningCount": [
+        17,
+        8
+      ],
+      "MiningChance": [
+        1.0,
+        0.25
+      ],
+      "MiningTime": 120,
+      "HpMax": 300,
+      "ModelIndex": 217,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-217"
+    },
+    {
+      "Name": "熔岩石1",
+      "ID": 631,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 3.3,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1012
+      ],
+      "MiningCount": [
+        100,
+        30,
+        10
+      ],
+      "MiningChance": [
+        1.0,
+        0.25,
+        0.1
+      ],
+      "MiningTime": 360,
+      "HpMax": 1200,
+      "ModelIndex": 223,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-223"
+    },
+    {
+      "Name": "熔岩石2",
+      "ID": 632,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.8,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1002,
+        1004
+      ],
+      "MiningCount": [
+        70,
+        20,
+        15
+      ],
+      "MiningChance": [
+        1.0,
+        0.27,
+        0.1
+      ],
+      "MiningTime": 300,
+      "HpMax": 1000,
+      "ModelIndex": 224,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-224"
+    },
+    {
+      "Name": "熔岩石3",
+      "ID": 633,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 3.3,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004,
+        1014
+      ],
+      "MiningCount": [
+        80,
+        20,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.25,
+        0.06
+      ],
+      "MiningTime": 300,
+      "HpMax": 1000,
+      "ModelIndex": 225,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-225"
+    },
+    {
+      "Name": "熔岩石4",
+      "ID": 634,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 3.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1006,
+        1012
+      ],
+      "MiningCount": [
+        80,
+        5,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.05,
+        0.1
+      ],
+      "MiningTime": 300,
+      "HpMax": 1000,
+      "ModelIndex": 226,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-226"
+    },
+    {
+      "Name": "熔岩石5",
+      "ID": 635,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 3.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1004,
+        1013
+      ],
+      "MiningCount": [
+        60,
+        15,
+        10,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.3,
+        0.2,
+        0.06
+      ],
+      "MiningTime": 300,
+      "HpMax": 1000,
+      "ModelIndex": 227,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-227"
+    },
+    {
+      "Name": "熔岩石6",
+      "ID": 636,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.8,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1002,
+        1012
+      ],
+      "MiningCount": [
+        80,
+        20,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.25,
+        0.03
+      ],
+      "MiningTime": 360,
+      "HpMax": 1200,
+      "ModelIndex": 228,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-228"
+    },
+    {
+      "Name": "熔岩石7",
+      "ID": 637,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.5,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004
+      ],
+      "MiningCount": [
+        50,
+        20
+      ],
+      "MiningChance": [
+        1.0,
+        0.15
+      ],
+      "MiningTime": 240,
+      "HpMax": 800,
+      "ModelIndex": 229,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-229"
+    },
+    {
+      "Name": "熔岩石8",
+      "ID": 638,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 3.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1002,
+        1012
+      ],
+      "MiningCount": [
+        50,
+        15,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.2,
+        0.06
+      ],
+      "MiningTime": 240,
+      "HpMax": 800,
+      "ModelIndex": 230,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-230"
+    },
+    {
+      "Name": "熔岩石9",
+      "ID": 639,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.8,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1013
+      ],
+      "MiningCount": [
+        40,
+        10,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.15,
+        0.1
+      ],
+      "MiningTime": 240,
+      "HpMax": 800,
+      "ModelIndex": 231,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-231"
+    },
+    {
+      "Name": "熔岩石10",
+      "ID": 640,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1002,
+        1004
+      ],
+      "MiningCount": [
+        30,
+        10,
+        10
+      ],
+      "MiningChance": [
+        1.0,
+        0.2,
+        0.06
+      ],
+      "MiningTime": 240,
+      "HpMax": 800,
+      "ModelIndex": 232,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-232"
+    },
+    {
+      "Name": "熔岩石11",
+      "ID": 641,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1003,
+        1004,
+        1006
+      ],
+      "MiningCount": [
+        50,
+        10,
+        15,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.2,
+        0.1,
+        0.02
+      ],
+      "MiningTime": 300,
+      "HpMax": 1000,
+      "ModelIndex": 233,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-233"
+    },
+    {
+      "Name": "熔岩石12",
+      "ID": 642,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004
+      ],
+      "MiningCount": [
+        10,
+        10
+      ],
+      "MiningChance": [
+        1.0,
+        0.15
+      ],
+      "MiningTime": 150,
+      "HpMax": 500,
+      "ModelIndex": 234,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-234"
+    },
+    {
+      "Name": "熔岩石13",
+      "ID": 643,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1002
+      ],
+      "MiningCount": [
+        15,
+        10
+      ],
+      "MiningChance": [
+        1.0,
+        0.1
+      ],
+      "MiningTime": 150,
+      "HpMax": 500,
+      "ModelIndex": 235,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-235"
+    },
+    {
+      "Name": "熔岩石14",
+      "ID": 644,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1012
+      ],
+      "MiningCount": [
+        15,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.06
+      ],
+      "MiningTime": 150,
+      "HpMax": 500,
+      "ModelIndex": 236,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-236"
+    },
+    {
+      "Name": "熔岩石15",
+      "ID": 645,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1013
+      ],
+      "MiningCount": [
+        10,
+        10,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.15,
+        0.06
+      ],
+      "MiningTime": 150,
+      "HpMax": 500,
+      "ModelIndex": 237,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-237"
+    },
+    {
+      "Name": "熔岩石16",
+      "ID": 646,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1006,
+        1014
+      ],
+      "MiningCount": [
+        10,
+        5,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.02,
+        0.06
+      ],
+      "MiningTime": 120,
+      "HpMax": 300,
+      "ModelIndex": 238,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-238"
+    },
+    {
+      "Name": "熔岩石17",
+      "ID": 647,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.5,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1003,
+        1012
+      ],
+      "MiningCount": [
+        10,
+        5,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.1,
+        0.06
+      ],
+      "MiningTime": 120,
+      "HpMax": 300,
+      "ModelIndex": 239,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-239"
+    },
+    {
+      "Name": "飓风石林石1",
+      "ID": 651,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.5,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.25,
+        "z": 0.05,
+        "w": 0.05
+      },
+      "MiningItem": [
+        1005,
+        1002
+      ],
+      "MiningCount": [
+        30,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.1
+      ],
+      "MiningTime": 150,
+      "HpMax": 400,
+      "ModelIndex": 240,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-240"
+    },
+    {
+      "Name": "飓风石林石2",
+      "ID": 652,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.0,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.25,
+        "z": 0.05,
+        "w": 0.05
+      },
+      "MiningItem": [
+        1005,
+        1004,
+        1003
+      ],
+      "MiningCount": [
+        40,
+        10,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.2,
+        0.06
+      ],
+      "MiningTime": 240,
+      "HpMax": 600,
+      "ModelIndex": 241,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-241"
+    },
+    {
+      "Name": "飓风石林石3",
+      "ID": 653,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.8,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.25,
+        "z": 0.05,
+        "w": 0.05
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1003,
+        1013
+      ],
+      "MiningCount": [
+        30,
+        5,
+        5,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.15,
+        0.1,
+        0.06
+      ],
+      "MiningTime": 240,
+      "HpMax": 600,
+      "ModelIndex": 242,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-242"
+    },
+    {
+      "Name": "飓风石林石4",
+      "ID": 654,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.0,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.25,
+        "z": 0.05,
+        "w": 0.05
+      },
+      "MiningItem": [
+        1005,
+        1002,
+        1003
+      ],
+      "MiningCount": [
+        40,
+        10,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.2,
+        0.1
+      ],
+      "MiningTime": 300,
+      "HpMax": 800,
+      "ModelIndex": 243,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-243"
+    },
+    {
+      "Name": "飓风石林石5",
+      "ID": 655,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.25,
+        "z": 0.05,
+        "w": 0.05
+      },
+      "MiningItem": [
+        1005,
+        1004,
+        1012
+      ],
+      "MiningCount": [
+        30,
+        5,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.2,
+        0.1
+      ],
+      "MiningTime": 240,
+      "HpMax": 600,
+      "ModelIndex": 244,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-244"
+    },
+    {
+      "Name": "飓风石林石6",
+      "ID": 656,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.5,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.25,
+        "z": 0.05,
+        "w": 0.05
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1002
+      ],
+      "MiningCount": [
+        40,
+        10,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.15,
+        0.06
+      ],
+      "MiningTime": 300,
+      "HpMax": 800,
+      "ModelIndex": 245,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-245"
+    },
+    {
+      "Name": "飓风石林石7",
+      "ID": 657,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.5,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.25,
+        "z": 0.05,
+        "w": 0.05
+      },
+      "MiningItem": [
+        1005,
+        1004
+      ],
+      "MiningCount": [
+        40,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.1
+      ],
+      "MiningTime": 300,
+      "HpMax": 800,
+      "ModelIndex": 246,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-246"
+    },
+    {
+      "Name": "飓风石林石8",
+      "ID": 658,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.25,
+        "z": 0.05,
+        "w": 0.05
+      },
+      "MiningItem": [
+        1005,
+        1003,
+        1014
+      ],
+      "MiningCount": [
+        20,
+        5,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.25,
+        0.06
+      ],
+      "MiningTime": 150,
+      "HpMax": 400,
+      "ModelIndex": 247,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-247"
+    },
+    {
+      "Name": "飓风石林石9",
+      "ID": 659,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.25,
+        "z": 0.05,
+        "w": 0.05
+      },
+      "MiningItem": [
+        1005,
+        1004
+      ],
+      "MiningCount": [
+        30,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.1
+      ],
+      "MiningTime": 240,
+      "HpMax": 600,
+      "ModelIndex": 248,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-248"
+    },
+    {
+      "Name": "冰原冻土冰1",
+      "ID": 661,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.5,
+      "ScaleRange": {
+        "x": -0.2,
+        "y": 0.35,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004,
+        1011
+      ],
+      "MiningCount": [
+        50,
+        15,
+        10
+      ],
+      "MiningChance": [
+        1.0,
+        0.2,
+        0.1
+      ],
+      "MiningTime": 360,
+      "HpMax": 1200,
+      "ModelIndex": 258,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-258"
+    },
+    {
+      "Name": "冰原冻土冰2",
+      "ID": 662,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.5,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004,
+        1011
+      ],
+      "MiningCount": [
+        40,
+        10,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.2,
+        0.1
+      ],
+      "MiningTime": 300,
+      "HpMax": 1000,
+      "ModelIndex": 259,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-259"
+    },
+    {
+      "Name": "冰原冻土冰3",
+      "ID": 663,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.5,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004,
+        1011
+      ],
+      "MiningCount": [
+        40,
+        10,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.2,
+        0.1
+      ],
+      "MiningTime": 300,
+      "HpMax": 1000,
+      "ModelIndex": 260,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-260"
+    },
+    {
+      "Name": "冰原冻土冰4",
+      "ID": 664,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.5,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004,
+        1011
+      ],
+      "MiningCount": [
+        40,
+        10,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.2,
+        0.1
+      ],
+      "MiningTime": 300,
+      "HpMax": 1000,
+      "ModelIndex": 261,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-261"
+    },
+    {
+      "Name": "冰原冻土冰5",
+      "ID": 665,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004
+      ],
+      "MiningCount": [
+        20,
+        10
+      ],
+      "MiningChance": [
+        1.0,
+        0.15
+      ],
+      "MiningTime": 240,
+      "HpMax": 600,
+      "ModelIndex": 262,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-262"
+    },
+    {
+      "Name": "冰原冻土冰6",
+      "ID": 666,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004
+      ],
+      "MiningCount": [
+        10,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.15
+      ],
+      "MiningTime": 150,
+      "HpMax": 500,
+      "ModelIndex": 263,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-263"
+    },
+    {
+      "Name": "冰原冻土冰7",
+      "ID": 667,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.5,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004
+      ],
+      "MiningCount": [
+        5,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.1
+      ],
+      "MiningTime": 120,
+      "HpMax": 300,
+      "ModelIndex": 264,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-264"
+    },
+    {
+      "Name": "冰原冻土冰8",
+      "ID": 668,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.5,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004
+      ],
+      "MiningCount": [
+        5,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.1
+      ],
+      "MiningTime": 120,
+      "HpMax": 300,
+      "ModelIndex": 265,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-265"
+    },
+    {
+      "Name": "冰原冻土冰9",
+      "ID": 669,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.5,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004
+      ],
+      "MiningCount": [
+        20,
+        10
+      ],
+      "MiningChance": [
+        1.0,
+        0.15
+      ],
+      "MiningTime": 240,
+      "HpMax": 600,
+      "ModelIndex": 266,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-266"
+    },
+    {
+      "Name": "冰原冻土冰10",
+      "ID": 670,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.5,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004
+      ],
+      "MiningCount": [
+        20,
+        10
+      ],
+      "MiningChance": [
+        1.0,
+        0.15
+      ],
+      "MiningTime": 240,
+      "HpMax": 600,
+      "ModelIndex": 267,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-267"
+    },
+    {
+      "Name": "冰原冻土冰11",
+      "ID": 671,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.5,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004
+      ],
+      "MiningCount": [
+        20,
+        10
+      ],
+      "MiningChance": [
+        1.0,
+        0.15
+      ],
+      "MiningTime": 240,
+      "HpMax": 600,
+      "ModelIndex": 268,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-268"
+    },
+    {
+      "Name": "潘多拉石1",
+      "ID": 681,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 0.8,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1003
+      ],
+      "MiningCount": [
+        5,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.2
+      ],
+      "MiningTime": 120,
+      "HpMax": 400,
+      "ModelIndex": 304,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-304"
+    },
+    {
+      "Name": "潘多拉石2",
+      "ID": 682,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.1,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1003
+      ],
+      "MiningCount": [
+        5,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.4
+      ],
+      "MiningTime": 120,
+      "HpMax": 400,
+      "ModelIndex": 305,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-305"
+    },
+    {
+      "Name": "潘多拉石3",
+      "ID": 683,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.4,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1003
+      ],
+      "MiningCount": [
+        5,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.4
+      ],
+      "MiningTime": 120,
+      "HpMax": 400,
+      "ModelIndex": 306,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-306"
+    },
+    {
+      "Name": "潘多拉石4",
+      "ID": 684,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 0.7,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1003
+      ],
+      "MiningCount": [
+        5,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.2
+      ],
+      "MiningTime": 120,
+      "HpMax": 400,
+      "ModelIndex": 307,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-307"
+    },
+    {
+      "Name": "潘多拉石5",
+      "ID": 685,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1003
+      ],
+      "MiningCount": [
+        5,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.2
+      ],
+      "MiningTime": 120,
+      "HpMax": 400,
+      "ModelIndex": 308,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-308"
+    },
+    {
+      "Name": "草原荒漠石1",
+      "ID": 691,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1002,
+        1003
+      ],
+      "MiningCount": [
+        15,
+        5,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.4,
+        0.1
+      ],
+      "MiningTime": 180,
+      "HpMax": 500,
+      "ModelIndex": 326,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-326"
+    },
+    {
+      "Name": "草原荒漠石2",
+      "ID": 692,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1003
+      ],
+      "MiningCount": [
+        5,
+        5,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.4,
+        0.1
+      ],
+      "MiningTime": 150,
+      "HpMax": 500,
+      "ModelIndex": 327,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-327"
+    },
+    {
+      "Name": "草原荒漠石3",
+      "ID": 693,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004,
+        1003
+      ],
+      "MiningCount": [
+        10,
+        5,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.2,
+        0.1
+      ],
+      "MiningTime": 150,
+      "HpMax": 500,
+      "ModelIndex": 328,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-328"
+    },
+    {
+      "Name": "草原荒漠石4",
+      "ID": 694,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1002,
+        1003
+      ],
+      "MiningCount": [
+        5,
+        5,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.2,
+        0.1
+      ],
+      "MiningTime": 150,
+      "HpMax": 500,
+      "ModelIndex": 329,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-329"
+    },
+    {
+      "Name": "橙晶荒漠石1",
+      "ID": 701,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.5,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1001,
+        1014
+      ],
+      "MiningCount": [
+        15,
+        20
+      ],
+      "MiningChance": [
+        1.0,
+        1.0
+      ],
+      "MiningTime": 120,
+      "HpMax": 500,
+      "ModelIndex": 344,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-344"
+    },
+    {
+      "Name": "橙晶荒漠石2",
+      "ID": 702,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.5,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1001,
+        1014
+      ],
+      "MiningCount": [
+        20,
+        25
+      ],
+      "MiningChance": [
+        1.0,
+        1.0
+      ],
+      "MiningTime": 120,
+      "HpMax": 500,
+      "ModelIndex": 345,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-345"
+    },
+    {
+      "Name": "橙晶荒漠石3",
+      "ID": 703,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.5,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1001,
+        1014
+      ],
+      "MiningCount": [
+        25,
+        30
+      ],
+      "MiningChance": [
+        1.0,
+        1.0
+      ],
+      "MiningTime": 120,
+      "HpMax": 500,
+      "ModelIndex": 346,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-346"
+    },
+    {
+      "Name": "橙晶荒漠石4",
+      "ID": 704,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 3.0,
+      "ScaleRange": {
+        "x": 0.25,
+        "y": 0.25,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1004,
+        1004
+      ],
+      "MiningCount": [
+        80,
+        20,
+        20,
+        10
+      ],
+      "MiningChance": [
+        1.0,
+        0.7,
+        0.2,
+        0.15
+      ],
+      "MiningTime": 360,
+      "HpMax": 1000,
+      "ModelIndex": 347,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-347"
+    },
+    {
+      "Name": "橙晶荒漠石5",
+      "ID": 705,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.5,
+      "ScaleRange": {
+        "x": 0.25,
+        "y": 0.25,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1004,
+        1014
+      ],
+      "MiningCount": [
+        80,
+        20,
+        20,
+        10
+      ],
+      "MiningChance": [
+        1.0,
+        0.7,
+        0.2,
+        0.15
+      ],
+      "MiningTime": 360,
+      "HpMax": 1000,
+      "ModelIndex": 348,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-348"
+    },
+    {
+      "Name": "橙晶荒漠石6",
+      "ID": 706,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 4.0,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1014
+      ],
+      "MiningCount": [
+        70,
+        20,
+        15
+      ],
+      "MiningChance": [
+        1.0,
+        0.7,
+        0.3
+      ],
+      "MiningTime": 300,
+      "HpMax": 1000,
+      "ModelIndex": 349,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-349"
+    },
+    {
+      "Name": "橙晶荒漠石7",
+      "ID": 707,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 3.0,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1004
+      ],
+      "MiningCount": [
+        70,
+        20,
+        15
+      ],
+      "MiningChance": [
+        1.0,
+        0.7,
+        0.1
+      ],
+      "MiningTime": 300,
+      "HpMax": 1000,
+      "ModelIndex": 350,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-350"
+    },
+    {
+      "Name": "橙晶荒漠石8",
+      "ID": 708,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 3.0,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1014
+      ],
+      "MiningCount": [
+        60,
+        20,
+        15
+      ],
+      "MiningChance": [
+        1.0,
+        0.7,
+        0.3
+      ],
+      "MiningTime": 300,
+      "HpMax": 1000,
+      "ModelIndex": 351,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-351"
+    },
+    {
+      "Name": "橙晶荒漠石9",
+      "ID": 709,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.5,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004,
+        1001
+      ],
+      "MiningCount": [
+        50,
+        20,
+        15
+      ],
+      "MiningChance": [
+        1.0,
+        0.3,
+        0.7
+      ],
+      "MiningTime": 300,
+      "HpMax": 1000,
+      "ModelIndex": 352,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-352"
+    },
+    {
+      "Name": "橙晶荒漠石10",
+      "ID": 710,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.5,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1004
+      ],
+      "MiningCount": [
+        50,
+        20,
+        15
+      ],
+      "MiningChance": [
+        1.0,
+        0.7,
+        0.1
+      ],
+      "MiningTime": 300,
+      "HpMax": 1000,
+      "ModelIndex": 353,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-353"
+    },
+    {
+      "Name": "橙晶荒漠石11",
+      "ID": 711,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001
+      ],
+      "MiningCount": [
+        15,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.7
+      ],
+      "MiningTime": 180,
+      "HpMax": 500,
+      "ModelIndex": 354,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-354"
+    },
+    {
+      "Name": "橙晶荒漠石12",
+      "ID": 712,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001
+      ],
+      "MiningCount": [
+        15,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.7
+      ],
+      "MiningTime": 180,
+      "HpMax": 500,
+      "ModelIndex": 355,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-355"
+    },
+    {
+      "Name": "橙晶荒漠石13",
+      "ID": 713,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001
+      ],
+      "MiningCount": [
+        15,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.7
+      ],
+      "MiningTime": 180,
+      "HpMax": 500,
+      "ModelIndex": 356,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-356"
+    },
+    {
+      "Name": "极寒冻土石1",
+      "ID": 721,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.6,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1002,
+        1004
+      ],
+      "MiningCount": [
+        40,
+        20,
+        10
+      ],
+      "MiningChance": [
+        1.0,
+        0.25,
+        0.1
+      ],
+      "MiningTime": 360,
+      "HpMax": 1000,
+      "ModelIndex": 357,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-357"
+    },
+    {
+      "Name": "极寒冻土石2",
+      "ID": 722,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.6,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1004
+      ],
+      "MiningCount": [
+        40,
+        15,
+        10
+      ],
+      "MiningChance": [
+        1.0,
+        0.3,
+        0.1
+      ],
+      "MiningTime": 360,
+      "HpMax": 1000,
+      "ModelIndex": 358,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-358"
+    },
+    {
+      "Name": "极寒冻土石3",
+      "ID": 723,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.3,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1003,
+        1012
+      ],
+      "MiningCount": [
+        35,
+        15,
+        15
+      ],
+      "MiningChance": [
+        1.0,
+        0.3,
+        0.1
+      ],
+      "MiningTime": 360,
+      "HpMax": 1000,
+      "ModelIndex": 359,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-359"
+    },
+    {
+      "Name": "极寒冻土石4",
+      "ID": 724,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.0,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1012
+      ],
+      "MiningCount": [
+        30,
+        10
+      ],
+      "MiningChance": [
+        1.0,
+        0.2
+      ],
+      "MiningTime": 360,
+      "HpMax": 1000,
+      "ModelIndex": 360,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-360"
+    },
+    {
+      "Name": "极寒冻土石5",
+      "ID": 725,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.0,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001
+      ],
+      "MiningCount": [
+        20,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.3
+      ],
+      "MiningTime": 300,
+      "HpMax": 800,
+      "ModelIndex": 361,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-361"
+    },
+    {
+      "Name": "极寒冻土石6",
+      "ID": 726,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.8,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1002
+      ],
+      "MiningCount": [
+        20,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.3
+      ],
+      "MiningTime": 300,
+      "HpMax": 800,
+      "ModelIndex": 362,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-362"
+    },
+    {
+      "Name": "极寒冻土石7",
+      "ID": 727,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.2,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001
+      ],
+      "MiningCount": [
+        20,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.3
+      ],
+      "MiningTime": 300,
+      "HpMax": 800,
+      "ModelIndex": 363,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-363"
+    },
+    {
+      "Name": "极寒冻土石8",
+      "ID": 728,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.5,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1002
+      ],
+      "MiningCount": [
+        20,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.3
+      ],
+      "MiningTime": 300,
+      "HpMax": 800,
+      "ModelIndex": 364,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-364"
+    },
+    {
+      "Name": "极寒冻土石9",
+      "ID": 729,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.8,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1003
+      ],
+      "MiningCount": [
+        20,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.3
+      ],
+      "MiningTime": 300,
+      "HpMax": 800,
+      "ModelIndex": 365,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-365"
+    },
+    {
+      "Name": "极寒冻土石10",
+      "ID": 730,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.8,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1012
+      ],
+      "MiningCount": [
+        20,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.1
+      ],
+      "MiningTime": 300,
+      "HpMax": 800,
+      "ModelIndex": 366,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-366"
+    },
+    {
+      "Name": "极寒冻土石11",
+      "ID": 731,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.5,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001
+      ],
+      "MiningCount": [
+        10,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.25
+      ],
+      "MiningTime": 300,
+      "HpMax": 800,
+      "ModelIndex": 367,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-367"
+    },
+    {
+      "Name": "极寒冻土石12",
+      "ID": 732,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1002
+      ],
+      "MiningCount": [
+        10,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.25
+      ],
+      "MiningTime": 180,
+      "HpMax": 500,
+      "ModelIndex": 368,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-368"
+    },
+    {
+      "Name": "极寒冻土石13",
+      "ID": 733,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.5,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004
+      ],
+      "MiningCount": [
+        10,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.2
+      ],
+      "MiningTime": 180,
+      "HpMax": 500,
+      "ModelIndex": 369,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-369"
+    },
+    {
+      "Name": "极寒冻土石14",
+      "ID": 734,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.5,
+      "ScaleRange": {
+        "x": 0.15,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004
+      ],
+      "MiningCount": [
+        10,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.2
+      ],
+      "MiningTime": 180,
+      "HpMax": 500,
+      "ModelIndex": 370,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-370"
+    },
+    {
+      "Name": "猩红冰湖石1",
+      "ID": 741,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.8,
+      "ScaleRange": {
+        "x": 0.25,
+        "y": 0.25,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1002,
+        1004,
+        1014
+      ],
+      "MiningCount": [
+        50,
+        12,
+        12,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.7,
+        0.2,
+        0.15
+      ],
+      "MiningTime": 300,
+      "HpMax": 1000,
+      "ModelIndex": 409,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-409"
+    },
+    {
+      "Name": "猩红冰湖石2",
+      "ID": 742,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.5,
+      "ScaleRange": {
+        "x": 0.25,
+        "y": 0.25,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1004,
+        1014
+      ],
+      "MiningCount": [
+        50,
+        12,
+        12,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.7,
+        0.2,
+        0.15
+      ],
+      "MiningTime": 300,
+      "HpMax": 1000,
+      "ModelIndex": 410,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-410"
+    },
+    {
+      "Name": "猩红冰湖石3",
+      "ID": 743,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 2.5,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1002,
+        1012
+      ],
+      "MiningCount": [
+        40,
+        12,
+        10
+      ],
+      "MiningChance": [
+        1.0,
+        0.7,
+        0.3
+      ],
+      "MiningTime": 240,
+      "HpMax": 1000,
+      "ModelIndex": 411,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-411"
+    },
+    {
+      "Name": "猩红冰湖石4",
+      "ID": 744,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.5,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1002,
+        1004
+      ],
+      "MiningCount": [
+        40,
+        12,
+        10
+      ],
+      "MiningChance": [
+        1.0,
+        0.7,
+        0.1
+      ],
+      "MiningTime": 240,
+      "HpMax": 1000,
+      "ModelIndex": 412,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-412"
+    },
+    {
+      "Name": "猩红冰湖石5",
+      "ID": 745,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.8,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1002,
+        1014
+      ],
+      "MiningCount": [
+        35,
+        10,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.7,
+        0.3
+      ],
+      "MiningTime": 240,
+      "HpMax": 1000,
+      "ModelIndex": 413,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-413"
+    },
+    {
+      "Name": "猩红冰湖石6",
+      "ID": 746,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.5,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004,
+        1012
+      ],
+      "MiningCount": [
+        35,
+        10,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.3,
+        0.7
+      ],
+      "MiningTime": 240,
+      "HpMax": 1000,
+      "ModelIndex": 414,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-414"
+    },
+    {
+      "Name": "猩红冰湖石7",
+      "ID": 747,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.5,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1004
+      ],
+      "MiningCount": [
+        30,
+        10,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.7,
+        0.1
+      ],
+      "MiningTime": 240,
+      "HpMax": 1000,
+      "ModelIndex": 415,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-415"
+    },
+    {
+      "Name": "猩红冰湖石8",
+      "ID": 748,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1002
+      ],
+      "MiningCount": [
+        15,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.7
+      ],
+      "MiningTime": 180,
+      "HpMax": 500,
+      "ModelIndex": 416,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-416"
+    },
+    {
+      "Name": "猩红冰湖石9",
+      "ID": 749,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1002
+      ],
+      "MiningCount": [
+        15,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.7
+      ],
+      "MiningTime": 180,
+      "HpMax": 500,
+      "ModelIndex": 417,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-417"
+    },
+    {
+      "Name": "猩红冰湖石10",
+      "ID": 750,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.2,
+        "y": 0.2,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1002
+      ],
+      "MiningCount": [
+        15,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.7
+      ],
+      "MiningTime": 180,
+      "HpMax": 500,
+      "ModelIndex": 418,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 1,
+      "IconPath": "Icons/Vege/model-418"
+    },
+    {
+      "Name": "地中海草7",
+      "ID": 1001,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.2,
+        "z": 0.1,
+        "w": 0.1
+      },
+      "MiningItem": [],
+      "MiningCount": [],
+      "MiningChance": [],
+      "MiningTime": 1,
+      "HpMax": 1,
+      "ModelIndex": 129,
+      "CollideAudio": 109,
+      "MiningAudio": 121,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-129"
+    },
+    {
+      "Name": "地中海草8",
+      "ID": 1002,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [],
+      "MiningCount": [],
+      "MiningChance": [],
+      "MiningTime": 1,
+      "HpMax": 1,
+      "ModelIndex": 130,
+      "CollideAudio": 109,
+      "MiningAudio": 121,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-130"
+    },
+    {
+      "Name": "地中海草9",
+      "ID": 1003,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [],
+      "MiningCount": [],
+      "MiningChance": [],
+      "MiningTime": 1,
+      "HpMax": 1,
+      "ModelIndex": 131,
+      "CollideAudio": 109,
+      "MiningAudio": 121,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-131"
+    },
+    {
+      "Name": "地中海草10",
+      "ID": 1004,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.1,
+        "w": 0.1
+      },
+      "MiningItem": [],
+      "MiningCount": [],
+      "MiningChance": [],
+      "MiningTime": 1,
+      "HpMax": 1,
+      "ModelIndex": 132,
+      "CollideAudio": 109,
+      "MiningAudio": 121,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-132"
+    },
+    {
+      "Name": "地中海碎6",
+      "ID": 1005,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        2
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 30,
+      "HpMax": 1,
+      "ModelIndex": 138,
+      "CollideAudio": 0,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-138"
+    },
+    {
+      "Name": "地中海碎7",
+      "ID": 1006,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        2
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 30,
+      "HpMax": 1,
+      "ModelIndex": 139,
+      "CollideAudio": 0,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-139"
+    },
+    {
+      "Name": "地中海碎8",
+      "ID": 1007,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        1
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 20,
+      "HpMax": 1,
+      "ModelIndex": 140,
+      "CollideAudio": 0,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-140"
+    },
+    {
+      "Name": "红石草3",
+      "ID": 1011,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.3,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1117
+      ],
+      "MiningCount": [
+        3
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 40,
+      "HpMax": 1,
+      "ModelIndex": 168,
+      "CollideAudio": 109,
+      "MiningAudio": 121,
+      "MiningEffect": 3,
+      "IconPath": "Icons/Vege/model-168"
+    },
+    {
+      "Name": "红石草8",
+      "ID": 1012,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [],
+      "MiningCount": [],
+      "MiningChance": [],
+      "MiningTime": 1,
+      "HpMax": 1,
+      "ModelIndex": 173,
+      "CollideAudio": 109,
+      "MiningAudio": 121,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-173"
+    },
+    {
+      "Name": "红石草9",
+      "ID": 1013,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [],
+      "MiningCount": [],
+      "MiningChance": [],
+      "MiningTime": 1,
+      "HpMax": 1,
+      "ModelIndex": 174,
+      "CollideAudio": 109,
+      "MiningAudio": 121,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-174"
+    },
+    {
+      "Name": "雨林草7",
+      "ID": 1021,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 1.3,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1031,
+        1117
+      ],
+      "MiningCount": [
+        5,
+        10
+      ],
+      "MiningChance": [
+        1.0,
+        1.0
+      ],
+      "MiningTime": 90,
+      "HpMax": 1,
+      "ModelIndex": 182,
+      "CollideAudio": 109,
+      "MiningAudio": 121,
+      "MiningEffect": 3,
+      "IconPath": "Icons/Vege/model-182"
+    },
+    {
+      "Name": "雨林草8",
+      "ID": 1022,
+      "SID": "",
+      "Type": 1,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1031,
+        1117
+      ],
+      "MiningCount": [
+        5,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        1.0
+      ],
+      "MiningTime": 90,
+      "HpMax": 1,
+      "ModelIndex": 183,
+      "CollideAudio": 109,
+      "MiningAudio": 121,
+      "MiningEffect": 3,
+      "IconPath": "Icons/Vege/model-183"
+    },
+    {
+      "Name": "雨林草9",
+      "ID": 1023,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 0.2,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [],
+      "MiningCount": [],
+      "MiningChance": [],
+      "MiningTime": 1,
+      "HpMax": 1,
+      "ModelIndex": 184,
+      "CollideAudio": 109,
+      "MiningAudio": 121,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-184"
+    },
+    {
+      "Name": "白地中海草7",
+      "ID": 1031,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.5,
+        "z": 0.0,
+        "w": 0.5
+      },
+      "MiningItem": [],
+      "MiningCount": [],
+      "MiningChance": [],
+      "MiningTime": 1,
+      "HpMax": 1,
+      "ModelIndex": 191,
+      "CollideAudio": 109,
+      "MiningAudio": 121,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-191"
+    },
+    {
+      "Name": "白地中海草8",
+      "ID": 1032,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [],
+      "MiningCount": [],
+      "MiningChance": [],
+      "MiningTime": 1,
+      "HpMax": 1,
+      "ModelIndex": 192,
+      "CollideAudio": 109,
+      "MiningAudio": 121,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-192"
+    },
+    {
+      "Name": "白地中海草9",
+      "ID": 1033,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [],
+      "MiningCount": [],
+      "MiningChance": [],
+      "MiningTime": 1,
+      "HpMax": 1,
+      "ModelIndex": 193,
+      "CollideAudio": 109,
+      "MiningAudio": 121,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-193"
+    },
+    {
+      "Name": "干旱荒漠碎10",
+      "ID": 1041,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        3
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 30,
+      "HpMax": 1,
+      "ModelIndex": 204,
+      "CollideAudio": 0,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-204"
+    },
+    {
+      "Name": "干旱荒漠碎11",
+      "ID": 1042,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        3
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 30,
+      "HpMax": 1,
+      "ModelIndex": 205,
+      "CollideAudio": 0,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-205"
+    },
+    {
+      "Name": "干旱荒漠碎12",
+      "ID": 1043,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 1.2,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005
+      ],
+      "MiningCount": [
+        4
+      ],
+      "MiningChance": [
+        1.0
+      ],
+      "MiningTime": 30,
+      "HpMax": 1,
+      "ModelIndex": 206,
+      "CollideAudio": 0,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-206"
+    },
+    {
+      "Name": "干旱荒漠特效1",
+      "ID": 1044,
+      "SID": "",
+      "Type": 8,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.3,
+        "y": 0.3,
+        "z": 0.15,
+        "w": 0.15
+      },
+      "MiningItem": [],
+      "MiningCount": [],
+      "MiningChance": [],
+      "MiningTime": 1,
+      "HpMax": 1,
+      "ModelIndex": 207,
+      "CollideAudio": 0,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-207"
+    },
+    {
+      "Name": "灰烬冻土碎10",
+      "ID": 1051,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1003
+      ],
+      "MiningCount": [
+        5,
+        4,
+        4
+      ],
+      "MiningChance": [
+        1.0,
+        0.25,
+        0.25
+      ],
+      "MiningTime": 30,
+      "HpMax": 1,
+      "ModelIndex": 218,
+      "CollideAudio": 0,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-218"
+    },
+    {
+      "Name": "灰烬冻土碎11",
+      "ID": 1052,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1003
+      ],
+      "MiningCount": [
+        5,
+        4,
+        4
+      ],
+      "MiningChance": [
+        1.0,
+        0.25,
+        0.25
+      ],
+      "MiningTime": 30,
+      "HpMax": 1,
+      "ModelIndex": 219,
+      "CollideAudio": 0,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-219"
+    },
+    {
+      "Name": "灰烬冻土碎12",
+      "ID": 1053,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1003
+      ],
+      "MiningCount": [
+        5,
+        4,
+        4
+      ],
+      "MiningChance": [
+        1.0,
+        0.25,
+        0.25
+      ],
+      "MiningTime": 30,
+      "HpMax": 1,
+      "ModelIndex": 220,
+      "CollideAudio": 0,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-220"
+    },
+    {
+      "Name": "灰烬冻土碎13",
+      "ID": 1054,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1003
+      ],
+      "MiningCount": [
+        5,
+        4,
+        4
+      ],
+      "MiningChance": [
+        1.0,
+        0.25,
+        0.25
+      ],
+      "MiningTime": 30,
+      "HpMax": 1,
+      "ModelIndex": 221,
+      "CollideAudio": 0,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-221"
+    },
+    {
+      "Name": "灰烬冻土碎14",
+      "ID": 1055,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1003
+      ],
+      "MiningCount": [
+        5,
+        4,
+        4
+      ],
+      "MiningChance": [
+        1.0,
+        0.25,
+        0.25
+      ],
+      "MiningTime": 30,
+      "HpMax": 1,
+      "ModelIndex": 222,
+      "CollideAudio": 0,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-222"
+    },
+    {
+      "Name": "飓风石林碎10",
+      "ID": 1061,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1004
+      ],
+      "MiningCount": [
+        5,
+        4,
+        4
+      ],
+      "MiningChance": [
+        1.0,
+        0.25,
+        0.25
+      ],
+      "MiningTime": 30,
+      "HpMax": 1,
+      "ModelIndex": 249,
+      "CollideAudio": 0,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-249"
+    },
+    {
+      "Name": "飓风石林碎11",
+      "ID": 1062,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1004
+      ],
+      "MiningCount": [
+        5,
+        4,
+        4
+      ],
+      "MiningChance": [
+        1.0,
+        0.25,
+        0.25
+      ],
+      "MiningTime": 30,
+      "HpMax": 1,
+      "ModelIndex": 250,
+      "CollideAudio": 0,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-250"
+    },
+    {
+      "Name": "飓风石林碎12",
+      "ID": 1063,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1004
+      ],
+      "MiningCount": [
+        5,
+        4,
+        4
+      ],
+      "MiningChance": [
+        1.0,
+        0.25,
+        0.25
+      ],
+      "MiningTime": 30,
+      "HpMax": 1,
+      "ModelIndex": 251,
+      "CollideAudio": 0,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-251"
+    },
+    {
+      "Name": "飓风石林碎13",
+      "ID": 1064,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1004
+      ],
+      "MiningCount": [
+        5,
+        4,
+        4
+      ],
+      "MiningChance": [
+        1.0,
+        0.25,
+        0.25
+      ],
+      "MiningTime": 30,
+      "HpMax": 1,
+      "ModelIndex": 252,
+      "CollideAudio": 0,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-252"
+    },
+    {
+      "Name": "飓风石林碎14",
+      "ID": 1065,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1004
+      ],
+      "MiningCount": [
+        5,
+        4,
+        4
+      ],
+      "MiningChance": [
+        1.0,
+        0.25,
+        0.25
+      ],
+      "MiningTime": 30,
+      "HpMax": 1,
+      "ModelIndex": 253,
+      "CollideAudio": 0,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-253"
+    },
+    {
+      "Name": "飓风石林碎15",
+      "ID": 1066,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1001,
+        1004
+      ],
+      "MiningCount": [
+        5,
+        4,
+        4
+      ],
+      "MiningChance": [
+        1.0,
+        0.25,
+        0.25
+      ],
+      "MiningTime": 30,
+      "HpMax": 1,
+      "ModelIndex": 254,
+      "CollideAudio": 0,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-254"
+    },
+    {
+      "Name": "冰原冻土碎冰12",
+      "ID": 1071,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004,
+        1011
+      ],
+      "MiningCount": [
+        5,
+        5,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.2,
+        0.1
+      ],
+      "MiningTime": 30,
+      "HpMax": 1,
+      "ModelIndex": 269,
+      "CollideAudio": 0,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-269"
+    },
+    {
+      "Name": "冰原冻土碎冰13",
+      "ID": 1072,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004,
+        1011
+      ],
+      "MiningCount": [
+        5,
+        5,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.2,
+        0.1
+      ],
+      "MiningTime": 30,
+      "HpMax": 1,
+      "ModelIndex": 270,
+      "CollideAudio": 0,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-270"
+    },
+    {
+      "Name": "冰原冻土碎冰14",
+      "ID": 1073,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004,
+        1011
+      ],
+      "MiningCount": [
+        5,
+        5,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.2,
+        0.1
+      ],
+      "MiningTime": 30,
+      "HpMax": 1,
+      "ModelIndex": 271,
+      "CollideAudio": 0,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-271"
+    },
+    {
+      "Name": "冰原冻土碎冰15",
+      "ID": 1074,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 1.0,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.15,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1005,
+        1004,
+        1011
+      ],
+      "MiningCount": [
+        5,
+        5,
+        5
+      ],
+      "MiningChance": [
+        1.0,
+        0.2,
+        0.1
+      ],
+      "MiningTime": 30,
+      "HpMax": 1,
+      "ModelIndex": 272,
+      "CollideAudio": 0,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-272"
+    },
+    {
+      "Name": "潘多拉草1",
+      "ID": 1081,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [],
+      "MiningCount": [],
+      "MiningChance": [],
+      "MiningTime": 1,
+      "HpMax": 1,
+      "ModelIndex": 320,
+      "CollideAudio": 109,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-320"
+    },
+    {
+      "Name": "潘多拉草2",
+      "ID": 1082,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [],
+      "MiningCount": [],
+      "MiningChance": [],
+      "MiningTime": 1,
+      "HpMax": 1,
+      "ModelIndex": 321,
+      "CollideAudio": 109,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-321"
+    },
+    {
+      "Name": "潘多拉草3",
+      "ID": 1083,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [],
+      "MiningCount": [],
+      "MiningChance": [],
+      "MiningTime": 1,
+      "HpMax": 1,
+      "ModelIndex": 322,
+      "CollideAudio": 109,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-322"
+    },
+    {
+      "Name": "潘多拉草4",
+      "ID": 1084,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [],
+      "MiningCount": [],
+      "MiningChance": [],
+      "MiningTime": 1,
+      "HpMax": 1,
+      "ModelIndex": 323,
+      "CollideAudio": 109,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-323"
+    },
+    {
+      "Name": "潘多拉草5",
+      "ID": 1085,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [],
+      "MiningCount": [],
+      "MiningChance": [],
+      "MiningTime": 1,
+      "HpMax": 1,
+      "ModelIndex": 324,
+      "CollideAudio": 109,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-324"
+    },
+    {
+      "Name": "潘多拉草6",
+      "ID": 1086,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [],
+      "MiningCount": [],
+      "MiningChance": [],
+      "MiningTime": 1,
+      "HpMax": 1,
+      "ModelIndex": 325,
+      "CollideAudio": 109,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-325"
+    },
+    {
+      "Name": "草原荒漠草1",
+      "ID": 1091,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [],
+      "MiningCount": [],
+      "MiningChance": [],
+      "MiningTime": 1,
+      "HpMax": 1,
+      "ModelIndex": 330,
+      "CollideAudio": 109,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-330"
+    },
+    {
+      "Name": "草原荒漠草2",
+      "ID": 1092,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [],
+      "MiningCount": [],
+      "MiningChance": [],
+      "MiningTime": 1,
+      "HpMax": 1,
+      "ModelIndex": 331,
+      "CollideAudio": 109,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-331"
+    },
+    {
+      "Name": "草原荒漠草3",
+      "ID": 1093,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [],
+      "MiningCount": [],
+      "MiningChance": [],
+      "MiningTime": 1,
+      "HpMax": 1,
+      "ModelIndex": 332,
+      "CollideAudio": 109,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-332"
+    },
+    {
+      "Name": "草原荒漠草4",
+      "ID": 1094,
+      "SID": "",
+      "Type": 9,
+      "CircleRadius": 0.5,
+      "ScaleRange": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [],
+      "MiningCount": [],
+      "MiningChance": [],
+      "MiningTime": 1,
+      "HpMax": 1,
+      "ModelIndex": 333,
+      "CollideAudio": 109,
+      "MiningAudio": 0,
+      "MiningEffect": 0,
+      "IconPath": "Icons/Vege/model-333"
+    },
+    {
+      "Name": "飞行舱",
+      "ID": 9999,
+      "SID": "",
+      "Type": 0,
+      "CircleRadius": 3.8,
+      "ScaleRange": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+      },
+      "MiningItem": [
+        1801,
+        1101,
+        1102,
+        1104
+      ],
+      "MiningCount": [
+        3,
+        10,
+        10,
+        10
+      ],
+      "MiningChance": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "MiningTime": 900,
+      "HpMax": 10000,
+      "ModelIndex": 175,
+      "CollideAudio": 0,
+      "MiningAudio": 120,
+      "MiningEffect": 0,
+      "IconPath": ""
+    }
+  ]
+}

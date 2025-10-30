@@ -1,0 +1,112 @@
+{
+  "m_GameObject": {
+    "m_FileID": 0,
+    "m_PathID": 0
+  },
+  "m_Enabled": 1,
+  "m_Script": {
+    "m_FileID": 1,
+    "m_PathID": 2003
+  },
+  "m_Name": "EffectEmitterProtoSet",
+  "TableName": "EffectEmitter",
+  "Signature": "",
+  "dataArray": [
+    {
+      "Name": "general-stone-break",
+      "ID": 1,
+      "SID": "",
+      "PrefabPath": "Effect/Emitters/general-stone-break"
+    },
+    {
+      "Name": "general-tree-break",
+      "ID": 2,
+      "SID": "",
+      "PrefabPath": "Effect/Emitters/general-tree-break"
+    },
+    {
+      "Name": "leaves-break-0",
+      "ID": 3,
+      "SID": "",
+      "PrefabPath": "Effect/Emitters/leaves-break-0"
+    },
+    {
+      "Name": "vein-break-1",
+      "ID": 21,
+      "SID": "",
+      "PrefabPath": "Effect/Emitters/vein-break-1"
+    },
+    {
+      "Name": "vein-break-2",
+      "ID": 22,
+      "SID": "",
+      "PrefabPath": "Effect/Emitters/vein-break-2"
+    },
+    {
+      "Name": "vein-break-3",
+      "ID": 23,
+      "SID": "",
+      "PrefabPath": "Effect/Emitters/vein-break-3"
+    },
+    {
+      "Name": "vein-break-4",
+      "ID": 24,
+      "SID": "",
+      "PrefabPath": "Effect/Emitters/vein-break-4"
+    },
+    {
+      "Name": "vein-break-5",
+      "ID": 25,
+      "SID": "",
+      "PrefabPath": "Effect/Emitters/vein-break-5"
+    },
+    {
+      "Name": "vein-break-6",
+      "ID": 26,
+      "SID": "",
+      "PrefabPath": "Effect/Emitters/vein-break-6"
+    },
+    {
+      "Name": "vein-break-8",
+      "ID": 28,
+      "SID": "",
+      "PrefabPath": "Effect/Emitters/vein-break-8"
+    },
+    {
+      "Name": "vein-break-9",
+      "ID": 29,
+      "SID": "",
+      "PrefabPath": "Effect/Emitters/vein-break-9"
+    },
+    {
+      "Name": "vein-break-10",
+      "ID": 30,
+      "SID": "",
+      "PrefabPath": "Effect/Emitters/vein-break-10"
+    },
+    {
+      "Name": "vein-break-11",
+      "ID": 31,
+      "SID": "",
+      "PrefabPath": "Effect/Emitters/vein-break-11"
+    },
+    {
+      "Name": "vein-break-12",
+      "ID": 32,
+      "SID": "",
+      "PrefabPath": "Effect/Emitters/vein-break-12"
+    },
+    {
+      "Name": "vein-break-13",
+      "ID": 33,
+      "SID": "",
+      "PrefabPath": "Effect/Emitters/vein-break-13"
+    },
+    {
+      "Name": "vein-break-14",
+      "ID": 34,
+      "SID": "",
+      "PrefabPath": "Effect/Emitters/vein-break-14"
+    }
+  ]
+}

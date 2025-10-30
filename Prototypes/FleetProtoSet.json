@@ -1,0 +1,70 @@
+{
+  "m_GameObject": {
+    "m_FileID": 0,
+    "m_PathID": 0
+  },
+  "m_Enabled": 1,
+  "m_Script": {
+    "m_FileID": 1,
+    "m_PathID": 2218
+  },
+  "m_Name": "FleetProtoSet",
+  "TableName": "Fleet",
+  "Signature": "",
+  "dataArray": [
+    {
+      "Name": "机甲地面编队",
+      "ID": 1,
+      "SID": "",
+      "Description": "机甲地面编队",
+      "ModelIndex": 442,
+      "IsSpace": false,
+      "IconPath": ""
+    },
+    {
+      "Name": "机甲太空编队0",
+      "ID": 2,
+      "SID": "",
+      "Description": "机甲太空编队0",
+      "ModelIndex": 443,
+      "IsSpace": true,
+      "IconPath": "Icons/Combat/fleet-space-0"
+    },
+    {
+      "Name": "机甲太空编队1",
+      "ID": 3,
+      "SID": "",
+      "Description": "机甲太空编队1",
+      "ModelIndex": 444,
+      "IsSpace": true,
+      "IconPath": "Icons/Combat/fleet-space-1"
+    },
+    {
+      "Name": "机甲太空编队2",
+      "ID": 4,
+      "SID": "",
+      "Description": "机甲太空编队2",
+      "ModelIndex": 445,
+      "IsSpace": true,
+      "IconPath": "Icons/Combat/fleet-space-2"
+    },
+    {
+      "Name": "机甲太空编队3",
+      "ID": 5,
+      "SID": "",
+      "Description": "机甲太空编队3",
+      "ModelIndex": 446,
+      "IsSpace": true,
+      "IconPath": "Icons/Combat/fleet-space-3"
+    },
+    {
+      "Name": "基站地面编队",
+      "ID": 6,
+      "SID": "",
+      "Description": "基站地面编队",
+      "ModelIndex": 447,
+      "IsSpace": false,
+      "IconPath": ""
+    }
+  ]
+}

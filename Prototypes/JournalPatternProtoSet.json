@@ -1,0 +1,380 @@
+{
+  "m_GameObject": {
+    "m_FileID": 0,
+    "m_PathID": 0
+  },
+  "m_Enabled": 1,
+  "m_Script": {
+    "m_FileID": 1,
+    "m_PathID": 1778
+  },
+  "m_Name": "JournalPatternProtoSet",
+  "TableName": "JournalPattern",
+  "Signature": "",
+  "dataArray": [
+    {
+      "Name": "范式1",
+      "ID": 1,
+      "SID": "范式1",
+      "JournalDesc": "里程碑已达成描述1",
+      "DataTypes": [
+        2
+      ]
+    },
+    {
+      "Name": "范式2",
+      "ID": 2,
+      "SID": "范式2",
+      "JournalDesc": "里程碑已达成描述2",
+      "DataTypes": [
+        2,
+        12,
+        7
+      ]
+    },
+    {
+      "Name": "范式3",
+      "ID": 3,
+      "SID": "范式3",
+      "JournalDesc": "里程碑已达成描述3",
+      "DataTypes": [
+        2,
+        10,
+        10
+      ]
+    },
+    {
+      "Name": "范式4",
+      "ID": 4,
+      "SID": "范式4",
+      "JournalDesc": "里程碑已达成描述4",
+      "DataTypes": [
+        6
+      ]
+    },
+    {
+      "Name": "范式5",
+      "ID": 5,
+      "SID": "范式5",
+      "JournalDesc": "里程碑已达成描述5",
+      "DataTypes": [
+        6
+      ]
+    },
+    {
+      "Name": "范式6",
+      "ID": 6,
+      "SID": "范式6",
+      "JournalDesc": "里程碑已达成描述6",
+      "DataTypes": [
+        6
+      ]
+    },
+    {
+      "Name": "范式7",
+      "ID": 7,
+      "SID": "范式7",
+      "JournalDesc": "里程碑已达成描述7",
+      "DataTypes": [
+        6
+      ]
+    },
+    {
+      "Name": "范式8",
+      "ID": 8,
+      "SID": "范式8",
+      "JournalDesc": "里程碑已达成描述8",
+      "DataTypes": [
+        6
+      ]
+    },
+    {
+      "Name": "范式9",
+      "ID": 9,
+      "SID": "范式9",
+      "JournalDesc": "里程碑已达成描述9",
+      "DataTypes": [
+        9
+      ]
+    },
+    {
+      "Name": "范式10",
+      "ID": 10,
+      "SID": "范式10",
+      "JournalDesc": "里程碑已达成描述10",
+      "DataTypes": [
+        6
+      ]
+    },
+    {
+      "Name": "范式11",
+      "ID": 11,
+      "SID": "范式11",
+      "JournalDesc": "里程碑已达成描述11",
+      "DataTypes": [
+        4
+      ]
+    },
+    {
+      "Name": "范式12",
+      "ID": 12,
+      "SID": "范式12",
+      "JournalDesc": "里程碑已达成描述12",
+      "DataTypes": [
+        4
+      ]
+    },
+    {
+      "Name": "范式13",
+      "ID": 13,
+      "SID": "范式13",
+      "JournalDesc": "里程碑已达成描述13",
+      "DataTypes": [
+        4
+      ]
+    },
+    {
+      "Name": "范式14",
+      "ID": 14,
+      "SID": "范式14",
+      "JournalDesc": "里程碑已达成描述14",
+      "DataTypes": [
+        4
+      ]
+    },
+    {
+      "Name": "范式15",
+      "ID": 15,
+      "SID": "范式15",
+      "JournalDesc": "里程碑已达成描述15",
+      "DataTypes": [
+        4
+      ]
+    },
+    {
+      "Name": "范式16",
+      "ID": 16,
+      "SID": "范式16",
+      "JournalDesc": "里程碑已达成描述16",
+      "DataTypes": [
+        4
+      ]
+    },
+    {
+      "Name": "范式17",
+      "ID": 17,
+      "SID": "范式17",
+      "JournalDesc": "里程碑已达成描述17",
+      "DataTypes": []
+    },
+    {
+      "Name": "范式18",
+      "ID": 18,
+      "SID": "范式18",
+      "JournalDesc": "里程碑已达成描述18",
+      "DataTypes": []
+    },
+    {
+      "Name": "范式19",
+      "ID": 19,
+      "SID": "范式19",
+      "JournalDesc": "里程碑已达成描述19",
+      "DataTypes": []
+    },
+    {
+      "Name": "范式20",
+      "ID": 20,
+      "SID": "范式20",
+      "JournalDesc": "里程碑已达成描述20",
+      "DataTypes": []
+    },
+    {
+      "Name": "范式21",
+      "ID": 21,
+      "SID": "范式21",
+      "JournalDesc": "里程碑已达成描述21",
+      "DataTypes": [
+        8
+      ]
+    },
+    {
+      "Name": "范式22",
+      "ID": 22,
+      "SID": "范式22",
+      "JournalDesc": "里程碑已达成描述22",
+      "DataTypes": []
+    },
+    {
+      "Name": "范式23",
+      "ID": 23,
+      "SID": "范式23",
+      "JournalDesc": "里程碑已达成描述23",
+      "DataTypes": [
+        2
+      ]
+    },
+    {
+      "Name": "范式24",
+      "ID": 24,
+      "SID": "范式24",
+      "JournalDesc": "里程碑已达成描述24",
+      "DataTypes": [
+        5,
+        2
+      ]
+    },
+    {
+      "Name": "范式25",
+      "ID": 25,
+      "SID": "范式25",
+      "JournalDesc": "里程碑已达成描述25",
+      "DataTypes": [
+        5,
+        6,
+        6
+      ]
+    },
+    {
+      "Name": "范式26",
+      "ID": 26,
+      "SID": "范式26",
+      "JournalDesc": "里程碑已达成描述26",
+      "DataTypes": [
+        6
+      ]
+    },
+    {
+      "Name": "范式27",
+      "ID": 27,
+      "SID": "范式27",
+      "JournalDesc": "里程碑已达成描述27",
+      "DataTypes": []
+    },
+    {
+      "Name": "范式28",
+      "ID": 28,
+      "SID": "范式28",
+      "JournalDesc": "里程碑已达成描述28",
+      "DataTypes": [
+        5
+      ]
+    },
+    {
+      "Name": "范式29",
+      "ID": 29,
+      "SID": "范式29",
+      "JournalDesc": "里程碑已达成描述29",
+      "DataTypes": []
+    },
+    {
+      "Name": "范式30",
+      "ID": 30,
+      "SID": "范式30",
+      "JournalDesc": "里程碑已达成描述30",
+      "DataTypes": [
+        3
+      ]
+    },
+    {
+      "Name": "范式31",
+      "ID": 31,
+      "SID": "范式31",
+      "JournalDesc": "里程碑已达成描述31",
+      "DataTypes": []
+    },
+    {
+      "Name": "范式32",
+      "ID": 32,
+      "SID": "范式32",
+      "JournalDesc": "里程碑已达成描述32",
+      "DataTypes": [
+        3
+      ]
+    },
+    {
+      "Name": "范式33",
+      "ID": 33,
+      "SID": "范式33",
+      "JournalDesc": "里程碑已达成描述33",
+      "DataTypes": []
+    },
+    {
+      "Name": "范式34",
+      "ID": 34,
+      "SID": "范式34",
+      "JournalDesc": "里程碑已达成描述34",
+      "DataTypes": [
+        1
+      ]
+    },
+    {
+      "Name": "范式35",
+      "ID": 35,
+      "SID": "范式35",
+      "JournalDesc": "里程碑已达成描述35",
+      "DataTypes": [
+        5
+      ]
+    },
+    {
+      "Name": "范式36",
+      "ID": 36,
+      "SID": "范式36",
+      "JournalDesc": "里程碑已达成描述36",
+      "DataTypes": []
+    },
+    {
+      "Name": "范式37",
+      "ID": 37,
+      "SID": "范式37",
+      "JournalDesc": "里程碑已达成描述37",
+      "DataTypes": []
+    },
+    {
+      "Name": "范式38",
+      "ID": 38,
+      "SID": "范式38",
+      "JournalDesc": "里程碑已达成描述38",
+      "DataTypes": [
+        11
+      ]
+    },
+    {
+      "Name": "范式39",
+      "ID": 39,
+      "SID": "范式39",
+      "JournalDesc": "里程碑已达成描述39",
+      "DataTypes": [
+        1,
+        8
+      ]
+    },
+    {
+      "Name": "范式40",
+      "ID": 40,
+      "SID": "范式40",
+      "JournalDesc": "里程碑已达成描述40",
+      "DataTypes": []
+    },
+    {
+      "Name": "范式41",
+      "ID": 41,
+      "SID": "范式41",
+      "JournalDesc": "里程碑已达成描述41",
+      "DataTypes": [
+        6,
+        1,
+        1
+      ]
+    },
+    {
+      "Name": "范式42",
+      "ID": 42,
+      "SID": "范式42",
+      "JournalDesc": "里程碑已达成描述42",
+      "DataTypes": [
+        8
+      ]
+    }
+  ]
+}
