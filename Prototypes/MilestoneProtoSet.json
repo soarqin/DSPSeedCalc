@@ -6,7 +6,7 @@
   "m_Enabled": 1,
   "m_Script": {
     "m_FileID": 1,
-    "m_PathID": 2101
+    "m_PathID": 2219
   },
   "m_Name": "MilestoneProtoSet",
   "TableName": "Milestone",
@@ -195,7 +195,7 @@
       "DefaultDesc": "里程碑未达成描述11",
       "ConditionString": "里程碑达成条件11",
       "JournalPatternId": 11,
-      "DeterminatorName": "MST_ItemProduction",
+      "DeterminatorName": "MST_ItemFirstProduction",
       "DeterminatorParams": [
         6001,
         1,
@@ -214,7 +214,7 @@
       "DefaultDesc": "里程碑未达成描述12",
       "ConditionString": "里程碑达成条件12",
       "JournalPatternId": 12,
-      "DeterminatorName": "MST_ItemProduction",
+      "DeterminatorName": "MST_ItemFirstProduction",
       "DeterminatorParams": [
         6002,
         1,
@@ -233,7 +233,7 @@
       "DefaultDesc": "里程碑未达成描述13",
       "ConditionString": "里程碑达成条件13",
       "JournalPatternId": 13,
-      "DeterminatorName": "MST_ItemProduction",
+      "DeterminatorName": "MST_ItemFirstProduction",
       "DeterminatorParams": [
         6003,
         1,
@@ -252,7 +252,7 @@
       "DefaultDesc": "里程碑未达成描述14",
       "ConditionString": "里程碑达成条件14",
       "JournalPatternId": 14,
-      "DeterminatorName": "MST_ItemProduction",
+      "DeterminatorName": "MST_ItemFirstProduction",
       "DeterminatorParams": [
         6004,
         1,
@@ -271,7 +271,7 @@
       "DefaultDesc": "里程碑未达成描述15",
       "ConditionString": "里程碑达成条件15",
       "JournalPatternId": 15,
-      "DeterminatorName": "MST_ItemProduction",
+      "DeterminatorName": "MST_ItemFirstProduction",
       "DeterminatorParams": [
         6005,
         1,
@@ -290,7 +290,7 @@
       "DefaultDesc": "里程碑未达成描述16",
       "ConditionString": "里程碑达成条件16",
       "JournalPatternId": 16,
-      "DeterminatorName": "MST_ItemProduction",
+      "DeterminatorName": "MST_ItemFirstProduction",
       "DeterminatorParams": [
         6006,
         1,
@@ -309,7 +309,7 @@
       "DefaultDesc": "里程碑未达成描述17",
       "ConditionString": "里程碑达成条件17",
       "JournalPatternId": 17,
-      "DeterminatorName": "MST_ItemProduction",
+      "DeterminatorName": "MST_ItemFirstProduction",
       "DeterminatorParams": [
         1303,
         1,
@@ -328,7 +328,7 @@
       "DefaultDesc": "里程碑未达成描述18",
       "ConditionString": "里程碑达成条件18",
       "JournalPatternId": 18,
-      "DeterminatorName": "MST_ItemProduction",
+      "DeterminatorName": "MST_ItemFirstProduction",
       "DeterminatorParams": [
         1126,
         1,
@@ -347,7 +347,7 @@
       "DefaultDesc": "里程碑未达成描述19",
       "ConditionString": "里程碑达成条件19",
       "JournalPatternId": 19,
-      "DeterminatorName": "MST_ItemProduction",
+      "DeterminatorName": "MST_ItemFirstProduction",
       "DeterminatorParams": [
         1127,
         1,
@@ -366,7 +366,7 @@
       "DefaultDesc": "里程碑未达成描述20",
       "ConditionString": "里程碑达成条件20",
       "JournalPatternId": 20,
-      "DeterminatorName": "MST_ItemProduction",
+      "DeterminatorName": "MST_ItemFirstProduction",
       "DeterminatorParams": [
         1305,
         1,
@@ -385,7 +385,7 @@
       "DefaultDesc": "里程碑未达成描述21",
       "ConditionString": "里程碑达成条件21",
       "JournalPatternId": 21,
-      "DeterminatorName": "MST_ItemProduction",
+      "DeterminatorName": "MST_ItemFirstProduction",
       "DeterminatorParams": [
         1208,
         1,
@@ -404,7 +404,7 @@
       "DefaultDesc": "里程碑未达成描述22",
       "ConditionString": "里程碑达成条件22",
       "JournalPatternId": 22,
-      "DeterminatorName": "MST_ItemProduction",
+      "DeterminatorName": "MST_ItemFirstProduction",
       "DeterminatorParams": [
         1122,
         1,
@@ -659,7 +659,7 @@
       "DefaultDesc": "里程碑未达成描述37",
       "ConditionString": "里程碑达成条件37",
       "JournalPatternId": 37,
-      "DeterminatorName": "MST_ItemProduction",
+      "DeterminatorName": "MST_ItemFirstProduction",
       "DeterminatorParams": [
         1121,
         1,

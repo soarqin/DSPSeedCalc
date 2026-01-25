@@ -6,7 +6,7 @@
   "m_Enabled": 1,
   "m_Script": {
     "m_FileID": 1,
-    "m_PathID": 397
+    "m_PathID": 326
   },
   "m_Name": "GoalProtoSet",
   "TableName": "Goal",

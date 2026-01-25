@@ -6,11 +6,11 @@
   "m_Enabled": 1,
   "m_Script": {
     "m_FileID": 1,
-    "m_PathID": 1892
+    "m_PathID": 1990
   },
   "m_Name": "TechProtoSet",
   "TableName": "Tech",
-  "Signature": "80206AEC2D6DB9EA1806A719D279A2D8",
+  "Signature": "2452C409B78808D067E12A59B5FF0906",
   "dataArray": [
     {
       "Name": "T戴森球计划",
@@ -27,6 +27,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1",
+      "IconTag": "dsqjh",
       "IsLabTech": false,
       "PreTechs": [],
       "PreTechsImplicit": [],
@@ -44,7 +45,9 @@
       "Position": {
         "x": 5.0,
         "y": 1.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T电磁学",
@@ -61,6 +64,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1001",
+      "IconTag": "dcx",
       "IsLabTech": false,
       "PreTechs": [
         1
@@ -100,7 +104,9 @@
       "Position": {
         "x": 9.0,
         "y": 1.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T电磁矩阵",
@@ -117,6 +123,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1002",
+      "IconTag": "tlant",
       "IsLabTech": false,
       "PreTechs": [
         1001
@@ -153,7 +160,9 @@
       "Position": {
         "x": 13.0,
         "y": 1.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T高效电浆控制",
@@ -170,6 +179,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1101",
+      "IconTag": "gxdjkz",
       "IsLabTech": true,
       "PreTechs": [
         1001
@@ -201,7 +211,9 @@
       "Position": {
         "x": 13.0,
         "y": -27.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T等离子萃取精炼",
@@ -218,6 +230,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1102",
+      "IconTag": "cqjl",
       "IsLabTech": true,
       "PreTechs": [
         1120,
@@ -246,7 +259,9 @@
       "Position": {
         "x": 17.0,
         "y": -27.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "TX射线裂解",
@@ -263,6 +278,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1103",
+      "IconTag": "txsxlj",
       "IsLabTech": true,
       "PreTechs": [
         1121,
@@ -291,7 +307,9 @@
       "Position": {
         "x": 25.0,
         "y": -27.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T重整精炼",
@@ -308,6 +326,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1104",
+      "IconTag": "tczjl",
       "IsLabTech": true,
       "PreTechs": [
         1103
@@ -335,7 +354,58 @@
       "Position": {
         "x": 29.0,
         "y": -27.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
+    },
+    {
+      "Name": "T电弧激光",
+      "ID": 1105,
+      "SID": "",
+      "Desc": "电弧激光描述",
+      "Conclusion": "电弧激光结果",
+      "Published": true,
+      "IsHiddenTech": false,
+      "IsObsolete": false,
+      "PreItem": [],
+      "Level": 0,
+      "MaxLevel": 0,
+      "LevelCoef1": 0,
+      "LevelCoef2": 0,
+      "IconPath": "Icons/Tech/1105",
+      "IconTag": "tqxxb",
+      "IsLabTech": true,
+      "PreTechs": [
+        1101
+      ],
+      "PreTechsImplicit": [],
+      "PreTechsMax": false,
+      "Items": [
+        6001
+      ],
+      "ItemPoints": [
+        20
+      ],
+      "PropertyOverrideItems": [],
+      "PropertyItemCounts": [],
+      "HashNeeded": 18000,
+      "UnlockRecipes": [
+        161
+      ],
+      "UnlockFunctions": [],
+      "UnlockValues": [],
+      "AddItems": [
+        2401
+      ],
+      "AddItemCounts": [
+        1
+      ],
+      "Position": {
+        "x": 17.0,
+        "y": -31.0
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T能量矩阵",
@@ -352,6 +422,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1111",
+      "IconTag": "thongt",
       "IsLabTech": true,
       "PreTechs": [
         1102
@@ -377,7 +448,9 @@
       "Position": {
         "x": 21.0,
         "y": -31.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T氢燃料棒",
@@ -394,6 +467,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1112",
+      "IconTag": "tqrlb",
       "IsLabTech": true,
       "PreTechs": [
         1111
@@ -419,7 +493,9 @@
       "Position": {
         "x": 25.0,
         "y": -31.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T推进器",
@@ -436,6 +512,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1113",
+      "IconTag": "ttjq",
       "IsLabTech": true,
       "PreTechs": [
         1112
@@ -461,7 +538,9 @@
       "Position": {
         "x": 29.0,
         "y": -31.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T加力推进器",
@@ -478,6 +557,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1114",
+      "IconTag": "tjltjq",
       "IsLabTech": true,
       "PreTechs": [
         1113
@@ -503,7 +583,9 @@
       "Position": {
         "x": 33.0,
         "y": -31.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T流体储存封装",
@@ -520,6 +602,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1120",
+      "IconTag": "ltccfz",
       "IsLabTech": true,
       "PreTechs": [
         1001
@@ -550,7 +633,9 @@
       "Position": {
         "x": 13.0,
         "y": -23.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T基础化工",
@@ -567,6 +652,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1121",
+      "IconTag": "jchg",
       "IsLabTech": true,
       "PreTechs": [
         1120,
@@ -595,7 +681,9 @@
       "Position": {
         "x": 21.0,
         "y": -23.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T高分子化工",
@@ -612,6 +700,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1122",
+      "IconTag": "gfzhg",
       "IsLabTech": true,
       "PreTechs": [
         1121
@@ -640,7 +729,9 @@
       "Position": {
         "x": 25.0,
         "y": -23.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T高强度晶体",
@@ -657,6 +748,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1123",
+      "IconTag": "gqdjt",
       "IsLabTech": true,
       "PreTechs": [
         1122
@@ -684,7 +776,9 @@
       "Position": {
         "x": 29.0,
         "y": -23.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T结构矩阵",
@@ -701,6 +795,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1124",
+      "IconTag": "thuant",
       "IsLabTech": true,
       "PreTechs": [
         1123
@@ -728,7 +823,9 @@
       "Position": {
         "x": 33.0,
         "y": -23.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T卡西米尔晶体",
@@ -745,6 +842,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1125",
+      "IconTag": "tkxme",
       "IsLabTech": true,
       "PreTechs": [
         1124
@@ -775,7 +873,9 @@
       "Position": {
         "x": 37.0,
         "y": -23.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T高强度玻璃",
@@ -792,6 +892,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1126",
+      "IconTag": "gqdbl",
       "IsLabTech": true,
       "PreTechs": [
         1132
@@ -819,7 +920,9 @@
       "Position": {
         "x": 37.0,
         "y": -19.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T应用型超导体",
@@ -836,6 +939,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1131",
+      "IconTag": "yyxcdt",
       "IsLabTech": true,
       "PreTechs": [
         1121
@@ -862,7 +966,9 @@
       "Position": {
         "x": 25.0,
         "y": -19.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T高强度材料",
@@ -879,6 +985,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1132",
+      "IconTag": "gqdcl",
       "IsLabTech": true,
       "PreTechs": [
         1131
@@ -907,7 +1014,9 @@
       "Position": {
         "x": 33.0,
         "y": -19.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T粒子可控技术",
@@ -924,6 +1033,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1133",
+      "IconTag": "lzkk",
       "IsLabTech": true,
       "PreTechs": [
         1132
@@ -954,7 +1064,9 @@
       "Position": {
         "x": 37.0,
         "y": -15.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T重氢分馏",
@@ -971,6 +1083,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1134",
+      "IconTag": "tzqfl",
       "IsLabTech": true,
       "PreTechs": [
         1412,
@@ -1000,7 +1113,9 @@
       "Position": {
         "x": 21.0,
         "y": -15.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T波函数干扰",
@@ -1017,6 +1132,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1141",
+      "IconTag": "bhsgr",
       "IsLabTech": true,
       "PreTechs": [
         1126,
@@ -1047,7 +1163,9 @@
       "Position": {
         "x": 41.0,
         "y": -23.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T微型粒子对撞机",
@@ -1064,6 +1182,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1142",
+      "IconTag": "tlzdzj",
       "IsLabTech": true,
       "PreTechs": [
         1124
@@ -1094,7 +1213,9 @@
       "Position": {
         "x": 37.0,
         "y": -31.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T奇异物质",
@@ -1111,6 +1232,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1143",
+      "IconTag": "tqywz",
       "IsLabTech": true,
       "PreTechs": [
         1142
@@ -1140,7 +1262,9 @@
       "Position": {
         "x": 41.0,
         "y": -31.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T人造恒星",
@@ -1157,6 +1281,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1144",
+      "IconTag": "txty",
       "IsLabTech": true,
       "PreTechs": [
         1145
@@ -1190,7 +1315,9 @@
       "Position": {
         "x": 61.0,
         "y": -3.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T可控湮灭反应",
@@ -1207,6 +1334,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1145",
+      "IconTag": "kkym",
       "IsLabTech": true,
       "PreTechs": [
         1506
@@ -1235,7 +1363,9 @@
       "Position": {
         "x": 57.0,
         "y": -3.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T增产剂 Mk.I",
@@ -1252,6 +1382,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1151",
+      "IconTag": "tzcj1",
       "IsLabTech": true,
       "PreTechs": [
         1311,
@@ -1279,7 +1410,9 @@
       "Position": {
         "x": 21.0,
         "y": -11.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T增产剂 Mk.II",
@@ -1296,6 +1429,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1152",
+      "IconTag": "tzcj2",
       "IsLabTech": true,
       "PreTechs": [
         1302,
@@ -1324,7 +1458,9 @@
       "Position": {
         "x": 29.0,
         "y": -11.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T增产剂 Mk.III",
@@ -1341,6 +1477,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1153",
+      "IconTag": "tzcj3",
       "IsLabTech": true,
       "PreTechs": [
         1152,
@@ -1371,7 +1508,9 @@
       "Position": {
         "x": 37.0,
         "y": -11.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T基础制造工艺",
@@ -1388,6 +1527,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1201",
+      "IconTag": "jczz",
       "IsLabTech": false,
       "PreTechs": [
         1001
@@ -1423,7 +1563,9 @@
       "Position": {
         "x": 13.0,
         "y": -3.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T高速制造工艺",
@@ -1440,6 +1582,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1202",
+      "IconTag": "gszz",
       "IsLabTech": true,
       "PreTechs": [
         1201,
@@ -1472,7 +1615,9 @@
       "Position": {
         "x": 29.0,
         "y": -3.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T量子打印技术",
@@ -1489,6 +1634,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1203",
+      "IconTag": "lzdy",
       "IsLabTech": true,
       "PreTechs": [
         1202,
@@ -1525,7 +1671,9 @@
       "Position": {
         "x": 49.0,
         "y": -3.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T处理器",
@@ -1542,6 +1690,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1302",
+      "IconTag": "tclq",
       "IsLabTech": true,
       "PreTechs": [
         1311
@@ -1567,7 +1716,9 @@
       "Position": {
         "x": 25.0,
         "y": -7.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T量子芯片",
@@ -1584,6 +1735,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1303",
+      "IconTag": "tlzxp",
       "IsLabTech": true,
       "PreTechs": [
         1312,
@@ -1614,7 +1766,9 @@
       "Position": {
         "x": 45.0,
         "y": -19.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T大型采矿机",
@@ -1631,6 +1785,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1304",
+      "IconTag": "gzjsck",
       "IsLabTech": true,
       "PreTechs": [
         1303
@@ -1664,7 +1819,9 @@
       "Position": {
         "x": 49.0,
         "y": -19.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T高级化工",
@@ -1681,6 +1838,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1305",
+      "IconTag": "lzjc",
       "IsLabTech": true,
       "PreTechs": [
         1303,
@@ -1713,7 +1871,9 @@
       "Position": {
         "x": 49.0,
         "y": -31.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T半导体材料",
@@ -1730,6 +1890,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1311",
+      "IconTag": "bdtcl",
       "IsLabTech": true,
       "PreTechs": [
         1201
@@ -1755,7 +1916,9 @@
       "Position": {
         "x": 17.0,
         "y": -7.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T信息矩阵",
@@ -1772,6 +1935,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1312",
+      "IconTag": "tzit",
       "IsLabTech": true,
       "PreTechs": [
         1302,
@@ -1800,7 +1964,9 @@
       "Position": {
         "x": 41.0,
         "y": -7.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T自动化冶金",
@@ -1817,6 +1983,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1401",
+      "IconTag": "zdhyj",
       "IsLabTech": false,
       "PreTechs": [
         1001
@@ -1853,7 +2020,9 @@
       "Position": {
         "x": 13.0,
         "y": 5.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T冶炼提纯",
@@ -1870,6 +2039,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1402",
+      "IconTag": "yltc",
       "IsLabTech": true,
       "PreTechs": [
         1401
@@ -1897,7 +2067,9 @@
       "Position": {
         "x": 17.0,
         "y": 5.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T晶体冶炼",
@@ -1914,6 +2086,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1403",
+      "IconTag": "jtyl",
       "IsLabTech": true,
       "PreTechs": [
         1402
@@ -1943,7 +2116,9 @@
       "Position": {
         "x": 21.0,
         "y": 5.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T钢材冶炼",
@@ -1960,6 +2135,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1411",
+      "IconTag": "gcyl",
       "IsLabTech": true,
       "PreTechs": [
         1401
@@ -1979,17 +2155,21 @@
         63
       ],
       "UnlockFunctions": [
+        37,
         37
       ],
       "UnlockValues": [
-        2203.0
+        2203.0,
+        2401.0
       ],
       "AddItems": [],
       "AddItemCounts": [],
       "Position": {
         "x": 17.0,
         "y": 13.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T火力发电",
@@ -2006,6 +2186,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1412",
+      "IconTag": "hlfd",
       "IsLabTech": true,
       "PreTechs": [
         1201
@@ -2035,7 +2216,9 @@
       "Position": {
         "x": 17.0,
         "y": -15.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T钛矿冶炼",
@@ -2052,6 +2235,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1413",
+      "IconTag": "tkyl",
       "IsLabTech": true,
       "PreTechs": [
         1411
@@ -2079,7 +2263,9 @@
       "Position": {
         "x": 25.0,
         "y": 13.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T高强度钛合金",
@@ -2096,6 +2282,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1414",
+      "IconTag": "gqdthj",
       "IsLabTech": true,
       "PreTechs": [
         1413
@@ -2125,7 +2312,9 @@
       "Position": {
         "x": 33.0,
         "y": 13.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T移山填海工程",
@@ -2142,6 +2331,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1415",
+      "IconTag": "ysthgc",
       "IsLabTech": true,
       "PreTechs": [
         1411
@@ -2167,7 +2357,9 @@
       "Position": {
         "x": 21.0,
         "y": 9.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T微型核聚变发电",
@@ -2184,6 +2376,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1416",
+      "IconTag": "hjbfd",
       "IsLabTech": true,
       "PreTechs": [
         1134
@@ -2216,7 +2409,9 @@
       "Position": {
         "x": 33.0,
         "y": -15.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T位面冶金",
@@ -2233,6 +2428,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1417",
+      "IconTag": "wmyj",
       "IsLabTech": true,
       "PreTechs": [
         1141
@@ -2266,7 +2462,9 @@
       "Position": {
         "x": 45.0,
         "y": -23.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T太阳能收集",
@@ -2283,6 +2481,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1501",
+      "IconTag": "tynsj",
       "IsLabTech": true,
       "PreTechs": [
         1402,
@@ -2314,7 +2513,9 @@
       "Position": {
         "x": 21.0,
         "y": 1.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T光子变频",
@@ -2331,6 +2532,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1502",
+      "IconTag": "gzbp",
       "IsLabTech": true,
       "PreTechs": [
         1501
@@ -2359,7 +2561,9 @@
       "Position": {
         "x": 25.0,
         "y": 1.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T太阳帆轨道系统",
@@ -2376,6 +2580,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1503",
+      "IconTag": "tyfgd",
       "IsLabTech": true,
       "PreTechs": [
         1502
@@ -2406,7 +2611,9 @@
       "Position": {
         "x": 29.0,
         "y": 1.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T射线接收站",
@@ -2423,6 +2630,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1504",
+      "IconTag": "tsxjsz",
       "IsLabTech": true,
       "PreTechs": [
         1503
@@ -2450,7 +2658,9 @@
       "Position": {
         "x": 33.0,
         "y": 1.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T行星电离层利用",
@@ -2467,6 +2677,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1505",
+      "IconTag": "dlcly",
       "IsLabTech": true,
       "PreTechs": [
         1504
@@ -2502,7 +2713,9 @@
       "Position": {
         "x": 49.0,
         "y": 1.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T狄拉克逆变机制",
@@ -2519,6 +2732,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1506",
+      "IconTag": "dlknb",
       "IsLabTech": true,
       "PreTechs": [
         1505
@@ -2552,7 +2766,9 @@
       "Position": {
         "x": 53.0,
         "y": 1.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T宇宙矩阵",
@@ -2569,6 +2785,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1507",
+      "IconTag": "tbait",
       "IsLabTech": true,
       "PreTechs": [
         1506
@@ -2602,7 +2819,9 @@
       "Position": {
         "x": 65.0,
         "y": 1.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T任务完成",
@@ -2619,6 +2838,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1508",
+      "IconTag": "rwwc",
       "IsLabTech": true,
       "PreTechs": [
         1507
@@ -2646,7 +2866,9 @@
       "Position": {
         "x": 69.0,
         "y": 1.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T能量储存",
@@ -2663,6 +2885,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1511",
+      "IconTag": "nlcc",
       "IsLabTech": true,
       "PreTechs": [
         1403,
@@ -2693,7 +2916,9 @@
       "Position": {
         "x": 25.0,
         "y": 9.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T星际电力运输",
@@ -2710,6 +2935,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1512",
+      "IconTag": "xjdlys",
       "IsLabTech": true,
       "PreTechs": [
         1414,
@@ -2740,7 +2966,9 @@
       "Position": {
         "x": 37.0,
         "y": 9.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T地热开采",
@@ -2757,6 +2985,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1513",
+      "IconTag": "drkc",
       "IsLabTech": true,
       "PreTechs": [
         1502
@@ -2786,7 +3015,9 @@
       "Position": {
         "x": 29.0,
         "y": 5.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T高强度轻质结构",
@@ -2803,6 +3034,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1521",
+      "IconTag": "qzjg",
       "IsLabTech": true,
       "PreTechs": [
         1503
@@ -2833,7 +3065,9 @@
       "Position": {
         "x": 33.0,
         "y": 5.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T垂直发射井",
@@ -2850,6 +3084,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1522",
+      "IconTag": "tczfsj",
       "IsLabTech": true,
       "PreTechs": [
         1521
@@ -2884,7 +3119,9 @@
       "Position": {
         "x": 45.0,
         "y": 5.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T戴森球应力系统",
@@ -2901,6 +3138,7 @@
       "LevelCoef1": 180000,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1523",
+      "IconTag": "dsqyl",
       "IsLabTech": true,
       "PreTechs": [
         1522
@@ -2936,7 +3174,9 @@
       "Position": {
         "x": 49.0,
         "y": 5.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T基础物流系统",
@@ -2953,6 +3193,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1601",
+      "IconTag": "jcwl",
       "IsLabTech": false,
       "PreTechs": [
         1001
@@ -2992,7 +3233,9 @@
       "Position": {
         "x": 13.0,
         "y": 21.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T改良物流系统",
@@ -3009,6 +3252,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1602",
+      "IconTag": "glwl",
       "IsLabTech": true,
       "PreTechs": [
         1601
@@ -3044,7 +3288,9 @@
       "Position": {
         "x": 21.0,
         "y": 21.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T高效物流系统",
@@ -3061,6 +3307,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1603",
+      "IconTag": "gxwl",
       "IsLabTech": true,
       "PreTechs": [
         1602
@@ -3092,7 +3339,9 @@
       "Position": {
         "x": 25.0,
         "y": 21.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T行星物流系统",
@@ -3109,6 +3358,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1604",
+      "IconTag": "xxwl",
       "IsLabTech": true,
       "PreTechs": [
         1603
@@ -3141,7 +3391,9 @@
       "Position": {
         "x": 29.0,
         "y": 21.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T星际物流系统",
@@ -3158,6 +3410,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1605",
+      "IconTag": "xjwl",
       "IsLabTech": true,
       "PreTechs": [
         1604,
@@ -3191,7 +3444,9 @@
       "Position": {
         "x": 37.0,
         "y": 21.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T气态行星开采",
@@ -3208,6 +3463,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1606",
+      "IconTag": "qtxxkc",
       "IsLabTech": true,
       "PreTechs": [
         1605,
@@ -3238,7 +3494,9 @@
       "Position": {
         "x": 41.0,
         "y": 13.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T集装物流系统",
@@ -3255,6 +3513,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1607",
+      "IconTag": "jzwl",
       "IsLabTech": true,
       "PreTechs": [
         1603
@@ -3287,7 +3546,9 @@
       "Position": {
         "x": 33.0,
         "y": 17.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T配送物流系统",
@@ -3304,6 +3565,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1608",
+      "IconTag": "pswl",
       "IsLabTech": true,
       "PreTechs": [
         1602
@@ -3338,7 +3600,9 @@
       "Position": {
         "x": 25.0,
         "y": 17.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T电磁驱动",
@@ -3355,6 +3619,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1701",
+      "IconTag": "thmd",
       "IsLabTech": true,
       "PreTechs": [
         1001
@@ -3380,7 +3645,9 @@
       "Position": {
         "x": 13.0,
         "y": -35.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T磁悬浮技术",
@@ -3397,6 +3664,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1702",
+      "IconTag": "tlvmd",
       "IsLabTech": true,
       "PreTechs": [
         1701
@@ -3424,7 +3692,9 @@
       "Position": {
         "x": 21.0,
         "y": -35.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T粒子磁力阱",
@@ -3441,6 +3711,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1703",
+      "IconTag": "lzclj",
       "IsLabTech": true,
       "PreTechs": [
         1702
@@ -3469,7 +3740,9 @@
       "Position": {
         "x": 29.0,
         "y": -35.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T引力波折射",
@@ -3486,6 +3759,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1704",
+      "IconTag": "ylbzs",
       "IsLabTech": true,
       "PreTechs": [
         1143,
@@ -3517,7 +3791,9 @@
       "Position": {
         "x": 45.0,
         "y": -35.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T引力矩阵",
@@ -3534,6 +3810,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1705",
+      "IconTag": "tlvt",
       "IsLabTech": true,
       "PreTechs": [
         1303,
@@ -3565,7 +3842,9 @@
       "Position": {
         "x": 49.0,
         "y": -35.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T超级磁场发生器",
@@ -3582,6 +3861,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1711",
+      "IconTag": "tlanmd",
       "IsLabTech": true,
       "PreTechs": [
         1702
@@ -3613,7 +3893,9 @@
       "Position": {
         "x": 25.0,
         "y": -39.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T卫星配电系统",
@@ -3630,6 +3912,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1712",
+      "IconTag": "wxpd",
       "IsLabTech": true,
       "PreTechs": [
         1711
@@ -3661,7 +3944,9 @@
       "Position": {
         "x": 37.0,
         "y": -39.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T武器系统",
@@ -3678,6 +3963,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1801",
+      "IconTag": "wqxt",
       "IsLabTech": true,
       "PreTechs": [
         1001
@@ -3710,7 +3996,9 @@
       "Position": {
         "x": 13.0,
         "y": -47.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T燃烧单元",
@@ -3727,6 +4015,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1802",
+      "IconTag": "trsdy",
       "IsLabTech": true,
       "PreTechs": [
         1401
@@ -3752,7 +4041,9 @@
       "Position": {
         "x": 17.0,
         "y": 9.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T爆破单元",
@@ -3769,6 +4060,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1803",
+      "IconTag": "tbpdy",
       "IsLabTech": true,
       "PreTechs": [
         1123
@@ -3796,7 +4088,9 @@
       "Position": {
         "x": 33.0,
         "y": -27.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T晶石爆破单元",
@@ -3813,6 +4107,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1804",
+      "IconTag": "tjsbp",
       "IsLabTech": true,
       "PreTechs": [
         1125
@@ -3844,7 +4139,9 @@
       "Position": {
         "x": 41.0,
         "y": -27.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T动力引擎",
@@ -3861,6 +4158,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1805",
+      "IconTag": "tdlyq",
       "IsLabTech": true,
       "PreTechs": [
         1001
@@ -3886,7 +4184,9 @@
       "Position": {
         "x": 13.0,
         "y": -43.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T导弹防御塔",
@@ -3903,6 +4203,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1806",
+      "IconTag": "tdd",
       "IsLabTech": true,
       "PreTechs": [
         1805,
@@ -3932,7 +4233,9 @@
       "Position": {
         "x": 21.0,
         "y": -47.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T聚爆加农炮",
@@ -3949,6 +4252,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1807",
+      "IconTag": "tjnp",
       "IsLabTech": true,
       "PreTechs": [
         1806
@@ -3979,7 +4283,9 @@
       "Position": {
         "x": 25.0,
         "y": -47.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T信号塔",
@@ -3996,6 +4302,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1808",
+      "IconTag": "txht",
       "IsLabTech": true,
       "PreTechs": [
         1806
@@ -4025,7 +4332,9 @@
       "Position": {
         "x": 25.0,
         "y": -43.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T行星防御系统",
@@ -4042,6 +4351,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1809",
+      "IconTag": "xxfy",
       "IsLabTech": true,
       "PreTechs": [
         1807
@@ -4072,7 +4382,9 @@
       "Position": {
         "x": 33.0,
         "y": -47.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T干扰塔",
@@ -4089,6 +4401,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1810",
+      "IconTag": "tgrt",
       "IsLabTech": true,
       "PreTechs": [
         1806
@@ -4119,7 +4432,9 @@
       "Position": {
         "x": 25.0,
         "y": -51.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T磁化电浆炮",
@@ -4136,6 +4451,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1811",
+      "IconTag": "tdjp",
       "IsLabTech": true,
       "PreTechs": [
         1809
@@ -4171,7 +4487,9 @@
       "Position": {
         "x": 41.0,
         "y": -47.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T钛化弹箱",
@@ -4188,6 +4506,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1812",
+      "IconTag": "tzd2",
       "IsLabTech": true,
       "PreTechs": [
         1801
@@ -4217,7 +4536,9 @@
       "Position": {
         "x": 29.0,
         "y": -55.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T超合金弹箱",
@@ -4234,6 +4555,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1813",
+      "IconTag": "tzd3",
       "IsLabTech": true,
       "PreTechs": [
         1812
@@ -4265,7 +4587,9 @@
       "Position": {
         "x": 33.0,
         "y": -55.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T高爆炮弹组",
@@ -4282,6 +4606,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1814",
+      "IconTag": "tpd2",
       "IsLabTech": true,
       "PreTechs": [
         1807
@@ -4311,7 +4636,9 @@
       "Position": {
         "x": 33.0,
         "y": -43.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T超音速导弹组",
@@ -4328,6 +4655,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1815",
+      "IconTag": "tdd2",
       "IsLabTech": true,
       "PreTechs": [
         1814
@@ -4359,7 +4687,9 @@
       "Position": {
         "x": 37.0,
         "y": -43.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T晶石炮弹组",
@@ -4376,6 +4706,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1816",
+      "IconTag": "tpd3",
       "IsLabTech": true,
       "PreTechs": [
         1815
@@ -4409,7 +4740,9 @@
       "Position": {
         "x": 41.0,
         "y": -43.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T引力导弹组",
@@ -4426,6 +4759,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1817",
+      "IconTag": "tdd3",
       "IsLabTech": true,
       "PreTechs": [
         1816
@@ -4461,7 +4795,9 @@
       "Position": {
         "x": 49.0,
         "y": -43.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T反物质胶囊",
@@ -4478,6 +4814,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1818",
+      "IconTag": "tfwzjn",
       "IsLabTech": true,
       "PreTechs": [
         1145,
@@ -4512,7 +4849,9 @@
       "Position": {
         "x": 61.0,
         "y": -47.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T地面战斗机-E型",
@@ -4529,6 +4868,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1819",
+      "IconTag": "tzdje",
       "IsLabTech": true,
       "PreTechs": [
         1826
@@ -4562,7 +4902,9 @@
       "Position": {
         "x": 21.0,
         "y": -59.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T地面战斗机-A型",
@@ -4579,6 +4921,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1820",
+      "IconTag": "tzdja",
       "IsLabTech": true,
       "PreTechs": [
         1819
@@ -4608,7 +4951,9 @@
       "Position": {
         "x": 25.0,
         "y": -59.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T地面战斗机-F型",
@@ -4625,6 +4970,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1821",
+      "IconTag": "tzdjf",
       "IsLabTech": true,
       "PreTechs": [
         1819
@@ -4656,7 +5002,9 @@
       "Position": {
         "x": 33.0,
         "y": -63.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T太空战斗机-A型",
@@ -4673,6 +5021,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1822",
+      "IconTag": "thwj",
       "IsLabTech": true,
       "PreTechs": [
         1809,
@@ -4711,7 +5060,9 @@
       "Position": {
         "x": 41.0,
         "y": -59.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T太空战斗机-F型",
@@ -4728,6 +5079,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1823",
+      "IconTag": "tqzj",
       "IsLabTech": true,
       "PreTechs": [
         1822,
@@ -4762,7 +5114,9 @@
       "Position": {
         "x": 49.0,
         "y": -63.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T电磁胶囊II",
@@ -4779,6 +5133,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1824",
+      "IconTag": "tgrjn2",
       "IsLabTech": true,
       "PreTechs": [
         1810
@@ -4808,7 +5163,9 @@
       "Position": {
         "x": 41.0,
         "y": -51.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T战场分析基站",
@@ -4825,6 +5182,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1826",
+      "IconTag": "tzcfx",
       "IsLabTech": true,
       "PreTechs": [
         1801,
@@ -4851,7 +5209,9 @@
       "Position": {
         "x": 17.0,
         "y": -59.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T数字模拟计算",
@@ -4870,6 +5230,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1901",
+      "IconTag": "szmnjs",
       "IsLabTech": false,
       "PreTechs": [
         1312
@@ -4895,7 +5256,9 @@
       "Position": {
         "x": 45.0,
         "y": -7.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T物质重组技术",
@@ -4914,6 +5277,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1902",
+      "IconTag": "wzcz",
       "IsLabTech": false,
       "PreTechs": [
         1203
@@ -4939,7 +5303,9 @@
       "Position": {
         "x": 53.0,
         "y": -3.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T负熵递归",
@@ -4958,6 +5324,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1903",
+      "IconTag": "fsdg",
       "IsLabTech": false,
       "PreTechs": [
         1417
@@ -4983,7 +5350,9 @@
       "Position": {
         "x": 49.0,
         "y": -23.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T金色燃料棒",
@@ -5002,6 +5371,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/1904",
+      "IconTag": "thuanb",
       "IsLabTech": false,
       "PreTechs": [
         1145
@@ -5027,7 +5397,9 @@
       "Position": {
         "x": 61.0,
         "y": -7.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T机甲核心",
@@ -5044,6 +5416,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2101",
+      "IconTag": "jjhx1",
       "IsLabTech": false,
       "PreTechs": [],
       "PreTechsImplicit": [],
@@ -5079,7 +5452,9 @@
       "Position": {
         "x": 9.0,
         "y": 29.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T机甲核心",
@@ -5096,6 +5471,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2102",
+      "IconTag": "jjhx2",
       "IsLabTech": true,
       "PreTechs": [
         2101
@@ -5131,7 +5507,9 @@
       "Position": {
         "x": 13.0,
         "y": 29.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T机甲核心",
@@ -5148,6 +5526,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2103",
+      "IconTag": "jjhx3",
       "IsLabTech": true,
       "PreTechs": [
         2102
@@ -5185,7 +5564,9 @@
       "Position": {
         "x": 17.0,
         "y": 29.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T机甲核心",
@@ -5202,6 +5583,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2104",
+      "IconTag": "jjhx4",
       "IsLabTech": true,
       "PreTechs": [
         2103
@@ -5241,7 +5623,9 @@
       "Position": {
         "x": 21.0,
         "y": 29.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T机甲核心",
@@ -5258,6 +5642,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2105",
+      "IconTag": "jjhx5",
       "IsLabTech": true,
       "PreTechs": [
         2104
@@ -5299,7 +5684,9 @@
       "Position": {
         "x": 25.0,
         "y": 29.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T机甲核心",
@@ -5316,6 +5703,7 @@
       "LevelCoef1": -8100000,
       "LevelCoef2": 900000,
       "IconPath": "Icons/Tech/2106",
+      "IconTag": "jjhx6",
       "IsLabTech": true,
       "PreTechs": [
         2105
@@ -5347,7 +5735,9 @@
       "Position": {
         "x": 29.0,
         "y": 29.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T机械骨骼",
@@ -5364,6 +5754,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2201",
+      "IconTag": "jxgg1",
       "IsLabTech": false,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -5395,7 +5786,9 @@
       "Position": {
         "x": 9.0,
         "y": 25.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T机械骨骼",
@@ -5412,6 +5805,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2202",
+      "IconTag": "jxgg2",
       "IsLabTech": true,
       "PreTechs": [
         2201
@@ -5443,7 +5837,9 @@
       "Position": {
         "x": 13.0,
         "y": 25.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T机械骨骼",
@@ -5460,6 +5856,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2203",
+      "IconTag": "jxgg3",
       "IsLabTech": true,
       "PreTechs": [
         2202
@@ -5491,7 +5888,9 @@
       "Position": {
         "x": 17.0,
         "y": 25.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T机械骨骼",
@@ -5508,6 +5907,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2204",
+      "IconTag": "jxgg4",
       "IsLabTech": true,
       "PreTechs": [
         2203
@@ -5541,7 +5941,9 @@
       "Position": {
         "x": 21.0,
         "y": 25.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T机械骨骼",
@@ -5558,6 +5960,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2205",
+      "IconTag": "jxgg5",
       "IsLabTech": true,
       "PreTechs": [
         2204
@@ -5591,7 +5994,9 @@
       "Position": {
         "x": 25.0,
         "y": 25.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T机械骨骼",
@@ -5608,6 +6013,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2206",
+      "IconTag": "jxgg6",
       "IsLabTech": true,
       "PreTechs": [
         2205
@@ -5643,7 +6049,9 @@
       "Position": {
         "x": 29.0,
         "y": 25.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T机械骨骼",
@@ -5660,6 +6068,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2207",
+      "IconTag": "jxgg7",
       "IsLabTech": true,
       "PreTechs": [
         2206
@@ -5695,7 +6104,9 @@
       "Position": {
         "x": 33.0,
         "y": 25.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T机械骨骼",
@@ -5712,6 +6123,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2208",
+      "IconTag": "jxgg8",
       "IsLabTech": true,
       "PreTechs": [
         2207
@@ -5749,7 +6161,9 @@
       "Position": {
         "x": 37.0,
         "y": 25.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T机舱容量",
@@ -5766,6 +6180,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2301",
+      "IconTag": "jcrl1",
       "IsLabTech": false,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -5799,7 +6214,9 @@
       "Position": {
         "x": 9.0,
         "y": 21.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T机舱容量",
@@ -5816,6 +6233,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2302",
+      "IconTag": "jcrl2",
       "IsLabTech": true,
       "PreTechs": [
         2301
@@ -5847,7 +6265,9 @@
       "Position": {
         "x": 13.0,
         "y": 21.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T机舱容量",
@@ -5864,6 +6284,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2303",
+      "IconTag": "jcrl3",
       "IsLabTech": true,
       "PreTechs": [
         2302
@@ -5899,7 +6320,9 @@
       "Position": {
         "x": 17.0,
         "y": 21.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T机舱容量",
@@ -5916,6 +6339,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2304",
+      "IconTag": "jcrl4",
       "IsLabTech": true,
       "PreTechs": [
         2303
@@ -5953,7 +6377,9 @@
       "Position": {
         "x": 21.0,
         "y": 21.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T机舱容量",
@@ -5970,6 +6396,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2305",
+      "IconTag": "jcrl5",
       "IsLabTech": true,
       "PreTechs": [
         2304
@@ -6005,7 +6432,9 @@
       "Position": {
         "x": 25.0,
         "y": 21.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T机舱容量",
@@ -6022,6 +6451,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2306",
+      "IconTag": "jcrl6",
       "IsLabTech": true,
       "PreTechs": [
         2305
@@ -6061,7 +6491,9 @@
       "Position": {
         "x": 29.0,
         "y": 21.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T机舱容量",
@@ -6078,6 +6510,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2307",
+      "IconTag": "jcrl7",
       "IsLabTech": true,
       "PreTechs": [
         2306
@@ -6107,7 +6540,9 @@
       "Position": {
         "x": 33.0,
         "y": 21.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T通讯控制",
@@ -6124,6 +6559,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2401",
+      "IconTag": "txkz1",
       "IsLabTech": true,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -6151,7 +6587,9 @@
       "Position": {
         "x": 9.0,
         "y": 17.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T通讯控制",
@@ -6168,6 +6606,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2402",
+      "IconTag": "txkz2",
       "IsLabTech": true,
       "PreTechs": [
         2401
@@ -6199,7 +6638,9 @@
       "Position": {
         "x": 13.0,
         "y": 17.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T通讯控制",
@@ -6216,6 +6657,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2403",
+      "IconTag": "txkz3",
       "IsLabTech": true,
       "PreTechs": [
         2402
@@ -6247,7 +6689,9 @@
       "Position": {
         "x": 17.0,
         "y": 17.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T通讯控制",
@@ -6264,6 +6708,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2404",
+      "IconTag": "txkz4",
       "IsLabTech": true,
       "PreTechs": [
         2403
@@ -6297,7 +6742,9 @@
       "Position": {
         "x": 21.0,
         "y": 17.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T通讯控制",
@@ -6314,6 +6761,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2405",
+      "IconTag": "txkz5",
       "IsLabTech": true,
       "PreTechs": [
         2404
@@ -6349,7 +6797,9 @@
       "Position": {
         "x": 25.0,
         "y": 17.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T通讯控制",
@@ -6366,6 +6816,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2406",
+      "IconTag": "txkz6",
       "IsLabTech": true,
       "PreTechs": [
         2405
@@ -6403,7 +6854,9 @@
       "Position": {
         "x": 29.0,
         "y": 17.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T通讯控制",
@@ -6416,10 +6869,11 @@
       "IsObsolete": false,
       "PreItem": [],
       "Level": 7,
-      "MaxLevel": 10000,
+      "MaxLevel": 88,
       "LevelCoef1": -21600000,
       "LevelCoef2": 1800000,
       "IconPath": "Icons/Tech/2407",
+      "IconTag": "txkz7",
       "IsLabTech": true,
       "PreTechs": [
         2406
@@ -6449,7 +6903,9 @@
       "Position": {
         "x": 33.0,
         "y": 17.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T能量回路",
@@ -6466,6 +6922,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2501",
+      "IconTag": "nlhl1",
       "IsLabTech": false,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -6501,7 +6958,9 @@
       "Position": {
         "x": 9.0,
         "y": 5.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T能量回路",
@@ -6518,6 +6977,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2502",
+      "IconTag": "nlhl2",
       "IsLabTech": true,
       "PreTechs": [
         2501
@@ -6549,7 +7009,9 @@
       "Position": {
         "x": 13.0,
         "y": 5.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T能量回路",
@@ -6566,6 +7028,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2503",
+      "IconTag": "nlhl3",
       "IsLabTech": true,
       "PreTechs": [
         2502
@@ -6599,7 +7062,9 @@
       "Position": {
         "x": 17.0,
         "y": 5.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T能量回路",
@@ -6616,6 +7081,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2504",
+      "IconTag": "nlhl4",
       "IsLabTech": true,
       "PreTechs": [
         2503
@@ -6649,7 +7115,9 @@
       "Position": {
         "x": 21.0,
         "y": 5.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T能量回路",
@@ -6666,6 +7134,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2505",
+      "IconTag": "nlhl5",
       "IsLabTech": true,
       "PreTechs": [
         2504
@@ -6703,7 +7172,9 @@
       "Position": {
         "x": 25.0,
         "y": 5.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T能量回路",
@@ -6720,6 +7191,7 @@
       "LevelCoef1": -16200000,
       "LevelCoef2": 1800000,
       "IconPath": "Icons/Tech/2506",
+      "IconTag": "nlhl6",
       "IsLabTech": true,
       "PreTechs": [
         2505
@@ -6749,7 +7221,9 @@
       "Position": {
         "x": 29.0,
         "y": 5.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T无人机引擎",
@@ -6766,6 +7240,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2601",
+      "IconTag": "wrjyq1",
       "IsLabTech": true,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -6793,7 +7268,9 @@
       "Position": {
         "x": 9.0,
         "y": 1.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T无人机引擎",
@@ -6810,6 +7287,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2602",
+      "IconTag": "wrjyq2",
       "IsLabTech": true,
       "PreTechs": [
         2601
@@ -6841,7 +7319,9 @@
       "Position": {
         "x": 13.0,
         "y": 1.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T无人机引擎",
@@ -6858,6 +7338,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2603",
+      "IconTag": "wrjyq3",
       "IsLabTech": true,
       "PreTechs": [
         2602
@@ -6891,7 +7372,9 @@
       "Position": {
         "x": 17.0,
         "y": 1.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T无人机引擎",
@@ -6908,6 +7391,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2604",
+      "IconTag": "wrjyq4",
       "IsLabTech": true,
       "PreTechs": [
         2603
@@ -6943,7 +7427,9 @@
       "Position": {
         "x": 21.0,
         "y": 1.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T无人机引擎",
@@ -6960,6 +7446,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2605",
+      "IconTag": "wrjyq5",
       "IsLabTech": true,
       "PreTechs": [
         2604
@@ -6997,7 +7484,9 @@
       "Position": {
         "x": 25.0,
         "y": 1.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T无人机引擎",
@@ -7014,6 +7503,7 @@
       "LevelCoef1": -18000000,
       "LevelCoef2": 1800000,
       "IconPath": "Icons/Tech/2606",
+      "IconTag": "wrjyq6",
       "IsLabTech": true,
       "PreTechs": [
         2605
@@ -7043,7 +7533,9 @@
       "Position": {
         "x": 29.0,
         "y": 1.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T批量建造",
@@ -7060,6 +7552,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2701",
+      "IconTag": "pljz1",
       "IsLabTech": false,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -7081,17 +7574,21 @@
       "HashNeeded": 12000,
       "UnlockRecipes": [],
       "UnlockFunctions": [
-        28
+        28,
+        44
       ],
       "UnlockValues": [
-        150.0
+        150.0,
+        1200.0
       ],
       "AddItems": [],
       "AddItemCounts": [],
       "Position": {
         "x": 9.0,
         "y": 9.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T批量建造",
@@ -7108,6 +7605,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2702",
+      "IconTag": "pljz2",
       "IsLabTech": true,
       "PreTechs": [
         2701
@@ -7127,17 +7625,21 @@
       "HashNeeded": 36000,
       "UnlockRecipes": [],
       "UnlockFunctions": [
-        28
+        28,
+        44
       ],
       "UnlockValues": [
-        300.0
+        300.0,
+        2400.0
       ],
       "AddItems": [],
       "AddItemCounts": [],
       "Position": {
         "x": 13.0,
         "y": 9.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T批量建造",
@@ -7154,6 +7656,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2703",
+      "IconTag": "pljz3",
       "IsLabTech": true,
       "PreTechs": [
         2702
@@ -7175,17 +7678,21 @@
       "HashNeeded": 60000,
       "UnlockRecipes": [],
       "UnlockFunctions": [
-        28
+        28,
+        44
       ],
       "UnlockValues": [
-        900.0
+        900.0,
+        7200.0
       ],
       "AddItems": [],
       "AddItemCounts": [],
       "Position": {
         "x": 17.0,
         "y": 9.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T批量建造",
@@ -7202,6 +7709,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2704",
+      "IconTag": "pljz4",
       "IsLabTech": true,
       "PreTechs": [
         2703
@@ -7225,17 +7733,21 @@
       "HashNeeded": 192000,
       "UnlockRecipes": [],
       "UnlockFunctions": [
-        28
+        28,
+        44
       ],
       "UnlockValues": [
-        3600.0
+        3600.0,
+        28800.0
       ],
       "AddItems": [],
       "AddItemCounts": [],
       "Position": {
         "x": 21.0,
         "y": 9.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T批量建造",
@@ -7252,6 +7764,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2705",
+      "IconTag": "pljz5",
       "IsLabTech": true,
       "PreTechs": [
         2704
@@ -7277,7 +7790,66 @@
       "HashNeeded": 240000,
       "UnlockRecipes": [],
       "UnlockFunctions": [
-        28
+        28,
+        44
+      ],
+      "UnlockValues": [
+        1048576.0,
+        45000.0
+      ],
+      "AddItems": [],
+      "AddItemCounts": [],
+      "Position": {
+        "x": 25.0,
+        "y": 9.0
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
+    },
+    {
+      "Name": "T批量建造",
+      "ID": 2706,
+      "SID": "",
+      "Desc": "批量建造描述6",
+      "Conclusion": "批量建造结果6",
+      "Published": true,
+      "IsHiddenTech": false,
+      "IsObsolete": false,
+      "PreItem": [],
+      "Level": 6,
+      "MaxLevel": 6,
+      "LevelCoef1": 0,
+      "LevelCoef2": 0,
+      "IconPath": "Icons/Tech/2706",
+      "IconTag": "pljz6",
+      "IsLabTech": true,
+      "PreTechs": [
+        2705
+      ],
+      "PreTechsImplicit": [
+        2105
+      ],
+      "PreTechsMax": false,
+      "Items": [
+        6001,
+        6002,
+        6003,
+        6004,
+        6005
+      ],
+      "ItemPoints": [
+        15,
+        15,
+        15,
+        15,
+        15
+      ],
+      "PropertyOverrideItems": [],
+      "PropertyItemCounts": [],
+      "HashNeeded": 480000,
+      "UnlockRecipes": [],
+      "UnlockFunctions": [
+        44
       ],
       "UnlockValues": [
         1048576.0
@@ -7285,9 +7857,11 @@
       "AddItems": [],
       "AddItemCounts": [],
       "Position": {
-        "x": 25.0,
+        "x": 29.0,
         "y": 9.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T能量护盾",
@@ -7304,6 +7878,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2801",
+      "IconTag": "nlhd1",
       "IsLabTech": true,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -7335,7 +7910,9 @@
       "Position": {
         "x": 9.0,
         "y": -7.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T能量护盾",
@@ -7352,6 +7929,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2802",
+      "IconTag": "nlhd2",
       "IsLabTech": true,
       "PreTechs": [
         2801
@@ -7385,7 +7963,9 @@
       "Position": {
         "x": 13.0,
         "y": -7.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T能量护盾",
@@ -7402,6 +7982,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2803",
+      "IconTag": "nlhd3",
       "IsLabTech": true,
       "PreTechs": [
         2802
@@ -7439,7 +8020,9 @@
       "Position": {
         "x": 17.0,
         "y": -7.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T能量护盾",
@@ -7456,6 +8039,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2804",
+      "IconTag": "nlhd4",
       "IsLabTech": true,
       "PreTechs": [
         2803
@@ -7491,7 +8075,9 @@
       "Position": {
         "x": 21.0,
         "y": -7.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T能量护盾",
@@ -7508,6 +8094,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2805",
+      "IconTag": "nlhd5",
       "IsLabTech": true,
       "PreTechs": [
         2804
@@ -7547,7 +8134,9 @@
       "Position": {
         "x": 25.0,
         "y": -7.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T能量护盾",
@@ -7564,6 +8153,7 @@
       "LevelCoef1": -8100000,
       "LevelCoef2": 900000,
       "IconPath": "Icons/Tech/2806",
+      "IconTag": "nlhd6",
       "IsLabTech": true,
       "PreTechs": [
         2805
@@ -7595,7 +8185,9 @@
       "Position": {
         "x": 29.0,
         "y": -7.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T能量护盾",
@@ -7612,6 +8204,7 @@
       "LevelCoef1": -8100000,
       "LevelCoef2": 900000,
       "IconPath": "Icons/Tech/2807",
+      "IconTag": "nlhd7",
       "IsLabTech": true,
       "PreTechs": [
         2806
@@ -7639,7 +8232,9 @@
       "Position": {
         "x": 33.0,
         "y": -7.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T驱动引擎",
@@ -7656,6 +8251,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2901",
+      "IconTag": "qdyq1",
       "IsLabTech": false,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -7689,7 +8285,9 @@
       "Position": {
         "x": 9.0,
         "y": -3.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T驱动引擎",
@@ -7706,6 +8304,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2902",
+      "IconTag": "qdyq2",
       "IsLabTech": true,
       "PreTechs": [
         2901
@@ -7737,7 +8336,9 @@
       "Position": {
         "x": 13.0,
         "y": -3.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T驱动引擎",
@@ -7754,6 +8355,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2903",
+      "IconTag": "qdyq3",
       "IsLabTech": true,
       "PreTechs": [
         2902
@@ -7787,7 +8389,9 @@
       "Position": {
         "x": 17.0,
         "y": -3.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T驱动引擎",
@@ -7804,6 +8408,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2904",
+      "IconTag": "qdyq4",
       "IsLabTech": true,
       "PreTechs": [
         2903
@@ -7838,7 +8443,9 @@
       "Position": {
         "x": 21.0,
         "y": -3.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T驱动引擎",
@@ -7855,6 +8462,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2904",
+      "IconTag": "qdyq5",
       "IsLabTech": true,
       "PreTechs": [
         2904
@@ -7888,7 +8496,9 @@
       "Position": {
         "x": 25.0,
         "y": -3.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T驱动引擎",
@@ -7905,6 +8515,7 @@
       "LevelCoef1": -1800000,
       "LevelCoef2": 360000,
       "IconPath": "Icons/Tech/2906",
+      "IconTag": "qdyq6",
       "IsLabTech": true,
       "PreTechs": [
         2905
@@ -7932,7 +8543,9 @@
       "Position": {
         "x": 29.0,
         "y": -3.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T自动重建",
@@ -7949,6 +8562,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2951",
+      "IconTag": "zdcj1",
       "IsLabTech": true,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -7976,7 +8590,9 @@
       "Position": {
         "x": 9.0,
         "y": 13.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T自动重建",
@@ -7993,6 +8609,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2952",
+      "IconTag": "zdcj2",
       "IsLabTech": true,
       "PreTechs": [
         2951
@@ -8022,7 +8639,9 @@
       "Position": {
         "x": 13.0,
         "y": 13.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T自动重建",
@@ -8039,6 +8658,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2953",
+      "IconTag": "zdcj3",
       "IsLabTech": true,
       "PreTechs": [
         2952
@@ -8070,7 +8690,9 @@
       "Position": {
         "x": 17.0,
         "y": 13.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T自动重建",
@@ -8087,6 +8709,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2954",
+      "IconTag": "zdcj4",
       "IsLabTech": true,
       "PreTechs": [
         2953
@@ -8120,7 +8743,9 @@
       "Position": {
         "x": 21.0,
         "y": 13.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T自动重建",
@@ -8137,6 +8762,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2955",
+      "IconTag": "zdcj5",
       "IsLabTech": true,
       "PreTechs": [
         2954
@@ -8172,7 +8798,9 @@
       "Position": {
         "x": 25.0,
         "y": 13.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T自动重建",
@@ -8189,6 +8817,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/2956",
+      "IconTag": "zdcj6",
       "IsLabTech": true,
       "PreTechs": [
         2955
@@ -8216,7 +8845,9 @@
       "Position": {
         "x": 29.0,
         "y": 13.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T太阳帆寿命",
@@ -8233,6 +8864,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3101",
+      "IconTag": "tyfsm1",
       "IsLabTech": true,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -8264,7 +8896,9 @@
       "Position": {
         "x": 9.0,
         "y": -15.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T太阳帆寿命",
@@ -8281,6 +8915,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3102",
+      "IconTag": "tyfsm2",
       "IsLabTech": true,
       "PreTechs": [
         3101
@@ -8312,7 +8947,9 @@
       "Position": {
         "x": 13.0,
         "y": -15.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T太阳帆寿命",
@@ -8329,6 +8966,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3103",
+      "IconTag": "tyfsm3",
       "IsLabTech": true,
       "PreTechs": [
         3102
@@ -8360,7 +8998,9 @@
       "Position": {
         "x": 17.0,
         "y": -15.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T太阳帆寿命",
@@ -8377,6 +9017,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3104",
+      "IconTag": "tyfsm4",
       "IsLabTech": true,
       "PreTechs": [
         3103
@@ -8410,7 +9051,9 @@
       "Position": {
         "x": 21.0,
         "y": -15.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T太阳帆寿命",
@@ -8427,6 +9070,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3105",
+      "IconTag": "tyfsm5",
       "IsLabTech": true,
       "PreTechs": [
         3104
@@ -8460,7 +9104,9 @@
       "Position": {
         "x": 25.0,
         "y": -15.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T太阳帆寿命",
@@ -8477,6 +9123,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3106",
+      "IconTag": "tyfsm6",
       "IsLabTech": true,
       "PreTechs": [
         3105
@@ -8510,7 +9157,9 @@
       "Position": {
         "x": 29.0,
         "y": -15.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T戴森球吸附速度",
@@ -8527,6 +9176,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/4201",
+      "IconTag": "xfsd1",
       "IsLabTech": true,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -8562,7 +9212,9 @@
       "Position": {
         "x": 9.0,
         "y": -19.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T戴森球吸附速度",
@@ -8579,6 +9231,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/4202",
+      "IconTag": "xfsd2",
       "IsLabTech": true,
       "PreTechs": [
         4201
@@ -8614,7 +9267,9 @@
       "Position": {
         "x": 13.0,
         "y": -19.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T戴森球吸附速度",
@@ -8631,6 +9286,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/4203",
+      "IconTag": "xfsd3",
       "IsLabTech": true,
       "PreTechs": [
         4202
@@ -8666,7 +9322,9 @@
       "Position": {
         "x": 17.0,
         "y": -19.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T戴森球吸附速度",
@@ -8683,6 +9341,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/4204",
+      "IconTag": "xfsd4",
       "IsLabTech": true,
       "PreTechs": [
         4203
@@ -8718,7 +9377,9 @@
       "Position": {
         "x": 21.0,
         "y": -19.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T戴森球吸附速度",
@@ -8735,6 +9396,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/4205",
+      "IconTag": "xfsd5",
       "IsLabTech": true,
       "PreTechs": [
         4204
@@ -8770,7 +9432,9 @@
       "Position": {
         "x": 25.0,
         "y": -19.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T戴森球吸附速度",
@@ -8787,6 +9451,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/4206",
+      "IconTag": "xfsd6",
       "IsLabTech": true,
       "PreTechs": [
         4205
@@ -8822,7 +9487,9 @@
       "Position": {
         "x": 29.0,
         "y": -19.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T射线传输效率",
@@ -8839,6 +9506,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3201",
+      "IconTag": "sxcs1",
       "IsLabTech": true,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -8870,7 +9538,9 @@
       "Position": {
         "x": 9.0,
         "y": -23.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T射线传输效率",
@@ -8887,6 +9557,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3202",
+      "IconTag": "sxcs2",
       "IsLabTech": true,
       "PreTechs": [
         3201
@@ -8918,7 +9589,9 @@
       "Position": {
         "x": 13.0,
         "y": -23.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T射线传输效率",
@@ -8935,6 +9608,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3203",
+      "IconTag": "sxcs3",
       "IsLabTech": true,
       "PreTechs": [
         3202
@@ -8966,7 +9640,9 @@
       "Position": {
         "x": 17.0,
         "y": -23.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T射线传输效率",
@@ -8983,6 +9659,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3204",
+      "IconTag": "sxcs4",
       "IsLabTech": true,
       "PreTechs": [
         3203
@@ -9016,7 +9693,9 @@
       "Position": {
         "x": 21.0,
         "y": -23.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T射线传输效率",
@@ -9033,6 +9712,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3205",
+      "IconTag": "sxcs5",
       "IsLabTech": true,
       "PreTechs": [
         3204
@@ -9066,7 +9746,9 @@
       "Position": {
         "x": 25.0,
         "y": -23.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T射线传输效率",
@@ -9083,6 +9765,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3206",
+      "IconTag": "sxcs6",
       "IsLabTech": true,
       "PreTechs": [
         3205
@@ -9118,7 +9801,9 @@
       "Position": {
         "x": 29.0,
         "y": -23.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T射线传输效率",
@@ -9135,6 +9820,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3207",
+      "IconTag": "sxcs7",
       "IsLabTech": true,
       "PreTechs": [
         3206
@@ -9170,7 +9856,9 @@
       "Position": {
         "x": 33.0,
         "y": -23.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T射线传输效率",
@@ -9187,6 +9875,7 @@
       "LevelCoef1": 1800000,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3208",
+      "IconTag": "sxcs8",
       "IsLabTech": true,
       "PreTechs": [
         3207
@@ -9214,7 +9903,9 @@
       "Position": {
         "x": 37.0,
         "y": -23.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T分拣器货物叠加",
@@ -9231,6 +9922,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3301",
+      "IconTag": "",
       "IsLabTech": true,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -9260,9 +9952,11 @@
       "AddItems": [],
       "AddItemCounts": [],
       "Position": {
-        "x": 9.0,
-        "y": -27.0
-      }
+        "x": 0.0,
+        "y": 0.0
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T分拣器货物叠加",
@@ -9279,6 +9973,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3302",
+      "IconTag": "",
       "IsLabTech": true,
       "PreTechs": [
         3301
@@ -9308,9 +10003,11 @@
       "AddItems": [],
       "AddItemCounts": [],
       "Position": {
-        "x": 13.0,
-        "y": -27.0
-      }
+        "x": 0.0,
+        "y": 0.0
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T分拣器货物叠加",
@@ -9327,6 +10024,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3303",
+      "IconTag": "",
       "IsLabTech": true,
       "PreTechs": [
         3302
@@ -9356,9 +10054,11 @@
       "AddItems": [],
       "AddItemCounts": [],
       "Position": {
-        "x": 17.0,
-        "y": -27.0
-      }
+        "x": 0.0,
+        "y": 0.0
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T分拣器货物叠加",
@@ -9375,6 +10075,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3304",
+      "IconTag": "",
       "IsLabTech": true,
       "PreTechs": [
         3303
@@ -9404,9 +10105,11 @@
       "AddItems": [],
       "AddItemCounts": [],
       "Position": {
-        "x": 21.0,
-        "y": -27.0
-      }
+        "x": 0.0,
+        "y": 0.0
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T分拣器货物叠加",
@@ -9423,6 +10126,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3305",
+      "IconTag": "",
       "IsLabTech": true,
       "PreTechs": [
         3304
@@ -9452,9 +10156,11 @@
       "AddItems": [],
       "AddItemCounts": [],
       "Position": {
-        "x": 25.0,
-        "y": -27.0
-      }
+        "x": 0.0,
+        "y": 0.0
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T分拣器货物集装",
@@ -9471,6 +10177,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3306",
+      "IconTag": "",
       "IsLabTech": true,
       "PreTechs": [
         3305
@@ -9504,9 +10211,11 @@
       "AddItems": [],
       "AddItemCounts": [],
       "Position": {
-        "x": 29.0,
-        "y": -27.0
-      }
+        "x": 0.0,
+        "y": 0.0
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T集装分拣器叠加",
@@ -9523,6 +10232,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3311",
+      "IconTag": "fjqdj1",
       "IsLabTech": true,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -9554,7 +10264,9 @@
       "Position": {
         "x": 9.0,
         "y": -31.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T集装分拣器叠加",
@@ -9571,6 +10283,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3312",
+      "IconTag": "fjqdj2",
       "IsLabTech": true,
       "PreTechs": [
         3311
@@ -9602,7 +10315,9 @@
       "Position": {
         "x": 13.0,
         "y": -31.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T集装分拣器叠加",
@@ -9619,6 +10334,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3313",
+      "IconTag": "fjqdj3",
       "IsLabTech": true,
       "PreTechs": [
         3312
@@ -9650,7 +10366,9 @@
       "Position": {
         "x": 17.0,
         "y": -31.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T集装分拣器叠加",
@@ -9667,6 +10385,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3314",
+      "IconTag": "fjqdj4",
       "IsLabTech": true,
       "PreTechs": [
         3313
@@ -9698,7 +10417,9 @@
       "Position": {
         "x": 21.0,
         "y": -31.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T集装分拣器叠加",
@@ -9715,6 +10436,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3315",
+      "IconTag": "fjqdj5",
       "IsLabTech": true,
       "PreTechs": [
         3314
@@ -9746,7 +10468,9 @@
       "Position": {
         "x": 25.0,
         "y": -31.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T集装分拣器叠加",
@@ -9763,6 +10487,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3316",
+      "IconTag": "fjqdj6",
       "IsLabTech": true,
       "PreTechs": [
         3315
@@ -9798,7 +10523,9 @@
       "Position": {
         "x": 29.0,
         "y": -31.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T配送范围",
@@ -9815,6 +10542,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/4001",
+      "IconTag": "psfw1",
       "IsLabTech": true,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -9844,7 +10572,9 @@
       "Position": {
         "x": 9.0,
         "y": -35.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T配送范围",
@@ -9861,6 +10591,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/4002",
+      "IconTag": "psfw2",
       "IsLabTech": true,
       "PreTechs": [
         4001
@@ -9892,7 +10623,9 @@
       "Position": {
         "x": 13.0,
         "y": -35.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T配送范围",
@@ -9909,6 +10642,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/4003",
+      "IconTag": "psfw3",
       "IsLabTech": true,
       "PreTechs": [
         4002
@@ -9940,7 +10674,9 @@
       "Position": {
         "x": 17.0,
         "y": -35.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T配送范围",
@@ -9957,6 +10693,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/4004",
+      "IconTag": "psfw4",
       "IsLabTech": true,
       "PreTechs": [
         4003
@@ -9990,7 +10727,9 @@
       "Position": {
         "x": 21.0,
         "y": -35.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T配送范围",
@@ -10007,6 +10746,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/4005",
+      "IconTag": "psfw5",
       "IsLabTech": true,
       "PreTechs": [
         4004
@@ -10042,7 +10782,9 @@
       "Position": {
         "x": 25.0,
         "y": -35.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T运输船引擎",
@@ -10059,6 +10801,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3401",
+      "IconTag": "yscyq1",
       "IsLabTech": true,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -10092,7 +10835,9 @@
       "Position": {
         "x": 9.0,
         "y": -39.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T运输船引擎",
@@ -10109,6 +10854,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3402",
+      "IconTag": "yscyq2",
       "IsLabTech": true,
       "PreTechs": [
         3401
@@ -10142,7 +10888,9 @@
       "Position": {
         "x": 13.0,
         "y": -39.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T运输船引擎",
@@ -10159,6 +10907,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3403",
+      "IconTag": "yscyq3",
       "IsLabTech": true,
       "PreTechs": [
         3402
@@ -10196,7 +10945,9 @@
       "Position": {
         "x": 17.0,
         "y": -39.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T运输船引擎",
@@ -10213,6 +10964,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3404",
+      "IconTag": "yscyq4",
       "IsLabTech": true,
       "PreTechs": [
         3403
@@ -10254,7 +11006,9 @@
       "Position": {
         "x": 21.0,
         "y": -39.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T运输船引擎",
@@ -10271,6 +11025,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3405",
+      "IconTag": "yscyq5",
       "IsLabTech": true,
       "PreTechs": [
         3404
@@ -10310,7 +11065,9 @@
       "Position": {
         "x": 25.0,
         "y": -39.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T运输船引擎",
@@ -10327,6 +11084,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3406",
+      "IconTag": "yscyq6",
       "IsLabTech": true,
       "PreTechs": [
         3405
@@ -10366,7 +11124,9 @@
       "Position": {
         "x": 29.0,
         "y": -39.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T运输船引擎",
@@ -10383,6 +11143,7 @@
       "LevelCoef1": -21600000,
       "LevelCoef2": 1800000,
       "IconPath": "Icons/Tech/3407",
+      "IconTag": "yscyq7",
       "IsLabTech": true,
       "PreTechs": [
         3406
@@ -10414,7 +11175,9 @@
       "Position": {
         "x": 33.0,
         "y": -39.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T运输机舱扩容",
@@ -10431,6 +11194,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3501",
+      "IconTag": "ysjc1",
       "IsLabTech": true,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -10464,7 +11228,9 @@
       "Position": {
         "x": 9.0,
         "y": -43.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T运输机舱扩容",
@@ -10481,6 +11247,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3502",
+      "IconTag": "ysjc2",
       "IsLabTech": true,
       "PreTechs": [
         3501
@@ -10514,7 +11281,9 @@
       "Position": {
         "x": 13.0,
         "y": -43.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T运输机舱扩容",
@@ -10531,6 +11300,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3503",
+      "IconTag": "ysjc3",
       "IsLabTech": true,
       "PreTechs": [
         3502
@@ -10568,7 +11338,9 @@
       "Position": {
         "x": 17.0,
         "y": -43.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T运输机舱扩容",
@@ -10585,6 +11357,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3504",
+      "IconTag": "ysjc4",
       "IsLabTech": true,
       "PreTechs": [
         3503
@@ -10620,7 +11393,9 @@
       "Position": {
         "x": 21.0,
         "y": -43.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T运输机舱扩容",
@@ -10637,6 +11412,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3505",
+      "IconTag": "ysjc5",
       "IsLabTech": true,
       "PreTechs": [
         3504
@@ -10674,7 +11450,9 @@
       "Position": {
         "x": 25.0,
         "y": -43.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T运输机舱扩容",
@@ -10691,6 +11469,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3506",
+      "IconTag": "ysjc6",
       "IsLabTech": true,
       "PreTechs": [
         3505
@@ -10728,7 +11507,9 @@
       "Position": {
         "x": 29.0,
         "y": -43.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T运输机舱扩容",
@@ -10745,6 +11526,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3507",
+      "IconTag": "ysjc7",
       "IsLabTech": true,
       "PreTechs": [
         3506
@@ -10784,7 +11566,9 @@
       "Position": {
         "x": 33.0,
         "y": -43.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T运输机舱扩容",
@@ -10801,6 +11585,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3508",
+      "IconTag": "ysjc8",
       "IsLabTech": true,
       "PreTechs": [
         3507
@@ -10838,7 +11623,9 @@
       "Position": {
         "x": 37.0,
         "y": -43.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T运输机舱扩容",
@@ -10855,6 +11642,7 @@
       "LevelCoef1": 2400000,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3509",
+      "IconTag": "ysjc9",
       "IsLabTech": true,
       "PreTechs": [
         3508
@@ -10888,7 +11676,9 @@
       "Position": {
         "x": 41.0,
         "y": -43.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T运输机舱扩容",
@@ -10905,6 +11695,7 @@
       "LevelCoef1": 4800000,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3510",
+      "IconTag": "ysjc10",
       "IsLabTech": true,
       "PreTechs": [
         3509
@@ -10938,7 +11729,9 @@
       "Position": {
         "x": 45.0,
         "y": -43.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T运输站集装物流",
@@ -10955,6 +11748,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3801",
+      "IconTag": "yszjz1",
       "IsLabTech": true,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -10982,7 +11776,9 @@
       "Position": {
         "x": 37.0,
         "y": -39.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T运输站集装物流",
@@ -10999,6 +11795,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3802",
+      "IconTag": "yszjz2",
       "IsLabTech": true,
       "PreTechs": [
         3801
@@ -11028,7 +11825,9 @@
       "Position": {
         "x": 41.0,
         "y": -39.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T运输站集装物流",
@@ -11045,6 +11844,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3803",
+      "IconTag": "yszjz3",
       "IsLabTech": true,
       "PreTechs": [
         3802
@@ -11074,7 +11874,9 @@
       "Position": {
         "x": 45.0,
         "y": -39.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T矿物利用",
@@ -11091,6 +11893,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3601",
+      "IconTag": "kwly1",
       "IsLabTech": true,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -11124,7 +11927,9 @@
       "Position": {
         "x": 9.0,
         "y": -47.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T矿物利用",
@@ -11141,6 +11946,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3602",
+      "IconTag": "kwly2",
       "IsLabTech": true,
       "PreTechs": [
         3601
@@ -11176,7 +11982,9 @@
       "Position": {
         "x": 13.0,
         "y": -47.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T矿物利用",
@@ -11193,6 +12001,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3603",
+      "IconTag": "kwly3",
       "IsLabTech": true,
       "PreTechs": [
         3602
@@ -11230,7 +12039,9 @@
       "Position": {
         "x": 17.0,
         "y": -47.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T矿物利用",
@@ -11247,6 +12058,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3604",
+      "IconTag": "kwly4",
       "IsLabTech": true,
       "PreTechs": [
         3603
@@ -11284,7 +12096,9 @@
       "Position": {
         "x": 21.0,
         "y": -47.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T矿物利用",
@@ -11301,6 +12115,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3605",
+      "IconTag": "kwly5",
       "IsLabTech": true,
       "PreTechs": [
         3604
@@ -11340,7 +12155,9 @@
       "Position": {
         "x": 25.0,
         "y": -47.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T矿物利用",
@@ -11357,6 +12174,7 @@
       "LevelCoef1": 3600000,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3606",
+      "IconTag": "kwly6",
       "IsLabTech": true,
       "PreTechs": [
         3605
@@ -11388,7 +12206,9 @@
       "Position": {
         "x": 29.0,
         "y": -47.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T垂直建造",
@@ -11405,6 +12225,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3701",
+      "IconTag": "czjz1",
       "IsLabTech": true,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -11434,7 +12255,9 @@
       "Position": {
         "x": 9.0,
         "y": -27.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T垂直建造",
@@ -11451,6 +12274,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3702",
+      "IconTag": "czjz2",
       "IsLabTech": true,
       "PreTechs": [
         3701
@@ -11480,7 +12304,9 @@
       "Position": {
         "x": 13.0,
         "y": -27.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T垂直建造",
@@ -11497,6 +12323,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3703",
+      "IconTag": "czjz3",
       "IsLabTech": true,
       "PreTechs": [
         3702
@@ -11528,7 +12355,9 @@
       "Position": {
         "x": 17.0,
         "y": -27.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T垂直建造",
@@ -11545,6 +12374,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3704",
+      "IconTag": "czjz4",
       "IsLabTech": true,
       "PreTechs": [
         3703
@@ -11578,7 +12408,9 @@
       "Position": {
         "x": 21.0,
         "y": -27.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T垂直建造",
@@ -11595,6 +12427,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3705",
+      "IconTag": "czjz5",
       "IsLabTech": true,
       "PreTechs": [
         3704
@@ -11628,7 +12461,9 @@
       "Position": {
         "x": 25.0,
         "y": -27.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T垂直建造",
@@ -11645,6 +12480,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3706",
+      "IconTag": "czjz6",
       "IsLabTech": true,
       "PreTechs": [
         3705
@@ -11680,7 +12516,9 @@
       "Position": {
         "x": 29.0,
         "y": -27.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T研究速度",
@@ -11697,6 +12535,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3901",
+      "IconTag": "yjsd1",
       "IsLabTech": true,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -11724,7 +12563,9 @@
       "Position": {
         "x": 9.0,
         "y": -51.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T研究速度",
@@ -11741,6 +12582,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3902",
+      "IconTag": "yjsd2",
       "IsLabTech": true,
       "PreTechs": [
         3901
@@ -11768,7 +12610,9 @@
       "Position": {
         "x": 13.0,
         "y": -51.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T研究速度",
@@ -11785,6 +12629,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3903",
+      "IconTag": "yjsd3",
       "IsLabTech": true,
       "PreTechs": [
         3902
@@ -11812,7 +12657,9 @@
       "Position": {
         "x": 17.0,
         "y": -51.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T研究速度",
@@ -11829,6 +12676,7 @@
       "LevelCoef1": 14400000,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/3904",
+      "IconTag": "yjsd4",
       "IsLabTech": true,
       "PreTechs": [
         3903
@@ -11856,7 +12704,9 @@
       "Position": {
         "x": 21.0,
         "y": -51.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T宇宙探索",
@@ -11873,6 +12723,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/4101",
+      "IconTag": "yzts1",
       "IsLabTech": true,
       "PreTechs": [],
       "PreTechsImplicit": [],
@@ -11898,7 +12749,9 @@
       "Position": {
         "x": 9.0,
         "y": 37.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T宇宙探索",
@@ -11915,6 +12768,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/4102",
+      "IconTag": "yzts2",
       "IsLabTech": true,
       "PreTechs": [
         4101
@@ -11942,7 +12796,9 @@
       "Position": {
         "x": 13.0,
         "y": 37.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T宇宙探索",
@@ -11959,6 +12815,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/4103",
+      "IconTag": "yzts3",
       "IsLabTech": true,
       "PreTechs": [
         4102
@@ -11992,7 +12849,9 @@
       "Position": {
         "x": 17.0,
         "y": 37.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T宇宙探索",
@@ -12009,6 +12868,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/4104",
+      "IconTag": "yzts4",
       "IsLabTech": true,
       "PreTechs": [
         4103
@@ -12042,7 +12902,9 @@
       "Position": {
         "x": 21.0,
         "y": 37.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T动能武器伤害",
@@ -12059,6 +12921,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5001",
+      "IconTag": "dnwq1",
       "IsLabTech": true,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -12086,7 +12949,9 @@
       "Position": {
         "x": 9.0,
         "y": -59.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T动能武器伤害",
@@ -12103,6 +12968,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5002",
+      "IconTag": "dnwq2",
       "IsLabTech": true,
       "PreTechs": [
         5001
@@ -12132,7 +12998,9 @@
       "Position": {
         "x": 13.0,
         "y": -59.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T动能武器伤害",
@@ -12149,6 +13017,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5003",
+      "IconTag": "dnwq3",
       "IsLabTech": true,
       "PreTechs": [
         5002
@@ -12180,7 +13049,9 @@
       "Position": {
         "x": 17.0,
         "y": -59.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T动能武器伤害",
@@ -12197,6 +13068,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5004",
+      "IconTag": "dnwq4",
       "IsLabTech": true,
       "PreTechs": [
         5003
@@ -12230,7 +13102,9 @@
       "Position": {
         "x": 21.0,
         "y": -59.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T动能武器伤害",
@@ -12247,6 +13121,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5005",
+      "IconTag": "dnwq5",
       "IsLabTech": true,
       "PreTechs": [
         5004
@@ -12282,7 +13157,9 @@
       "Position": {
         "x": 25.0,
         "y": -59.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T动能武器伤害",
@@ -12299,6 +13176,7 @@
       "LevelCoef1": -16200000,
       "LevelCoef2": 1800000,
       "IconPath": "Icons/Tech/5006",
+      "IconTag": "dnwq6",
       "IsLabTech": true,
       "PreTechs": [
         5005
@@ -12326,7 +13204,9 @@
       "Position": {
         "x": 29.0,
         "y": -59.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T能量武器伤害",
@@ -12343,6 +13223,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5101",
+      "IconTag": "nlwq1",
       "IsLabTech": true,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -12370,7 +13251,9 @@
       "Position": {
         "x": 9.0,
         "y": -63.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T能量武器伤害",
@@ -12387,6 +13270,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5102",
+      "IconTag": "nlwq2",
       "IsLabTech": true,
       "PreTechs": [
         5101
@@ -12416,7 +13300,9 @@
       "Position": {
         "x": 13.0,
         "y": -63.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T能量武器伤害",
@@ -12433,6 +13319,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5103",
+      "IconTag": "nlwq3",
       "IsLabTech": true,
       "PreTechs": [
         5102
@@ -12464,7 +13351,9 @@
       "Position": {
         "x": 17.0,
         "y": -63.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T能量武器伤害",
@@ -12481,6 +13370,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5104",
+      "IconTag": "nlwq4",
       "IsLabTech": true,
       "PreTechs": [
         5103
@@ -12514,7 +13404,9 @@
       "Position": {
         "x": 21.0,
         "y": -63.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T能量武器伤害",
@@ -12531,6 +13423,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5105",
+      "IconTag": "nlwq5",
       "IsLabTech": true,
       "PreTechs": [
         5104
@@ -12566,7 +13459,9 @@
       "Position": {
         "x": 25.0,
         "y": -63.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T能量武器伤害",
@@ -12583,6 +13478,7 @@
       "LevelCoef1": -54000000,
       "LevelCoef2": 5400000,
       "IconPath": "Icons/Tech/5106",
+      "IconTag": "nlwq6",
       "IsLabTech": true,
       "PreTechs": [
         5105
@@ -12610,7 +13506,9 @@
       "Position": {
         "x": 29.0,
         "y": -63.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T爆炸武器伤害",
@@ -12627,6 +13525,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5201",
+      "IconTag": "bpwq1",
       "IsLabTech": true,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -12654,7 +13553,9 @@
       "Position": {
         "x": 9.0,
         "y": -67.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T爆炸武器伤害",
@@ -12671,6 +13572,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5202",
+      "IconTag": "bpwq2",
       "IsLabTech": true,
       "PreTechs": [
         5201
@@ -12700,7 +13602,9 @@
       "Position": {
         "x": 13.0,
         "y": -67.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T爆炸武器伤害",
@@ -12717,6 +13621,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5203",
+      "IconTag": "bpwq3",
       "IsLabTech": true,
       "PreTechs": [
         5202
@@ -12748,7 +13653,9 @@
       "Position": {
         "x": 17.0,
         "y": -67.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T爆炸武器伤害",
@@ -12765,6 +13672,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5204",
+      "IconTag": "bpwq4",
       "IsLabTech": true,
       "PreTechs": [
         5203
@@ -12798,7 +13706,9 @@
       "Position": {
         "x": 21.0,
         "y": -67.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T爆炸武器伤害",
@@ -12815,6 +13725,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5205",
+      "IconTag": "bpwq5",
       "IsLabTech": true,
       "PreTechs": [
         5204
@@ -12850,7 +13761,9 @@
       "Position": {
         "x": 25.0,
         "y": -67.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T爆炸武器伤害",
@@ -12867,6 +13780,7 @@
       "LevelCoef1": -16200000,
       "LevelCoef2": 1800000,
       "IconPath": "Icons/Tech/5206",
+      "IconTag": "bpwq6",
       "IsLabTech": true,
       "PreTechs": [
         5205
@@ -12894,7 +13808,9 @@
       "Position": {
         "x": 29.0,
         "y": -67.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T战斗无人机伤害",
@@ -12911,6 +13827,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5301",
+      "IconTag": "wrjsh1",
       "IsLabTech": true,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -12940,7 +13857,9 @@
       "Position": {
         "x": 9.0,
         "y": -75.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T战斗无人机伤害",
@@ -12957,6 +13876,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5302",
+      "IconTag": "wrjsh2",
       "IsLabTech": true,
       "PreTechs": [
         5301
@@ -12988,7 +13908,9 @@
       "Position": {
         "x": 13.0,
         "y": -75.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T战斗无人机伤害",
@@ -13005,6 +13927,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5303",
+      "IconTag": "wrjsh3",
       "IsLabTech": true,
       "PreTechs": [
         5302
@@ -13040,7 +13963,9 @@
       "Position": {
         "x": 17.0,
         "y": -75.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T战斗无人机伤害",
@@ -13057,6 +13982,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5304",
+      "IconTag": "wrjsh4",
       "IsLabTech": true,
       "PreTechs": [
         5303
@@ -13094,7 +14020,9 @@
       "Position": {
         "x": 21.0,
         "y": -75.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T战斗无人机伤害",
@@ -13111,6 +14039,7 @@
       "LevelCoef1": -43200000,
       "LevelCoef2": 5400000,
       "IconPath": "Icons/Tech/5305",
+      "IconTag": "wrjsh5",
       "IsLabTech": true,
       "PreTechs": [
         5304
@@ -13140,7 +14069,9 @@
       "Position": {
         "x": 25.0,
         "y": -75.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T战斗无人机攻击速度",
@@ -13157,6 +14088,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5401",
+      "IconTag": "wrjss1",
       "IsLabTech": true,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -13186,7 +14118,9 @@
       "Position": {
         "x": 9.0,
         "y": -79.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T战斗无人机攻击速度",
@@ -13203,6 +14137,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5402",
+      "IconTag": "wrjss2",
       "IsLabTech": true,
       "PreTechs": [
         5401
@@ -13234,7 +14169,9 @@
       "Position": {
         "x": 13.0,
         "y": -79.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T战斗无人机攻击速度",
@@ -13251,6 +14188,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5403",
+      "IconTag": "wrjss3",
       "IsLabTech": true,
       "PreTechs": [
         5402
@@ -13286,7 +14224,9 @@
       "Position": {
         "x": 17.0,
         "y": -79.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T战斗无人机攻击速度",
@@ -13303,6 +14243,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5404",
+      "IconTag": "wrjss4",
       "IsLabTech": true,
       "PreTechs": [
         5403
@@ -13340,7 +14281,9 @@
       "Position": {
         "x": 21.0,
         "y": -79.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T战斗无人机攻击速度",
@@ -13357,6 +14300,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5405",
+      "IconTag": "wrjss5",
       "IsLabTech": true,
       "PreTechs": [
         5404
@@ -13386,7 +14330,9 @@
       "Position": {
         "x": 25.0,
         "y": -79.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T战斗无人机耐久",
@@ -13403,6 +14349,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5601",
+      "IconTag": "wrjnj1",
       "IsLabTech": true,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -13432,7 +14379,9 @@
       "Position": {
         "x": 9.0,
         "y": -83.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T战斗无人机耐久",
@@ -13449,6 +14398,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5602",
+      "IconTag": "wrjnj2",
       "IsLabTech": true,
       "PreTechs": [
         5601
@@ -13480,7 +14430,9 @@
       "Position": {
         "x": 13.0,
         "y": -83.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T战斗无人机耐久",
@@ -13497,6 +14449,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5603",
+      "IconTag": "wrjnj3",
       "IsLabTech": true,
       "PreTechs": [
         5602
@@ -13532,7 +14485,9 @@
       "Position": {
         "x": 17.0,
         "y": -83.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T战斗无人机耐久",
@@ -13549,6 +14504,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5604",
+      "IconTag": "wrjnj4",
       "IsLabTech": true,
       "PreTechs": [
         5603
@@ -13586,7 +14542,9 @@
       "Position": {
         "x": 21.0,
         "y": -83.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T战斗无人机耐久",
@@ -13603,6 +14561,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5605",
+      "IconTag": "wrjnj5",
       "IsLabTech": true,
       "PreTechs": [
         5604
@@ -13632,7 +14591,9 @@
       "Position": {
         "x": 25.0,
         "y": -83.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T行星护盾",
@@ -13649,6 +14610,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5701",
+      "IconTag": "xxhd1",
       "IsLabTech": true,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -13680,7 +14642,9 @@
       "Position": {
         "x": 9.0,
         "y": -99.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T行星护盾",
@@ -13697,6 +14661,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5702",
+      "IconTag": "xxhd2",
       "IsLabTech": true,
       "PreTechs": [
         5701
@@ -13728,7 +14693,9 @@
       "Position": {
         "x": 13.0,
         "y": -99.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T行星护盾",
@@ -13745,6 +14712,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5703",
+      "IconTag": "xxhd3",
       "IsLabTech": true,
       "PreTechs": [
         5702
@@ -13778,7 +14746,9 @@
       "Position": {
         "x": 17.0,
         "y": -99.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T行星护盾",
@@ -13795,6 +14765,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5704",
+      "IconTag": "xxhd4",
       "IsLabTech": true,
       "PreTechs": [
         5703
@@ -13830,7 +14801,9 @@
       "Position": {
         "x": 21.0,
         "y": -99.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T行星护盾",
@@ -13847,6 +14820,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5705",
+      "IconTag": "xxhd5",
       "IsLabTech": true,
       "PreTechs": [
         5704
@@ -13874,7 +14848,9 @@
       "Position": {
         "x": 25.0,
         "y": -99.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T地面编队扩容",
@@ -13891,6 +14867,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5801",
+      "IconTag": "dmbd1",
       "IsLabTech": true,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -13920,7 +14897,9 @@
       "Position": {
         "x": 9.0,
         "y": -87.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T地面编队扩容",
@@ -13937,6 +14916,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5802",
+      "IconTag": "dmbd2",
       "IsLabTech": true,
       "PreTechs": [
         5801
@@ -13968,7 +14948,9 @@
       "Position": {
         "x": 13.0,
         "y": -87.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T地面编队扩容",
@@ -13985,6 +14967,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5803",
+      "IconTag": "dmbd3",
       "IsLabTech": true,
       "PreTechs": [
         5802
@@ -14018,7 +15001,9 @@
       "Position": {
         "x": 17.0,
         "y": -87.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T地面编队扩容",
@@ -14035,6 +15020,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5804",
+      "IconTag": "dmbd4",
       "IsLabTech": true,
       "PreTechs": [
         5803
@@ -14068,7 +15054,9 @@
       "Position": {
         "x": 21.0,
         "y": -87.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T地面编队扩容",
@@ -14085,6 +15073,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5805",
+      "IconTag": "dmbd5",
       "IsLabTech": true,
       "PreTechs": [
         5804
@@ -14120,7 +15109,9 @@
       "Position": {
         "x": 25.0,
         "y": -87.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T地面编队扩容",
@@ -14137,6 +15128,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5806",
+      "IconTag": "dmbd6",
       "IsLabTech": true,
       "PreTechs": [
         5805
@@ -14164,7 +15156,9 @@
       "Position": {
         "x": 29.0,
         "y": -87.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T地面编队扩容",
@@ -14181,6 +15175,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5807",
+      "IconTag": "dmbd7",
       "IsLabTech": true,
       "PreTechs": [
         5806
@@ -14208,7 +15203,9 @@
       "Position": {
         "x": 33.0,
         "y": -87.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T太空编队扩容",
@@ -14225,6 +15222,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5901",
+      "IconTag": "tkbd1",
       "IsLabTech": true,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -14258,7 +15256,9 @@
       "Position": {
         "x": 9.0,
         "y": -91.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T太空编队扩容",
@@ -14275,6 +15275,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5902",
+      "IconTag": "tkbd2",
       "IsLabTech": true,
       "PreTechs": [
         5901
@@ -14308,7 +15309,9 @@
       "Position": {
         "x": 13.0,
         "y": -91.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T太空编队扩容",
@@ -14325,6 +15328,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5903",
+      "IconTag": "tkbd3",
       "IsLabTech": true,
       "PreTechs": [
         5902
@@ -14358,7 +15362,9 @@
       "Position": {
         "x": 17.0,
         "y": -91.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T太空编队扩容",
@@ -14375,6 +15381,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5904",
+      "IconTag": "tkbd4",
       "IsLabTech": true,
       "PreTechs": [
         5903
@@ -14410,7 +15417,9 @@
       "Position": {
         "x": 21.0,
         "y": -91.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T太空编队扩容",
@@ -14427,6 +15436,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5905",
+      "IconTag": "tkbd5",
       "IsLabTech": true,
       "PreTechs": [
         5904
@@ -14462,7 +15472,9 @@
       "Position": {
         "x": 25.0,
         "y": -91.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T太空编队扩容",
@@ -14479,6 +15491,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5906",
+      "IconTag": "tkbd6",
       "IsLabTech": true,
       "PreTechs": [
         5905
@@ -14506,7 +15519,9 @@
       "Position": {
         "x": 29.0,
         "y": -91.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T太空编队扩容",
@@ -14523,6 +15538,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/5907",
+      "IconTag": "tkbd7",
       "IsLabTech": true,
       "PreTechs": [
         5906
@@ -14550,7 +15566,9 @@
       "Position": {
         "x": 33.0,
         "y": -91.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T全局耐久度提升",
@@ -14567,6 +15585,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/6001",
+      "IconTag": "qjnj1",
       "IsLabTech": true,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -14594,7 +15613,9 @@
       "Position": {
         "x": 9.0,
         "y": -95.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T全局耐久度提升",
@@ -14611,6 +15632,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/6002",
+      "IconTag": "qjnj2",
       "IsLabTech": true,
       "PreTechs": [
         6001
@@ -14640,7 +15662,9 @@
       "Position": {
         "x": 13.0,
         "y": -95.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T全局耐久度提升",
@@ -14657,6 +15681,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/6003",
+      "IconTag": "qjnj3",
       "IsLabTech": true,
       "PreTechs": [
         6002
@@ -14688,7 +15713,9 @@
       "Position": {
         "x": 17.0,
         "y": -95.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T全局耐久度提升",
@@ -14705,6 +15732,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/6004",
+      "IconTag": "qjnj4",
       "IsLabTech": true,
       "PreTechs": [
         6003
@@ -14738,7 +15766,9 @@
       "Position": {
         "x": 21.0,
         "y": -95.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T全局耐久度提升",
@@ -14755,6 +15785,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/6005",
+      "IconTag": "qjnj5",
       "IsLabTech": true,
       "PreTechs": [
         6004
@@ -14790,7 +15821,9 @@
       "Position": {
         "x": 25.0,
         "y": -95.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T全局耐久度提升",
@@ -14807,6 +15840,7 @@
       "LevelCoef1": -3150000,
       "LevelCoef2": 450000,
       "IconPath": "Icons/Tech/6006",
+      "IconTag": "qjnj6",
       "IsLabTech": true,
       "PreTechs": [
         6005
@@ -14834,7 +15868,9 @@
       "Position": {
         "x": 29.0,
         "y": -95.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T干扰塔效果",
@@ -14851,6 +15887,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/6101",
+      "IconTag": "grtxg1",
       "IsLabTech": true,
       "PreTechs": [],
       "PreTechsImplicit": [
@@ -14880,7 +15917,9 @@
       "Position": {
         "x": 9.0,
         "y": -71.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T干扰塔效果",
@@ -14897,6 +15936,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/6102",
+      "IconTag": "grtxg2",
       "IsLabTech": true,
       "PreTechs": [
         6101
@@ -14926,7 +15966,9 @@
       "Position": {
         "x": 13.0,
         "y": -71.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T干扰塔效果",
@@ -14943,6 +15985,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/6103",
+      "IconTag": "grtxg3",
       "IsLabTech": true,
       "PreTechs": [
         6102
@@ -14974,7 +16017,9 @@
       "Position": {
         "x": 17.0,
         "y": -71.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T干扰塔效果",
@@ -14991,6 +16036,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/6104",
+      "IconTag": "grtxg4",
       "IsLabTech": true,
       "PreTechs": [
         6103
@@ -15024,7 +16070,9 @@
       "Position": {
         "x": 21.0,
         "y": -71.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T干扰塔效果",
@@ -15041,6 +16089,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/6105",
+      "IconTag": "grtxg5",
       "IsLabTech": true,
       "PreTechs": [
         6104
@@ -15076,7 +16125,9 @@
       "Position": {
         "x": 25.0,
         "y": -71.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     },
     {
       "Name": "T干扰塔效果",
@@ -15093,6 +16144,7 @@
       "LevelCoef1": 0,
       "LevelCoef2": 0,
       "IconPath": "Icons/Tech/6106",
+      "IconTag": "grtxg6",
       "IsLabTech": true,
       "PreTechs": [
         6105
@@ -15120,7 +16172,9 @@
       "Position": {
         "x": 29.0,
         "y": -71.0
-      }
+      },
+      "iconTagString": "",
+      "iconNameTagString": ""
     }
   ]
 }

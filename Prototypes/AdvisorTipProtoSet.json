@@ -6,7 +6,7 @@
   "m_Enabled": 1,
   "m_Script": {
     "m_FileID": 1,
-    "m_PathID": 1049
+    "m_PathID": 1047
   },
   "m_Name": "AdvisorTipProtoSet",
   "TableName": "AdvisorTip",
@@ -1087,8 +1087,11 @@
       "Voice": "tip-75",
       "MinLength": 5.0,
       "MaxLength": 5.5,
-      "DeterminatorName": "",
-      "DeterminatorParams": []
+      "DeterminatorName": "ADV_AdvisorPlaybackEnd",
+      "DeterminatorParams": [
+        120,
+        74
+      ]
     },
     {
       "Name": "提示76",
@@ -1368,7 +1371,7 @@
       "MaxLength": 30.0,
       "DeterminatorName": "ADV_OnPlayerKilled",
       "DeterminatorParams": [
-        120
+        90
       ]
     },
     {
@@ -1399,7 +1402,7 @@
       "DeterminatorParams": [
         0,
         10,
-        155
+        300
       ]
     },
     {

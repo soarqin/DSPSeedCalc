@@ -6,7 +6,7 @@
   "m_Enabled": 1,
   "m_Script": {
     "m_FileID": 1,
-    "m_PathID": 2187
+    "m_PathID": 2321
   },
   "m_Name": "CosmicMessageProtoSet",
   "TableName": "CosmicMessage",

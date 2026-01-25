@@ -6,7 +6,7 @@
   "m_Enabled": 1,
   "m_Script": {
     "m_FileID": 1,
-    "m_PathID": 398
+    "m_PathID": 328
   },
   "m_Name": "MIDIProtoSet",
   "TableName": "MIDI",

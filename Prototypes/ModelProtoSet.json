@@ -6,7 +6,7 @@
   "m_Enabled": 1,
   "m_Script": {
     "m_FileID": 1,
-    "m_PathID": 1806
+    "m_PathID": 1903
   },
   "m_Name": "ModelProtoSet",
   "TableName": "Model",
@@ -8696,7 +8696,7 @@
       "Order": 0,
       "ObjectType": 5,
       "RuinType": 0,
-      "RendererType": 5,
+      "RendererType": 0,
       "RotSymmetry": 0,
       "HpMax": 1,
       "HpUpgrade": 0,
@@ -8714,7 +8714,7 @@
       "Order": 0,
       "ObjectType": 5,
       "RuinType": 0,
-      "RendererType": 5,
+      "RendererType": 0,
       "RotSymmetry": 0,
       "HpMax": 1,
       "HpUpgrade": 0,
