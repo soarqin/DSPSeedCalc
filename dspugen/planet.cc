@@ -86,15 +86,15 @@ Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, i
     auto rand3 = dotNet35Random.nextDouble();
     auto rand4 = dotNet35Random.nextDouble();
     auto themeSeed = dotNet35Random.next();
-    auto num15 = std::pow(1.2f, float(num2 * (num3 - 0.5) * 0.5));
+    auto num15 = util::mathfPow(1.2f, float(num2 * (num3 - 0.5) * 0.5));
     float num16;
     if (orbitAround == 0) {
         num16 = OrbitRadiusFactor[orbitIndex] * star->orbitScaler;
         auto num17 = (num15 - 1.0f) / std::max(1.0f, num16) + 1.0f;
         num16 *= num17;
     } else {
-        num16 = ((1600.0f * orbitIndex + 200.0f) * std::pow(star->orbitScaler, 0.3f) *
-                 util::lerp(num15, 1.0f, 0.5f) + planet->orbitAroundPlanet->realRadius()) / 40000.0;
+        num16 = ((1600.0f * orbitIndex + 200.0f) * util::mathfPow(star->orbitScaler, 0.3f) *
+                  util::lerp(num15, 1.0f, 0.5f) + planet->orbitAroundPlanet->realRadius()) / 40000.0;
     }
 
     planet->orbitRadius = num16;
@@ -202,10 +202,10 @@ Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, i
         auto num23 = 1000.0f;
         if (habitableRadius > 0.0f && sunDistance > 0.0f) {
             num23 = sunDistance / habitableRadius;
-            num22 = std::abs(std::log(num23));
+            num22 = std::abs(util::mathfLog(num23));
         }
 
-        auto num24 = std::clamp(std::sqrt(habitableRadius), 1.0f, 2.0f) - 0.04f;
+        auto num24 = std::clamp(util::mathfSqrt(habitableRadius), 1.0f, 2.0f) - 0.04f;
         auto a = num20 / num21;
         a = util::lerp(a, 0.35f, 0.5f);
         a = std::clamp(a, 0.08f, 0.8f);
@@ -214,7 +214,7 @@ Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, i
 
         auto f = util::clamp01(planet->habitableBias / a);
         auto p = a * 10.0f;
-        f = std::pow(f, p);
+        f = util::mathfPow(f, p);
         if (num12 > f && star->index > 0 ||
             planet->orbitAround > 0 && planet->orbitIndex == 1 && star->index == 0) {
             planet->type = EPlanetType::Ocean;
@@ -242,14 +242,14 @@ Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, i
     }
 */
 
-    planet->luminosity = std::pow(planet->star->lightBalanceRadius / (planet->sunDistance + 0.01f), 0.6f);
+    planet->luminosity = util::mathfPow(planet->star->lightBalanceRadius / (planet->sunDistance + 0.01f), 0.6f);
     if (planet->luminosity > 1.0f) {
-        planet->luminosity = std::log(planet->luminosity) + 1.0f;
-        planet->luminosity = std::log(planet->luminosity) + 1.0f;
-        planet->luminosity = std::log(planet->luminosity) + 1.0f;
+        planet->luminosity = util::mathfLog(planet->luminosity) + 1.0f;
+        planet->luminosity = util::mathfLog(planet->luminosity) + 1.0f;
+        planet->luminosity = util::mathfLog(planet->luminosity) + 1.0f;
     }
 
-    planet->luminosity = std::round(planet->luminosity * 100.0f) / 100.0f;
+    planet->luminosity = util::mathfRound(planet->luminosity * 100.0f) / 100.0f;
     planet->setPlanetTheme(rand, rand2, rand3, rand4, themeSeed);
     planet->generateVeins();
     return planet;
@@ -270,7 +270,9 @@ void Planet::generateGas() {
 */
     util::DotNet35Random dotNet35Random(themeSeed);
     for (auto num5 = 0; num5 < num3; num5++) {
-        gasSpeeds[num5] = themeProto4->gasSpeeds[num5] * (dotNet35Random.nextDouble() * 0.190909147f + 0.9090909f) * std::pow(resourceCoef, 0.3f);
+        auto speed = themeProto4->gasSpeeds[num5];
+        speed *= float(dotNet35Random.nextDouble()) * 0.19090915f + 0.9090909f;
+        gasSpeeds[num5] = speed * util::mathfPow(resourceCoef, 0.3f);
 /*
         auto *itemProto = itemProtoSet.select(gasItems[num5]);
         gasHeatValues[num5] = itemProto->heatValue;
@@ -457,7 +459,7 @@ void Planet::generateVeins() {
             auto num2 = themeProto->rareVeins[n];
             auto num3 = themeProto->rareSettings[star->index == 0 ? (n * 4) : (n * 4 + 1)];
             auto num4 = themeProto->rareSettings[n * 4 + 2];
-            num3 = 1.0f - std::pow(1.0f - num3, p);
+            num3 = 1.0f - util::mathfPow(1.0f - num3, p);
             if (dotNet35Random.nextDouble() >= double(num3)) continue;
             veinSpot[num2]++;
             for (auto num7 = 1; num7 < 12; num7++) {

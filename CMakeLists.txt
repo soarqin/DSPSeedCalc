@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.21)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 include(GlobalOptions)
-add_global_options()
+add_global_options(CXX_STANDARD 17)
 include(CustomCompilerOptions)
 fix_compile_flags()
 fix_release_flags(STRIP_BINARY ON USE_LTO ON USE_STATIC_CRT ON)
@@ -22,6 +22,7 @@ add_project(${PROJECT_NAME} EXECUTABLE
     LANGUAGES CXX)
 
 target_link_libraries(${PROJECT_NAME} dspugen)
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 if(WIN32)
     add_subdirectory(getopt)
     add_subdirectory(dlfcn-win32)

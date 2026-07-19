@@ -20,6 +20,11 @@ public:
     MemPool() noexcept {
         pool_.reserve(N);
     }
+    MemPool(const MemPool &) = delete;
+    MemPool &operator=(const MemPool &) = delete;
+    ~MemPool() {
+        for (auto *ptr: pool_) free(ptr);
+    }
     template<typename...V>
     T *alloc(const V &...v) {
         T *ptr;

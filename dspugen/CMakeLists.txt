@@ -16,3 +16,10 @@ add_subdirectory(fmt)
 
 target_include_directories(dspugen PUBLIC .)
 target_link_libraries(dspugen fmt::fmt)
+target_compile_features(dspugen PUBLIC cxx_std_17)
+
+if(MSVC)
+    target_compile_options(dspugen PRIVATE /fp:strict)
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(dspugen PRIVATE -fno-fast-math -ffp-contract=off)
+endif()
