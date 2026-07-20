@@ -7,6 +7,7 @@ add_project(dspugen STATIC
     settings.hh
     vectors.hh
     util/dotnet35random.cc util/dotnet35random.hh
+    util/instrumentation.cc util/instrumentation.hh
     util/maths.hh util/mempool.hh
     LANGUAGES CXX
     FOLDER "lib"
@@ -17,6 +18,10 @@ add_subdirectory(fmt)
 target_include_directories(dspugen PUBLIC .)
 target_link_libraries(dspugen fmt::fmt)
 target_compile_features(dspugen PUBLIC cxx_std_17)
+
+if(DSP_ENABLE_INSTRUMENTATION)
+    target_compile_definitions(dspugen PUBLIC DSP_ENABLE_INSTRUMENTATION=1)
+endif()
 
 if(MSVC)
     target_compile_options(dspugen PRIVATE /fp:strict)

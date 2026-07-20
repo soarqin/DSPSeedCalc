@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "description": "Balanced PGO training coverage",
+  "workloads": [
+    {"range": "1-2000,16", "threads": 1, "mode": ["-P"], "plugin": "pose_sink"},
+    {"range": "2001-4000,64", "threads": 1, "mode": [], "plugin": "reject_galaxy"},
+    {"range": "4001-6000,64", "threads": 16, "mode": ["-Z"], "plugin": "reject_galaxy"},
+    {"range": "6001-8000,64", "threads": 1, "mode": ["-b"], "plugin": "reject_galaxy"},
+    {"range": "8001-10000,64", "threads": 16, "mode": ["-b", "-Z"], "plugin": "reject_galaxy"},
+    {"range": "10001-10500,64", "threads": 1, "mode": ["-p"], "plugin": "reject_planet"},
+    {"range": "10501-11000,64", "threads": 1, "mode": ["-n"], "plugin": "reject_galaxy"},
+    {"range": "11001-11200,256", "threads": 16, "mode": ["-p", "-n"], "plugin": "reject_planet"},
+    {"range": "11201-12000,64", "threads": 16, "mode": [], "plugin": "high_output"}
+  ]
+}

@@ -34,3 +34,11 @@
 # CLion files
 /.idea/
 /cmake-build-*/
+/benchmark-results*.json
+/pgo-data/
+*.profraw
+*.profdata
+*.gcda
+*.gcno
+__pycache__/
+*.pyc

@@ -94,11 +94,12 @@ public:
     static void releaseThread();
 
     void release();
+    void reset();
 
-    int id;
-    int index;
-    int number;
-    int seed;
+    int id = 0;
+    int index = 0;
+    int number = 0;
+    int seed = 0;
 
     Galaxy *galaxy = nullptr;
     Star *star = nullptr;

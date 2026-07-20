@@ -31,6 +31,9 @@ public:
 
     ~Galaxy();
     void release();
+    void reset();
+    void ensureAllPlanets();
+    void ensureAllGas();
 /*
     int birthPlanetId = 0;
 */
@@ -38,6 +41,7 @@ public:
     int HabitableCount = 0;
     int seed = 0;
     int starCount = 0;
+    float habitableTarget = 0.0f;
 
     std::vector<Star *> stars;
 

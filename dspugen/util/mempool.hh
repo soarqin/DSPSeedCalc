@@ -7,6 +7,7 @@
  */
 
 #pragma once
+#include "instrumentation.hh"
 
 #include <vector>
 #include <cstddef>
@@ -17,29 +18,36 @@ namespace dspugen::util {
 template<typename T, size_t N = 65536>
 class MemPool final {
 public:
-    MemPool() noexcept {
-        pool_.reserve(N);
-    }
+    MemPool() noexcept = default;
     MemPool(const MemPool &) = delete;
     MemPool &operator=(const MemPool &) = delete;
     ~MemPool() {
-        for (auto *ptr: pool_) free(ptr);
+        for (auto *ptr: pool_) {
+            ptr->~T();
+            free(ptr);
+        }
     }
-    template<typename...V>
-    T *alloc(const V &...v) {
+    T *alloc() {
         T *ptr;
         if (pool_.empty()) {
             ptr = static_cast<T*>(malloc(sizeof(T)));
+            DSP_INSTRUMENT(++instrumentation::local().poolFreshAllocations);
+            return new(ptr) T();
         } else {
             ptr = pool_.back();
             pool_.pop_back();
+            DSP_INSTRUMENT(++instrumentation::local().poolReuseAllocations);
+            return ptr;
         }
-        return new(ptr) T(v...);
     }
     void release(T *v) {
+        v->reset();
         if (pool_.size() < N) {
-            v->~T();
             pool_.push_back(v);
+            DSP_INSTRUMENT(
+                auto &highWater = instrumentation::local().poolFreeListHighWater;
+                if (pool_.size() > highWater) highWater = pool_.size();
+            );
         } else {
             v->~T();
             free(v);

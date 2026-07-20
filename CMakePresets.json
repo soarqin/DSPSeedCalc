@@ -1,0 +1,60 @@
+{
+  "version": 6,
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "generator": "Ninja",
+      "cacheVariables": {
+        "CMAKE_CXX_STANDARD": "17",
+        "BUILD_VIEWER": "OFF",
+        "FMT_TEST": "OFF",
+        "DSP_BUILD_ORACLE": "ON"
+      }
+    },
+    {
+      "name": "gcc-debug-parity",
+      "inherits": "base",
+      "binaryDir": "${sourceDir}/cmake-build-gcc-debug-parity",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_C_COMPILER": "C:/msys64/ucrt64/bin/gcc.exe",
+        "CMAKE_CXX_COMPILER": "C:/msys64/ucrt64/bin/g++.exe"
+      }
+    },
+    {
+      "name": "gcc-release-parity",
+      "inherits": "base",
+      "binaryDir": "${sourceDir}/cmake-build-gcc-release-parity",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_C_COMPILER": "C:/msys64/ucrt64/bin/gcc.exe",
+        "CMAKE_CXX_COMPILER": "C:/msys64/ucrt64/bin/g++.exe"
+      }
+    },
+    {
+      "name": "clang-release-parity",
+      "inherits": "base",
+      "binaryDir": "${sourceDir}/cmake-build-clang-release-parity",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_C_COMPILER": "C:/msys64/clang64/bin/clang.exe",
+        "CMAKE_CXX_COMPILER": "C:/msys64/clang64/bin/clang++.exe"
+      }
+    },
+    {
+      "name": "gcc-release-instrumented",
+      "inherits": "gcc-release-parity",
+      "binaryDir": "${sourceDir}/cmake-build-gcc-release-instrumented",
+      "cacheVariables": {
+        "DSP_ENABLE_INSTRUMENTATION": "ON"
+      }
+    }
+  ],
+  "buildPresets": [
+    {"name": "gcc-debug-parity", "configurePreset": "gcc-debug-parity", "targets": ["dspugen_oracle", "DSPSeedCalc"]},
+    {"name": "gcc-release-parity", "configurePreset": "gcc-release-parity", "targets": ["dspugen_oracle", "DSPSeedCalc"]},
+    {"name": "clang-release-parity", "configurePreset": "clang-release-parity", "targets": ["dspugen_oracle", "DSPSeedCalc"]},
+    {"name": "gcc-release-instrumented", "configurePreset": "gcc-release-instrumented", "targets": ["dspugen_oracle", "DSPSeedCalc"]}
+  ]
+}

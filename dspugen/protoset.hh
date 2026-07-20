@@ -11,6 +11,7 @@
 #include "vectors.hh"
 
 #include <unordered_map>
+#include <array>
 #include <vector>
 #include <string>
 #include <cstdint>
@@ -59,6 +60,8 @@ public:
     }
 
     inline void onLoaded() {
+        dataIndices.clear();
+        nameIndices.clear();
         auto count = static_cast<int>(dataArray.size());
         for (int i = 0; i < count; ++i) {
             dataIndices[dataArray[i].id] = i;
@@ -120,7 +123,22 @@ struct StringProto : Proto {
 
 extern void loadProtoSets();
 
-using ThemeProtoSet = ProtoSet<ThemeProto>;
+class ThemeProtoSet final : public ProtoSet<ThemeProto> {
+public:
+    void onLoaded();
+    [[nodiscard]] const ThemeProto *select(int id) const;
+    [[nodiscard]] const std::vector<int> &candidates(bool birthStar, int planetType) const;
+    [[nodiscard]] const std::vector<int> &birthCandidates() const { return birthThemes; }
+    [[nodiscard]] const std::vector<int> &desertCandidates() const { return desertThemes; }
+
+private:
+    std::vector<int> denseIndices;
+    std::unordered_map<int, int> sparseIndices;
+    std::vector<int> birthThemes;
+    std::array<std::vector<int>, 6> birthDefaultByType;
+    std::array<std::vector<int>, 6> interstellarByType;
+    std::vector<int> desertThemes;
+};
 extern ThemeProtoSet themeProtoSet;
 using ItemProtoSet = ProtoSet<ItemProto>;
 extern ItemProtoSet itemProtoSet;

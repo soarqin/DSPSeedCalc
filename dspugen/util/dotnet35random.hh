@@ -7,6 +7,7 @@
  */
 
 #pragma once
+#include "instrumentation.hh"
 
 #include <limits>
 #include <cstdint>
@@ -33,6 +34,12 @@ private:
         int num = seedArray[inext] - seedArray[inextp];
         if (num < 0) num += MBIG;
         seedArray[inext] = num;
+        DSP_INSTRUMENT(
+            auto &counters = instrumentation::local();
+            ++counters.rngCalls;
+            counters.rngTraceHash ^= static_cast<std::uint32_t>(num);
+            counters.rngTraceHash *= 1099511628211ULL;
+        );
         return static_cast<double>(num) * 4.6566128752457969E-10;
     }
 

@@ -44,6 +44,7 @@ public:
 
     ~Star();
     void release();
+    void reset();
 
     static constexpr float kPhysicsRadiusRatio = 1200.0f;
 
@@ -73,6 +74,7 @@ public:
     float classFactor;
 */
     float resourceCoef = 0.0f;
+    float habitableRadiusSqrt = 0.0f;
 /*
     float acdiskRadius;
     VectorLF3 uPosition;

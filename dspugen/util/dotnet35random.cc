@@ -13,6 +13,12 @@
 namespace dspugen::util {
 
 DotNet35Random::DotNet35Random(int seed) {
+    DSP_INSTRUMENT(
+        auto &counters = instrumentation::local();
+        ++counters.rngConstructions;
+        counters.rngTraceHash ^= static_cast<std::uint32_t>(seed);
+        counters.rngTraceHash *= 1099511628211ULL;
+    );
     int num = 161803398 - std::abs(seed);
     seedArray[55] = num;
     int num2 = 1;

@@ -45,6 +45,35 @@ Star::~Star() {
     }
 }
 
+void Star::reset() {
+    for (auto *planet: planets) {
+        if (planet) planet->release();
+    }
+    planets.clear();
+    name.clear();
+    galaxy = nullptr;
+    index = 0;
+    level = 0.0f;
+    id = 1;
+    seed = 0;
+    type = EStarType::MainSeqStar;
+    spectr = ESpectrType::M;
+    mass = 1.0f;
+    lifetime = 50.0f;
+    age = 0.0f;
+    temperature = 8500.0f;
+    luminosity = 1.0f;
+    radius = 1.0f;
+    habitableRadius = 1.0f;
+    lightBalanceRadius = 1.0f;
+    orbitScaler = 1.0f;
+    dysonRadius = 10.0f;
+    position = {};
+    color = 0.0f;
+    resourceCoef = 0.0f;
+    habitableRadiusSqrt = 0.0f;
+}
+
 void Star::release() {
     spool->release(this);
 }
@@ -183,8 +212,9 @@ Star *Star::createStar(Galaxy *galaxy,
     star->acdiskRadius = 0.0f;
 */
     auto p = float(num13) + 2.0f;
-    star->habitableRadius = util::mathfPow(1.7f, p) + 0.25f * std::min(1.0f, star->orbitScaler);
-    star->lightBalanceRadius = util::mathfPow(1.7f, p);
+    auto lightBalanceRadius = util::mathfPow(1.7f, p);
+    star->habitableRadius = lightBalanceRadius + 0.25f * std::min(1.0f, star->orbitScaler);
+    star->lightBalanceRadius = lightBalanceRadius;
     star->orbitScaler = util::mathfPow(1.35f, p);
     if (star->orbitScaler < 1.0f) star->orbitScaler = util::lerp(star->orbitScaler, 1.0f, 0.6f);
     star->setStarAge(rn, rt);
@@ -247,8 +277,9 @@ Star *Star::createBirthStar(Galaxy *galaxy, int seed) {
     star->acdiskRadius = 0.0f;
 */
     auto p = float(num6) + 2.0f;
-    star->habitableRadius = util::mathfPow(1.7f, p) + 0.2f * std::min(1.0f, star->orbitScaler);
-    star->lightBalanceRadius = util::mathfPow(1.7f, p);
+    auto lightBalanceRadius = util::mathfPow(1.7f, p);
+    star->habitableRadius = lightBalanceRadius + 0.2f * std::min(1.0f, star->orbitScaler);
+    star->lightBalanceRadius = lightBalanceRadius;
     star->orbitScaler = util::mathfPow(1.35f, p);
     if (star->orbitScaler < 1.0f) star->orbitScaler = util::lerp(star->orbitScaler, 1.0f, 0.6f);
     star->setStarAge(rn, rt);
@@ -327,6 +358,7 @@ void Star::setStarAge(double rn, double rt) {
 }
 
 void Star::createStarPlanets() {
+    if (habitableRadiusSqrt == 0.0f) habitableRadiusSqrt = util::mathfSqrt(habitableRadius);
     util::DotNet35Random dotNet35Random(seed);
     dotNet35Random.next();
     dotNet35Random.next();

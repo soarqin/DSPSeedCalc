@@ -7,6 +7,7 @@
  */
 
 #include "protoset.hh"
+#include "util/instrumentation.hh"
 
 #include <nlohmann/json.hpp>
 #include <fstream>
@@ -17,6 +18,55 @@ ThemeProtoSet themeProtoSet;
 ItemProtoSet itemProtoSet;
 VeinProtoSet veinProtoSet;
 StringProtoSet stringProtoSet;
+
+void ThemeProtoSet::onLoaded() {
+    ProtoSet<ThemeProto>::onLoaded();
+    denseIndices.clear();
+    sparseIndices.clear();
+    birthThemes.clear();
+    desertThemes.clear();
+    for (auto &indices: birthDefaultByType) indices.clear();
+    for (auto &indices: interstellarByType) indices.clear();
+
+    int maxId = -1;
+    for (const auto &theme: dataArray)
+        if (theme.id >= 0 && theme.id > maxId) maxId = theme.id;
+    denseIndices.resize(static_cast<std::size_t>(maxId + 1), -1);
+    for (std::size_t i = 0; i < dataArray.size(); ++i) {
+        const auto &theme = dataArray[i];
+        if (theme.id >= 0)
+            denseIndices[static_cast<std::size_t>(theme.id)] = static_cast<int>(i);
+        else
+            sparseIndices[theme.id] = static_cast<int>(i);
+        if (theme.distribute == EThemeDistribute::Birth) birthThemes.emplace_back(static_cast<int>(i));
+        if (theme.planetType >= 0 && theme.planetType < static_cast<int>(birthDefaultByType.size())) {
+            if (theme.distribute == EThemeDistribute::Default)
+                birthDefaultByType[static_cast<std::size_t>(theme.planetType)].emplace_back(static_cast<int>(i));
+            if (theme.distribute == EThemeDistribute::Default ||
+                theme.distribute == EThemeDistribute::Interstellar)
+                interstellarByType[static_cast<std::size_t>(theme.planetType)].emplace_back(static_cast<int>(i));
+        }
+        if (theme.planetType == 3) desertThemes.emplace_back(static_cast<int>(i));
+    }
+}
+
+const ThemeProto *ThemeProtoSet::select(int id) const {
+    DSP_INSTRUMENT(++util::instrumentation::local().prototypeLookups);
+    if (id < 0) {
+        auto found = sparseIndices.find(id);
+        return found == sparseIndices.end() ? nullptr : &dataArray[found->second];
+    }
+    if (static_cast<std::size_t>(id) >= denseIndices.size()) return nullptr;
+    auto index = denseIndices[static_cast<std::size_t>(id)];
+    return index < 0 ? nullptr : &dataArray[static_cast<std::size_t>(index)];
+}
+
+const std::vector<int> &ThemeProtoSet::candidates(bool birthStar, int planetType) const {
+    static const std::vector<int> empty;
+    if (planetType < 0 || planetType >= static_cast<int>(birthDefaultByType.size())) return empty;
+    return birthStar ? birthDefaultByType[static_cast<std::size_t>(planetType)]
+                     : interstellarByType[static_cast<std::size_t>(planetType)];
+}
 
 #define JL(a, b) j.at(#a).get_to(p.b)
 void from_json(const nlohmann::json &j, Vector2 &p) {

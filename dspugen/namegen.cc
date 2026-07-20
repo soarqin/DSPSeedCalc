@@ -86,7 +86,7 @@ std::string NameGen::randomStarName(int seed, Star *starData, Galaxy *galaxy) {
     while (num++ < 256) {
         std::string text = _randomStarName(dotNet35Random.next(), starData);
         bool flag = false;
-        for (int i = 0; i < galaxy->starCount; i++) {
+        for (std::size_t i = 0; i < galaxy->stars.size(); i++) {
             if (galaxy->stars[i] != nullptr && galaxy->stars[i]->name == text) {
                 flag = true;
                 break;
@@ -276,6 +276,7 @@ std::string NameGen::randomGiantStarNameWithConstellationAlpha(int seed) {
     int num3 = dotNet35Random.next(0, 26);
     int num4 = (65 + num2);
     int num5 = (65 + num3);
+    // C# promotes ushort + char to int before concatenating the string.
     return std::to_string(num4 + num5) + ' ' + constellations(num);
 }
 

@@ -14,8 +14,10 @@
 #include "util/dotnet35random.hh"
 #include "util/maths.hh"
 #include "util/mempool.hh"
+#include "util/instrumentation.hh"
 
 #include <algorithm>
+#include <cstring>
 
 namespace dspugen {
 
@@ -38,8 +40,36 @@ void Planet::release() {
     ppool->release(this);
 }
 
+void Planet::reset() {
+    id = 0;
+    index = 0;
+    number = 0;
+    seed = 0;
+    galaxy = nullptr;
+    star = nullptr;
+    type = EPlanetType::None;
+    singularity = 0;
+    theme = 0;
+    algoId = 0;
+    orbitAround = 0;
+    orbitAroundPlanet = nullptr;
+    orbitIndex = 0;
+    orbitRadius = 1.0f;
+    radius = 200.0f;
+    scale = 1.0f;
+    habitableBias = 0.0f;
+    sunDistance = 0.0f;
+    temperatureBias = 0.0f;
+    luminosity = 0.0f;
+    gasItems.clear();
+    gasSpeeds.clear();
+    std::memset(veinSpot, 0, sizeof(veinSpot));
+    themeSeed = 0;
+}
+
 Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, int number,
                        bool gasGiant, int infoSeed, int genSeed) {
+    DSP_INSTRUMENT(++util::instrumentation::local().planetsCreated);
     auto planet = ppool->alloc();
     util::DotNet35Random dotNet35Random(infoSeed);
     auto *galaxy = star->galaxy;
@@ -54,10 +84,6 @@ Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, i
     planet->orbitIndex = orbitIndex;
     planet->number = number;
     planet->id = star->id * 100 + index + 1;
-    auto &stars = galaxy->stars;
-    auto num = 0;
-    for (auto i = 0; i < star->index; i++) num += static_cast<int>(stars[i]->planets.size());
-    num += index;
     if (orbitAround > 0) {
         auto planetCount = static_cast<int>(star->planets.size());
         for (auto j = 0; j < planetCount; j++)
@@ -193,8 +219,12 @@ Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, i
         planet->scale = 10.0f;
         planet->habitableBias = 100.0f;
     } else {
-        auto num19 = std::ceil(galaxy->starCount * 0.29f);
-        if (num19 < 11.0f) num19 = 11.0f;
+        auto num19 = galaxy->habitableTarget;
+        if (num19 == 0.0f) {
+            num19 = std::ceil(galaxy->starCount * 0.29f);
+            if (num19 < 11.0f) num19 = 11.0f;
+            galaxy->habitableTarget = num19;
+        }
         auto num20 = num19 - static_cast<float>(galaxy->HabitableCount);
         auto num21 = static_cast<float>(galaxy->starCount - star->index);
         auto sunDistance = planet->sunDistance;
@@ -205,7 +235,7 @@ Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, i
             num22 = std::abs(util::mathfLog(num23));
         }
 
-        auto num24 = std::clamp(util::mathfSqrt(habitableRadius), 1.0f, 2.0f) - 0.04f;
+        auto num24 = std::clamp(star->habitableRadiusSqrt, 1.0f, 2.0f) - 0.04f;
         auto a = num20 / num21;
         a = util::lerp(a, 0.35f, 0.5f);
         a = std::clamp(a, 0.08f, 0.8f);
@@ -267,12 +297,14 @@ void Planet::generateGas() {
     auto resourceCoef = star->updateResourceCoef();
 /*
     auto num4 = 0.0;
-*/
+    */
     util::DotNet35Random dotNet35Random(themeSeed);
+    float resourceScale = util::mathfPow(resourceCoef, 0.3f);
     for (auto num5 = 0; num5 < num3; num5++) {
+        DSP_INSTRUMENT(++util::instrumentation::local().gasEntriesGenerated);
         auto speed = themeProto4->gasSpeeds[num5];
         speed *= float(dotNet35Random.nextDouble()) * 0.19090915f + 0.9090909f;
-        gasSpeeds[num5] = speed * util::mathfPow(resourceCoef, 0.3f);
+        gasSpeeds[num5] = speed * resourceScale;
 /*
         auto *itemProto = itemProtoSet.select(gasItems[num5]);
         gasHeatValues[num5] = itemProto->heatValue;
@@ -286,10 +318,15 @@ void Planet::generateGas() {
 }
 
 void Planet::setPlanetTheme(double rand1, double rand2, double rand3, double rand4, int thmSeed) {
-    int tmpTheme[32];
-    int tmpThemeCount = 0;
+    static thread_local std::vector<int> tmpTheme;
+    tmpTheme.clear();
     this->themeSeed = thmSeed;
-    for (const auto &themeProto: themeProtoSet.dataArray) {
+    const auto &candidates = star->index == 0 && type == EPlanetType::Ocean
+                             ? themeProtoSet.birthCandidates()
+                             : themeProtoSet.candidates(star->index == 0, static_cast<int>(type));
+    for (auto candidate: candidates) {
+        DSP_INSTRUMENT(++util::instrumentation::local().themeRowsExamined);
+        const auto &themeProto = themeProtoSet.dataArray[static_cast<std::size_t>(candidate)];
         auto flag = false;
         if (star->index == 0 && type == EPlanetType::Ocean) {
             if (themeProto.distribute == EThemeDistribute::Birth) flag = true;
@@ -316,11 +353,13 @@ void Planet::setPlanetTheme(double rand1, double rand2, double rand3, double ran
                     break;
                 }
 
-        if (flag) tmpTheme[tmpThemeCount++] = themeProto.id;
+        if (flag) tmpTheme.emplace_back(themeProto.id);
     }
 
-    if (tmpThemeCount == 0)
-        for (const auto &themeProto2: themeProtoSet.dataArray) {
+    if (tmpTheme.empty())
+        for (auto candidate: themeProtoSet.desertCandidates()) {
+            DSP_INSTRUMENT(++util::instrumentation::local().themeRowsExamined);
+            const auto &themeProto2 = themeProtoSet.dataArray[static_cast<std::size_t>(candidate)];
             auto flag2 = themeProto2.planetType == static_cast<int>(EPlanetType::Desert);
             if (flag2)
                 for (auto l = 0; l < index; l++)
@@ -329,14 +368,17 @@ void Planet::setPlanetTheme(double rand1, double rand2, double rand3, double ran
                         break;
                     }
 
-            if (flag2) tmpTheme[tmpThemeCount++] = themeProto2.id;
+            if (flag2) tmpTheme.emplace_back(themeProto2.id);
         }
 
-    if (tmpThemeCount == 0)
-        for (const auto &themeProto3: themeProtoSet.dataArray) {
-            if (themeProto3.planetType == static_cast<int>(EPlanetType::Desert)) tmpTheme[tmpThemeCount++] = themeProto3.id;
+    if (tmpTheme.empty())
+        for (auto candidate: themeProtoSet.desertCandidates()) {
+            DSP_INSTRUMENT(++util::instrumentation::local().themeRowsExamined);
+            const auto &themeProto3 = themeProtoSet.dataArray[static_cast<std::size_t>(candidate)];
+            if (themeProto3.planetType == static_cast<int>(EPlanetType::Desert)) tmpTheme.emplace_back(themeProto3.id);
         }
 
+    auto tmpThemeCount = static_cast<int>(tmpTheme.size());
     theme = tmpTheme[static_cast<int>(rand1 * tmpThemeCount) % tmpThemeCount];
     const auto *themeProto4 = themeProtoSet.select(theme);
     algoId = 0;
