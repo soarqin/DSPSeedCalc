@@ -42,3 +42,7 @@
 *.gcno
 __pycache__/
 *.pyc
+
+# Agent folders
+/.opencode/
+/.codegraph/
