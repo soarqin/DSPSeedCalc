@@ -31,8 +31,7 @@
 *.out
 *.app
 
-# CLion files
-/.idea/
+# Intermediate files
 /cmake-build-*/
 /benchmark-results*.json
 /pgo-data/
