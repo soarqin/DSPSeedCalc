@@ -1,11 +1,22 @@
 cmake_minimum_required(VERSION 3.28)
-add_project(viewer WIN32
-    viewer.cc
-    LANGUAGES CXX
-    FOLDER "gui")
+if(EMSCRIPTEN)
+    add_project(viewer EXECUTABLE
+        viewer.cc
+        web_shell.html
+        LANGUAGES CXX
+        FOLDER "gui")
+else()
+    add_project(viewer EXECUTABLE
+        viewer.cc
+        LANGUAGES CXX
+        FOLDER "gui")
+endif()
 
 set(RAYLIB_VERSION 6.0)
 set(RAYLIB_SHA256SUM 2b3ee1e2120c7a0796b33062c7e9a694dd8a8caa56a96319ac8c8ecf54a90d0b)
+if(EMSCRIPTEN)
+    set(PLATFORM Web CACHE STRING "raylib target platform" FORCE)
+endif()
 find_package(raylib ${RAYLIB_VERSION} QUIET)
 if (NOT raylib_FOUND)
     include(FetchContent)
@@ -23,4 +34,15 @@ endif()
 target_link_libraries(${PROJECT_NAME} dspugen raylib)
 if (APPLE)
     target_link_libraries(${PROJECT_NAME} "-framework IOKit" "-framework Cocoa" "-framework OpenGL")
+endif()
+
+if(EMSCRIPTEN)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE PLATFORM_WEB)
+    target_link_options(${PROJECT_NAME} PRIVATE
+        "-sUSE_GLFW=3"
+        "-sWASM=1"
+        "-sALLOW_MEMORY_GROWTH=1"
+        "--preload-file=${CMAKE_SOURCE_DIR}/Prototypes@Prototypes"
+        "--shell-file=${CMAKE_CURRENT_SOURCE_DIR}/web_shell.html")
+    set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX ".html")
 endif()

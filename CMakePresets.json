@@ -49,12 +49,26 @@
       "cacheVariables": {
         "DSP_ENABLE_INSTRUMENTATION": "ON"
       }
+    },
+    {
+      "name": "emscripten-viewer",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/cmake-build-emscripten-viewer",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_TOOLCHAIN_FILE": "$env{EMSDK}/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake",
+        "CMAKE_CXX_STANDARD": "17",
+        "BUILD_VIEWER": "ON",
+        "DSP_BUILD_ORACLE": "OFF",
+        "FMT_TEST": "OFF"
+      }
     }
   ],
   "buildPresets": [
     {"name": "gcc-debug-parity", "configurePreset": "gcc-debug-parity", "targets": ["dspugen_oracle", "DSPSeedCalc"]},
     {"name": "gcc-release-parity", "configurePreset": "gcc-release-parity", "targets": ["dspugen_oracle", "DSPSeedCalc"]},
     {"name": "clang-release-parity", "configurePreset": "clang-release-parity", "targets": ["dspugen_oracle", "DSPSeedCalc"]},
-    {"name": "gcc-release-instrumented", "configurePreset": "gcc-release-instrumented", "targets": ["dspugen_oracle", "DSPSeedCalc"]}
+    {"name": "gcc-release-instrumented", "configurePreset": "gcc-release-instrumented", "targets": ["dspugen_oracle", "DSPSeedCalc"]},
+    {"name": "emscripten-viewer", "configurePreset": "emscripten-viewer", "targets": ["viewer"]}
   ]
 }
