@@ -4,8 +4,8 @@ add_project(viewer WIN32
     LANGUAGES CXX
     FOLDER "gui")
 
-set(RAYLIB_VERSION 5.5)
-set(RAYLIB_SHA256SUM aea98ecf5bc5c5e0b789a76de0083a21a70457050ea4cc2aec7566935f5e258e)
+set(RAYLIB_VERSION 6.0)
+set(RAYLIB_SHA256SUM 2b3ee1e2120c7a0796b33062c7e9a694dd8a8caa56a96319ac8c8ecf54a90d0b)
 find_package(raylib ${RAYLIB_VERSION} QUIET)
 if (NOT raylib_FOUND)
     include(FetchContent)
