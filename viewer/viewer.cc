@@ -95,6 +95,7 @@ struct PlanetViewData {
     float orbitLongitude = 0.0f;
     float orbitPhase = 0.0f;
     double orbitalPeriod = 3600.0;
+    Matrix orbitRotation{};
     float labelWidth = 0.0f;
     std::string name;
     PanelData panel;
@@ -470,14 +471,19 @@ void DrawCachedLines(const std::vector<Line3DCache> &lines, Color color) {
 }
 
 Vector3 TransformOrbitPoint(Vector3 point, float inclination, float longitude) {
-    Matrix tilt = MatrixRotateX(inclination);
     Matrix heading = MatrixRotateY(longitude);
-    return Vector3Transform(point, MatrixMultiply(tilt, heading));
+    Matrix tilt = MatrixRotateZ(inclination);
+    return Vector3Transform(point, MatrixMultiply(heading, tilt));
 }
 
 Vector3 OrbitPoint(Vector3 center, float radius, float angle, float inclination, float longitude) {
     return center + TransformOrbitPoint(
         Vector3 {std::cos(angle) * radius, 0.0f, std::sin(angle) * radius}, inclination, longitude);
+}
+
+Vector3 OrbitPoint(Vector3 center, float radius, float angle, Matrix rotation) {
+    Vector3 point {std::cos(angle) * radius, 0.0f, std::sin(angle) * radius};
+    return center + Vector3Transform(point, rotation);
 }
 
 std::vector<int> ReplayInfoSeeds(const dspugen::Star *star) {
@@ -551,12 +557,15 @@ OrbitParameters CreateOrbitParameters(const dspugen::Star *star, const dspugen::
     return result;
 }
 
+Matrix PlanetOrbitRotation(float inclination, float longitude) {
+    return MatrixMultiply(MatrixRotateY(longitude), MatrixRotateZ(inclination));
+}
+
 void DrawOrbit(Vector3 center, const PlanetViewData &planet) {
-    Vector3 previous = OrbitPoint(center, planet.orbitRadius, 0.0f, planet.orbitInclination, planet.orbitLongitude);
+    Vector3 previous = OrbitPoint(center, planet.orbitRadius, 0.0f, planet.orbitRotation);
     for (int i = 1; i <= kOrbitSegments; ++i) {
         float angle = static_cast<float>(i) / kOrbitSegments * 2.0f * PI;
-        Vector3 next = OrbitPoint(center, planet.orbitRadius, angle,
-                                  planet.orbitInclination, planet.orbitLongitude);
+        Vector3 next = OrbitPoint(center, planet.orbitRadius, angle, planet.orbitRotation);
         DrawLine3D(previous, next, Color {67, 119, 150, 122});
         previous = next;
     }
@@ -757,17 +766,17 @@ private:
                     }
                 }
             }
-            float orbitRadius = std::max(planet->orbitAround == 0
-                                             ? planet->orbitRadius * kSystemOrbitScale
-                                             : planet->orbitRadius * kSystemOrbitScale * 1.5f,
-                                         planet->orbitAround == 0 ? 2.4f : 0.85f);
+            float orbitRadius = planet->orbitRadius * kSystemOrbitScale;
             auto orbit = CreateOrbitParameters(starView.data, planet, infoSeeds[planetIndex]);
             float inclination = orbit.inclination * DEG2RAD;
             float longitude = orbit.longitude * DEG2RAD;
             float angle = orbit.phase * DEG2RAD;
-            Vector3 position = OrbitPoint(center, orbitRadius, angle, inclination, longitude);
-            float radius = planet->type == dspugen::EPlanetType::Gas ? 0.72f : 0.42f;
-            radius *= planet->type == dspugen::EPlanetType::Gas ? 1.0f : 0.86f;
+            Matrix orbitRotation = PlanetOrbitRotation(inclination, longitude);
+            if (parentIndex >= 0)
+                orbitRotation = MatrixMultiply(system.planets[static_cast<std::size_t>(parentIndex)].orbitRotation,
+                                               orbitRotation);
+            Vector3 position = OrbitPoint(center, orbitRadius, angle, orbitRotation);
+            float radius = planet->realRadius() * 2.0f * 0.00025f;
             PlanetViewData view;
             view.data = planet;
             view.position = position;
@@ -781,6 +790,7 @@ private:
             view.orbitLongitude = longitude;
             view.orbitPhase = angle;
             view.orbitalPeriod = std::max(orbit.period, 1.0);
+            view.orbitRotation = orbitRotation;
             view.name = PlanetName(planet);
             view.labelWidth = MeasureTextEx(viewerFont, view.name.c_str(), 16.0f, 1.0f).x;
             view.panel = CreatePlanetPanel(planet, seed, view.name);
@@ -789,7 +799,7 @@ private:
         }
         system.star = starView;
         system.star.position = Vector3 {};
-        system.star.radius = std::max(starView.data->radius * 0.3f, 0.16f);
+        system.star.radius = starView.data->radius * 800.0f * 0.00025f;
         system.star.selectionSize = Vector3 {system.star.radius * 1.8f, system.star.radius * 1.8f,
                                              system.star.radius * 1.8f};
         system.summary = FormatString("system view  /  %d planets  /  click a planet for details",
@@ -804,9 +814,11 @@ private:
             if (planet.parentIndex >= 0)
                 center = system.planets[static_cast<std::size_t>(planet.parentIndex)].position;
             float angle = planet.orbitPhase +
-                          static_cast<float>(simulationTime / planet.orbitalPeriod * 2.0 * PI);
-            planet.position = OrbitPoint(center, planet.orbitRadius, angle,
-                                         planet.orbitInclination, planet.orbitLongitude);
+                          static_cast<float>(simulationTime * 60.0 / planet.orbitalPeriod * 2.0 * PI);
+            double phase = static_cast<double>(angle) / (2.0 * PI);
+            phase -= std::floor(phase + 0.1);
+            planet.position = OrbitPoint(center, planet.orbitRadius,
+                                         static_cast<float>(phase * 2.0 * PI), planet.orbitRotation);
         }
         (void)now;
     }
