@@ -425,11 +425,10 @@ void CameraControl(Camera *camera) {
         webMouse.delta = Vector2 {};
 #endif
         if (middleDown) {
-            CameraMoveRight(camera, -delta.x * kCameraPanSpeed * 0.08f, false);
-            CameraMoveUp(camera, delta.y * kCameraPanSpeed * 0.08f);
+            CameraYaw(camera, -delta.x * kCameraMouseSensitivity, true);
+            CameraPitch(camera, -delta.y * kCameraMouseSensitivity, true, true, rotateUp);
         } else if (rightDown) {
-            CameraYaw(camera, -delta.x * kCameraMouseSensitivity, false);
-            CameraPitch(camera, -delta.y * kCameraMouseSensitivity, false, false, rotateUp);
+            CameraRoll(camera, delta.x * kCameraMouseSensitivity);
         }
         if (IsKeyDown(KEY_W)) CameraMoveForward(camera, kCameraMoveSpeed, false);
         if (IsKeyDown(KEY_A)) CameraMoveRight(camera, -kCameraMoveSpeed, false);
