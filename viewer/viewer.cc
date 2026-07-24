@@ -18,6 +18,7 @@
 #include "galaxy.hh"
 #include "protoset.hh"
 #include "settings.hh"
+#include "util/dotnet35random.hh"
 
 #include <raylib.h>
 #include <rcamera.h>
@@ -88,6 +89,12 @@ struct PlanetViewData {
     Color color{};
     float flickerPhase = 0.0f;
     float selectionRadius = 0.0f;
+    int parentIndex = -1;
+    float orbitRadius = 0.0f;
+    float orbitInclination = 0.0f;
+    float orbitLongitude = 0.0f;
+    float orbitPhase = 0.0f;
+    double orbitalPeriod = 3600.0;
     float labelWidth = 0.0f;
     std::string name;
     PanelData panel;
@@ -95,10 +102,16 @@ struct PlanetViewData {
 
 struct SystemViewCache {
     std::vector<PlanetViewData> planets;
-    std::vector<Line3DCache> orbitLines;
     StarViewData star;
     std::string summary;
     float radius = 8.0f;
+};
+
+struct OrbitParameters {
+    float inclination = 0.0f;
+    float longitude = 0.0f;
+    float phase = 0.0f;
+    double period = 3600.0;
 };
 
 enum class ViewMode {
@@ -456,6 +469,99 @@ void DrawCachedLines(const std::vector<Line3DCache> &lines, Color color) {
     for (const auto &line: lines) DrawLine3D(line.start, line.end, color);
 }
 
+Vector3 TransformOrbitPoint(Vector3 point, float inclination, float longitude) {
+    Matrix tilt = MatrixRotateX(inclination);
+    Matrix heading = MatrixRotateY(longitude);
+    return Vector3Transform(point, MatrixMultiply(tilt, heading));
+}
+
+Vector3 OrbitPoint(Vector3 center, float radius, float angle, float inclination, float longitude) {
+    return center + TransformOrbitPoint(
+        Vector3 {std::cos(angle) * radius, 0.0f, std::sin(angle) * radius}, inclination, longitude);
+}
+
+std::vector<int> ReplayInfoSeeds(const dspugen::Star *star) {
+    dspugen::util::DotNet35Random rng(star->seed);
+    rng.next();
+    rng.next();
+    rng.next();
+    dspugen::util::DotNet35Random planetRng(rng.next());
+    for (int i = 0; i < 7; ++i) planetRng.nextDouble();
+
+    std::vector<int> seeds;
+    seeds.reserve(star->planets.size());
+    const bool special = star->type != dspugen::EStarType::MainSeqStar;
+    if (special) {
+        for (std::size_t i = 0; i < star->planets.size(); ++i) {
+            seeds.push_back(planetRng.next());
+            planetRng.next();
+        }
+        return seeds;
+    }
+
+    int orbitIndex = 1;
+    for (std::size_t i = 0; i < star->planets.size(); ++i) {
+        seeds.push_back(planetRng.next());
+        planetRng.next();
+        planetRng.nextDouble();
+        planetRng.nextDouble();
+        const auto *planet = star->planets[i];
+        bool mainPlanet = planet->orbitAround == 0;
+        if (mainPlanet) {
+            bool gasGiant = planet->type == dspugen::EPlanetType::Gas && i + 1 < star->planets.size();
+            if (gasGiant && orbitIndex < 3) orbitIndex = 3;
+            while (true) {
+                if (star->index == 0 && orbitIndex == 3) break;
+                int remaining = static_cast<int>(star->planets.size() - i);
+                int slots = 9 - orbitIndex;
+                if (slots <= remaining) break;
+                float chance = static_cast<float>(remaining) / static_cast<float>(slots);
+                chance = orbitIndex <= 3 ? chance + (1.0f - chance) * 0.15f + 0.01f
+                                         : chance + (1.0f - chance) * 0.45f + 0.01f;
+                if (planetRng.nextDouble() < chance) break;
+                ++orbitIndex;
+            }
+        }
+        ++orbitIndex;
+    }
+    return seeds;
+}
+
+OrbitParameters CreateOrbitParameters(const dspugen::Star *star, const dspugen::Planet *planet, int infoSeed) {
+    dspugen::util::DotNet35Random rng(infoSeed);
+    double num2 = rng.nextDouble();
+    double num3 = rng.nextDouble();
+    double num4 = rng.nextDouble();
+    double num5 = rng.nextDouble();
+    double num6 = rng.nextDouble();
+    OrbitParameters result;
+    result.inclination = static_cast<float>(num4 * 16.0 - 8.0);
+    if (planet->orbitAround > 0) result.inclination *= 2.2f;
+    result.longitude = static_cast<float>(num5 * 360.0);
+    if (star->type >= dspugen::EStarType::NeutronStar)
+        result.inclination += result.inclination > 0.0f ? 3.0f : -3.0f;
+    result.phase = static_cast<float>(num6 * 360.0);
+    double radius = planet->orbitRadius;
+    result.period = std::sqrt(39.478417604357432 * radius * radius * radius /
+                               (planet->orbitAroundPlanet == nullptr
+                                    ? 1.3538551990520382E-06 * star->mass
+                                    : 1.0830842106853677E-08));
+    (void)num2;
+    (void)num3;
+    return result;
+}
+
+void DrawOrbit(Vector3 center, const PlanetViewData &planet) {
+    Vector3 previous = OrbitPoint(center, planet.orbitRadius, 0.0f, planet.orbitInclination, planet.orbitLongitude);
+    for (int i = 1; i <= kOrbitSegments; ++i) {
+        float angle = static_cast<float>(i) / kOrbitSegments * 2.0f * PI;
+        Vector3 next = OrbitPoint(center, planet.orbitRadius, angle,
+                                  planet.orbitInclination, planet.orbitLongitude);
+        DrawLine3D(previous, next, Color {67, 119, 150, 122});
+        previous = next;
+    }
+}
+
 void DrawPlanet(const PlanetViewData &planet, float time, bool selected) {
     float pulse = 0.5f + 0.5f * std::sin(time * 1.7f + planet.flickerPhase);
     DrawSphere(planet.position, planet.radius, planet.color);
@@ -613,6 +719,10 @@ private:
     const StarViewData *previousClickedStar = nullptr;
     const PlanetViewData *previousClickedPlanet = nullptr;
     bool shutdown = false;
+    double simulationTime = 0.0;
+    double lastFrameTime = -1.0;
+    float timeScale = 10.0f;
+    bool draggingTimeSlider = false;
 
     static void Loop() {
         if (current == nullptr) return;
@@ -631,14 +741,18 @@ private:
     void BuildSystemCache(std::size_t starIndex) {
         const auto &starView = stars[starIndex];
         auto &system = systems[starIndex];
+        const auto infoSeeds = ReplayInfoSeeds(starView.data);
         system.planets.reserve(starView.data->planets.size());
-        system.orbitLines.reserve(starView.data->planets.size() * kOrbitSegments);
-        for (const auto *planet: starView.data->planets) {
+        for (std::size_t planetIndex = 0; planetIndex < starView.data->planets.size(); ++planetIndex) {
+            const auto *planet = starView.data->planets[planetIndex];
             Vector3 center {};
+            int parentIndex = -1;
             if (planet->orbitAroundPlanet != nullptr) {
-                for (const auto &parent: system.planets) {
+                for (std::size_t i = 0; i < system.planets.size(); ++i) {
+                    const auto &parent = system.planets[i];
                     if (parent.data == planet->orbitAroundPlanet) {
                         center = parent.position;
+                        parentIndex = static_cast<int>(i);
                         break;
                     }
                 }
@@ -647,8 +761,11 @@ private:
                                              ? planet->orbitRadius * kSystemOrbitScale
                                              : planet->orbitRadius * kSystemOrbitScale * 1.5f,
                                          planet->orbitAround == 0 ? 2.4f : 0.85f);
-            float angle = Hash01(planet->seed + planet->id * 17) * 2.0f * PI;
-            Vector3 position = center + Vector3 {std::cos(angle) * orbitRadius, 0.0f, std::sin(angle) * orbitRadius};
+            auto orbit = CreateOrbitParameters(starView.data, planet, infoSeeds[planetIndex]);
+            float inclination = orbit.inclination * DEG2RAD;
+            float longitude = orbit.longitude * DEG2RAD;
+            float angle = orbit.phase * DEG2RAD;
+            Vector3 position = OrbitPoint(center, orbitRadius, angle, inclination, longitude);
             float radius = planet->type == dspugen::EPlanetType::Gas ? 0.72f : 0.42f;
             radius *= planet->type == dspugen::EPlanetType::Gas ? 1.0f : 0.86f;
             PlanetViewData view;
@@ -658,17 +775,15 @@ private:
             view.color = PlanetColor(planet->type);
             view.flickerPhase = planet->seed * 0.02f;
             view.selectionRadius = radius * 1.35f;
+            view.parentIndex = parentIndex;
+            view.orbitRadius = orbitRadius;
+            view.orbitInclination = inclination;
+            view.orbitLongitude = longitude;
+            view.orbitPhase = angle;
+            view.orbitalPeriod = std::max(orbit.period, 1.0);
             view.name = PlanetName(planet);
             view.labelWidth = MeasureTextEx(viewerFont, view.name.c_str(), 16.0f, 1.0f).x;
             view.panel = CreatePlanetPanel(planet, seed, view.name);
-            Vector3 previous = center + Vector3 {orbitRadius, 0.0f, 0.0f};
-            for (int i = 1; i <= kOrbitSegments; ++i) {
-                float orbitAngle = static_cast<float>(i) / kOrbitSegments * 2.0f * PI;
-                Vector3 next = center + Vector3 {std::cos(orbitAngle) * orbitRadius, 0.0f,
-                                                  std::sin(orbitAngle) * orbitRadius};
-                system.orbitLines.push_back(Line3DCache {previous, next});
-                previous = next;
-            }
             system.radius = std::max(system.radius, Vector3Length(position) + radius);
             system.planets.emplace_back(std::move(view));
         }
@@ -679,6 +794,39 @@ private:
                                              system.star.radius * 1.8f};
         system.summary = FormatString("system view  /  %d planets  /  click a planet for details",
                                       static_cast<int>(system.planets.size()));
+    }
+
+    void UpdatePlanetPositions(double now) {
+        if (mode != ViewMode::System || selectedStar == nullptr) return;
+        auto &system = CurrentSystem();
+        for (auto &planet: system.planets) {
+            Vector3 center {};
+            if (planet.parentIndex >= 0)
+                center = system.planets[static_cast<std::size_t>(planet.parentIndex)].position;
+            float angle = planet.orbitPhase +
+                          static_cast<float>(simulationTime / planet.orbitalPeriod * 2.0 * PI);
+            planet.position = OrbitPoint(center, planet.orbitRadius, angle,
+                                         planet.orbitInclination, planet.orbitLongitude);
+        }
+        (void)now;
+    }
+
+    Rectangle TimeSliderBounds() const {
+        return Rectangle {GetScreenWidth() - kPanelWidth + 22.0f,
+                          GetScreenHeight() - 125.0f, kPanelWidth - 44.0f, 14.0f};
+    }
+
+    void UpdateTimeSlider() {
+        if (mode != ViewMode::System) return;
+        Rectangle bounds = TimeSliderBounds();
+        Vector2 mouse = GetMousePosition();
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(mouse, bounds))
+            draggingTimeSlider = true;
+        if (!IsMouseButtonDown(MOUSE_BUTTON_LEFT)) draggingTimeSlider = false;
+        if (draggingTimeSlider) {
+            float fraction = std::clamp((mouse.x - bounds.x) / bounds.width, 0.0f, 1.0f);
+            timeScale = fraction * 100.0f;
+        }
     }
 
     void EnterSystem() {
@@ -788,6 +936,10 @@ private:
 
     void Update() {
         if (shutdown) return;
+        double now = GetTime();
+        if (lastFrameTime < 0.0) lastFrameTime = now;
+        simulationTime += std::max(0.0, now - lastFrameTime) * timeScale;
+        lastFrameTime = now;
 #if defined(__EMSCRIPTEN__)
         bool needHide = false;
 #else
@@ -798,6 +950,8 @@ private:
             else EnableCursor();
         }
         CameraControl(&camera);
+        UpdateTimeSlider();
+        UpdatePlanetPositions(now);
         if (IsKeyPressed(KEY_Z)) ResetCamera(camera, mode);
 
         if (mode == ViewMode::Galaxy) {
@@ -818,9 +972,12 @@ private:
 
     void DrawSystemScene(float time) {
         const auto &system = CurrentSystem();
-        DrawCachedLines(system.orbitLines, Color {67, 119, 150, 122});
         DrawStar(system.star, time, selectedPlanet == nullptr);
         for (const auto &planet: system.planets) {
+            Vector3 center {};
+            if (planet.parentIndex >= 0)
+                center = system.planets[static_cast<std::size_t>(planet.parentIndex)].position;
+            DrawOrbit(center, planet);
             DrawPlanet(planet, time, &planet == selectedPlanet);
         }
     }
@@ -860,6 +1017,15 @@ private:
         if (selectedPlanet != nullptr) DrawPanel(selectedPlanet->panel);
         else DrawPanel(selectedStar->panel);
         int x = GetScreenWidth() - static_cast<int>(kPanelWidth) + 22;
+        Rectangle slider = TimeSliderBounds();
+        DrawRectangleRounded(slider, 0.5f, 4, Color {25, 43, 61, 255});
+        float fraction = timeScale / 100.0f;
+        DrawRectangleRounded(Rectangle {slider.x, slider.y, slider.width * fraction, slider.height},
+                             0.5f, 4, Color {88, 198, 255, 255});
+        DrawCircle(static_cast<int>(slider.x + slider.width * fraction),
+                   static_cast<int>(slider.y + slider.height * 0.5f), 7.0f, WHITE);
+        TextLine(FormatString("time speed  %.1fx", timeScale).c_str(), x, slider.y - 22, 12,
+                 Color {123, 157, 183, 255});
         TextLine("Click another body to inspect it", x, GetScreenHeight() - 54, 12, Color {98, 131, 159, 255});
         TextLine("ESC / G returns to the galaxy map", x, GetScreenHeight() - 33, 12, Color {98, 131, 159, 255});
     }
