@@ -8,6 +8,8 @@
 
 #include "filter.hh"
 
+#include <fmt/format.h>
+
 extern "C" {
 
 __declspec(dllexport) const char *FILTERAPI init(PluginAPI*, int *type) {
@@ -17,16 +19,19 @@ __declspec(dllexport) const char *FILTERAPI init(PluginAPI*, int *type) {
 
 __declspec(dllexport) bool FILTERAPI galaxyFilter(const dspugen::Galaxy *g) {
     int cnt = 0, cnt2 = 0;
+    float lum = 0;
     for (const auto *star: g->stars) {
         if (star->type == dspugen::EStarType::GiantStar && star->spectr == dspugen::ESpectrType::O) {
-            ++cnt;
-            if (star->luminosity >= /*19.832529646959319302266016012115f*/ 18.092348467648446913917646190829f /*16.064927362833999424416458640845f*/) {
+            if (++cnt == 1) {
+                lum = star->luminosity;
+            }
+            if (star->luminosity >= 21.800680734017587301436790397276f) {
                 ++cnt2;
             }
         }
     }
-    if (cnt == 2 && cnt2 == 2) {
-        fprintf(stdout, "%d,%d\n", g->seed, g->starCount);
+    if (cnt == 1 && cnt2 > 0) {
+        fmt::print(stdout, "{},{},{:.4f}\n", g->seed, g->starCount, std::pow(lum, 0.33000001311302185f));
         return true;
     }
     return false;

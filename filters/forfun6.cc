@@ -11,6 +11,7 @@
 #include <fmt/format.h>
 #include <mutex>
 #include <vector>
+#include <algorithm>
 
 std::mutex mtx;
 
