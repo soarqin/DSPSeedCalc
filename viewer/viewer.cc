@@ -605,9 +605,9 @@ void DrawPanelBackground() {
 
 int DrawKeyValue(const PanelRow &row, int y) {
     int x = GetScreenWidth() - static_cast<int>(kPanelWidth) + 22;
-    TextLine(row.key, x, y, 14, Color {123, 157, 183, 255});
-    TextLine(row.value.c_str(), x + 112, y, 14, RAYWHITE);
-    return y + 24;
+        TextLine(row.key, x, y, 15, Color {123, 157, 183, 255});
+        TextLine(row.value.c_str(), x + 112, y, 15, RAYWHITE);
+        return y + 25;
 }
 
 void DrawPanel(const PanelData &panel) {
@@ -618,15 +618,16 @@ void DrawPanel(const PanelData &panel) {
     TextLine(panel.subtitle.c_str(), x, 89, 14, Color {161, 187, 208, 255});
     int y = 126;
     for (const auto &row: panel.rows) y = DrawKeyValue(row, y);
-    if (!panel.footerKey.empty()) TextLine(panel.footerKey.c_str(), x, y + 8, 14, Color {123, 157, 183, 255});
-    if (!panel.footerValue.empty()) TextLine(panel.footerValue.c_str(), x, y + (panel.footerKey.empty() ? 16 : 31), 13,
+    if (!panel.footerKey.empty()) TextLine(panel.footerKey.c_str(), x, y + 8, 15, Color {123, 157, 183, 255});
+    if (!panel.footerValue.empty()) TextLine(panel.footerValue.c_str(), x, y + (panel.footerKey.empty() ? 16 : 31), 14,
                                              panel.footerKey.empty() ? Color {98, 131, 159, 255} : RAYWHITE);
 }
 
 class Viewer {
 public:
     Viewer(int seed, int starCount, std::string fontPath)
-        : seed(seed), starCount(starCount), fontPath(std::move(fontPath)) {}
+        : seed(seed), starCount(starCount), fontPath(std::move(fontPath)),
+          seedInput(std::to_string(seed)), starCountInput(std::to_string(starCount)) {}
 
     bool Init() {
         SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_HIGHDPI | FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
@@ -653,6 +654,28 @@ public:
         dspugen::Galaxy::initThread();
         dspugen::Star::initThread();
         dspugen::Planet::initThread();
+        return RebuildGalaxy();
+    }
+
+    bool RebuildGalaxy() {
+        if (galaxy != nullptr) {
+            galaxy->release();
+            galaxy = nullptr;
+        }
+        stars.clear();
+        systems.clear();
+        galaxyGridLines.clear();
+        selectedStar = nullptr;
+        hoveredStar = nullptr;
+        selectedPlanet = nullptr;
+        hoveredPlanet = nullptr;
+        previousClickedStar = nullptr;
+        previousClickedPlanet = nullptr;
+        previousClickTime = -1.0;
+        mode = ViewMode::Galaxy;
+        simulationTime = 0.0;
+        lastFrameTime = GetTime();
+
         galaxy = dspugen::Galaxy::create(dspugen::DefaultAlgoVersion, seed, starCount);
         if (galaxy == nullptr) return false;
         galaxy->ensureAllGas();
@@ -731,6 +754,13 @@ private:
     double lastFrameTime = -1.0;
     float timeScale = 10.0f;
     bool draggingTimeSlider = false;
+    std::string seedInput;
+    std::string starCountInput;
+    int activeInput = 0;
+    std::size_t inputCursor[2] = {};
+    std::size_t inputAnchor[2] = {};
+    bool draggingInput = false;
+    bool inputConsumed = false;
 
     static void Loop() {
         if (current == nullptr) return;
@@ -851,6 +881,138 @@ private:
         camera.target = Vector3 {0.0f, 0.0f, 0.0f};
     }
 
+    Rectangle SeedInputBounds() const { return Rectangle {430.0f, 14.0f, 150.0f, 32.0f}; }
+    Rectangle StarCountInputBounds() const { return Rectangle {642.0f, 14.0f, 86.0f, 32.0f}; }
+    Rectangle ApplyInputBounds() const { return Rectangle {738.0f, 14.0f, 92.0f, 32.0f}; }
+
+    std::size_t InputPositionAt(const Rectangle &bounds, const std::string &value, float mouseX) const {
+        float localX = std::max(0.0f, mouseX - bounds.x - 9.0f);
+        std::size_t position = 0;
+        for (; position < value.size(); ++position) {
+            float left = MeasureTextEx(viewerFont, value.substr(0, position).c_str(), 17.0f, 1.0f).x;
+            float right = MeasureTextEx(viewerFont, value.substr(0, position + 1).c_str(), 17.0f, 1.0f).x;
+            if (localX < (left + right) * 0.5f) break;
+        }
+        return position;
+    }
+
+    void DrawInputBox(Rectangle bounds, const std::string &value, const char *label, int inputIndex) {
+        bool active = activeInput == inputIndex + 1;
+        TextLine(label, static_cast<int>(bounds.x), static_cast<int>(bounds.y - 12.0f), 11,
+                 Color {123, 157, 183, 255});
+        DrawRectangleRounded(bounds, 0.16f, 6, Color {19, 31, 48, 235});
+        DrawRectangleRoundedLinesEx(bounds, 0.16f, 6, 1.0f,
+                                    active ? Color {88, 198, 255, 255} : Color {72, 104, 133, 255});
+        std::size_t selectionStart = std::min(inputCursor[inputIndex], inputAnchor[inputIndex]);
+        std::size_t selectionEnd = std::max(inputCursor[inputIndex], inputAnchor[inputIndex]);
+        if (active && selectionStart != selectionEnd) {
+            float start = MeasureTextEx(viewerFont, value.substr(0, selectionStart).c_str(), 17.0f, 1.0f).x;
+            float end = MeasureTextEx(viewerFont, value.substr(0, selectionEnd).c_str(), 17.0f, 1.0f).x;
+            DrawRectangle(static_cast<int>(bounds.x + 8.0f + start), static_cast<int>(bounds.y + 5.0f),
+                          static_cast<int>(end - start), 22, Color {45, 125, 180, 220});
+        }
+        TextLine(value.c_str(), static_cast<int>(bounds.x + 9.0f), static_cast<int>(bounds.y + 7.0f), 17, WHITE);
+        if (active) {
+            float cursorX = MeasureTextEx(viewerFont, value.substr(0, inputCursor[inputIndex]).c_str(), 17.0f, 1.0f).x;
+            DrawLine(static_cast<int>(bounds.x + 9.0f + cursorX), static_cast<int>(bounds.y + 6.0f),
+                     static_cast<int>(bounds.x + 9.0f + cursorX), static_cast<int>(bounds.y + 27.0f), WHITE);
+        }
+    }
+
+    bool ApplyGalaxyInputs() {
+        char *end = nullptr;
+        long newSeed = std::strtol(seedInput.c_str(), &end, 10);
+        if (end == seedInput.c_str() || *end != '\0' || newSeed < 0 || newSeed > 99999999) return false;
+        long newStarCount = std::strtol(starCountInput.c_str(), &end, 10);
+        if (end == starCountInput.c_str() || *end != '\0' || newStarCount < 32 || newStarCount > 64) return false;
+        seed = static_cast<int>(newSeed);
+        starCount = static_cast<int>(newStarCount);
+        bool rebuilt = RebuildGalaxy();
+        if (rebuilt) activeInput = 0;
+        return rebuilt;
+    }
+
+    void HandleGalaxySettingsInput() {
+        Vector2 mouse = GetMousePosition();
+        Rectangle bounds[] = {SeedInputBounds(), StarCountInputBounds(), ApplyInputBounds()};
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            activeInput = 0;
+            draggingInput = false;
+            for (int i = 0; i < 3; ++i) {
+                if (CheckCollisionPointRec(mouse, bounds[i])) {
+                    inputConsumed = true;
+                    activeInput = i + 1;
+                    if (i < 2) {
+                        std::string &input = i == 0 ? seedInput : starCountInput;
+                        inputCursor[i] = InputPositionAt(bounds[i], input, mouse.x);
+                        inputAnchor[i] = inputCursor[i];
+                        draggingInput = true;
+                    } else {
+                        ApplyGalaxyInputs();
+                    }
+                    break;
+                }
+            }
+        }
+        if (activeInput != 0) inputConsumed = true;
+        if (draggingInput && IsMouseButtonDown(MOUSE_BUTTON_LEFT) && activeInput <= 2) {
+            int index = activeInput - 1;
+            std::string &input = index == 0 ? seedInput : starCountInput;
+            inputCursor[index] = InputPositionAt(bounds[index], input, mouse.x);
+        }
+        if (!IsMouseButtonDown(MOUSE_BUTTON_LEFT)) draggingInput = false;
+        if (activeInput == 0) return;
+        if (activeInput == 3) {
+            if (IsKeyPressed(KEY_ENTER)) ApplyGalaxyInputs();
+            return;
+        }
+        int index = activeInput - 1;
+        std::string &input = index == 0 ? seedInput : starCountInput;
+        std::size_t &cursor = inputCursor[index];
+        std::size_t &anchor = inputAnchor[index];
+        bool shift = IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT);
+        bool control = IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL);
+        if (IsKeyPressed(KEY_LEFT)) cursor = cursor > 0 ? cursor - 1 : 0;
+        if (IsKeyPressed(KEY_RIGHT)) cursor = std::min(cursor + 1, input.size());
+        if (IsKeyPressed(KEY_HOME)) cursor = 0;
+        if (IsKeyPressed(KEY_END)) cursor = input.size();
+        if (!shift) anchor = cursor;
+        if (control && IsKeyPressed(KEY_A)) anchor = 0, cursor = input.size();
+        std::size_t selectionStart = std::min(cursor, anchor);
+        std::size_t selectionEnd = std::max(cursor, anchor);
+        if (IsKeyPressed(KEY_BACKSPACE) || IsKeyPressed(KEY_DELETE)) {
+            if (selectionStart != selectionEnd) {
+                input.erase(selectionStart, selectionEnd - selectionStart);
+                cursor = anchor = selectionStart;
+            } else if (IsKeyPressed(KEY_BACKSPACE) && cursor > 0) {
+                input.erase(cursor - 1, 1);
+                --cursor;
+                anchor = cursor;
+            } else if (IsKeyPressed(KEY_DELETE) && cursor < input.size()) {
+                input.erase(cursor, 1);
+            }
+        }
+        int key = GetCharPressed();
+        while (key > 0) {
+            if (key >= '0' && key <= '9') {
+                std::size_t maxLength = index == 0 ? 8 : 2;
+                selectionStart = std::min(cursor, anchor);
+                selectionEnd = std::max(cursor, anchor);
+                if (selectionStart != selectionEnd) {
+                    input.erase(selectionStart, selectionEnd - selectionStart);
+                    cursor = anchor = selectionStart;
+                }
+                if (input.size() < maxLength) {
+                    input.insert(cursor, 1, static_cast<char>(key));
+                    ++cursor;
+                    anchor = cursor;
+                }
+            }
+            key = GetCharPressed();
+        }
+        if (IsKeyPressed(KEY_ENTER)) ApplyGalaxyInputs();
+    }
+
     void LeaveSystem() {
         mode = ViewMode::Galaxy;
         selectedPlanet = nullptr;
@@ -900,6 +1062,7 @@ private:
     }
 
     void HandleGalaxyInput() {
+        if (activeInput != 0) return;
         if ((IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_S)) && selectedStar != nullptr) {
             EnterSystem();
             return;
@@ -947,6 +1110,7 @@ private:
 
     void Update() {
         if (shutdown) return;
+        inputConsumed = false;
         double now = GetTime();
         if (lastFrameTime < 0.0) lastFrameTime = now;
         simulationTime += std::max(0.0, now - lastFrameTime) * timeScale;
@@ -960,14 +1124,16 @@ private:
             if (needHide) DisableCursor();
             else EnableCursor();
         }
-        CameraControl(&camera);
+        bool editingInput = mode == ViewMode::Galaxy && activeInput != 0;
+        if (!editingInput) CameraControl(&camera);
+        if (mode == ViewMode::Galaxy) HandleGalaxySettingsInput();
         UpdateTimeSlider();
         UpdatePlanetPositions(now);
-        if (IsKeyPressed(KEY_Z)) ResetCamera(camera, mode);
+        if (!editingInput && !inputConsumed && IsKeyPressed(KEY_Z)) ResetCamera(camera, mode);
 
         if (mode == ViewMode::Galaxy) {
             PickGalaxyObject();
-            HandleGalaxyInput();
+            if (activeInput == 0 && !inputConsumed) HandleGalaxyInput();
         } else {
             PickSystemObject();
             HandleSystemInput();
@@ -998,11 +1164,14 @@ private:
                       Color {5, 12, 23, 218});
         if (mode == ViewMode::Galaxy) {
             TextLine("GALAXY MAP", 24, 17, 22, Color {177, 232, 255, 255});
-            TextLine(galaxySummary.c_str(), 24, 42, 12, Color {121, 154, 179, 255});
+            TextLine(galaxySummary.c_str(), 24, 42, 14, Color {121, 154, 179, 255});
+            DrawInputBox(SeedInputBounds(), seedInput, "seed 0-99999999", 0);
+            DrawInputBox(StarCountInputBounds(), starCountInput, "stars 32-64", 1);
+            DrawButton(ApplyInputBounds(), "APPLY", 46, true);
         } else {
             DrawButton(Rectangle {22.0f, 20.0f, 112.0f, 38.0f}, "BACK  [G]", kBackButtonTextWidth);
             TextLine(selectedStar->data->name.c_str(), 160, 17, 22, Color {177, 232, 255, 255});
-            TextLine(CurrentSystem().summary.c_str(), 160, 42, 12, Color {121, 154, 179, 255});
+            TextLine(CurrentSystem().summary.c_str(), 160, 42, 14, Color {121, 154, 179, 255});
         }
     }
 
@@ -1013,15 +1182,15 @@ private:
         } else {
             DrawPanelBackground();
             TextLine("SELECT A STAR", x, 94, 20, Color {137, 221, 255, 255});
-            TextLine("Left click a star to inspect", x, 132, 15, Color {178, 197, 213, 255});
-            TextLine("its generated parameters.", x, 155, 15, Color {178, 197, 213, 255});
-            TextLine("Press Enter or double click", x, 203, 15, Color {178, 197, 213, 255});
-            TextLine("to enter the planetary system.", x, 226, 15, Color {178, 197, 213, 255});
+            TextLine("Left click a star to inspect", x, 132, 16, Color {178, 197, 213, 255});
+            TextLine("its generated parameters.", x, 155, 16, Color {178, 197, 213, 255});
+            TextLine("Press Enter or double click", x, 203, 16, Color {178, 197, 213, 255});
+            TextLine("to enter the planetary system.", x, 226, 16, Color {178, 197, 213, 255});
         }
         DrawButton(Rectangle {static_cast<float>(x), GetScreenHeight() - 104.0f, kPanelWidth - 44.0f, 38.0f},
                    "ENTER SYSTEM  [ENTER]", kEnterButtonTextWidth, selectedStar != nullptr);
-        TextLine("RMB orbit  /  MMB pan  /  wheel zoom", x, GetScreenHeight() - 54, 12, Color {98, 131, 159, 255});
-        TextLine("WASD move  /  arrows rotate  /  Z reset", x, GetScreenHeight() - 33, 12, Color {98, 131, 159, 255});
+        TextLine("RMB roll  /  MMB orbit  /  wheel zoom", x, GetScreenHeight() - 54, 14, Color {98, 131, 159, 255});
+        TextLine("WASD move  /  arrows rotate  /  Z reset", x, GetScreenHeight() - 33, 14, Color {98, 131, 159, 255});
     }
 
     void DrawSystemOverlay() {
@@ -1035,10 +1204,10 @@ private:
                              0.5f, 4, Color {88, 198, 255, 255});
         DrawCircle(static_cast<int>(slider.x + slider.width * fraction),
                    static_cast<int>(slider.y + slider.height * 0.5f), 7.0f, WHITE);
-        TextLine(FormatString("time speed  %.1fx", timeScale).c_str(), x, slider.y - 22, 12,
+        TextLine(FormatString("time speed  %.1fx", timeScale).c_str(), x, slider.y - 22, 14,
                  Color {123, 157, 183, 255});
-        TextLine("Click another body to inspect it", x, GetScreenHeight() - 54, 12, Color {98, 131, 159, 255});
-        TextLine("ESC / G returns to the galaxy map", x, GetScreenHeight() - 33, 12, Color {98, 131, 159, 255});
+        TextLine("Click another body to inspect it", x, GetScreenHeight() - 54, 14, Color {98, 131, 159, 255});
+        TextLine("ESC / G returns to the galaxy map", x, GetScreenHeight() - 33, 14, Color {98, 131, 159, 255});
     }
 
     void DrawHoverLabel() {
