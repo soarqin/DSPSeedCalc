@@ -24,7 +24,18 @@
         var Module = {
             canvas: document.getElementById('canvas'),
             setStatus: function(text) {
-                if (!text) document.getElementById('loading').classList.add('hidden');
+                var loading = document.getElementById('loading');
+                if (text) {
+                    loading.textContent = text;
+                    loading.classList.remove('hidden');
+                } else {
+                    loading.classList.add('hidden');
+                }
+            },
+            onAbort: function(reason) {
+                var loading = document.getElementById('loading');
+                loading.textContent = 'VIEWER FAILED: ' + reason;
+                loading.classList.remove('hidden');
             },
             printErr: function(text) { console.error(text); }
         };

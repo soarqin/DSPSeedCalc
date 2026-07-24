@@ -28,6 +28,10 @@
 #include <emscripten/html5.h>
 #endif
 
+#ifndef DSP_VIEWER_DEFAULT_FONT
+#define DSP_VIEWER_DEFAULT_FONT ""
+#endif
+
 namespace {
 
 constexpr int kScreenWidth = 1280;
@@ -41,6 +45,10 @@ constexpr float kSystemOrbitScale = 10.0f;
 constexpr int kOrbitSegments = 72;
 constexpr int kEnterButtonTextWidth = 243;
 constexpr int kBackButtonTextWidth = 80;
+constexpr int kViewerFontSize = 64;
+
+Font viewerFont{};
+bool hasCustomFont = false;
 
 struct Line3DCache {
     Vector3 start{};
@@ -458,7 +466,8 @@ void DrawPlanet(const PlanetViewData &planet, float time, bool selected) {
 }
 
 void TextLine(const char *text, int x, int y, int size, Color color = RAYWHITE) {
-    DrawText(text, x, y, size, color);
+    DrawTextEx(viewerFont, text, Vector2 {static_cast<float>(x), static_cast<float>(y)},
+               static_cast<float>(size), 1.0f, color);
 }
 
 void DrawButton(Rectangle bounds, const char *label, int labelWidth, bool accent = false) {
@@ -502,11 +511,21 @@ void DrawPanel(const PanelData &panel) {
 
 class Viewer {
 public:
-    Viewer(int seed, int starCount) : seed(seed), starCount(starCount) {}
+    Viewer(int seed, int starCount, std::string fontPath)
+        : seed(seed), starCount(starCount), fontPath(std::move(fontPath)) {}
 
     bool Init() {
         SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_HIGHDPI | FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
         InitWindow(kScreenWidth, kScreenHeight, "DSPSeedCalc Universe Viewer");
+        viewerFont = GetFontDefault();
+        if (!fontPath.empty() && FileExists(fontPath.c_str())) {
+            Font loadedFont = LoadFontEx(fontPath.c_str(), kViewerFontSize, nullptr, 0);
+            if (loadedFont.glyphCount > 0) {
+                viewerFont = loadedFont;
+                hasCustomFont = true;
+                SetTextureFilter(viewerFont.texture, TEXTURE_FILTER_BILINEAR);
+            }
+        }
         SetTargetFPS(60);
 #if defined(__EMSCRIPTEN__)
         InitWebMouse();
@@ -541,7 +560,7 @@ public:
             view.flickerSpeed = 1.3f + Hash01(star->seed) * 2.0f;
             view.flickerPhase = star->seed * 0.01f;
             view.selectionSize = Vector3 {radius * 1.8f, radius * 1.8f, radius * 1.8f};
-            view.labelWidth = static_cast<float>(MeasureText(star->name.c_str(), 16));
+            view.labelWidth = MeasureTextEx(viewerFont, star->name.c_str(), 16.0f, 1.0f).x;
             view.panel = CreateStarPanel(star, seed);
             stars.emplace_back(std::move(view));
         }
@@ -578,6 +597,7 @@ private:
 
     int seed = 0;
     int starCount = 64;
+    std::string fontPath;
     dspugen::Galaxy *galaxy = nullptr;
     Camera3D camera{};
     ViewMode mode = ViewMode::Galaxy;
@@ -639,7 +659,7 @@ private:
             view.flickerPhase = planet->seed * 0.02f;
             view.selectionRadius = radius * 1.35f;
             view.name = PlanetName(planet);
-            view.labelWidth = static_cast<float>(MeasureText(view.name.c_str(), 16));
+            view.labelWidth = MeasureTextEx(viewerFont, view.name.c_str(), 16.0f, 1.0f).x;
             view.panel = CreatePlanetPanel(planet, seed, view.name);
             Vector3 previous = center + Vector3 {orbitRadius, 0.0f, 0.0f};
             for (int i = 1; i <= kOrbitSegments; ++i) {
@@ -848,12 +868,14 @@ private:
         if (IsCursorHidden()) return;
         if (mode == ViewMode::Galaxy && hoveredStar != nullptr && hoveredStar != selectedStar) {
             Vector2 screen = GetWorldToScreen(hoveredStar->position, camera);
-            DrawText(hoveredStar->data->name.c_str(), static_cast<int>(screen.x - hoveredStar->labelWidth * 0.5f),
-                     static_cast<int>(screen.y - 22), 16, LIGHTGRAY);
+            DrawTextEx(viewerFont, hoveredStar->data->name.c_str(),
+                       Vector2 {screen.x - hoveredStar->labelWidth * 0.5f, screen.y - 22.0f},
+                       16.0f, 1.0f, LIGHTGRAY);
         } else if (mode == ViewMode::System && hoveredPlanet != nullptr && hoveredPlanet != selectedPlanet) {
             Vector2 screen = GetWorldToScreen(hoveredPlanet->position, camera);
-            DrawText(hoveredPlanet->name.c_str(), static_cast<int>(screen.x - hoveredPlanet->labelWidth * 0.5f),
-                     static_cast<int>(screen.y - 22), 16, LIGHTGRAY);
+            DrawTextEx(viewerFont, hoveredPlanet->name.c_str(),
+                       Vector2 {screen.x - hoveredPlanet->labelWidth * 0.5f, screen.y - 22.0f},
+                       16.0f, 1.0f, LIGHTGRAY);
         }
     }
 
@@ -882,6 +904,10 @@ private:
         dspugen::Planet::releaseThread();
         dspugen::Star::releaseThread();
         dspugen::Galaxy::releaseThread();
+        if (hasCustomFont) {
+            UnloadFont(viewerFont);
+            hasCustomFont = false;
+        }
         CloseWindow();
     }
 };
@@ -894,7 +920,7 @@ int main(int argc, char *argv[]) {
     int seed = argc > 1 ? std::atoi(argv[1]) : 0;
     int starCount = argc > 2 ? std::atoi(argv[2]) : 64;
     starCount = std::clamp(starCount, 1, 256);
-    Viewer viewer(seed, starCount);
+    Viewer viewer(seed, starCount, argc > 3 ? argv[3] : DSP_VIEWER_DEFAULT_FONT);
     if (!viewer.Init()) return 1;
     viewer.Run();
     return 0;

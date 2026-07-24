@@ -14,6 +14,18 @@ endif()
 
 set(RAYLIB_VERSION 6.0)
 set(RAYLIB_SHA256SUM 2b3ee1e2120c7a0796b33062c7e9a694dd8a8caa56a96319ac8c8ecf54a90d0b)
+set(DSP_VIEWER_FONT "" CACHE FILEPATH "External TTF/OTF font for the viewer")
+if(DSP_VIEWER_FONT)
+    if(EMSCRIPTEN)
+        target_compile_definitions(${PROJECT_NAME} PRIVATE DSP_VIEWER_DEFAULT_FONT="/viewer-font.ttf")
+    else()
+        target_compile_definitions(${PROJECT_NAME} PRIVATE DSP_VIEWER_DEFAULT_FONT="viewer-font.ttf")
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "${DSP_VIEWER_FONT}"
+                "$<TARGET_FILE_DIR:${PROJECT_NAME}>/viewer-font.ttf")
+    endif()
+endif()
 if(EMSCRIPTEN)
     set(PLATFORM Web CACHE STRING "raylib target platform" FORCE)
 endif()
@@ -41,8 +53,15 @@ if(EMSCRIPTEN)
     target_link_options(${PROJECT_NAME} PRIVATE
         "-sUSE_GLFW=3"
         "-sWASM=1"
+        "-sSINGLE_FILE=1"
         "-sALLOW_MEMORY_GROWTH=1"
         "--preload-file=${CMAKE_SOURCE_DIR}/Prototypes@Prototypes"
         "--shell-file=${CMAKE_CURRENT_SOURCE_DIR}/web_shell.html")
-    set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX ".html")
+    if(DSP_VIEWER_FONT)
+        target_link_options(${PROJECT_NAME} PRIVATE
+            "--preload-file=${DSP_VIEWER_FONT}@/viewer-font.ttf")
+    endif()
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        OUTPUT_NAME "index"
+        SUFFIX ".html")
 endif()
