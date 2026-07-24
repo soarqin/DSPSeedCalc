@@ -114,13 +114,6 @@ struct VeinProto : Proto {
     int modelIndex = 0;
 };
 
-struct StringProto : Proto {
-    std::string name;
-    std::string zhcn;
-    std::string enus;
-    std::string frfr;
-};
-
 extern void loadProtoSets();
 
 class ThemeProtoSet final : public ProtoSet<ThemeProto> {
@@ -144,10 +137,5 @@ using ItemProtoSet = ProtoSet<ItemProto>;
 extern ItemProtoSet itemProtoSet;
 using VeinProtoSet = ProtoSet<VeinProto>;
 extern VeinProtoSet veinProtoSet;
-using StringProtoSet = ProtoSet<StringProto>;
-extern StringProtoSet stringProtoSet;
-
-/* for type: 0-ZHCN 1-ENUS 2-FRFR */
-extern const std::string &translate(const std::string &name, int type = 0);
 
 }

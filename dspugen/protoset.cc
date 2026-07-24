@@ -17,7 +17,6 @@ namespace dspugen {
 ThemeProtoSet themeProtoSet;
 ItemProtoSet itemProtoSet;
 VeinProtoSet veinProtoSet;
-StringProtoSet stringProtoSet;
 
 void ThemeProtoSet::onLoaded() {
     ProtoSet<ThemeProto>::onLoaded();
@@ -119,13 +118,6 @@ void from_json(const nlohmann::json &j, VeinProto &p) {
     JL(ModelIndex, modelIndex);
 }
 
-void from_json(const nlohmann::json &j, StringProto &p) {
-    JL(Name, name);
-    JL(ZHCN, zhcn);
-    JL(ENUS, enus);
-    JL(FRFR, frfr);
-}
-
 #undef JL
 
 void loadProtoSets() {
@@ -150,29 +142,6 @@ void loadProtoSets() {
         j["dataArray"].get_to(veinProtoSet.dataArray);
         veinProtoSet.onLoaded();
     }
-    {
-        nlohmann::json j;
-        std::ifstream ifs("Prototypes/StringProtoSet.json");
-        ifs >> j;
-        j["dataArray"].get_to(stringProtoSet.dataArray);
-        stringProtoSet.onLoaded();
-    }
-}
-
-const std::string &translate(const std::string &name, int type) {
-    const auto *val = stringProtoSet.select(name);
-    if (val) {
-        switch (type) {
-            case 1:
-                return val->enus;
-            case 2:
-                return val->frfr;
-            default:
-                return val->zhcn;
-        }
-    }
-    static std::string empty;
-    return empty;
 }
 
 }
