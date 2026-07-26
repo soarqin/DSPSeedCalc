@@ -70,9 +70,7 @@ public:
 
     VectorLF3 position;
     float color;
-/*
     float classFactor;
-*/
     float resourceCoef = 0.0f;
     float habitableRadiusSqrt = 0.0f;
 /*

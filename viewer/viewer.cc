@@ -7,8 +7,10 @@
  */
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <cfloat>
+#include <cstring>
 #include <cstdlib>
 #include <cstdio>
 #include <string>
@@ -23,6 +25,7 @@
 #include <raylib.h>
 #include <rcamera.h>
 #include <raymath.h>
+#include <rlgl.h>
 
 #if defined(__EMSCRIPTEN__)
 #include <emscripten/emscripten.h>
@@ -42,14 +45,87 @@ constexpr float kCameraMoveSpeed = 0.09f;
 constexpr float kCameraRotationSpeed = 0.03f;
 constexpr float kCameraPanSpeed = 0.2f;
 constexpr float kCameraMouseSensitivity = 0.003f;
+constexpr float kGalaxyCameraDistance = 80.9000015f;
+constexpr float kGalaxyCameraTargetHeight = 11.0f;
+constexpr float kGalaxyCameraPitchBegin = -22.0f;
+constexpr float kGalaxyCameraPitchMin = -81.1999969f;
+constexpr float kGalaxyCameraPitchMax = -4.9000001f;
+constexpr float kGalaxyGridHeight = -15.0f;
 constexpr float kSystemOrbitScale = 10.0f;
 constexpr int kOrbitSegments = 72;
 constexpr int kEnterButtonTextWidth = 243;
 constexpr int kBackButtonTextWidth = 80;
 constexpr int kViewerFontSize = 64;
+constexpr int kMaxBloomIterations = 16;
 
 Font viewerFont{};
 bool hasCustomFont = false;
+Shader starSurfaceShader{};
+Shader starSpotShader{};
+Shader starBlackShader{};
+Shader galaxyStarPointShader{};
+Shader bloomPrefilterShader{};
+Shader bloomDownsampleFirstShader{};
+Shader bloomDownsampleShader{};
+Shader bloomUpsampleShader{};
+Shader bloomCompositeShader{};
+Model starMassModel{};
+Model starBlackModel{};
+Model starSpotModel{};
+Model galaxyStarPointModel{};
+Texture2D galaxyStarPointTexture{};
+Texture2D bloomLensDirtTexture{};
+Texture2D galaxyColorGradingLut{};
+bool hasStarSurfaceShader = false;
+bool hasStarSpotShader = false;
+bool hasStarBlackShader = false;
+bool hasGalaxyStarPointShader = false;
+bool hasBloomShaders = false;
+bool hasStarModels = false;
+bool hasGalaxyStarPointModel = false;
+RenderTexture2D galaxySceneTarget{};
+RenderTexture2D bloomPrefilterTarget{};
+std::array<RenderTexture2D, kMaxBloomIterations> bloomDownLevels{};
+std::array<RenderTexture2D, kMaxBloomIterations> bloomUpLevels{};
+int bloomTargetWidth = 0;
+int bloomTargetHeight = 0;
+int bloomIterationCount = 0;
+float bloomSampleScale = 1.0f;
+
+std::string ViewerAssetPath(const char *name) {
+#if defined(__EMSCRIPTEN__)
+    return name;
+#else
+    return std::string(GetApplicationDirectory()) + name;
+#endif
+}
+
+struct StarMassMaterialData {
+    Vector4 color0;
+    Vector4 color1;
+    Vector4 color2;
+    Vector4 color3;
+    float multiplier;
+    float noiseTile;
+    float noiseSpeed;
+    float chaosTile;
+    float chaosDistort;
+    float chaosOverlay;
+    float spotIntensity;
+    float rimPower;
+    float rotSpeed;
+};
+
+struct StarSpotMaterialData {
+    Vector4 centerColor;
+    Vector4 glowColor;
+    float multiplier;
+    float glowPower;
+    float centerMultiplier;
+    float centerSize;
+    float centerBlur;
+    float centerBlurPower;
+};
 
 struct Line3DCache {
     Vector3 start{};
@@ -66,6 +142,7 @@ struct PanelData {
     std::string name;
     std::string subtitle;
     std::vector<PanelRow> rows;
+    std::vector<PanelRow> detailRows;
     std::string footerKey;
     std::string footerValue;
 };
@@ -73,10 +150,9 @@ struct PanelData {
 struct StarViewData {
     const dspugen::Star *data = nullptr;
     Vector3 position{};
-    Color color{};
+    Vector4 galaxyColor{};
+    float galaxyScale = 1.2f;
     float radius = 1.0f;
-    float flickerSpeed = 1.0f;
-    float flickerPhase = 0.0f;
     Vector3 selectionSize{};
     float labelWidth = 0.0f;
     PanelData panel;
@@ -176,68 +252,175 @@ Color AddColor(Color color, int amount) {
     return color;
 }
 
-void GradientColor(float value, Color &color) {
-    const struct {
-        float position;
-        Vector3 color;
-    } stops[] = {
-        {0.0f, {1.0f, 0.229f, 0.1745f}},
-        {0.07f, {1.0f, 0.4373f, 0.1765f}},
-        {0.32f, {1.0f, 0.9515f, 0.1557f}},
-        {0.5f, {0.9879f, 1.0f, 0.6179f}},
-        {0.7235f, {0.9764f, 1.0f, 0.978f}},
-        {0.82f, {0.58f, 0.8963f, 1.0f}},
-        {0.92f, {0.1176f, 0.6548f, 1.0f}},
-        {1.0f, {0.0991f, 0.34f, 1.0f}},
+Color LinearColor(Color color) {
+    auto convert = [](unsigned char value) {
+        float srgb = static_cast<float>(value) / 255.0f;
+        float linear = srgb <= 0.04045f ? srgb / 12.92f : std::pow((srgb + 0.055f) / 1.055f, 2.4f);
+        return static_cast<unsigned char>(std::round(linear * 255.0f));
     };
+    return Color {convert(color.r), convert(color.g), convert(color.b), color.a};
+}
 
-    color.a = 255;
-    if (value == 0.0f) {
-        color.r = static_cast<unsigned char>(std::roundf(stops[0].color.x * 255.0f));
-        color.g = static_cast<unsigned char>(std::roundf(stops[0].color.y * 255.0f));
-        color.b = static_cast<unsigned char>(std::roundf(stops[0].color.z * 255.0f));
-        return;
+Color LinearBackground(Color color) {
+    return LinearColor(color);
+}
+
+float GammaToLinearSpace(float value) {
+    if (value <= 0.04045f) return value / 12.92f;
+    return std::pow((value + 0.055f) / 1.055f, 2.4f);
+}
+
+Vector4 GalaxyStarColor(const dspugen::Star *star) {
+    static constexpr struct {
+        float position;
+        Vector4 color;
+    } keys[] = {
+        {0.0f, {1.0f, 0.229039833f, 0.174528301f, 1.0f}},
+        {0.06999313f, {1.0f, 0.437254906f, 0.176470578f, 1.0f}},
+        {0.31999695f, {1.0f, 0.951527596f, 0.155660391f, 1.0f}},
+        {0.50000763f, {0.987870634f, 1.0f, 0.617924571f, 1.0f}},
+        {0.723537f, {0.976415098f, 1.0f, 0.97796154f, 1.0f}},
+        {0.8200046f, {0.580000043f, 0.896296144f, 1.0f, 1.0f}},
+        {0.919996977f, {0.117647052f, 0.654785156f, 1.0f, 1.0f}},
+        {1.0f, {0.0990566015f, 0.340047508f, 1.0f, 1.0f}},
+    };
+    if (star->type == dspugen::EStarType::NeutronStar)
+        return Vector4 {0.502143919f, 0.382075489f, 1.0f, 1.0f};
+    if (star->type == dspugen::EStarType::WhiteDwarf)
+        return Vector4 {0.46226418f, 0.46226418f, 0.46226418f, 1.0f};
+    if (star->type == dspugen::EStarType::BlackHole) return Vector4 {0.0f, 0.0f, 0.0f, 1.0f};
+    float value = std::clamp(star->color, 0.0f, 1.0f);
+    for (std::size_t i = 1; i < std::size(keys); ++i) {
+        if (value > keys[i].position) continue;
+        float amount = (value - keys[i - 1].position) / (keys[i].position - keys[i - 1].position);
+        return Vector4Lerp(keys[i - 1].color, keys[i].color, amount);
     }
-    for (std::size_t i = 1; i < std::size(stops); ++i) {
-        if (value > stops[i].position) continue;
-        const auto &left = stops[i - 1];
-        const auto &right = stops[i];
-        float t = (value - left.position) / (right.position - left.position);
-        color.r = static_cast<unsigned char>(std::roundf((left.color.x + (right.color.x - left.color.x) * t) * 255.0f));
-        color.g = static_cast<unsigned char>(std::roundf((left.color.y + (right.color.y - left.color.y) * t) * 255.0f));
-        color.b = static_cast<unsigned char>(std::roundf((left.color.z + (right.color.z - left.color.z) * t) * 255.0f));
-        return;
+    return keys[std::size(keys) - 1].color;
+}
+
+float GalaxyStarScale(const dspugen::Star *star) {
+    switch (star->type) {
+        case dspugen::EStarType::GiantStar: return 3.0f;
+        case dspugen::EStarType::WhiteDwarf:
+        case dspugen::EStarType::NeutronStar: return 0.6f;
+        case dspugen::EStarType::BlackHole: return 0.8f;
+        default: return 1.2f;
     }
 }
 
-Color StarColor(const dspugen::Star *star) {
-    switch (star->type) {
-        case dspugen::EStarType::WhiteDwarf:
-            return Color {118, 118, 118, 255};
-        case dspugen::EStarType::NeutronStar:
-            return Color {128, 97, 255, 255};
-        case dspugen::EStarType::BlackHole:
-            return Color {0, 0, 0, 255};
-        default: {
-            Color color{};
-            GradientColor(star->color, color);
-            return color;
+Vector4 LerpColor(Vector4 left, Vector4 right, float t) {
+    return Vector4Lerp(left, right, t);
+}
+
+constexpr float kSpectralParams[] = {-3.5999999046325684f, -3.0f, -2.0f, -1.0f, -0.30000001192092896f,
+                                     0.0f, 0.25f, 1.0f, 1.600000023841858f};
+
+struct SpectralBlend {
+    std::size_t material = 0;
+    std::size_t target = 0;
+    float amount = 0.0f;
+    bool hasTarget = false;
+};
+
+SpectralBlend FindSpectralBlend(float classFactor) {
+    SpectralBlend result;
+    for (std::size_t i = 0; i + 1 < std::size(kSpectralParams); ++i) {
+        if (classFactor >= kSpectralParams[i] && classFactor <= kSpectralParams[i + 1]) {
+            result.material = i;
+            result.target = i + 1;
+            result.amount = std::clamp((classFactor - kSpectralParams[i]) /
+                                       (kSpectralParams[i + 1] - kSpectralParams[i]), 0.0f, 1.0f);
+            result.hasTarget = true;
         }
     }
+    if (classFactor <= kSpectralParams[0]) result.material = 0;
+    if (classFactor >= kSpectralParams[std::size(kSpectralParams) - 1])
+        result.material = std::size(kSpectralParams) - 1;
+    return result;
 }
 
-float StarRadius(const dspugen::Star *star) {
-    switch (star->type) {
-        case dspugen::EStarType::GiantStar:
-            return 4.0f * 0.2f;
-        case dspugen::EStarType::WhiteDwarf:
-        case dspugen::EStarType::NeutronStar:
-            return 0.8f * 0.2f;
-        case dspugen::EStarType::BlackHole:
-            return 1.0f * 0.2f;
-        default:
-            return 1.5f * 0.2f;
+float LerpFloat(float left, float right, float amount) {
+    return left + (right - left) * amount;
+}
+
+StarMassMaterialData StarMassMaterial(const dspugen::Star *star) {
+    static const StarMassMaterialData mainMaterials[] = {
+        {{1.0f, 0.629063308f, 0.36470592f, 1.0f}, {0.528301895f, 0.255579025f, 0.0f, 1.0f}, {0.264150918f, 0.0138839362f, 0.00373797794f, 1.0f}, {1.0f, 0.282301843f, 0.0784313679f, 1.0f}, 4.0f, 200.0f, 0.300000012f, 1.29999995f, 0.180000007f, 0.75f, 12.0f, 3.0f, 0.0399999991f},
+        {{1.0f, 0.813083529f, 0.363207519f, 1.0f}, {0.632075429f, 0.372084856f, 0.0f, 1.0f}, {0.301886797f, 0.0137221254f, 0.0f, 1.0f}, {1.0f, 0.432450503f, 0.0801886916f, 1.0f}, 4.0f, 200.0f, 0.300000012f, 1.29999995f, 0.180000007f, 0.75f, 12.0f, 3.0f, 0.0399999991f},
+        {{0.990566015f, 0.933518291f, 0.406505883f, 1.0f}, {0.575471699f, 0.473466545f, 0.0407173298f, 1.0f}, {0.41568628f, 0.226671472f, 0.0f, 1.0f}, {1.0f, 0.56016314f, 0.26886791f, 1.0f}, 4.0f, 200.0f, 0.300000012f, 1.29999995f, 0.180000007f, 0.800000012f, 12.0f, 4.0f, 0.0399999991f},
+        {{0.801886797f, 0.783705056f, 0.624109983f, 1.0f}, {0.556603789f, 0.502054989f, 0.312433243f, 1.0f}, {0.386792481f, 0.253650099f, 0.133187965f, 1.0f}, {0.726999998f, 0.643031478f, 0.391125977f, 1.0f}, 4.0f, 250.0f, 0.300000012f, 1.20000005f, 0.180000007f, 0.699999988f, 12.0f, 3.5f, 0.0399999991f},
+        {{0.894999981f, 0.878270984f, 0.815537393f, 1.0f}, {0.490196079f, 0.46526733f, 0.36470589f, 1.0f}, {0.427450985f, 0.422490686f, 0.407843143f, 1.0f}, {0.796999991f, 0.796999991f, 0.665292382f, 1.0f}, 4.0f, 250.0f, 0.300000012f, 1.20000005f, 0.180000007f, 0.899999976f, 12.0f, 5.0f, 0.0399999991f},
+        {{0.897672892f, 0.950999975f, 0.866565406f, 1.0f}, {0.506150007f, 0.573000014f, 0.487050027f, 1.0f}, {0.405999988f, 0.405999988f, 0.405999988f, 1.0f}, {0.911330044f, 1.0f, 0.985221684f, 1.0f}, 4.0f, 250.0f, 0.300000012f, 1.20000005f, 0.180000007f, 0.800000012f, 12.0f, 7.0f, 0.0399999991f},
+        {{0.78047061f, 0.828764975f, 0.839215696f, 1.0f}, {0.656894147f, 0.737478256f, 0.776470602f, 1.0f}, {0.36470589f, 0.386221647f, 0.392156869f, 1.0f}, {0.74125427f, 0.854135633f, 0.888000011f, 1.0f}, 4.0f, 250.0f, 0.300000012f, 1.20000005f, 0.180000007f, 0.899999976f, 12.0f, 5.0f, 0.0399999991f},
+        {{0.630784988f, 0.92203629f, 0.990566015f, 1.0f}, {0.313725501f, 0.39416796f, 0.556862772f, 1.0f}, {0.0813011751f, 0.205825761f, 0.273584902f, 1.0f}, {0.384700954f, 0.570500672f, 0.858490586f, 1.0f}, 4.0f, 280.0f, 0.300000012f, 1.20000005f, 0.180000007f, 0.699999988f, 12.0f, 4.0f, 0.0399999991f},
+        {{0.458823562f, 0.737789989f, 1.0f, 1.0f}, {0.164705873f, 0.39788875f, 0.784313738f, 1.0f}, {0.0117647108f, 0.161571428f, 0.301960796f, 1.0f}, {0.286274582f, 0.401634216f, 0.992156863f, 1.0f}, 5.0f, 300.0f, 0.300000012f, 1.0f, 0.180000007f, 0.699999988f, 12.0f, 3.5f, 0.0399999991f},
+    };
+    static const StarMassMaterialData specialMaterials[] = {
+        {{0.816037714f, 0.850495577f, 1.0f, 1.0f}, {0.411764711f, 0.499932766f, 0.549019635f, 1.0f}, {0.129505023f, 0.121568628f, 0.235294119f, 1.0f}, {0.57558459f, 0.372549057f, 1.0f, 1.0f}, 6.0f, 70.0f, 8.0f, 0.899999976f, 0.25f, 0.949999988f, 5.0f, 2.0f, 0.300000012f},
+        {{1.0f, 1.0f, 1.0f, 1.0f}, {0.740101993f, 0.752798617f, 0.772549033f, 1.0f}, {0.122821964f, 0.161190778f, 0.216999978f, 1.0f}, {0.552910268f, 0.595265687f, 0.669811308f, 1.0f}, 4.0f, 60.0f, 0.0500000007f, 1.5f, 0.300000012f, 0.850000024f, 5.0f, 2.79999995f, 1.5f},
+        {{0.0f, 0.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 0.0f, 1.0f}, {0.264150918f, 0.264150918f, 0.264150918f, 1.0f}, 6.0f, 6.0f, 0.400000006f, 0.899999976f, 0.25f, 0.850000024f, 0.0f, 4.0f, 0.300000012f},
+    };
+
+    if (star->type == dspugen::EStarType::NeutronStar) return specialMaterials[0];
+    if (star->type == dspugen::EStarType::WhiteDwarf) return specialMaterials[1];
+    if (star->type == dspugen::EStarType::BlackHole) return specialMaterials[2];
+    auto blend = FindSpectralBlend(star->classFactor);
+    StarMassMaterialData result = mainMaterials[blend.material];
+    if (blend.hasTarget) {
+        const auto &target = mainMaterials[blend.target];
+        result.color0 = LerpColor(result.color0, target.color0, blend.amount);
+        result.color1 = LerpColor(result.color1, target.color1, blend.amount);
+        result.color2 = LerpColor(result.color2, target.color2, blend.amount);
+        result.color3 = LerpColor(result.color3, target.color3, blend.amount);
+        result.multiplier = LerpFloat(result.multiplier, target.multiplier, blend.amount);
+        result.noiseTile = LerpFloat(result.noiseTile, target.noiseTile, blend.amount);
+        result.noiseSpeed = LerpFloat(result.noiseSpeed, target.noiseSpeed, blend.amount);
+        result.chaosTile = LerpFloat(result.chaosTile, target.chaosTile, blend.amount);
+        result.chaosDistort = LerpFloat(result.chaosDistort, target.chaosDistort, blend.amount);
+        result.chaosOverlay = LerpFloat(result.chaosOverlay, target.chaosOverlay, blend.amount);
+        result.spotIntensity = LerpFloat(result.spotIntensity, target.spotIntensity, blend.amount);
+        result.rimPower = LerpFloat(result.rimPower, target.rimPower, blend.amount);
+        result.rotSpeed = LerpFloat(result.rotSpeed, target.rotSpeed, blend.amount);
     }
+    if (star->type == dspugen::EStarType::GiantStar) {
+        result.noiseTile *= 3.0f;
+        result.chaosTile /= 3.0f;
+    }
+    return result;
+}
+
+StarSpotMaterialData StarSpotMaterial(const dspugen::Star *star) {
+    static const StarSpotMaterialData mainMaterials[] = {
+        {{1.0f, 0.466861874f, 0.258823514f, 1.0f}, {1.0f, 0.0f, 0.15857029f, 1.0f}, 1.0f, 5.0f, 5.0f, 0.300000012f, 0.0500000007f, 2.0f},
+        {{1.0f, 0.571663201f, 0.334905684f, 1.0f}, {1.0f, 0.426606327f, 0.0f, 1.0f}, 1.0f, 5.0f, 5.0f, 0.300000012f, 0.0500000007f, 2.0f},
+        {{1.0f, 0.789915204f, 0.334905684f, 1.0f}, {1.0f, 0.591718853f, 0.0f, 1.0f}, 1.0f, 5.0f, 5.0f, 0.300000012f, 0.0500000007f, 2.0f},
+        {{1.0f, 0.726871908f, 0.353773594f, 1.0f}, {1.0f, 0.876956701f, 0.627358496f, 1.0f}, 1.0f, 5.0f, 5.0f, 0.300000012f, 0.0500000007f, 2.0f},
+        {{0.930000007f, 0.99667722f, 1.0f, 1.0f}, {0.908999979f, 0.98862499f, 1.0f, 1.0f}, 1.0f, 5.0f, 5.0f, 0.300000012f, 0.0500000007f, 2.0f},
+        {{0.957547188f, 1.0f, 0.984421909f, 1.0f}, {0.99000001f, 1.0f, 0.993749976f, 1.0f}, 1.0f, 5.0f, 5.0f, 0.300000012f, 0.0500000007f, 2.0f},
+        {{1.0f, 0.99902153f, 0.908999979f, 1.0f}, {1.0f, 0.995625019f, 0.930000007f, 1.0f}, 1.0f, 5.0f, 5.0f, 0.300000012f, 0.0500000007f, 2.0f},
+        {{0.391509414f, 0.82864356f, 1.0f, 1.0f}, {0.419811308f, 0.640218198f, 1.0f, 1.0f}, 1.0f, 5.0f, 5.0f, 0.300000012f, 0.0500000007f, 2.0f},
+        {{0.221698105f, 0.583651304f, 1.0f, 1.0f}, {0.221698105f, 0.391599625f, 1.0f, 1.0f}, 1.0f, 5.0f, 5.0f, 0.300000012f, 0.0500000007f, 2.0f},
+    };
+    static const StarSpotMaterialData specialMaterials[] = {
+        {{0.433218956f, 0.380392134f, 1.0f, 1.0f}, {0.617746413f, 0.258823484f, 1.0f, 1.0f}, 0.600000024f, 5.0f, 12.0f, 0.300000012f, 0.0500000007f, 2.0f},
+        {{0.929245293f, 0.941550434f, 1.0f, 1.0f}, {0.909803927f, 0.911484003f, 1.0f, 1.0f}, 1.0f, 5.0f, 5.0f, 0.300000012f, 0.0500000007f, 2.0f},
+        {{0.837492347f, 0.580188632f, 1.0f, 1.0f}, {1.0f, 0.333333343f, 0.760824859f, 1.0f}, 0.600000024f, 5.0f, 5.0f, 0.319999993f, 0.0500000007f, 10.0f},
+    };
+
+    if (star->type == dspugen::EStarType::NeutronStar) return specialMaterials[0];
+    if (star->type == dspugen::EStarType::WhiteDwarf) return specialMaterials[1];
+    if (star->type == dspugen::EStarType::BlackHole) return specialMaterials[2];
+    auto blend = FindSpectralBlend(star->classFactor);
+    StarSpotMaterialData result = mainMaterials[blend.material];
+    if (!blend.hasTarget) return result;
+    const auto &target = mainMaterials[blend.target];
+    result.centerColor = LerpColor(result.centerColor, target.centerColor, blend.amount);
+    result.glowColor = LerpColor(result.glowColor, target.glowColor, blend.amount);
+    result.multiplier = LerpFloat(result.multiplier, target.multiplier, blend.amount);
+    result.glowPower = LerpFloat(result.glowPower, target.glowPower, blend.amount);
+    result.centerMultiplier = LerpFloat(result.centerMultiplier, target.centerMultiplier, blend.amount);
+    result.centerBlurPower = LerpFloat(result.centerBlurPower, target.centerBlurPower, blend.amount);
+    return result;
 }
 
 const char *SpectrName(dspugen::ESpectrType spectr) {
@@ -314,6 +497,27 @@ std::string SingularityName(int singularity) {
     return result.empty() ? "none" : result;
 }
 
+const char *ThemeName(int theme) {
+    static const char *names[] = {
+        "Unknown", "Mediterranean", "Gas Giant", "Gas Giant", "Ice Giant", "Ice Giant",
+        "Arid Desert", "Ashen Gelisol", "Oceanic Jungle", "Lava", "Ice Field Gelisol",
+        "Barren Desert", "Gobi", "Volcanic Ash", "Red Stone", "Prairie", "Waterworld",
+        "Rocky Salt Lake", "Sakura Ocean", "Hurricane Stone Forest", "Scarlet Ice Lake",
+        "Gas Giant", "Savanna", "Crystal Desert", "Frozen Tundra", "Pandora Swamp",
+    };
+    return theme > 0 && theme < static_cast<int>(sizeof(names) / sizeof(names[0])) ? names[theme] : names[0];
+}
+
+const char *VeinName(int veinType) {
+    static const char *names[] = {
+        "", "Iron veins", "Copper veins", "Silicon veins", "Titanium veins", "Stone veins",
+        "Coal veins", "Crude oil seep", "Fire ice vein", "Kimberlite vein", "Fractal silicon vein",
+        "Organic crystal vein", "Optical grating crystal vein", "Spiniform stalagmite crystal vein",
+        "Unipolar magnet vein",
+    };
+    return veinType > 0 && veinType < static_cast<int>(sizeof(names) / sizeof(names[0])) ? names[veinType] : "Unknown";
+}
+
 float Hash01(int value) {
     unsigned int hash = static_cast<unsigned int>(value);
     hash ^= hash >> 16;
@@ -359,53 +563,88 @@ PanelData CreateStarPanel(const dspugen::Star *star, int galaxySeed) {
     return panel;
 }
 
-PanelData CreatePlanetPanel(const dspugen::Planet *planet, int galaxySeed, const std::string &name) {
-    const auto *theme = dspugen::themeProtoSet.select(planet->theme);
-    int veinSpots = 0;
-    for (int i = 1; i < 15; ++i) veinSpots += planet->veinSpot[i];
+PanelData CreatePlanetPanel(const dspugen::Planet *planet, const std::string &name) {
     PanelData panel;
     panel.title = "PLANET PARAMETERS";
     panel.name = name;
     panel.subtitle = PlanetTypeName(planet->type);
     panel.rows = {
-        {"galaxy seed", std::to_string(galaxySeed)},
-        {"planet ID", std::to_string(planet->id)},
-        {"generation seed", std::to_string(planet->seed)},
         {"star", planet->star->name},
-        {"orbit number", std::to_string(planet->number)},
         {"orbit parent", planet->orbitAround == 0 ? "star" : std::to_string(planet->orbitAround)},
-        {"orbit index", std::to_string(planet->orbitIndex)},
         {"orbit radius", FormatString("%.4f AU", planet->orbitRadius)},
         {"sun distance", FormatString("%.4f AU", planet->sunDistance)},
         {"real radius", FormatString("%.1f km", planet->realRadius())},
         {"luminosity", FormatString("%.2f", planet->luminosity)},
-        {"temperature bias", FormatString("%+.3f", planet->temperatureBias)},
-        {"habitable bias", FormatString("%.3f", planet->habitableBias)},
-        {"theme", theme == nullptr ? "unknown" : theme->name},
-        {"theme ID", std::to_string(planet->theme)},
-        {"algorithm", std::to_string(planet->algoId)},
-        {"gas entries", std::to_string(planet->gasItems.size())},
-        {"vein spots", std::to_string(veinSpots)},
+        {"theme", ThemeName(planet->theme)},
     };
+    for (int i = 1; i < 15; ++i) {
+        if (planet->veinSpot[i] > 0) panel.detailRows.push_back({VeinName(i), std::to_string(planet->veinSpot[i])});
+    }
+    if (panel.detailRows.empty()) panel.detailRows.push_back({"None", ""});
     panel.footerKey = "singularities";
     panel.footerValue = SingularityName(planet->singularity);
     return panel;
 }
 
-void ResetCamera(Camera3D &camera, ViewMode mode) {
-    camera.up = mode == ViewMode::Galaxy ? Vector3 {0.0f, -1.0f, 0.0f} : Vector3 {0.0f, 1.0f, 0.0f};
-    camera.fovy = mode == ViewMode::Galaxy ? 45.0f : 52.0f;
+void ApplyGalaxyCamera(Camera3D &camera, float yaw, float pitch) {
+    float yawRadians = yaw * DEG2RAD;
+    float pitchRadians = pitch * DEG2RAD;
+    float sinYaw = std::sin(yawRadians);
+    float cosYaw = std::cos(yawRadians);
+    float sinPitch = std::sin(pitchRadians);
+    float cosPitch = std::cos(pitchRadians);
+    Vector3 forward {sinYaw * cosPitch, sinPitch, -cosYaw * cosPitch};
+    camera.target = Vector3 {0.0f, kGalaxyCameraTargetHeight, 0.0f};
+    camera.position = camera.target - forward * kGalaxyCameraDistance;
+    camera.up = Vector3 {-sinYaw * sinPitch, cosPitch, cosYaw * sinPitch};
+}
+
+void ResetCamera(Camera3D &camera, ViewMode mode, float &galaxyYaw, float &galaxyPitch) {
+    camera.up = Vector3 {0.0f, 1.0f, 0.0f};
+    camera.fovy = mode == ViewMode::Galaxy ? 60.0f : 52.0f;
     camera.projection = CAMERA_PERSPECTIVE;
     if (mode == ViewMode::Galaxy) {
-        camera.position = Vector3 {40.0f, -40.0f, 40.0f};
-        camera.target = Vector3 {0.0f, -10.0f, 0.0f};
+        galaxyYaw = 0.0f;
+        galaxyPitch = kGalaxyCameraPitchBegin;
+        ApplyGalaxyCamera(camera, galaxyYaw, galaxyPitch);
     } else {
         camera.position = Vector3 {0.0f, 24.0f, 30.0f};
         camera.target = Vector3 {0.0f, 0.0f, 0.0f};
     }
 }
 
-void CameraControl(Camera *camera) {
+void CameraControl(Camera *camera, ViewMode mode, float &galaxyYaw, float &galaxyPitch) {
+    if (mode == ViewMode::Galaxy) {
+        if (IsKeyDown(KEY_DOWN)) galaxyPitch -= kCameraRotationSpeed * RAD2DEG;
+        if (IsKeyDown(KEY_UP)) galaxyPitch += kCameraRotationSpeed * RAD2DEG;
+        if (IsKeyDown(KEY_RIGHT)) galaxyYaw += kCameraRotationSpeed * RAD2DEG;
+        if (IsKeyDown(KEY_LEFT)) galaxyYaw -= kCameraRotationSpeed * RAD2DEG;
+
+        if (!IsGamepadAvailable(0)) {
+            bool middleDown = IsMouseButtonDown(MOUSE_BUTTON_MIDDLE);
+            Vector2 delta = GetMouseDelta();
+#if defined(__EMSCRIPTEN__)
+            middleDown = webMouse.middleDown;
+            delta = webMouse.delta;
+            webMouse.delta = Vector2 {};
+#endif
+            if (middleDown) {
+                galaxyYaw += delta.x * kCameraMouseSensitivity * RAD2DEG;
+                galaxyPitch -= delta.y * kCameraMouseSensitivity * RAD2DEG;
+            }
+        } else {
+            galaxyYaw += GetGamepadAxisMovement(0, GAMEPAD_AXIS_RIGHT_X) *
+                         2.0f * kCameraMouseSensitivity * RAD2DEG;
+            galaxyPitch -= GetGamepadAxisMovement(0, GAMEPAD_AXIS_RIGHT_Y) *
+                           2.0f * kCameraMouseSensitivity * RAD2DEG;
+        }
+        galaxyYaw = std::fmod(galaxyYaw, 360.0f);
+        if (galaxyYaw < 0.0f) galaxyYaw += 360.0f;
+        galaxyPitch = std::clamp(galaxyPitch, kGalaxyCameraPitchMin, kGalaxyCameraPitchMax);
+        ApplyGalaxyCamera(*camera, galaxyYaw, galaxyPitch);
+        return;
+    }
+
     bool rotateUp = false;
     if (IsKeyDown(KEY_DOWN)) CameraPitch(camera, -kCameraRotationSpeed, false, false, rotateUp);
     if (IsKeyDown(KEY_UP)) CameraPitch(camera, kCameraRotationSpeed, false, false, rotateUp);
@@ -450,18 +689,417 @@ void CameraControl(Camera *camera) {
     if (IsKeyPressed(KEY_KP_ADD)) CameraMoveToTarget(camera, -2.0f);
 }
 
-void DrawFlicker(Vector3 position, float radius, float pulse) {
-    BeginBlendMode(BLEND_ADDITIVE);
-    DrawSphere(position, radius, WithAlpha(WHITE, 0.015f + pulse * 0.055f));
-    EndBlendMode();
+void SetShaderVector3(Shader shader, const char *name, Vector3 value) {
+    int location = GetShaderLocation(shader, name);
+    if (location >= 0) SetShaderValue(shader, location, &value, SHADER_UNIFORM_VEC3);
 }
 
-void DrawStar(const StarViewData &star, float time, bool selected) {
-    float pulse = 0.5f + 0.5f * std::sin(time * star.flickerSpeed + star.flickerPhase);
-    DrawSphere(star.position, star.radius, star.color);
-    DrawFlicker(star.position, star.radius, pulse);
-    if (selected) {
-        DrawCubeWiresV(star.position, star.selectionSize, WHITE);
+void SetShaderFloat(Shader shader, const char *name, float value) {
+    int location = GetShaderLocation(shader, name);
+    if (location >= 0) SetShaderValue(shader, location, &value, SHADER_UNIFORM_FLOAT);
+}
+
+void SetShaderVector4(Shader shader, const char *name, Vector4 value) {
+    int location = GetShaderLocation(shader, name);
+    if (location >= 0) SetShaderValue(shader, location, &value, SHADER_UNIFORM_VEC4);
+}
+
+void SetShaderMatrix(Shader shader, const char *name, Matrix value) {
+    int location = GetShaderLocation(shader, name);
+    if (location >= 0) SetShaderValueMatrix(shader, location, value);
+}
+
+void ConfigureStarShader(Shader &shader, bool hasNormal, bool hasTexcoord) {
+    shader.locs[SHADER_LOC_VERTEX_POSITION] = GetShaderLocationAttrib(shader, "in_POSITION0");
+    shader.locs[SHADER_LOC_VERTEX_NORMAL] = hasNormal ? GetShaderLocationAttrib(shader, "in_NORMAL0") : -1;
+    shader.locs[SHADER_LOC_VERTEX_TEXCOORD01] = hasTexcoord ? GetShaderLocationAttrib(shader, "in_TEXCOORD0") : -1;
+    shader.locs[SHADER_LOC_MATRIX_MODEL] = GetShaderLocation(shader, "matModel");
+    shader.locs[SHADER_LOC_MATRIX_MVP] = -1;
+}
+
+void ConfigureGalaxyStarPointShader(Shader &shader) {
+    shader.locs[SHADER_LOC_VERTEX_POSITION] = GetShaderLocationAttrib(shader, "vertexPosition");
+    shader.locs[SHADER_LOC_VERTEX_TEXCOORD01] = GetShaderLocationAttrib(shader, "vertexTexCoord");
+    shader.locs[SHADER_LOC_VERTEX_COLOR] = GetShaderLocationAttrib(shader, "vertexColor");
+    shader.locs[SHADER_LOC_MATRIX_MODEL] = GetShaderLocation(shader, "matModel");
+    shader.locs[SHADER_LOC_MATRIX_MVP] = -1;
+    shader.locs[SHADER_LOC_COLOR_DIFFUSE] = GetShaderLocation(shader, "colDiffuse");
+    shader.locs[SHADER_LOC_MAP_DIFFUSE] = GetShaderLocation(shader, "texture0");
+}
+
+void ConfigureScreenShader(Shader &shader) {
+    shader.locs[SHADER_LOC_VERTEX_POSITION] = GetShaderLocationAttrib(shader, "vertexPosition");
+    shader.locs[SHADER_LOC_VERTEX_TEXCOORD01] = GetShaderLocationAttrib(shader, "vertexTexCoord");
+    shader.locs[SHADER_LOC_MATRIX_MVP] = GetShaderLocation(shader, "mvp");
+    shader.locs[SHADER_LOC_MAP_DIFFUSE] = GetShaderLocation(shader, "texture0");
+}
+
+RenderTexture2D LoadHalfFloatRenderTexture(int width, int height, bool withDepth) {
+    RenderTexture2D target{};
+    target.id = rlLoadFramebuffer();
+    if (target.id == 0) return {};
+    rlEnableFramebuffer(target.id);
+    target.texture.id = rlLoadTexture(nullptr, width, height, RL_PIXELFORMAT_UNCOMPRESSED_R16G16B16A16, 1);
+    target.texture.width = width;
+    target.texture.height = height;
+    target.texture.mipmaps = 1;
+    target.texture.format = PIXELFORMAT_UNCOMPRESSED_R16G16B16A16;
+    rlFramebufferAttach(target.id, target.texture.id, RL_ATTACHMENT_COLOR_CHANNEL0, RL_ATTACHMENT_TEXTURE2D, 0);
+    if (withDepth) {
+        target.depth.id = rlLoadTextureDepth(width, height, true);
+        target.depth.width = width;
+        target.depth.height = height;
+        target.depth.mipmaps = 1;
+        target.depth.format = 19;
+        rlFramebufferAttach(target.id, target.depth.id, RL_ATTACHMENT_DEPTH, RL_ATTACHMENT_RENDERBUFFER, 0);
+    }
+    bool complete = rlFramebufferComplete(target.id);
+    rlDisableFramebuffer();
+    if (!complete || !IsTextureValid(target.texture)) {
+        UnloadRenderTexture(target);
+        return {};
+    }
+    SetTextureFilter(target.texture, TEXTURE_FILTER_BILINEAR);
+    SetTextureWrap(target.texture, TEXTURE_WRAP_CLAMP);
+    return target;
+}
+
+void UnloadBloomTargets() {
+    if (galaxySceneTarget.id != 0) UnloadRenderTexture(galaxySceneTarget);
+    if (bloomPrefilterTarget.id != 0) UnloadRenderTexture(bloomPrefilterTarget);
+    for (auto &level: bloomDownLevels) {
+        if (level.id != 0) UnloadRenderTexture(level);
+        level = {};
+    }
+    for (auto &level: bloomUpLevels) {
+        if (level.id != 0) UnloadRenderTexture(level);
+        level = {};
+    }
+    galaxySceneTarget = {};
+    bloomPrefilterTarget = {};
+    bloomTargetWidth = 0;
+    bloomTargetHeight = 0;
+    bloomIterationCount = 0;
+    bloomSampleScale = 1.0f;
+}
+
+bool EnsureBloomTargets(int width, int height) {
+    if (bloomTargetWidth == width && bloomTargetHeight == height && galaxySceneTarget.id != 0 &&
+        bloomPrefilterTarget.id != 0 && bloomDownLevels[0].id != 0) return true;
+    UnloadBloomTargets();
+    galaxySceneTarget = LoadHalfFloatRenderTexture(width, height, true);
+    int levelWidth = std::max(1, width / 2);
+    int levelHeight = std::max(1, height / 2);
+    bloomPrefilterTarget = LoadHalfFloatRenderTexture(levelWidth, levelHeight, false);
+    float pyramid = std::log2(static_cast<float>(levelHeight)) + 5.0f - 8.0f;
+    int pyramidInteger = static_cast<int>(pyramid);
+    bloomIterationCount = std::clamp(pyramidInteger, 1, kMaxBloomIterations);
+    bloomSampleScale = 0.5f + pyramid - static_cast<float>(pyramidInteger);
+    for (int i = 0; i < bloomIterationCount; ++i) {
+        levelWidth = std::max(1, levelWidth / 2);
+        levelHeight = std::max(1, levelHeight / 2);
+        bloomDownLevels[static_cast<std::size_t>(i)] = LoadHalfFloatRenderTexture(levelWidth, levelHeight, false);
+    }
+    for (int i = bloomIterationCount - 2; i >= 0; --i) {
+        const auto &down = bloomDownLevels[static_cast<std::size_t>(i)];
+        bloomUpLevels[static_cast<std::size_t>(i)] =
+            LoadHalfFloatRenderTexture(down.texture.width, down.texture.height, false);
+    }
+    bool complete = galaxySceneTarget.id != 0 && bloomPrefilterTarget.id != 0;
+    for (int i = 0; i < bloomIterationCount; ++i)
+        complete = complete && bloomDownLevels[static_cast<std::size_t>(i)].id != 0;
+    for (int i = 0; i < bloomIterationCount - 1; ++i)
+        complete = complete && bloomUpLevels[static_cast<std::size_t>(i)].id != 0;
+    if (!complete) {
+        UnloadBloomTargets();
+        return false;
+    }
+    bloomTargetWidth = width;
+    bloomTargetHeight = height;
+    return true;
+}
+
+void BeginOpaqueBlit() {
+    rlDrawRenderBatchActive();
+    rlDisableDepthTest();
+    rlDisableDepthMask();
+    rlDisableBackfaceCulling();
+    rlDisableColorBlend();
+}
+
+void EndOpaqueBlit() {
+    rlDrawRenderBatchActive();
+    rlEnableColorBlend();
+    rlEnableBackfaceCulling();
+    rlEnableDepthMask();
+    rlEnableDepthTest();
+}
+
+void DrawFlippedTexture(Texture2D texture, int width, int height) {
+    DrawTexturePro(texture,
+                   Rectangle {0.0f, 0.0f, static_cast<float>(texture.width), -static_cast<float>(texture.height)},
+                   Rectangle {0.0f, 0.0f, static_cast<float>(width), static_cast<float>(height)},
+                   Vector2 {}, 0.0f, WHITE);
+}
+
+void SetSourceTexelSize(Shader shader, const Texture2D &texture, float scale = 1.0f) {
+    Vector2 texelSize {scale / static_cast<float>(texture.width), scale / static_cast<float>(texture.height)};
+    int location = GetShaderLocation(shader, "sourceTexelSize");
+    if (location >= 0) SetShaderValue(shader, location, &texelSize, SHADER_UNIFORM_VEC2);
+}
+
+template<typename T>
+T *LoadMeshArray(const char *path, int expectedCount) {
+    int size = 0;
+    unsigned char *data = LoadFileData(path, &size);
+    if (data == nullptr || size != expectedCount * static_cast<int>(sizeof(T))) {
+        if (data != nullptr) UnloadFileData(data);
+        return nullptr;
+    }
+    T *result = static_cast<T *>(MemAlloc(static_cast<unsigned int>(size)));
+    if (result == nullptr) {
+        UnloadFileData(data);
+        return nullptr;
+    }
+    std::memcpy(result, data, static_cast<std::size_t>(size));
+    UnloadFileData(data);
+    return result;
+}
+
+Model LoadStarModel(const char *verticesPath, int vertexCount, const char *indicesPath, int triangleCount,
+                    const char *normalsPath = nullptr, const char *texcoordsPath = nullptr) {
+    Mesh mesh{};
+    mesh.vertexCount = vertexCount;
+    mesh.triangleCount = triangleCount;
+    mesh.vertices = LoadMeshArray<float>(verticesPath, vertexCount * 3);
+    mesh.indices = LoadMeshArray<unsigned short>(indicesPath, triangleCount * 3);
+    if (normalsPath != nullptr) mesh.normals = LoadMeshArray<float>(normalsPath, vertexCount * 3);
+    if (texcoordsPath != nullptr) mesh.texcoords = LoadMeshArray<float>(texcoordsPath, vertexCount * 2);
+    if (mesh.vertices == nullptr || mesh.indices == nullptr || (normalsPath != nullptr && mesh.normals == nullptr) ||
+        (texcoordsPath != nullptr && mesh.texcoords == nullptr)) {
+        UnloadMesh(mesh);
+        return {};
+    }
+    UploadMesh(&mesh, false);
+    return LoadModelFromMesh(mesh);
+}
+
+void SetModelShader(Model &model, Shader shader) {
+    model.materials[0].shader = shader;
+    for (int i = 0; i <= MATERIAL_MAP_BRDF; ++i) model.materials[0].maps[i].texture = {};
+}
+
+bool StarModelReady(const Model &model) {
+    return IsModelValid(model) && model.meshCount == 1 && model.materialCount == 1;
+}
+
+float StarViewRadius(const dspugen::Star *star) {
+    float viewRadius = star->radius * 800.0f;
+    return static_cast<float>(static_cast<double>(viewRadius) * 0.00025);
+}
+
+float RawStarSpotLevel(const StarViewData &star, const Camera3D &camera) {
+    float ratio = Vector3Distance(star.position, camera.position) / std::max(0.0001f, StarViewRadius(star.data));
+    return std::max(0.0f, (ratio - 15.0f) * 0.05f);
+}
+
+float StarSpotLevel(const StarViewData &star, const Camera3D &camera) {
+    float level = RawStarSpotLevel(star, camera);
+    if (level > 1.0f) {
+        level = std::log(level) + 1.0f;
+        level = std::log(level) + 1.0f;
+    }
+    return std::min(level, 2.0f);
+}
+
+float StarVisualScale(const StarViewData &star, const Camera3D &camera) {
+    float vradius = StarViewRadius(star.data);
+    float vdist = Vector3Distance(star.position, camera.position);
+    float factor = static_cast<float>(std::pow(static_cast<double>(std::max(1.0f, star.data->radius)),
+                                               0.15000000596046448));
+    float minimumScaleRatio = (vdist / std::max(0.0001f, vradius)) / (160.0f / factor);
+    float minimumScale = std::max(1.0f, static_cast<float>(std::pow(static_cast<double>(minimumScaleRatio), 0.7)));
+    return minimumScale * vradius * 2.0f;
+}
+
+void DrawStarSpot(const StarViewData &star, const Camera3D &camera, float visualScale);
+
+Matrix ViewProjection() {
+    return MatrixMultiply(rlGetMatrixModelview(), rlGetMatrixProjection());
+}
+
+Matrix StarViewProjection() {
+    Matrix result = ViewProjection();
+    result.m2 = (result.m2 + result.m3) * 0.5f;
+    result.m6 = (result.m6 + result.m7) * 0.5f;
+    result.m10 = (result.m10 + result.m11) * 0.5f;
+    result.m14 = (result.m14 + result.m15) * 0.5f;
+    return result;
+}
+
+void SetStarMatrices(Shader shader, Matrix transform) {
+    SetShaderMatrix(shader, "matModel", transform);
+    SetShaderMatrix(shader, "matViewProjection", StarViewProjection());
+}
+
+Matrix StarTransform(Vector3 position, float scale) {
+    return MatrixMultiply(MatrixScale(scale, scale, scale), MatrixTranslate(position.x, position.y, position.z));
+}
+
+void SetGalaxyPointUniforms(float pointGlow, float multiplier, float alphaMultiplier) {
+    int glowLocation = GetShaderLocation(galaxyStarPointShader, "_PointGlow");
+    int multiplierLocation = GetShaderLocation(galaxyStarPointShader, "_Multiplier");
+    int alphaLocation = GetShaderLocation(galaxyStarPointShader, "_AlphaMultiplier");
+    if (glowLocation >= 0) SetShaderValue(galaxyStarPointShader, glowLocation, &pointGlow, SHADER_UNIFORM_FLOAT);
+    if (multiplierLocation >= 0) SetShaderValue(galaxyStarPointShader, multiplierLocation, &multiplier, SHADER_UNIFORM_FLOAT);
+    if (alphaLocation >= 0) SetShaderValue(galaxyStarPointShader, alphaLocation, &alphaMultiplier, SHADER_UNIFORM_FLOAT);
+}
+
+void DrawStarMass(const StarViewData &star, const Camera3D &camera, float time) {
+    float rawSpotLevel = RawStarSpotLevel(star, camera);
+    float bodyLevel = std::sqrt(std::clamp(1.0f - rawSpotLevel, 0.0f, 1.0f));
+    if (bodyLevel <= 0.0f || !hasStarSurfaceShader || !hasStarModels) return;
+    float visualScale = StarVisualScale(star, camera);
+    Matrix transform = StarTransform(star.position, visualScale);
+    auto material = StarMassMaterial(star.data);
+    rlDrawRenderBatchActive();
+    SetShaderVector3(starSurfaceShader, "_Color0_xyz", Vector3 {material.color0.x, material.color0.y, material.color0.z});
+    SetShaderVector3(starSurfaceShader, "_Color1_xyz", Vector3 {material.color1.x, material.color1.y, material.color1.z});
+    SetShaderVector3(starSurfaceShader, "_Color2_xyz", Vector3 {material.color2.x, material.color2.y, material.color2.z});
+    SetShaderVector3(starSurfaceShader, "_Color3_xyz", Vector3 {material.color3.x, material.color3.y, material.color3.z});
+    SetShaderVector4(starSurfaceShader, "_Multiplier_and_NoiseTile_and_NoiseSpeed_and_ChaosTile",
+                     Vector4 {4.0f * bodyLevel, material.noiseTile, material.noiseSpeed, material.chaosTile});
+    SetShaderVector4(starSurfaceShader, "_ChaosDistort_and_ChaosOverlay_and_SpotIntens_and_RimPower",
+                     Vector4 {material.chaosDistort, material.chaosOverlay, material.spotIntensity, material.rimPower});
+    SetShaderVector4(starSurfaceShader, "_RotSpeed", Vector4 {material.rotSpeed, 0.0f, 0.0f, 0.0f});
+    SetShaderVector4(starSurfaceShader, "_Time", Vector4 {time / 20.0f, time, time * 2.0f, time * 3.0f});
+    SetShaderVector3(starSurfaceShader, "_WorldSpaceCameraPos", camera.position);
+    SetStarMatrices(starSurfaceShader, transform);
+    rlEnableDepthMask();
+    rlEnableBackfaceCulling();
+    rlSetCullFace(RL_CULL_FACE_BACK);
+    rlSetBlendMode(RL_BLEND_ADD_COLORS);
+    DrawMesh(starMassModel.meshes[0], starMassModel.materials[0], transform);
+    rlSetBlendMode(RL_BLEND_ALPHA);
+}
+
+void DrawStarBlack(const StarViewData &star, const Camera3D &camera) {
+    if (RawStarSpotLevel(star, camera) >= 1.0f || !hasStarBlackShader || !hasStarModels) return;
+    float visualScale = StarVisualScale(star, camera);
+    Matrix transform = StarTransform(star.position, visualScale * 1.0049999952316284f);
+    rlDrawRenderBatchActive();
+    SetShaderVector4(starBlackShader, "_TintColor", Vector4 {0.0f, 0.0f, 0.0f, 1.0f});
+    SetStarMatrices(starBlackShader, transform);
+    rlSetBlendMode(RL_BLEND_ALPHA);
+    rlDisableDepthMask();
+    rlDisableBackfaceCulling();
+    DrawMesh(starBlackModel.meshes[0], starBlackModel.materials[0], transform);
+    rlEnableBackfaceCulling();
+    rlEnableDepthMask();
+}
+
+void DrawStarSpot(const StarViewData &star, const Camera3D &camera, float visualScale) {
+    if (!hasStarSpotShader || !hasStarModels) return;
+    float spotLevel = StarSpotLevel(star, camera);
+    if (spotLevel <= 0.0f) return;
+    auto material = StarSpotMaterial(star.data);
+    rlDrawRenderBatchActive();
+    SetShaderVector4(starSpotShader, "_Multiplier", Vector4 {0.3f * spotLevel, 0.0f, 0.0f, 0.0f});
+    SetShaderVector3(starSpotShader, "_SunGlowColor_xyz", Vector3 {material.glowColor.x, material.glowColor.y, material.glowColor.z});
+    SetShaderVector4(starSpotShader, "_SunGlowPower", Vector4 {material.glowPower, 0.0f, 0.0f, 0.0f});
+    SetShaderVector3(starSpotShader, "_SunCenterColor_xyz", Vector3 {material.centerColor.x, material.centerColor.y, material.centerColor.z});
+    SetShaderVector4(starSpotShader, "_SunCenterMultiplier_and_SunCenterSize_and_SunCenterBlur_and_SunCenterBlurPower",
+                     Vector4 {material.centerMultiplier, material.centerSize, material.centerBlur, material.centerBlurPower});
+    SetShaderVector4(starSpotShader, "_Global_WhiteMode0", Vector4 {});
+    Vector3 forward = Vector3Normalize(Vector3Subtract(camera.target, camera.position));
+    Vector3 worldUp {0.0f, 1.0f, 0.0f};
+    if (std::abs(Vector3DotProduct(forward, worldUp)) > 0.999999f) worldUp = Vector3 {0.0f, 0.0f, 1.0f};
+    Vector3 right = Vector3Normalize(Vector3CrossProduct(worldUp, forward));
+    Vector3 up = Vector3CrossProduct(forward, right);
+    Matrix rotation {right.x, up.x, forward.x, 0.0f,
+                     right.y, up.y, forward.y, 0.0f,
+                     right.z, up.z, forward.z, 0.0f,
+                     0.0f, 0.0f, 0.0f, 1.0f};
+    Matrix transform = MatrixMultiply(MatrixScale(visualScale * 3.700000047683716f,
+                                                   visualScale * 3.700000047683716f,
+                                                   visualScale * 3.700000047683716f), rotation);
+    transform = MatrixMultiply(transform, MatrixTranslate(star.position.x, star.position.y, star.position.z));
+    SetStarMatrices(starSpotShader, transform);
+    rlSetBlendMode(RL_BLEND_ADD_COLORS);
+    rlDisableDepthMask();
+    rlDisableBackfaceCulling();
+    DrawMesh(starSpotModel.meshes[0], starSpotModel.materials[0], transform);
+    rlEnableBackfaceCulling();
+    rlEnableDepthMask();
+    rlSetBlendMode(RL_BLEND_ALPHA);
+}
+
+void DrawGalaxyStarPoint(const StarViewData &star, const Camera3D &camera) {
+    if (!hasGalaxyStarPointShader || !hasGalaxyStarPointModel) return;
+    Vector3 forward = Vector3Normalize(Vector3Subtract(camera.target, camera.position));
+    Vector3 up = Vector3Normalize(camera.up);
+    if (std::abs(Vector3DotProduct(forward, up)) > 0.999999f) up = Vector3 {0.0f, 0.0f, 1.0f};
+    Vector3 right = Vector3Normalize(Vector3CrossProduct(up, forward));
+    up = Vector3CrossProduct(forward, right);
+    Matrix rotation {right.x, up.x, forward.x, 0.0f,
+                     right.y, up.y, forward.y, 0.0f,
+                     right.z, up.z, forward.z, 0.0f,
+                     0.0f, 0.0f, 0.0f, 1.0f};
+    Matrix transform = MatrixMultiply(MatrixScale(star.galaxyScale, star.galaxyScale, star.galaxyScale), rotation);
+    transform = MatrixMultiply(transform, MatrixTranslate(star.position.x, star.position.y, star.position.z));
+    rlDrawRenderBatchActive();
+    SetShaderMatrix(galaxyStarPointShader, "matViewProjection", ViewProjection());
+    SetShaderVector4(galaxyStarPointShader, "_MainTex_ST", Vector4 {1.0f, 1.0f, 0.0f, 0.0f});
+    SetShaderVector4(galaxyStarPointShader, "_TintColor", star.galaxyColor);
+    int framebufferWidth = rlGetFramebufferWidth();
+    int framebufferHeight = rlGetFramebufferHeight();
+    SetShaderVector4(galaxyStarPointShader, "_ScreenParams",
+                     Vector4 {static_cast<float>(framebufferWidth), static_cast<float>(framebufferHeight), 0.0f, 0.0f});
+    float fadeRadius = 0.0f;
+    int fadeLocation = GetShaderLocation(galaxyStarPointShader, "_Global_GalaxyFadeRadius");
+    if (fadeLocation >= 0) SetShaderValue(galaxyStarPointShader, fadeLocation, &fadeRadius, SHADER_UNIFORM_FLOAT);
+    float sceneLinear = galaxySceneTarget.id != 0 && rlGetActiveFramebuffer() == galaxySceneTarget.id ? 1.0f : 0.0f;
+    int sceneLinearLocation = GetShaderLocation(galaxyStarPointShader, "_SceneLinear");
+    if (sceneLinearLocation >= 0)
+        SetShaderValue(galaxyStarPointShader, sceneLinearLocation, &sceneLinear, SHADER_UNIFORM_FLOAT);
+    Vector4 white {1.0f, 1.0f, 1.0f, 1.0f};
+    int colorLocation = GetShaderLocation(galaxyStarPointShader, "colDiffuse");
+    if (colorLocation >= 0) SetShaderValue(galaxyStarPointShader, colorLocation, &white, SHADER_UNIFORM_VEC4);
+    auto &material = galaxyStarPointModel.materials[0];
+    int savedColorLocation = material.shader.locs[SHADER_LOC_COLOR_DIFFUSE];
+    material.shader.locs[SHADER_LOC_COLOR_DIFFUSE] = -1;
+    rlDisableDepthMask();
+    rlDisableDepthTest();
+    rlDisableBackfaceCulling();
+    rlColorMask(true, true, true, false);
+    SetGalaxyPointUniforms(0.0f, 2.5f, 1.0f);
+    rlSetBlendFactors(RL_SRC_ALPHA, RL_ONE_MINUS_SRC_ALPHA, RL_FUNC_ADD);
+    rlSetBlendMode(RL_BLEND_CUSTOM);
+    DrawMesh(galaxyStarPointModel.meshes[0], material, transform);
+    material.shader.locs[SHADER_LOC_COLOR_DIFFUSE] = savedColorLocation;
+    rlColorMask(true, true, true, true);
+    rlSetBlendMode(RL_BLEND_ALPHA);
+    rlEnableBackfaceCulling();
+    rlEnableDepthTest();
+    rlEnableDepthMask();
+}
+
+void DrawBackgroundStars(const Camera3D &camera, bool bloomVisible = true) {
+    if (!bloomVisible) return;
+    for (int layer = 0; layer < 2; ++layer) {
+        float follow = layer == 0 ? 0.93f : 0.96f;
+        float shellRadius = layer == 0 ? 105.0f : 180.0f;
+        int count = layer == 0 ? 90 : 150;
+        Vector3 center = camera.position * follow;
+        for (int i = 0; i < count; ++i) {
+            float y = 1.0f - 2.0f * (static_cast<float>(i) + 0.5f) / static_cast<float>(count);
+            float ring = std::sqrt(std::max(0.0f, 1.0f - y * y));
+            float angle = static_cast<float>(i) * 2.39996323f + Hash01(i + layer * 997) * 0.35f;
+            Vector3 point = center + Vector3 {std::cos(angle) * ring, y, std::sin(angle) * ring} * shellRadius;
+            float size = (layer == 0 ? 0.025f : 0.035f) * (0.65f + Hash01(i * 17 + layer) * 0.9f);
+            Color color = Hash01(i * 31 + layer) > 0.82f ? Color {132, 186, 231, 180} : Color {194, 211, 224, 145};
+            DrawSphere(point, size, color);
+        }
     }
 }
 
@@ -570,10 +1208,14 @@ void DrawOrbit(Vector3 center, const PlanetViewData &planet) {
     }
 }
 
-void DrawPlanet(const PlanetViewData &planet, float time, bool selected) {
-    float pulse = 0.5f + 0.5f * std::sin(time * 1.7f + planet.flickerPhase);
-    DrawSphere(planet.position, planet.radius, planet.color);
-    DrawFlicker(planet.position, planet.radius, pulse);
+void DrawPlanet(const PlanetViewData &planet, bool selected) {
+    Color nightColor {
+        static_cast<unsigned char>(planet.color.r * 0.13f),
+        static_cast<unsigned char>(planet.color.g * 0.15f),
+        static_cast<unsigned char>(planet.color.b * 0.2f), 255};
+    DrawSphere(planet.position, planet.radius, nightColor);
+    DrawSphere(planet.position, planet.radius * 0.995f, planet.color);
+    DrawSphereWires(planet.position, planet.radius * 1.006f, 14, 10, WithAlpha(AddColor(planet.color, 45), 0.2f));
     if (selected) {
         DrawSphereWires(planet.position, planet.selectionRadius, 12, 8, WHITE);
     }
@@ -618,6 +1260,16 @@ void DrawPanel(const PanelData &panel) {
     TextLine(panel.subtitle.c_str(), x, 89, 14, Color {161, 187, 208, 255});
     int y = 126;
     for (const auto &row: panel.rows) y = DrawKeyValue(row, y);
+    if (!panel.detailRows.empty()) {
+        TextLine("MINERAL VEINS", x, y + 8, 15, Color {123, 157, 183, 255});
+        y += 34;
+        for (const auto &row: panel.detailRows) {
+            TextLine(row.key, x, y, 14, RAYWHITE);
+            int valueWidth = static_cast<int>(MeasureTextEx(viewerFont, row.value.c_str(), 14.0f, 1.0f).x);
+            TextLine(row.value.c_str(), GetScreenWidth() - 22 - valueWidth, y, 14, Color {137, 221, 255, 255});
+            y += 22;
+        }
+    }
     if (!panel.footerKey.empty()) TextLine(panel.footerKey.c_str(), x, y + 8, 15, Color {123, 157, 183, 255});
     if (!panel.footerValue.empty()) TextLine(panel.footerValue.c_str(), x, y + (panel.footerKey.empty() ? 16 : 31), 14,
                                              panel.footerKey.empty() ? Color {98, 131, 159, 255} : RAYWHITE);
@@ -633,8 +1285,105 @@ public:
         SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_HIGHDPI | FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
         InitWindow(kScreenWidth, kScreenHeight, "DSPSeedCalc Universe Viewer");
         viewerFont = GetFontDefault();
-        if (!fontPath.empty() && FileExists(fontPath.c_str())) {
-            Font loadedFont = LoadFontEx(fontPath.c_str(), kViewerFontSize, nullptr, 0);
+        const auto surfaceVertex = ViewerAssetPath("star_surface.vs");
+        const auto surfaceFragment = ViewerAssetPath("star_surface.fs");
+        const auto spotVertex = ViewerAssetPath("star_spot.vs");
+        const auto spotFragment = ViewerAssetPath("star_spot.fs");
+        const auto blackVertex = ViewerAssetPath("star_black.vs");
+        const auto blackFragment = ViewerAssetPath("star_black.fs");
+        const auto galaxyPointVertex = ViewerAssetPath("galaxy_star_point.vs");
+        const auto galaxyPointFragment = ViewerAssetPath("galaxy_star_point.fs");
+        const auto bloomVertex = ViewerAssetPath("bloom.vs");
+        const auto bloomPrefilterFragment = ViewerAssetPath("bloom_prefilter.fs");
+        const auto bloomDownsampleFirstFragment = ViewerAssetPath("bloom_downsample_first.fs");
+        const auto bloomDownsampleFragment = ViewerAssetPath("bloom_downsample.fs");
+        const auto bloomUpsampleFragment = ViewerAssetPath("bloom_upsample.fs");
+        const auto bloomCompositeFragment = ViewerAssetPath("bloom_composite.fs");
+        starSurfaceShader = LoadShader(surfaceVertex.c_str(), surfaceFragment.c_str());
+        starSpotShader = LoadShader(spotVertex.c_str(), spotFragment.c_str());
+        starBlackShader = LoadShader(blackVertex.c_str(), blackFragment.c_str());
+        galaxyStarPointShader = LoadShader(galaxyPointVertex.c_str(), galaxyPointFragment.c_str());
+        bloomPrefilterShader = LoadShader(bloomVertex.c_str(), bloomPrefilterFragment.c_str());
+        bloomDownsampleFirstShader = LoadShader(bloomVertex.c_str(), bloomDownsampleFirstFragment.c_str());
+        bloomDownsampleShader = LoadShader(bloomVertex.c_str(), bloomDownsampleFragment.c_str());
+        bloomUpsampleShader = LoadShader(bloomVertex.c_str(), bloomUpsampleFragment.c_str());
+        bloomCompositeShader = LoadShader(bloomVertex.c_str(), bloomCompositeFragment.c_str());
+        hasStarSurfaceShader = IsShaderValid(starSurfaceShader) && starSurfaceShader.id != rlGetShaderIdDefault();
+        hasStarSpotShader = IsShaderValid(starSpotShader) && starSpotShader.id != rlGetShaderIdDefault();
+        hasStarBlackShader = IsShaderValid(starBlackShader) && starBlackShader.id != rlGetShaderIdDefault();
+        hasGalaxyStarPointShader = IsShaderValid(galaxyStarPointShader) &&
+                                   galaxyStarPointShader.id != rlGetShaderIdDefault();
+        hasBloomShaders = IsShaderValid(bloomPrefilterShader) && IsShaderValid(bloomDownsampleFirstShader) &&
+                          IsShaderValid(bloomDownsampleShader) && IsShaderValid(bloomUpsampleShader) &&
+                          IsShaderValid(bloomCompositeShader) &&
+                          bloomPrefilterShader.id != rlGetShaderIdDefault() &&
+                          bloomDownsampleFirstShader.id != rlGetShaderIdDefault() &&
+                          bloomDownsampleShader.id != rlGetShaderIdDefault() &&
+                          bloomUpsampleShader.id != rlGetShaderIdDefault() &&
+                          bloomCompositeShader.id != rlGetShaderIdDefault();
+        if (hasStarSurfaceShader) ConfigureStarShader(starSurfaceShader, true, false);
+        if (hasStarSpotShader) ConfigureStarShader(starSpotShader, false, true);
+        if (hasStarBlackShader) ConfigureStarShader(starBlackShader, false, false);
+        if (hasGalaxyStarPointShader) ConfigureGalaxyStarPointShader(galaxyStarPointShader);
+        if (hasBloomShaders) {
+            ConfigureScreenShader(bloomPrefilterShader);
+            ConfigureScreenShader(bloomDownsampleFirstShader);
+            ConfigureScreenShader(bloomDownsampleShader);
+            ConfigureScreenShader(bloomUpsampleShader);
+            ConfigureScreenShader(bloomCompositeShader);
+        }
+        const auto massVertices = ViewerAssetPath("star_mass_vertices.bin");
+        const auto massNormals = ViewerAssetPath("star_mass_normals.bin");
+        const auto massIndices = ViewerAssetPath("star_mass_indices.bin");
+        const auto blackVertices = ViewerAssetPath("star_black_vertices.bin");
+        const auto blackIndices = ViewerAssetPath("star_black_indices.bin");
+        const auto spotVertices = ViewerAssetPath("star_spot_vertices.bin");
+        const auto spotTexcoords = ViewerAssetPath("star_spot_uv.bin");
+        const auto spotIndices = ViewerAssetPath("star_spot_indices.bin");
+        const auto galaxyPointVertices = ViewerAssetPath("galaxy_star_point_vertices.bin");
+        const auto galaxyPointTexcoords = ViewerAssetPath("galaxy_star_point_uv.bin");
+        const auto galaxyPointIndices = ViewerAssetPath("galaxy_star_point_indices.bin");
+        const auto galaxyPointTexturePath = ViewerAssetPath("galaxy_star_point.png");
+        const auto bloomLensDirtPath = ViewerAssetPath("LensDirt00.png");
+        const auto galaxyColorGradingLutPath = ViewerAssetPath("galaxy_select_lut.bin");
+        starMassModel = LoadStarModel(massVertices.c_str(), 2617, massIndices.c_str(), 5120, massNormals.c_str());
+        starBlackModel = LoadStarModel(blackVertices.c_str(), 515, blackIndices.c_str(), 768);
+        starSpotModel = LoadStarModel(spotVertices.c_str(), 4, spotIndices.c_str(), 2, nullptr, spotTexcoords.c_str());
+        galaxyStarPointModel = LoadStarModel(galaxyPointVertices.c_str(), 4, galaxyPointIndices.c_str(), 2,
+                                             nullptr, galaxyPointTexcoords.c_str());
+        galaxyStarPointTexture = LoadTexture(galaxyPointTexturePath.c_str());
+        bloomLensDirtTexture = LoadTexture(bloomLensDirtPath.c_str());
+        Image gradingLutImage = LoadImageRaw(galaxyColorGradingLutPath.c_str(), 1024, 32,
+                                             PIXELFORMAT_UNCOMPRESSED_R32G32B32A32, 0);
+        if (IsImageValid(gradingLutImage)) {
+            galaxyColorGradingLut = LoadTextureFromImage(gradingLutImage);
+            UnloadImage(gradingLutImage);
+        }
+        hasStarModels = StarModelReady(starMassModel) && StarModelReady(starBlackModel) && StarModelReady(starSpotModel) &&
+                        hasStarSurfaceShader && hasStarSpotShader && hasStarBlackShader;
+        hasGalaxyStarPointModel = StarModelReady(galaxyStarPointModel) && IsTextureValid(galaxyStarPointTexture) &&
+                                  hasGalaxyStarPointShader;
+        if (!hasStarModels || !hasGalaxyStarPointModel || !hasBloomShaders ||
+            !IsTextureValid(bloomLensDirtTexture) || !IsTextureValid(galaxyColorGradingLut)) {
+            Shutdown();
+            return false;
+        }
+        SetModelShader(starMassModel, starSurfaceShader);
+        SetModelShader(starBlackModel, starBlackShader);
+        SetModelShader(starSpotModel, starSpotShader);
+        SetModelShader(galaxyStarPointModel, galaxyStarPointShader);
+        galaxyStarPointModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = galaxyStarPointTexture;
+        SetTextureFilter(galaxyStarPointTexture, TEXTURE_FILTER_BILINEAR);
+        SetTextureWrap(galaxyStarPointTexture, TEXTURE_WRAP_CLAMP);
+        SetTextureFilter(bloomLensDirtTexture, TEXTURE_FILTER_BILINEAR);
+        SetTextureWrap(bloomLensDirtTexture, TEXTURE_WRAP_CLAMP);
+        SetTextureFilter(galaxyColorGradingLut, TEXTURE_FILTER_BILINEAR);
+        SetTextureWrap(galaxyColorGradingLut, TEXTURE_WRAP_CLAMP);
+        std::string resolvedFontPath = fontPath;
+        if (resolvedFontPath == DSP_VIEWER_DEFAULT_FONT && !resolvedFontPath.empty())
+            resolvedFontPath = ViewerAssetPath(resolvedFontPath.c_str());
+        if (!resolvedFontPath.empty() && FileExists(resolvedFontPath.c_str())) {
+            Font loadedFont = LoadFontEx(resolvedFontPath.c_str(), kViewerFontSize, nullptr, 0);
             if (loadedFont.glyphCount > 0) {
                 viewerFont = loadedFont;
                 hasCustomFont = true;
@@ -650,11 +1399,20 @@ public:
         dspugen::settings.birthOnly = false;
         dspugen::settings.genName = true;
         dspugen::settings.noPosition = false;
+#if !defined(__EMSCRIPTEN__)
+        if (!ChangeDirectory(GetApplicationDirectory())) {
+            Shutdown();
+            return false;
+        }
+#endif
         dspugen::loadProtoSets();
         dspugen::Galaxy::initThread();
         dspugen::Star::initThread();
         dspugen::Planet::initThread();
-        return RebuildGalaxy();
+        generatorThreadsInitialized = true;
+        if (RebuildGalaxy()) return true;
+        Shutdown();
+        return false;
     }
 
     bool RebuildGalaxy() {
@@ -685,18 +1443,16 @@ public:
         for (const auto *star: galaxy->stars) {
             Vector3 position {
                 static_cast<float>(star->position.x),
-                static_cast<float>(star->position.y - 10.0f),
-                static_cast<float>(star->position.z),
+                static_cast<float>(star->position.y),
+                -static_cast<float>(star->position.z),
             };
-            float radius = StarRadius(star);
             StarViewData view;
             view.data = star;
             view.position = position;
-            view.color = StarColor(star);
-            view.radius = radius;
-            view.flickerSpeed = 1.3f + Hash01(star->seed) * 2.0f;
-            view.flickerPhase = star->seed * 0.01f;
-            view.selectionSize = Vector3 {radius * 1.8f, radius * 1.8f, radius * 1.8f};
+            view.galaxyColor = GalaxyStarColor(star);
+            view.galaxyScale = GalaxyStarScale(star);
+            view.radius = view.galaxyScale * 0.5f;
+            view.selectionSize = Vector3 {view.galaxyScale, view.galaxyScale, view.galaxyScale};
             view.labelWidth = MeasureTextEx(viewerFont, star->name.c_str(), 16.0f, 1.0f).x;
             view.panel = CreateStarPanel(star, seed);
             stars.emplace_back(std::move(view));
@@ -709,10 +1465,12 @@ public:
         float halfGrid = gridSlices * 0.5f * gridSpacing;
         for (int i = -gridSlices / 2; i <= gridSlices / 2; ++i) {
             float offset = static_cast<float>(i) * gridSpacing;
-            galaxyGridLines.push_back(Line3DCache {{offset, 0.0f, -halfGrid}, {offset, 0.0f, halfGrid}});
-            galaxyGridLines.push_back(Line3DCache {{-halfGrid, 0.0f, offset}, {halfGrid, 0.0f, offset}});
+            galaxyGridLines.push_back(Line3DCache {{offset, kGalaxyGridHeight, -halfGrid},
+                                                    {offset, kGalaxyGridHeight, halfGrid}});
+            galaxyGridLines.push_back(Line3DCache {{-halfGrid, kGalaxyGridHeight, offset},
+                                                    {halfGrid, kGalaxyGridHeight, offset}});
         }
-        ResetCamera(camera, mode);
+        ResetCamera(camera, mode, galaxyCameraYaw, galaxyCameraPitch);
         return true;
     }
 
@@ -750,9 +1508,12 @@ private:
     const StarViewData *previousClickedStar = nullptr;
     const PlanetViewData *previousClickedPlanet = nullptr;
     bool shutdown = false;
+    bool generatorThreadsInitialized = false;
     double simulationTime = 0.0;
     double lastFrameTime = -1.0;
     float timeScale = 10.0f;
+    float galaxyCameraYaw = 0.0f;
+    float galaxyCameraPitch = kGalaxyCameraPitchBegin;
     bool draggingTimeSlider = false;
     std::string seedInput;
     std::string starCountInput;
@@ -822,13 +1583,13 @@ private:
             view.orbitRotation = orbitRotation;
             view.name = PlanetName(planet);
             view.labelWidth = MeasureTextEx(viewerFont, view.name.c_str(), 16.0f, 1.0f).x;
-            view.panel = CreatePlanetPanel(planet, seed, view.name);
+            view.panel = CreatePlanetPanel(planet, view.name);
             system.radius = std::max(system.radius, Vector3Length(position) + radius);
             system.planets.emplace_back(std::move(view));
         }
         system.star = starView;
         system.star.position = Vector3 {};
-        system.star.radius = starView.data->radius * 800.0f * 0.00025f;
+        system.star.radius = StarViewRadius(starView.data);
         system.star.selectionSize = Vector3 {system.star.radius * 1.8f, system.star.radius * 1.8f,
                                              system.star.radius * 1.8f};
         system.summary = FormatString("system view  /  %d planets  /  click a planet for details",
@@ -875,7 +1636,7 @@ private:
         mode = ViewMode::System;
         selectedPlanet = nullptr;
         hoveredPlanet = nullptr;
-        ResetCamera(camera, mode);
+        ResetCamera(camera, mode, galaxyCameraYaw, galaxyCameraPitch);
         float systemRadius = CurrentSystem().radius;
         camera.position = Vector3 {0.0f, systemRadius * 0.72f, systemRadius * 1.15f};
         camera.target = Vector3 {0.0f, 0.0f, 0.0f};
@@ -1017,7 +1778,7 @@ private:
         mode = ViewMode::Galaxy;
         selectedPlanet = nullptr;
         hoveredPlanet = nullptr;
-        ResetCamera(camera, mode);
+        ResetCamera(camera, mode, galaxyCameraYaw, galaxyCameraPitch);
     }
 
     bool MouseOnPanel() const {
@@ -1027,17 +1788,17 @@ private:
     void PickGalaxyObject() {
         hoveredStar = nullptr;
         if (MouseOnPanel() || IsCursorHidden()) return;
-        Vector2 mouse = GetMousePosition();
-        float closest = FLT_MAX;
+        Ray ray = GetScreenToWorldRay(GetMousePosition(), camera);
+        Vector3 rayEnd = ray.position + ray.direction * 300.0f;
+        float closest = 1.7f;
         for (const auto &star: stars) {
-            Vector2 screen = GetWorldToScreen(star.position, camera);
-            Vector3 cameraSpace = Vector3Subtract(star.position, camera.position);
-            float distance = Vector3Length(cameraSpace);
-            float dx = screen.x - mouse.x;
-            float dy = screen.y - mouse.y;
-            float screenDistance = dx * dx + dy * dy;
-            if (screenDistance <= 12.0f * 12.0f && distance < closest) {
-                closest = distance;
+            Vector3 raySpan = rayEnd - ray.position;
+            float squaredLength = Vector3LengthSqr(raySpan);
+            float parameter = squaredLength < 0.000001f ? 0.0f :
+                              Vector3DotProduct(star.position - ray.position, raySpan) / squaredLength;
+            float distance = Vector3Distance(ray.position + raySpan * parameter, star.position);
+            if (distance < closest) {
+                closest = distance < star.galaxyScale * 0.25f ? 0.0f : distance;
                 hoveredStar = &star;
             }
         }
@@ -1125,11 +1886,12 @@ private:
             else EnableCursor();
         }
         bool editingInput = mode == ViewMode::Galaxy && activeInput != 0;
-        if (!editingInput) CameraControl(&camera);
+        if (!editingInput) CameraControl(&camera, mode, galaxyCameraYaw, galaxyCameraPitch);
         if (mode == ViewMode::Galaxy) HandleGalaxySettingsInput();
         UpdateTimeSlider();
         UpdatePlanetPositions(now);
-        if (!editingInput && !inputConsumed && IsKeyPressed(KEY_Z)) ResetCamera(camera, mode);
+        if (!editingInput && !inputConsumed && IsKeyPressed(KEY_Z))
+            ResetCamera(camera, mode, galaxyCameraYaw, galaxyCameraPitch);
 
         if (mode == ViewMode::Galaxy) {
             PickGalaxyObject();
@@ -1141,21 +1903,27 @@ private:
     }
 
     void DrawGalaxyScene(float time) {
-        DrawCachedLines(galaxyGridLines, LIGHTGRAY);
-        for (const auto &star: stars) {
-            DrawStar(star, time, &star == selectedStar);
-        }
+        (void)time;
+        DrawBackgroundStars(camera, false);
+        float gridAlpha = std::clamp((Vector3Distance(camera.position, camera.target) - 22.0f) / 34.0f, 0.0f, 1.0f) * 0.3f;
+        DrawCachedLines(galaxyGridLines, WithAlpha(Color {105, 153, 181, 255}, gridAlpha));
+        for (const auto &star: stars) DrawGalaxyStarPoint(star, camera);
     }
 
     void DrawSystemScene(float time) {
+        (void)time;
         const auto &system = CurrentSystem();
-        DrawStar(system.star, time, selectedPlanet == nullptr);
+        DrawBackgroundStars(camera);
+        DrawStarBlack(system.star, camera);
+        DrawStarSpot(system.star, camera, StarVisualScale(system.star, camera));
+        DrawStarMass(system.star, camera, time);
+        if (selectedPlanet == nullptr) DrawCubeWiresV(system.star.position, system.star.selectionSize, WHITE);
         for (const auto &planet: system.planets) {
             Vector3 center {};
             if (planet.parentIndex >= 0)
                 center = system.planets[static_cast<std::size_t>(planet.parentIndex)].position;
             DrawOrbit(center, planet);
-            DrawPlanet(planet, time, &planet == selectedPlanet);
+            DrawPlanet(planet, &planet == selectedPlanet);
         }
     }
 
@@ -1189,8 +1957,9 @@ private:
         }
         DrawButton(Rectangle {static_cast<float>(x), GetScreenHeight() - 104.0f, kPanelWidth - 44.0f, 38.0f},
                    "ENTER SYSTEM  [ENTER]", kEnterButtonTextWidth, selectedStar != nullptr);
-        TextLine("RMB roll  /  MMB orbit  /  wheel zoom", x, GetScreenHeight() - 54, 14, Color {98, 131, 159, 255});
-        TextLine("WASD move  /  arrows rotate  /  Z reset", x, GetScreenHeight() - 33, 14, Color {98, 131, 159, 255});
+        TextLine("MMB orbit  /  pitch follows game limits", x, GetScreenHeight() - 54, 14,
+                 Color {98, 131, 159, 255});
+        TextLine("Arrows rotate  /  Z reset", x, GetScreenHeight() - 33, 14, Color {98, 131, 159, 255});
     }
 
     void DrawSystemOverlay() {
@@ -1229,10 +1998,87 @@ private:
         float time = static_cast<float>(GetTime());
         BeginDrawing();
         ClearBackground(Color {4, 8, 17, 255});
-        BeginMode3D(camera);
-        if (mode == ViewMode::Galaxy) DrawGalaxyScene(time);
-        else DrawSystemScene(time);
-        EndMode3D();
+        if (mode == ViewMode::Galaxy && EnsureBloomTargets(GetScreenWidth(), GetScreenHeight())) {
+            BeginTextureMode(galaxySceneTarget);
+            Color linearBackground = LinearBackground(Color {5, 21, 26, 255});
+            rlClearColor(linearBackground.r, linearBackground.g, linearBackground.b, 255);
+            rlClearScreenBuffers();
+            BeginMode3D(camera);
+            DrawGalaxyScene(time);
+            EndMode3D();
+            EndTextureMode();
+
+            BeginTextureMode(bloomPrefilterTarget);
+            BeginOpaqueBlit();
+            BeginShaderMode(bloomPrefilterShader);
+            SetSourceTexelSize(bloomPrefilterShader, galaxySceneTarget.texture);
+            const float threshold = GammaToLinearSpace(1.2f);
+            const float knee = threshold * 0.3f + 1.0e-5f;
+            SetShaderFloat(bloomPrefilterShader, "prefilterOffset", -0.5f);
+            SetShaderFloat(bloomPrefilterShader, "threshold", threshold);
+            SetShaderVector3(bloomPrefilterShader, "curve",
+                             Vector3 {threshold - knee, knee * 2.0f, 0.25f / knee});
+            DrawFlippedTexture(galaxySceneTarget.texture, bloomPrefilterTarget.texture.width,
+                               bloomPrefilterTarget.texture.height);
+            EndShaderMode();
+            EndOpaqueBlit();
+            EndTextureMode();
+
+            Texture2D bloomSource = bloomPrefilterTarget.texture;
+            for (int i = 0; i < bloomIterationCount; ++i) {
+                auto &level = bloomDownLevels[static_cast<std::size_t>(i)];
+                BeginTextureMode(level);
+                BeginOpaqueBlit();
+                Shader shader = i == 0 ? bloomDownsampleFirstShader : bloomDownsampleShader;
+                BeginShaderMode(shader);
+                SetSourceTexelSize(shader, bloomSource);
+                DrawFlippedTexture(bloomSource, level.texture.width, level.texture.height);
+                EndShaderMode();
+                EndOpaqueBlit();
+                EndTextureMode();
+                bloomSource = level.texture;
+            }
+
+            for (int i = bloomIterationCount - 2; i >= 0; --i) {
+                auto &level = bloomUpLevels[static_cast<std::size_t>(i)];
+                BeginTextureMode(level);
+                BeginOpaqueBlit();
+                BeginShaderMode(bloomUpsampleShader);
+                SetSourceTexelSize(bloomUpsampleShader, bloomSource, bloomSampleScale);
+                int baseLocation = GetShaderLocation(bloomUpsampleShader, "baseTexture");
+                if (baseLocation >= 0)
+                    SetShaderValueTexture(bloomUpsampleShader, baseLocation,
+                                          bloomDownLevels[static_cast<std::size_t>(i)].texture);
+                DrawFlippedTexture(bloomSource, level.texture.width, level.texture.height);
+                EndShaderMode();
+                EndOpaqueBlit();
+                EndTextureMode();
+                bloomSource = level.texture;
+            }
+
+            BeginOpaqueBlit();
+            BeginShaderMode(bloomCompositeShader);
+            int bloomLocation = GetShaderLocation(bloomCompositeShader, "bloomTexture");
+            if (bloomLocation >= 0)
+                SetShaderValueTexture(bloomCompositeShader, bloomLocation, bloomSource);
+            int dirtLocation = GetShaderLocation(bloomCompositeShader, "lensDirtTexture");
+            if (dirtLocation >= 0)
+                SetShaderValueTexture(bloomCompositeShader, dirtLocation, bloomLensDirtTexture);
+            int lutLocation = GetShaderLocation(bloomCompositeShader, "gradingLutTexture");
+            if (lutLocation >= 0)
+                SetShaderValueTexture(bloomCompositeShader, lutLocation, galaxyColorGradingLut);
+            SetSourceTexelSize(bloomCompositeShader, bloomSource, bloomSampleScale);
+            SetShaderFloat(bloomCompositeShader, "intensity", 0.3f);
+            SetShaderFloat(bloomCompositeShader, "dirtIntensity", 3.0f);
+            DrawFlippedTexture(galaxySceneTarget.texture, GetScreenWidth(), GetScreenHeight());
+            EndShaderMode();
+            EndOpaqueBlit();
+        } else {
+            BeginMode3D(camera);
+            if (mode == ViewMode::Galaxy) DrawGalaxyScene(time);
+            else DrawSystemScene(time);
+            EndMode3D();
+        }
         DrawHoverLabel();
         DrawTopBar();
         if (mode == ViewMode::Galaxy) DrawGalaxyOverlay();
@@ -1247,13 +2093,54 @@ private:
             galaxy->release();
             galaxy = nullptr;
         }
-        dspugen::Planet::releaseThread();
-        dspugen::Star::releaseThread();
-        dspugen::Galaxy::releaseThread();
+        if (generatorThreadsInitialized) {
+            dspugen::Planet::releaseThread();
+            dspugen::Star::releaseThread();
+            dspugen::Galaxy::releaseThread();
+            generatorThreadsInitialized = false;
+        }
         if (hasCustomFont) {
             UnloadFont(viewerFont);
             hasCustomFont = false;
         }
+        if (starMassModel.meshCount != 0) {
+            starMassModel.materials[0].shader.id = rlGetShaderIdDefault();
+            starMassModel.materials[0].shader.locs = rlGetShaderLocsDefault();
+            UnloadModel(starMassModel);
+        }
+        if (starBlackModel.meshCount != 0) {
+            starBlackModel.materials[0].shader.id = rlGetShaderIdDefault();
+            starBlackModel.materials[0].shader.locs = rlGetShaderLocsDefault();
+            UnloadModel(starBlackModel);
+        }
+        if (starSpotModel.meshCount != 0) {
+            starSpotModel.materials[0].shader.id = rlGetShaderIdDefault();
+            starSpotModel.materials[0].shader.locs = rlGetShaderLocsDefault();
+            UnloadModel(starSpotModel);
+        }
+        if (galaxyStarPointModel.meshCount != 0) {
+            galaxyStarPointModel.materials[0].shader.id = rlGetShaderIdDefault();
+            galaxyStarPointModel.materials[0].shader.locs = rlGetShaderLocsDefault();
+            galaxyStarPointModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = {};
+            UnloadModel(galaxyStarPointModel);
+        }
+        if (IsTextureValid(galaxyStarPointTexture)) UnloadTexture(galaxyStarPointTexture);
+        if (IsTextureValid(galaxyColorGradingLut)) UnloadTexture(galaxyColorGradingLut);
+        if (IsTextureValid(bloomLensDirtTexture)) UnloadTexture(bloomLensDirtTexture);
+        galaxyColorGradingLut = {};
+        bloomLensDirtTexture = {};
+        UnloadBloomTargets();
+        if (hasBloomShaders) {
+            UnloadShader(bloomCompositeShader);
+            UnloadShader(bloomUpsampleShader);
+            UnloadShader(bloomDownsampleShader);
+            UnloadShader(bloomDownsampleFirstShader);
+            UnloadShader(bloomPrefilterShader);
+        }
+        if (hasGalaxyStarPointShader) UnloadShader(galaxyStarPointShader);
+        if (hasStarBlackShader) UnloadShader(starBlackShader);
+        if (hasStarSpotShader) UnloadShader(starSpotShader);
+        if (hasStarSurfaceShader) UnloadShader(starSurfaceShader);
         CloseWindow();
     }
 };

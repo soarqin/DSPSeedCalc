@@ -70,6 +70,7 @@ void Star::reset() {
     dysonRadius = 10.0f;
     position = {};
     color = 0.0f;
+    classFactor = 0.0f;
     resourceCoef = 0.0f;
     habitableRadiusSqrt = 0.0f;
 }
@@ -206,6 +207,7 @@ Star *Star::createStar(Galaxy *galaxy,
     else if (num13 < -4.0) num13 = -4.0;
     star->spectr = (ESpectrType)util::mathfRoundToInt(float(num13) + 4.0f);
     star->color = util::clamp01((float(num13) + 3.5f) * 0.2f);
+    star->classFactor = float(num13);
     star->luminosity = util::mathfPow(num12, 0.7f);
     star->radius = std::pow(star->mass, 0.4) * num8;
 /*
@@ -271,6 +273,7 @@ Star *Star::createBirthStar(Galaxy *galaxy, int seed) {
     else if (num6 < -4.0) num6 = -4.0;
     star->spectr = (ESpectrType)util::mathfRoundToInt(float(num6) + 4.0f);
     star->color = util::clamp01((float(num6) + 3.5f) * 0.2f);
+    star->classFactor = float(num6);
     star->luminosity = util::mathfPow(num5, 0.7f);
     star->radius = std::pow(star->mass, 0.4) * num3;
 /*
