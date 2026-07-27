@@ -44,15 +44,22 @@ namespace {
 constexpr int kScreenWidth = 1280;
 constexpr int kScreenHeight = 720;
 constexpr float kPanelWidth = 326.0f;
-constexpr float kCameraMoveSpeed = 0.09f;
 constexpr float kCameraRotationSpeed = 0.03f;
-constexpr float kCameraPanSpeed = 0.2f;
 constexpr float kCameraMouseSensitivity = 0.003f;
 constexpr float kGalaxyCameraDistance = 80.9000015f;
+constexpr float kGalaxyCameraZoomScale = 1.25f;
+constexpr float kGalaxyCameraDistanceMin = 45.0f;
+constexpr float kGalaxyCameraDistanceMax = 160.0f;
 constexpr float kGalaxyCameraTargetHeight = 11.0f;
 constexpr float kGalaxyCameraPitchBegin = -22.0f;
 constexpr float kGalaxyCameraPitchMin = -81.1999969f;
 constexpr float kGalaxyCameraPitchMax = -4.9000001f;
+constexpr float kSystemCameraPitchBegin = -32.0f;
+constexpr float kSystemCameraPitchMin = -89.0f;
+constexpr float kSystemCameraPitchMax = 89.0f;
+constexpr float kSystemCameraZoomScale = 1.2f;
+constexpr float kSystemCameraDistanceMin = 0.0375f;
+constexpr float kSystemCameraDistanceMax = 45000.0f;
 constexpr float kGalaxyGridHeight = -15.0f;
 constexpr float kSystemOrbitScale = 10.0f;
 constexpr int kOrbitSegments = 72;
@@ -66,6 +73,7 @@ bool hasCustomFont = false;
 Shader starSurfaceShader{};
 Shader starSpotShader{};
 Shader starBlackShader{};
+Shader planetThumbShader{};
 Shader galaxyStarPointShader{};
 Shader galaxyLineShader{};
 Shader bloomPrefilterShader{};
@@ -77,6 +85,7 @@ Shader galaxyFxaaShader{};
 Model starMassModel{};
 Model starBlackModel{};
 Model starSpotModel{};
+Model planetThumbModel{};
 Model galaxyStarPointModel{};
 Texture2D galaxyStarPointTexture{};
 Texture2D galaxyLineTexture{};
@@ -85,11 +94,13 @@ Texture2D galaxyColorGradingLut{};
 bool hasStarSurfaceShader = false;
 bool hasStarSpotShader = false;
 bool hasStarBlackShader = false;
+bool hasPlanetThumbShader = false;
 bool hasGalaxyStarPointShader = false;
 bool hasGalaxyLineShader = false;
 bool hasBloomShaders = false;
 bool hasGalaxyFxaaShader = false;
 bool hasStarModels = false;
+bool hasPlanetThumbModel = false;
 bool hasGalaxyStarPointModel = false;
 RenderTexture2D galaxySceneTarget{};
 RenderTexture2D galaxySceneMultisampleTarget{};
@@ -99,6 +110,8 @@ std::array<RenderTexture2D, kMaxBloomIterations> bloomDownLevels{};
 std::array<RenderTexture2D, kMaxBloomIterations> bloomUpLevels{};
 int bloomTargetWidth = 0;
 int bloomTargetHeight = 0;
+int bloomFailedWidth = 0;
+int bloomFailedHeight = 0;
 int bloomIterationCount = 0;
 float bloomSampleScale = 1.0f;
 
@@ -153,6 +166,11 @@ struct StarSpotMaterialData {
     float centerSize;
     float centerBlur;
     float centerBlurPower;
+};
+
+struct PlanetThumbMaterialData {
+    Vector4 color;
+    Vector4 rimColor;
 };
 
 struct Line3DCache {
@@ -719,7 +737,7 @@ PanelData CreatePlanetPanel(const dspugen::Planet *planet, const std::string &na
     return panel;
 }
 
-void ApplyGalaxyCamera(Camera3D &camera, float yaw, float pitch) {
+void ApplyGalaxyCamera(Camera3D &camera, float yaw, float pitch, float distance) {
     float yawRadians = yaw * DEG2RAD;
     float pitchRadians = pitch * DEG2RAD;
     float sinYaw = std::sin(yawRadians);
@@ -728,25 +746,95 @@ void ApplyGalaxyCamera(Camera3D &camera, float yaw, float pitch) {
     float cosPitch = std::cos(pitchRadians);
     Vector3 forward {sinYaw * cosPitch, sinPitch, -cosYaw * cosPitch};
     camera.target = Vector3 {0.0f, kGalaxyCameraTargetHeight, 0.0f};
-    camera.position = camera.target - forward * kGalaxyCameraDistance;
+    camera.position = camera.target - forward * distance;
     camera.up = Vector3 {-sinYaw * sinPitch, cosPitch, cosYaw * sinPitch};
 }
 
-void ResetCamera(Camera3D &camera, ViewMode mode, float &galaxyYaw, float &galaxyPitch) {
+void ApplySystemCamera(Camera3D &camera, float yaw, float pitch, float roll, float distance, Vector3 target) {
+    float yawRadians = yaw * DEG2RAD;
+    float pitchRadians = pitch * DEG2RAD;
+    float sinYaw = std::sin(yawRadians);
+    float cosYaw = std::cos(yawRadians);
+    float sinPitch = std::sin(pitchRadians);
+    float cosPitch = std::cos(pitchRadians);
+    Vector3 forward {sinYaw * cosPitch, sinPitch, -cosYaw * cosPitch};
+    Vector3 up {-sinYaw * sinPitch, cosPitch, cosYaw * sinPitch};
+    Quaternion rollRotation = QuaternionFromAxisAngle(forward, roll * DEG2RAD);
+    camera.target = target;
+    camera.position = target - forward * distance;
+    camera.up = Vector3Normalize(Vector3RotateByQuaternion(up, rollRotation));
+}
+
+void ResetCamera(Camera3D &camera, ViewMode mode, float &galaxyYaw, float &galaxyPitch,
+                 float &galaxyDistance) {
     camera.up = Vector3 {0.0f, 1.0f, 0.0f};
-    camera.fovy = mode == ViewMode::Galaxy ? 60.0f : 52.0f;
+    camera.fovy = 60.0f;
     camera.projection = CAMERA_PERSPECTIVE;
     if (mode == ViewMode::Galaxy) {
         galaxyYaw = 0.0f;
         galaxyPitch = kGalaxyCameraPitchBegin;
-        ApplyGalaxyCamera(camera, galaxyYaw, galaxyPitch);
+        galaxyDistance = kGalaxyCameraDistance;
+        ApplyGalaxyCamera(camera, galaxyYaw, galaxyPitch, galaxyDistance);
     } else {
         camera.position = Vector3 {0.0f, 24.0f, 30.0f};
         camera.target = Vector3 {0.0f, 0.0f, 0.0f};
     }
 }
 
-void CameraControl(Camera *camera, ViewMode mode, float &galaxyYaw, float &galaxyPitch) {
+PlanetThumbMaterialData PlanetThumbMaterial(const dspugen::Planet *planet) {
+    static const PlanetThumbMaterialData materials[] = {
+        {{0.63f, 0.63f, 0.68f, 1.0f}, {0.85f, 0.85f, 0.9f, 1.0f}},
+        {{0.31764707f, 0.974079907f, 1.0f, 1.0f}, {0.70014894f, 1.0f, 0.533018768f, 1.0f}},
+        {{1.0f, 0.737077832f, 0.683962166f, 1.0f}, {1.0f, 0.63740623f, 0.391509354f, 1.0f}},
+        {{1.0f, 0.893302858f, 0.68235296f, 1.0f}, {1.0f, 0.793441594f, 0.39215681f, 1.0f}},
+        {{0.68235296f, 1.0f, 0.86861521f, 1.0f}, {0.39215681f, 1.0f, 0.898458004f, 1.0f}},
+        {{0.21226415f, 0.421354353f, 1.0f, 1.0f}, {0.21226418f, 0.421592534f, 1.0f, 1.0f}},
+        {{1.0f, 0.613482177f, 0.533333302f, 1.0f}, {1.0f, 0.657547176f, 0.429245234f, 1.0f}},
+        {{0.594784617f, 0.68418479f, 0.773584902f, 1.0f}, {0.623576045f, 0.716571808f, 0.764150977f, 1.0f}},
+        {{0.364705861f, 1.0f, 0.942396462f, 1.0f}, {0.94343096f, 1.0f, 0.533333302f, 1.0f}},
+        {{1.0f, 0.390114635f, 0.117647029f, 0.552941203f}, {0.55660373f, 0.437134475f, 0.412201762f, 1.0f}},
+        {{0.17359373f, 0.390347809f, 0.783018827f, 1.0f}, {0.215601474f, 0.3932859f, 0.896226406f, 1.0f}},
+        {{0.678431392f, 0.678431392f, 0.678431392f, 1.0f}, {0.850980401f, 0.850980401f, 0.850980401f, 1.0f}},
+        {{0.754716933f, 0.716123521f, 0.566037774f, 1.0f}, {0.0f, 0.905660391f, 0.677003562f, 1.0f}},
+        {{0.39930892f, 0.45395124f, 0.5169999f, 1.0f}, {0.726999998f, 0.877150118f, 1.0f, 1.0f}},
+        {{0.916000009f, 0.558636725f, 0.550421536f, 1.0f}, {1.0f, 0.608490586f, 0.764849603f, 1.0f}},
+        {{0.488182306f, 1.0f, 0.36470592f, 1.0f}, {0.70014894f, 1.0f, 0.533018768f, 1.0f}},
+        {{0.31764707f, 0.974079907f, 1.0f, 1.0f}, {0.70014894f, 1.0f, 0.533018768f, 1.0f}},
+        {{0.925490201f, 0.861179173f, 0.823529422f, 1.0f}, {1.0f, 0.657547176f, 0.429245234f, 1.0f}},
+        {{0.947095871f, 0.848789632f, 0.96226418f, 1.0f}, {0.589556694f, 0.0f, 1.0f, 1.0f}},
+        {{0.501960814f, 0.451389819f, 0.431372553f, 1.0f}, {0.165094316f, 1.0f, 0.797282696f, 1.0f}},
+        {{0.839622617f, 0.693084717f, 0.704714715f, 1.0f}, {0.070588224f, 0.651593029f, 0.858823538f, 1.0f}},
+        {{0.279369891f, 0.708091974f, 0.811320782f, 1.0f}, {0.211764693f, 0.74371165f, 1.0f, 1.0f}},
+        {{0.422582775f, 0.549019635f, 0.368627459f, 1.0f}, {0.0f, 0.087976456f, 0.773584902f, 1.0f}},
+        {{0.092070594f, 0.220235169f, 0.337254912f, 1.0f}, {0.438679218f, 0.701035619f, 1.0f, 1.0f}},
+        {{0.197579205f, 0.208793163f, 0.226415098f, 1.0f}, {0.0f, 0.708162427f, 0.896226406f, 1.0f}},
+        {{0.109803915f, 0.133629814f, 0.321568638f, 1.0f}, {0.0f, 0.55506897f, 1.0f, 1.0f}},
+    };
+    int theme = std::clamp(planet->theme, 1, static_cast<int>(std::size(materials)) - 1);
+    int style = planet->themeSeed % 60;
+    if (theme == 2 && style % 2 == 1)
+        return {{1.0f, 0.715175867f, 0.655660391f, 1.0f}, {1.0f, 0.514081478f, 0.392156839f, 1.0f}};
+    if (theme == 3 && style % 2 == 1)
+        return {{0.670588255f, 0.490196079f, 0.534301162f, 1.0f}, {1.0f, 0.392156839f, 0.636116445f, 1.0f}};
+    if (theme == 4 && style % 2 == 1)
+        return {{0.39537558f, 0.880999982f, 0.562980533f, 1.0f}, {0.39215681f, 1.0f, 0.898458004f, 1.0f}};
+    if (theme == 5 && style % 2 == 1)
+        return {{0.634163976f, 0.438679218f, 1.0f, 1.0f}, {0.64533478f, 0.400943398f, 1.0f, 1.0f}};
+    if (theme == 10 && style % 3 == 1)
+        return {{0.73243922f, 0.771671414f, 0.831372559f, 1.0f}, {0.716447115f, 0.755622327f, 0.867924512f, 1.0f}};
+    if (theme == 10 && style % 3 == 2)
+        return {{0.778301895f, 0.831293106f, 1.0f, 1.0f}, {0.466981113f, 0.593418181f, 1.0f, 1.0f}};
+    return materials[theme];
+}
+
+void CameraControl(Camera *camera, ViewMode mode, float &galaxyYaw, float &galaxyPitch,
+                   float &galaxyDistance, float &systemYaw, float &systemPitch, float &systemRoll,
+                   float &systemDistance, Vector3 systemTarget) {
+    float wheel = GetMouseWheelMove();
+    if (IsMouseButtonDown(MOUSE_BUTTON_MIDDLE) || IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) wheel = 0.0f;
+#if defined(__EMSCRIPTEN__)
+    if (webMouse.middleDown || webMouse.rightDown) wheel = 0.0f;
+#endif
     if (mode == ViewMode::Galaxy) {
         if (IsKeyDown(KEY_DOWN)) galaxyPitch -= kCameraRotationSpeed * RAD2DEG;
         if (IsKeyDown(KEY_UP)) galaxyPitch += kCameraRotationSpeed * RAD2DEG;
@@ -771,20 +859,15 @@ void CameraControl(Camera *camera, ViewMode mode, float &galaxyYaw, float &galax
             galaxyPitch -= GetGamepadAxisMovement(0, GAMEPAD_AXIS_RIGHT_Y) *
                            2.0f * kCameraMouseSensitivity * RAD2DEG;
         }
+        if (std::abs(wheel) > 0.0f)
+            galaxyDistance *= std::pow(kGalaxyCameraZoomScale, -wheel);
+        galaxyDistance = std::clamp(galaxyDistance, kGalaxyCameraDistanceMin, kGalaxyCameraDistanceMax);
         galaxyYaw = std::fmod(galaxyYaw, 360.0f);
         if (galaxyYaw < 0.0f) galaxyYaw += 360.0f;
         galaxyPitch = std::clamp(galaxyPitch, kGalaxyCameraPitchMin, kGalaxyCameraPitchMax);
-        ApplyGalaxyCamera(*camera, galaxyYaw, galaxyPitch);
+        ApplyGalaxyCamera(*camera, galaxyYaw, galaxyPitch, galaxyDistance);
         return;
     }
-
-    bool rotateUp = false;
-    if (IsKeyDown(KEY_DOWN)) CameraPitch(camera, -kCameraRotationSpeed, false, false, rotateUp);
-    if (IsKeyDown(KEY_UP)) CameraPitch(camera, kCameraRotationSpeed, false, false, rotateUp);
-    if (IsKeyDown(KEY_RIGHT)) CameraYaw(camera, -kCameraRotationSpeed, false);
-    if (IsKeyDown(KEY_LEFT)) CameraYaw(camera, kCameraRotationSpeed, false);
-    if (IsKeyDown(KEY_Q)) CameraRoll(camera, -kCameraRotationSpeed);
-    if (IsKeyDown(KEY_E)) CameraRoll(camera, kCameraRotationSpeed);
 
     if (!IsGamepadAvailable(0)) {
         bool middleDown = IsMouseButtonDown(MOUSE_BUTTON_MIDDLE);
@@ -797,29 +880,24 @@ void CameraControl(Camera *camera, ViewMode mode, float &galaxyYaw, float &galax
         webMouse.delta = Vector2 {};
 #endif
         if (middleDown) {
-            CameraYaw(camera, -delta.x * kCameraMouseSensitivity, true);
-            CameraPitch(camera, -delta.y * kCameraMouseSensitivity, true, true, rotateUp);
+            systemYaw += delta.x * kCameraMouseSensitivity * RAD2DEG;
+            systemPitch -= delta.y * kCameraMouseSensitivity * 0.5f * RAD2DEG;
         } else if (rightDown) {
-            CameraRoll(camera, delta.x * kCameraMouseSensitivity);
+            systemRoll -= delta.x * kCameraMouseSensitivity * 0.7f * RAD2DEG;
         }
-        if (IsKeyDown(KEY_W)) CameraMoveForward(camera, kCameraMoveSpeed, false);
-        if (IsKeyDown(KEY_A)) CameraMoveRight(camera, -kCameraMoveSpeed, false);
-        if (IsKeyDown(KEY_S)) CameraMoveForward(camera, -kCameraMoveSpeed, false);
-        if (IsKeyDown(KEY_D)) CameraMoveRight(camera, kCameraMoveSpeed, false);
     } else {
-        CameraYaw(camera, -GetGamepadAxisMovement(0, GAMEPAD_AXIS_RIGHT_X) * 2.0f * kCameraMouseSensitivity, false);
-        CameraPitch(camera, -GetGamepadAxisMovement(0, GAMEPAD_AXIS_RIGHT_Y) * 2.0f * kCameraMouseSensitivity,
-                    false, false, rotateUp);
-        if (GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_Y) <= -0.25f) CameraMoveForward(camera, kCameraMoveSpeed, false);
-        if (GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X) <= -0.25f) CameraMoveRight(camera, -kCameraMoveSpeed, false);
-        if (GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_Y) >= 0.25f) CameraMoveForward(camera, -kCameraMoveSpeed, false);
-        if (GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X) >= 0.25f) CameraMoveRight(camera, kCameraMoveSpeed, false);
+        systemYaw += GetGamepadAxisMovement(0, GAMEPAD_AXIS_RIGHT_X) *
+                     2.0f * kCameraMouseSensitivity * RAD2DEG;
+        systemPitch -= GetGamepadAxisMovement(0, GAMEPAD_AXIS_RIGHT_Y) *
+                       2.0f * kCameraMouseSensitivity * 0.5f * RAD2DEG;
     }
-    if (IsKeyDown(KEY_SPACE)) CameraMoveUp(camera, kCameraMoveSpeed);
-    if (IsKeyDown(KEY_LEFT_CONTROL)) CameraMoveUp(camera, -kCameraMoveSpeed);
-    CameraMoveToTarget(camera, -GetMouseWheelMove());
-    if (IsKeyPressed(KEY_KP_SUBTRACT)) CameraMoveToTarget(camera, 2.0f);
-    if (IsKeyPressed(KEY_KP_ADD)) CameraMoveToTarget(camera, -2.0f);
+    if (std::abs(wheel) > 0.0f)
+        systemDistance *= std::pow(kSystemCameraZoomScale, -wheel);
+    systemDistance = std::clamp(systemDistance, kSystemCameraDistanceMin, kSystemCameraDistanceMax);
+    systemYaw = std::fmod(systemYaw, 360.0f);
+    if (systemYaw < 0.0f) systemYaw += 360.0f;
+    systemPitch = std::clamp(systemPitch, kSystemCameraPitchMin, kSystemCameraPitchMax);
+    ApplySystemCamera(*camera, systemYaw, systemPitch, systemRoll, systemDistance, systemTarget);
 }
 
 void SetShaderVector3(Shader shader, const char *name, Vector3 value) {
@@ -846,6 +924,14 @@ void ConfigureStarShader(Shader &shader, bool hasNormal, bool hasTexcoord) {
     shader.locs[SHADER_LOC_VERTEX_POSITION] = GetShaderLocationAttrib(shader, "in_POSITION0");
     shader.locs[SHADER_LOC_VERTEX_NORMAL] = hasNormal ? GetShaderLocationAttrib(shader, "in_NORMAL0") : -1;
     shader.locs[SHADER_LOC_VERTEX_TEXCOORD01] = hasTexcoord ? GetShaderLocationAttrib(shader, "in_TEXCOORD0") : -1;
+    shader.locs[SHADER_LOC_MATRIX_MODEL] = GetShaderLocation(shader, "matModel");
+    shader.locs[SHADER_LOC_MATRIX_MVP] = -1;
+}
+
+void ConfigurePlanetThumbShader(Shader &shader) {
+    shader.locs[SHADER_LOC_VERTEX_POSITION] = GetShaderLocationAttrib(shader, "vertexPosition");
+    shader.locs[SHADER_LOC_VERTEX_NORMAL] = -1;
+    shader.locs[SHADER_LOC_VERTEX_TEXCOORD01] = -1;
     shader.locs[SHADER_LOC_MATRIX_MODEL] = GetShaderLocation(shader, "matModel");
     shader.locs[SHADER_LOC_MATRIX_MVP] = -1;
 }
@@ -1069,6 +1155,7 @@ bool EnsureBloomTargets(int width, int height) {
     if (bloomTargetWidth == width && bloomTargetHeight == height && galaxySceneMultisampleTarget.id != 0 &&
         galaxySceneTarget.id != 0 &&
         galaxyFxaaTarget.id != 0 && bloomPrefilterTarget.id != 0 && bloomDownLevels[0].id != 0) return true;
+    if (bloomFailedWidth == width && bloomFailedHeight == height) return false;
     UnloadBloomTargets();
     galaxySceneMultisampleTarget = LoadMultisampleHalfFloatRenderTexture(width, height, 8);
     galaxySceneTarget = LoadHalfFloatRenderTexture(width, height, true);
@@ -1098,10 +1185,14 @@ bool EnsureBloomTargets(int width, int height) {
         complete = complete && bloomUpLevels[static_cast<std::size_t>(i)].id != 0;
     if (!complete) {
         UnloadBloomTargets();
+        bloomFailedWidth = width;
+        bloomFailedHeight = height;
         return false;
     }
     bloomTargetWidth = width;
     bloomTargetHeight = height;
+    bloomFailedWidth = 0;
+    bloomFailedHeight = 0;
     return true;
 }
 
@@ -1486,7 +1577,7 @@ std::vector<int> ReplayInfoSeeds(const dspugen::Star *star) {
         bool mainPlanet = planet->orbitAround == 0;
         if (mainPlanet) {
             bool gasGiant = planet->type == dspugen::EPlanetType::Gas && i + 1 < star->planets.size();
-            if (gasGiant && orbitIndex < 3) orbitIndex = 3;
+            if (star->index != 0 && gasGiant && orbitIndex < 3) orbitIndex = 3;
             while (true) {
                 if (star->index == 0 && orbitIndex == 3) break;
                 int remaining = static_cast<int>(star->planets.size() - i);
@@ -1542,14 +1633,33 @@ void DrawOrbit(Vector3 center, const PlanetViewData &planet) {
     }
 }
 
-void DrawPlanet(const PlanetViewData &planet, bool selected) {
-    Color nightColor {
-        static_cast<unsigned char>(planet.color.r * 0.13f),
-        static_cast<unsigned char>(planet.color.g * 0.15f),
-        static_cast<unsigned char>(planet.color.b * 0.2f), 255};
-    DrawSphere(planet.position, planet.radius, nightColor);
-    DrawSphere(planet.position, planet.radius * 0.995f, planet.color);
-    DrawSphereWires(planet.position, planet.radius * 1.006f, 14, 10, WithAlpha(AddColor(planet.color, 45), 0.2f));
+void DrawPlanet(const PlanetViewData &planet, const Camera3D &camera, float time, bool selected) {
+    if (hasPlanetThumbShader && hasPlanetThumbModel) {
+        float scale = planet.radius * 2.0f;
+        float rotationAngle = time * 0.035f + planet.flickerPhase;
+        Quaternion rotation = QuaternionFromAxisAngle(Vector3 {0.0f, -1.0f, 0.0f}, rotationAngle);
+        Matrix transform = MatrixMultiply(MatrixScale(scale, scale, scale), MatrixRotateY(-rotationAngle));
+        transform = MatrixMultiply(transform,
+                                   MatrixTranslate(planet.position.x, planet.position.y, planet.position.z));
+        Vector3 sunDirection = Vector3Normalize(Vector3Scale(planet.position, -1.0f));
+        auto material = PlanetThumbMaterial(planet.data);
+        rlDrawRenderBatchActive();
+        SetShaderMatrix(planetThumbShader, "matModel", transform);
+        SetShaderMatrix(planetThumbShader, "matViewProjection", ViewProjection());
+        SetShaderVector3(planetThumbShader, "_SunDir", sunDirection);
+        SetShaderVector4(planetThumbShader, "_Rotation", Vector4 {rotation.x, rotation.y, rotation.z, rotation.w});
+        SetShaderVector3(planetThumbShader, "_WorldSpaceCameraPos", camera.position);
+        SetShaderVector4(planetThumbShader, "_Color", material.color);
+        SetShaderVector4(planetThumbShader, "_RimColor", material.rimColor);
+        rlEnableDepthMask();
+        rlEnableDepthTest();
+        rlEnableBackfaceCulling();
+        rlSetCullFace(RL_CULL_FACE_BACK);
+        rlSetBlendMode(RL_BLEND_ALPHA);
+        DrawMesh(planetThumbModel.meshes[0], planetThumbModel.materials[0], transform);
+    } else {
+        DrawSphere(planet.position, planet.radius, planet.color);
+    }
     if (selected) {
         DrawSphereWires(planet.position, planet.selectionRadius, 12, 8, WHITE);
     }
@@ -1625,6 +1735,8 @@ public:
         const auto spotFragment = ViewerAssetPath("star_spot.fs");
         const auto blackVertex = ViewerAssetPath("star_black.vs");
         const auto blackFragment = ViewerAssetPath("star_black.fs");
+        const auto planetThumbVertex = ViewerAssetPath("planet_thumb.vs");
+        const auto planetThumbFragment = ViewerAssetPath("planet_thumb.fs");
         const auto galaxyPointVertex = ViewerAssetPath("galaxy_star_point.vs");
         const auto galaxyPointFragment = ViewerAssetPath("galaxy_star_point.fs");
         const auto galaxyLineVertex = ViewerAssetPath("galaxy_line.vs");
@@ -1639,6 +1751,7 @@ public:
         starSurfaceShader = LoadShader(surfaceVertex.c_str(), surfaceFragment.c_str());
         starSpotShader = LoadShader(spotVertex.c_str(), spotFragment.c_str());
         starBlackShader = LoadShader(blackVertex.c_str(), blackFragment.c_str());
+        planetThumbShader = LoadShader(planetThumbVertex.c_str(), planetThumbFragment.c_str());
         galaxyStarPointShader = LoadShader(galaxyPointVertex.c_str(), galaxyPointFragment.c_str());
         galaxyLineShader = LoadShader(galaxyLineVertex.c_str(), galaxyLineFragment.c_str());
         bloomPrefilterShader = LoadShader(bloomVertex.c_str(), bloomPrefilterFragment.c_str());
@@ -1650,6 +1763,7 @@ public:
         hasStarSurfaceShader = IsShaderValid(starSurfaceShader) && starSurfaceShader.id != rlGetShaderIdDefault();
         hasStarSpotShader = IsShaderValid(starSpotShader) && starSpotShader.id != rlGetShaderIdDefault();
         hasStarBlackShader = IsShaderValid(starBlackShader) && starBlackShader.id != rlGetShaderIdDefault();
+        hasPlanetThumbShader = IsShaderValid(planetThumbShader) && planetThumbShader.id != rlGetShaderIdDefault();
         hasGalaxyStarPointShader = IsShaderValid(galaxyStarPointShader) &&
                                    galaxyStarPointShader.id != rlGetShaderIdDefault();
         hasGalaxyLineShader = IsShaderValid(galaxyLineShader) && galaxyLineShader.id != rlGetShaderIdDefault();
@@ -1665,6 +1779,7 @@ public:
         if (hasStarSurfaceShader) ConfigureStarShader(starSurfaceShader, true, false);
         if (hasStarSpotShader) ConfigureStarShader(starSpotShader, false, true);
         if (hasStarBlackShader) ConfigureStarShader(starBlackShader, false, false);
+        if (hasPlanetThumbShader) ConfigurePlanetThumbShader(planetThumbShader);
         if (hasGalaxyStarPointShader) ConfigureGalaxyStarPointShader(galaxyStarPointShader);
         if (hasGalaxyLineShader) ConfigureGalaxyLineShader(galaxyLineShader);
         if (hasBloomShaders) {
@@ -1691,6 +1806,7 @@ public:
         const auto bloomLensDirtPath = ViewerAssetPath("LensDirt00.png");
         const auto galaxyColorGradingLutPath = ViewerAssetPath("galaxy_select_lut.bin");
         starMassModel = LoadStarModel(massVertices.c_str(), 2617, massIndices.c_str(), 5120, massNormals.c_str());
+        planetThumbModel = LoadStarModel(massVertices.c_str(), 2617, massIndices.c_str(), 5120, massNormals.c_str());
         starBlackModel = LoadStarModel(blackVertices.c_str(), 515, blackIndices.c_str(), 768);
         starSpotModel = LoadStarModel(spotVertices.c_str(), 4, spotIndices.c_str(), 2, nullptr, spotTexcoords.c_str());
         galaxyStarPointModel = LoadStarModel(galaxyPointVertices.c_str(), 4, galaxyPointIndices.c_str(), 2,
@@ -1706,6 +1822,7 @@ public:
         }
         hasStarModels = StarModelReady(starMassModel) && StarModelReady(starBlackModel) && StarModelReady(starSpotModel) &&
                         hasStarSurfaceShader && hasStarSpotShader && hasStarBlackShader;
+        hasPlanetThumbModel = StarModelReady(planetThumbModel) && hasPlanetThumbShader;
         hasGalaxyStarPointModel = StarModelReady(galaxyStarPointModel) && IsTextureValid(galaxyStarPointTexture) &&
                                   hasGalaxyStarPointShader;
         if (!hasStarModels || !hasGalaxyStarPointModel || !hasGalaxyLineShader || !hasBloomShaders ||
@@ -1716,6 +1833,7 @@ public:
             return false;
         }
         SetModelShader(starMassModel, starSurfaceShader);
+        if (hasPlanetThumbModel) SetModelShader(planetThumbModel, planetThumbShader);
         SetModelShader(starBlackModel, starBlackShader);
         SetModelShader(starSpotModel, starSpotShader);
         SetModelShader(galaxyStarPointModel, galaxyStarPointShader);
@@ -1821,7 +1939,7 @@ public:
             galaxyGridLines.push_back(Line3DCache {{-halfGrid, kGalaxyGridHeight, offset},
                                                     {halfGrid, kGalaxyGridHeight, offset}});
         }
-        ResetCamera(camera, mode, galaxyCameraYaw, galaxyCameraPitch);
+        ResetCamera(camera, mode, galaxyCameraYaw, galaxyCameraPitch, galaxyCameraDistance);
         return true;
     }
 
@@ -1866,6 +1984,12 @@ private:
     float timeScale = 10.0f;
     float galaxyCameraYaw = 0.0f;
     float galaxyCameraPitch = kGalaxyCameraPitchBegin;
+    float galaxyCameraDistance = kGalaxyCameraDistance;
+    float systemCameraYaw = 0.0f;
+    float systemCameraPitch = kSystemCameraPitchBegin;
+    float systemCameraRoll = 0.0f;
+    float systemCameraDistance = 40.0f;
+    Vector3 systemCameraTarget{};
     bool draggingTimeSlider = false;
     std::string seedInput;
     std::string starCountInput;
@@ -1918,7 +2042,7 @@ private:
                 orbitRotation = MatrixMultiply(system.planets[static_cast<std::size_t>(parentIndex)].orbitRotation,
                                                orbitRotation);
             Vector3 position = OrbitPoint(center, orbitRadius, angle, orbitRotation);
-            float radius = planet->realRadius() * 2.0f * 0.00025f;
+            float radius = planet->realRadius() * 0.00025f;
             PlanetViewData view;
             view.data = planet;
             view.position = position;
@@ -1988,10 +2112,16 @@ private:
         mode = ViewMode::System;
         selectedPlanet = nullptr;
         hoveredPlanet = nullptr;
-        ResetCamera(camera, mode, galaxyCameraYaw, galaxyCameraPitch);
         float systemRadius = CurrentSystem().radius;
-        camera.position = Vector3 {0.0f, systemRadius * 0.72f, systemRadius * 1.15f};
-        camera.target = Vector3 {0.0f, 0.0f, 0.0f};
+        systemCameraYaw = 0.0f;
+        systemCameraPitch = kSystemCameraPitchBegin;
+        systemCameraRoll = 0.0f;
+        systemCameraDistance = systemRadius * 1.35f;
+        systemCameraTarget = Vector3 {};
+        camera.fovy = 60.0f;
+        camera.projection = CAMERA_PERSPECTIVE;
+        ApplySystemCamera(camera, systemCameraYaw, systemCameraPitch, systemCameraRoll,
+                          systemCameraDistance, systemCameraTarget);
     }
 
     Rectangle SeedInputBounds() const { return Rectangle {430.0f, 14.0f, 150.0f, 32.0f}; }
@@ -2130,7 +2260,7 @@ private:
         mode = ViewMode::Galaxy;
         selectedPlanet = nullptr;
         hoveredPlanet = nullptr;
-        ResetCamera(camera, mode, galaxyCameraYaw, galaxyCameraPitch);
+        ResetCamera(camera, mode, galaxyCameraYaw, galaxyCameraPitch, galaxyCameraDistance);
     }
 
     bool MouseOnPanel() const {
@@ -2217,7 +2347,9 @@ private:
         previousClickedPlanet = hoveredPlanet;
         previousClickTime = now;
         if (doubleClick) {
-            camera.target = hoveredPlanet->position;
+            systemCameraTarget = hoveredPlanet->position;
+            systemCameraDistance = std::clamp(hoveredPlanet->radius * 4.5f,
+                                              kSystemCameraDistanceMin, kSystemCameraDistanceMax);
         }
     }
 
@@ -2238,12 +2370,27 @@ private:
             else EnableCursor();
         }
         bool editingInput = mode == ViewMode::Galaxy && activeInput != 0;
-        if (!editingInput) CameraControl(&camera, mode, galaxyCameraYaw, galaxyCameraPitch);
+        if (!editingInput)
+            CameraControl(&camera, mode, galaxyCameraYaw, galaxyCameraPitch, galaxyCameraDistance,
+                          systemCameraYaw, systemCameraPitch, systemCameraRoll, systemCameraDistance,
+                          systemCameraTarget);
         if (mode == ViewMode::Galaxy) HandleGalaxySettingsInput();
         UpdateTimeSlider();
         UpdatePlanetPositions(now);
-        if (!editingInput && !inputConsumed && IsKeyPressed(KEY_Z))
-            ResetCamera(camera, mode, galaxyCameraYaw, galaxyCameraPitch);
+        if (!editingInput && !inputConsumed && IsKeyPressed(KEY_Z)) {
+            if (mode == ViewMode::Galaxy) {
+                ResetCamera(camera, mode, galaxyCameraYaw, galaxyCameraPitch, galaxyCameraDistance);
+            } else {
+                float systemRadius = CurrentSystem().radius;
+                systemCameraYaw = 0.0f;
+                systemCameraPitch = kSystemCameraPitchBegin;
+                systemCameraRoll = 0.0f;
+                systemCameraDistance = systemRadius * 1.35f;
+                systemCameraTarget = Vector3 {};
+                ApplySystemCamera(camera, systemCameraYaw, systemCameraPitch, systemCameraRoll,
+                                  systemCameraDistance, systemCameraTarget);
+            }
+        }
 
         if (mode == ViewMode::Galaxy) {
             PickGalaxyObject();
@@ -2268,15 +2415,15 @@ private:
         const auto &system = CurrentSystem();
         DrawBackgroundStars(camera);
         DrawStarBlack(system.star, camera);
-        DrawStarSpot(system.star, camera, StarVisualScale(system.star, camera));
         DrawStarMass(system.star, camera, time);
+        DrawStarSpot(system.star, camera, StarVisualScale(system.star, camera));
         if (selectedPlanet == nullptr) DrawCubeWiresV(system.star.position, system.star.selectionSize, WHITE);
         for (const auto &planet: system.planets) {
             Vector3 center {};
             if (planet.parentIndex >= 0)
                 center = system.planets[static_cast<std::size_t>(planet.parentIndex)].position;
             DrawOrbit(center, planet);
-            DrawPlanet(planet, &planet == selectedPlanet);
+            DrawPlanet(planet, camera, time, &planet == selectedPlanet);
         }
     }
 
@@ -2310,8 +2457,8 @@ private:
         }
         DrawButton(Rectangle {static_cast<float>(x), GetScreenHeight() - 104.0f, kPanelWidth - 44.0f, 38.0f},
                    "ENTER SYSTEM  [ENTER]", kEnterButtonTextWidth, selectedStar != nullptr);
-        TextLine("MMB orbit  /  pitch follows game limits", x, GetScreenHeight() - 54, 14,
-                 Color {98, 131, 159, 255});
+        TextLine("MMB orbit  /  wheel zooms around center", x, GetScreenHeight() - 54, 14,
+                  Color {98, 131, 159, 255});
         TextLine("Arrows rotate  /  Z reset", x, GetScreenHeight() - 33, 14, Color {98, 131, 159, 255});
     }
 
@@ -2328,8 +2475,10 @@ private:
                    static_cast<int>(slider.y + slider.height * 0.5f), 7.0f, WHITE);
         TextLine(FormatString("time speed  %.1fx", timeScale).c_str(), x, slider.y - 22, 14,
                  Color {123, 157, 183, 255});
-        TextLine("Click another body to inspect it", x, GetScreenHeight() - 54, 14, Color {98, 131, 159, 255});
-        TextLine("ESC / G returns to the galaxy map", x, GetScreenHeight() - 33, 14, Color {98, 131, 159, 255});
+        TextLine("MMB orbit  /  RMB roll  /  wheel zoom", x, GetScreenHeight() - 54, 14,
+                 Color {98, 131, 159, 255});
+        TextLine("Double click focuses  /  ESC or G returns", x, GetScreenHeight() - 33, 14,
+                 Color {98, 131, 159, 255});
     }
 
     void DrawHoverLabel() {
@@ -2351,13 +2500,14 @@ private:
         float time = static_cast<float>(GetTime());
         BeginDrawing();
         ClearBackground(Color {4, 8, 17, 255});
-        if (mode == ViewMode::Galaxy && EnsureBloomTargets(GetScreenWidth(), GetScreenHeight())) {
+        if (EnsureBloomTargets(GetScreenWidth(), GetScreenHeight())) {
             BeginMultisampleTextureMode(galaxySceneMultisampleTarget);
             Color linearBackground = LinearBackground(Color {5, 21, 26, 255});
             rlClearColor(linearBackground.r, linearBackground.g, linearBackground.b, 255);
             rlClearScreenBuffers();
             BeginMode3D(camera);
-            DrawGalaxyScene(time);
+            if (mode == ViewMode::Galaxy) DrawGalaxyScene(time);
+            else DrawSystemScene(time);
             EndMode3D();
             ResolveMultisampleTexture(galaxySceneMultisampleTarget, galaxySceneTarget);
 
@@ -2484,6 +2634,11 @@ private:
             starSpotModel.materials[0].shader.locs = rlGetShaderLocsDefault();
             UnloadModel(starSpotModel);
         }
+        if (planetThumbModel.meshCount != 0) {
+            planetThumbModel.materials[0].shader.id = rlGetShaderIdDefault();
+            planetThumbModel.materials[0].shader.locs = rlGetShaderLocsDefault();
+            UnloadModel(planetThumbModel);
+        }
         if (galaxyStarPointModel.meshCount != 0) {
             galaxyStarPointModel.materials[0].shader.id = rlGetShaderIdDefault();
             galaxyStarPointModel.materials[0].shader.locs = rlGetShaderLocsDefault();
@@ -2497,19 +2652,22 @@ private:
         galaxyColorGradingLut = {};
         bloomLensDirtTexture = {};
         UnloadBloomTargets();
-        if (hasGalaxyFxaaShader) UnloadShader(galaxyFxaaShader);
-        if (hasBloomShaders) {
-            UnloadShader(bloomCompositeShader);
-            UnloadShader(bloomUpsampleShader);
-            UnloadShader(bloomDownsampleShader);
-            UnloadShader(bloomDownsampleFirstShader);
-            UnloadShader(bloomPrefilterShader);
-        }
-        if (hasGalaxyLineShader) UnloadShader(galaxyLineShader);
-        if (hasGalaxyStarPointShader) UnloadShader(galaxyStarPointShader);
-        if (hasStarBlackShader) UnloadShader(starBlackShader);
-        if (hasStarSpotShader) UnloadShader(starSpotShader);
-        if (hasStarSurfaceShader) UnloadShader(starSurfaceShader);
+        auto unloadCustomShader = [](Shader &shader) {
+            if (IsShaderValid(shader) && shader.id != rlGetShaderIdDefault()) UnloadShader(shader);
+            shader = {};
+        };
+        unloadCustomShader(galaxyFxaaShader);
+        unloadCustomShader(bloomCompositeShader);
+        unloadCustomShader(bloomUpsampleShader);
+        unloadCustomShader(bloomDownsampleShader);
+        unloadCustomShader(bloomDownsampleFirstShader);
+        unloadCustomShader(bloomPrefilterShader);
+        unloadCustomShader(galaxyLineShader);
+        unloadCustomShader(galaxyStarPointShader);
+        unloadCustomShader(starBlackShader);
+        unloadCustomShader(planetThumbShader);
+        unloadCustomShader(starSpotShader);
+        unloadCustomShader(starSurfaceShader);
         CloseWindow();
     }
 };

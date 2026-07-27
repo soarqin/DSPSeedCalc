@@ -55,6 +55,15 @@
 | FXAA | 已确认并实现 | 官方启用 Default preset 39；加入后 `10.png` 线宽基本不变 | 已排除为主因 |
 | Dithering | 已确认但未实现 | 最终低幅度颜色扰动，不参与 FXAA 边缘搜索和几何 | 否 |
 
+### 星系内视图
+
+- 普通恒星后处理：已实现，待截图验收。星系内视图现进入与银河视图相同的 8-sample HDR、Bloom、Color Grading 和 FXAA 管线；恒星仍按官方距离公式切换表面与 Spot，并按 Black、Mass、Spot 顺序绘制。
+- 行星实体几何：已实现，待截图验收。`UIStarmapPlanet` 使用固定 `GeoSphere`；viewer 复用字节一致的 `star_mass_*` 网格，使用官方 `realRadius * 2 * 0.00025` Transform 缩放，并移除常驻线框层。
+- 行星主题材质：部分实现。viewer 已按 `theme` 和 `themeSeed % 60` 选择官方 thumb 材质的 `_Color.rgb` 与 `_RimColor`，并移除临时程序化条纹。当前 Shader 为近似实现，尚未移植完整 `Planet Thumb New` 和黑色 `_HeightMap` 路径。
+- 相机操作：已实现，待交互验收。viewer 已按 `StarmapCamera.CameraControl()` 改为中键旋转、右键滚转、滚轮指数缩放；中键的纵向灵敏度为横向的一半，右键滚转灵敏度为横向的 `0.7`。缩放范围对应官方 `0.0375` 至 `45000`，但为适配离散滚轮输入，单级缩放倍率调整为 `1.2`。双击行星会把视图目标切到该行星，`Z` 恢复恒星系中心。
+
+星图行星证据来自参考构建中的 `UIStarmapPlanet`、`ThemeProto`、`PlanetGen`、`level0`、`resources.assets` 和 `sharedassets0.assets`。Prefab 关系为 `UIStarmap:46333 -> planetUIPrefab:46827 -> starmap-planet-obj:2667`，实体网格为 `sharedassets0.assets:1153`（`GeoSphere`，2617 个顶点、5120 个三角形），材质 Shader 为 `resources.assets:10085`（`VF Shaders/Forward/Planet Thumb New`）。官方 thumb 材质不序列化 `_HeightMap`，远程未加载行星也可以没有高度 Cubemap；因此完整 Shader 移植时应绑定黑色 Cubemap，不应虚构静态地形纹理。
+
 ## 已确认结论
 
 ### 托管运行逻辑
@@ -255,6 +264,8 @@ Galaxy Select 使用 ThirdPersonPoser path ID `42877`。已确认参数：
 
 官方运行时使用主相机当前 aspect 构建普通 perspective projection。当前 viewer 使用同样的垂直 FOV、距离、目标和俯仰范围。near/far 的不同只影响裁剪和深度映射，不构成普通可见线段的 XY 宽度比例差异。
 
+viewer 的 Galaxy Select 视图按新增交互要求允许有限缩放，范围为 `45` 至 `160`，单级缩放倍率为 `1.25`。缩放时只改变相机到固定目标 `(0,11,0)` 的距离，因此锚点始终是宇宙中心。该行为是 viewer 扩展，不属于上方固定距离的官方 Galaxy Select 相机结论。
+
 主要证据：
 
 - `C:\Users\soar\AppData\Local\Temp\opencode\dsp-virtual-starmap\camera\camera-findings.json`
@@ -318,7 +329,7 @@ FXAA 配置：
 
 状态：「已确认并实现；已排除为线芯偏粗主因」。
 
-这是尚未关闭的 rasterization 区域，不重复检查资产宽度、原生半宽、UV、索引、相机参数或后处理。当前 viewer 请求 `FLAG_MSAA_4X_HINT`，但 raylib 6.0 明确只把该提示应用到主 framebuffer；`galaxySceneTarget` 是通过 `rlLoadTexture` 和普通深度 renderbuffer 创建的用户 FBO，没有 multisample attachment。连接线实际绘制到该 FBO，因此 viewer 的线 pass 实际为单采样，窗口的 x4 请求不作用于该 pass。
+修正前，这是尚未关闭的 rasterization 区域。旧 viewer 只请求 `FLAG_MSAA_4X_HINT`，但 raylib 6.0 明确只把该提示应用到主 framebuffer；当时的 `galaxySceneTarget` 是通过 `rlLoadTexture` 和普通深度 renderbuffer 创建的用户 FBO，没有 multisample attachment。连接线实际绘制到该 FBO，因此旧 viewer 的 line pass 为单采样，窗口的 x4 请求不作用于该 pass。
 
 官方本机配置为 `<MSAA>8</MSAA>`，`GameOption.cs` 把该值赋给 `QualitySettings.antiAliasing`，Main Camera 序列化为 `m_AllowMSAA=true`。Unity 2022.3 文档明确规定 `QualitySettings.antiAliasing` 的值就是每像素样本数，且 `Camera.allowMSAA` 控制相机是否使用该质量级别的 MSAA render target；在当前 Forward 渲染路径下，官方线 pass 因此使用 8 样本。对应文档为 `https://docs.unity3d.com/2022.3/Documentation/ScriptReference/QualitySettings-antiAliasing.html` 和 `https://docs.unity3d.com/2022.3/Documentation/ScriptReference/Camera-allowMSAA.html`。
 

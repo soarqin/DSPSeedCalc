@@ -9,6 +9,8 @@ if(EMSCRIPTEN)
         star_spot_web.fs
         star_black_web.vs
         star_black_web.fs
+        planet_thumb_web.vs
+        planet_thumb_web.fs
         galaxy_star_point_web.vs
         galaxy_star_point_web.fs
         galaxy_line_web.vs
@@ -32,6 +34,8 @@ else()
         star_spot.fs
         star_black.vs
         star_black.fs
+        planet_thumb.vs
+        planet_thumb.fs
         galaxy_star_point.vs
         galaxy_star_point.fs
         galaxy_line.vs
@@ -62,6 +66,8 @@ set(DSP_VIEWER_RUNTIME_ASSETS
     "${CMAKE_CURRENT_SOURCE_DIR}/star_spot.fs"
     "${CMAKE_CURRENT_SOURCE_DIR}/star_black.vs"
     "${CMAKE_CURRENT_SOURCE_DIR}/star_black.fs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/planet_thumb.vs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/planet_thumb.fs"
     "${CMAKE_CURRENT_SOURCE_DIR}/galaxy_star_point.vs"
     "${CMAKE_CURRENT_SOURCE_DIR}/galaxy_star_point.fs"
     "${CMAKE_CURRENT_SOURCE_DIR}/galaxy_line.vs"
@@ -95,6 +101,8 @@ set(DSP_VIEWER_WEB_ASSETS
     "${CMAKE_CURRENT_SOURCE_DIR}/star_spot_web.fs"
     "${CMAKE_CURRENT_SOURCE_DIR}/star_black_web.vs"
     "${CMAKE_CURRENT_SOURCE_DIR}/star_black_web.fs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/planet_thumb_web.vs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/planet_thumb_web.fs"
     "${CMAKE_CURRENT_SOURCE_DIR}/galaxy_star_point_web.vs"
     "${CMAKE_CURRENT_SOURCE_DIR}/galaxy_star_point_web.fs"
     "${CMAKE_CURRENT_SOURCE_DIR}/galaxy_line_web.vs"
@@ -179,6 +187,8 @@ if(EMSCRIPTEN)
         "--preload-file=${CMAKE_CURRENT_SOURCE_DIR}/star_spot_web.fs@star_spot.fs"
         "--preload-file=${CMAKE_CURRENT_SOURCE_DIR}/star_black_web.vs@star_black.vs"
         "--preload-file=${CMAKE_CURRENT_SOURCE_DIR}/star_black_web.fs@star_black.fs"
+        "--preload-file=${CMAKE_CURRENT_SOURCE_DIR}/planet_thumb_web.vs@planet_thumb.vs"
+        "--preload-file=${CMAKE_CURRENT_SOURCE_DIR}/planet_thumb_web.fs@planet_thumb.fs"
         "--preload-file=${CMAKE_CURRENT_SOURCE_DIR}/galaxy_star_point_web.vs@galaxy_star_point.vs"
         "--preload-file=${CMAKE_CURRENT_SOURCE_DIR}/galaxy_star_point_web.fs@galaxy_star_point.fs"
         "--preload-file=${CMAKE_CURRENT_SOURCE_DIR}/galaxy_line_web.vs@galaxy_line.vs"
