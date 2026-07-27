@@ -109,6 +109,15 @@ Before using decompiled code as an oracle, record:
 - Prototype snapshot;
 - seed, star count, and compared fields.
 
+For viewer and `UIVirtualStarmap` parity work, read `docs/viewer-parity-evidence.md` before starting research. Treat entries marked established or ruled out as closed for the recorded game build. Do not repeat asset extraction, managed-code tracing, shader disassembly, or Unity native-code analysis unless at least one of these conditions applies:
+
+- the reference game or Unity build changed;
+- a cited artifact is missing or cannot reproduce the recorded conclusion;
+- new runtime evidence contradicts the recorded conclusion;
+- an unresolved question explicitly requires additional data from that area.
+
+When reopening an area, record the reason, the new evidence, and the delta from the existing conclusion before doing the work. Afterward, update the ledger with the result, exact evidence location, implementation status, and remaining open question. Screenshots may classify symptoms and validate results, but must not be used to infer constants already available from code, assets, shaders, or native implementation.
+
 Verify parity in this order:
 
 1. `DotNet35Random` output and derived seeds.

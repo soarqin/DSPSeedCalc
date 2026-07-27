@@ -33,14 +33,6 @@ highp vec3 LinearToLogC(highp vec3 color)
     return 0.244161 * log2(5.555556 * color + 0.047996) / log2(10.0) + 0.386036;
 }
 
-highp vec3 LinearToSrgb(highp vec3 value)
-{
-    value = max(value, vec3(0.0));
-    highp vec3 low = value * 12.92;
-    highp vec3 high = 1.055 * pow(value, vec3(1.0 / 2.4)) - 0.055;
-    return mix(low, high, step(vec3(0.0031308), value));
-}
-
 highp vec3 ApplyLut2d(highp vec3 uvw)
 {
     const highp vec3 scaleOffset = vec3(1.0 / 1024.0, 1.0 / 32.0, 31.0);
@@ -60,5 +52,5 @@ void main()
     highp vec3 dirt = texture(lensDirtTexture, vec2(fragTexCoord.x, 1.0 - fragTexCoord.y)).rgb * dirtIntensity;
     highp vec3 color = scene + bloom + bloom * dirt;
     highp vec3 logColor = clamp(LinearToLogC(max(color, vec3(0.0))), 0.0, 1.0);
-    finalColor = vec4(LinearToSrgb(clamp(ApplyLut2d(logColor), 0.0, 1.0)), 1.0);
+    finalColor = vec4(clamp(ApplyLut2d(logColor), 0.0, 1.0), 1.0);
 }

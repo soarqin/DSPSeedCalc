@@ -30,6 +30,9 @@
 #if defined(__EMSCRIPTEN__)
 #include <emscripten/emscripten.h>
 #include <emscripten/html5.h>
+#include <GLES3/gl3.h>
+#else
+#include <external/glad.h>
 #endif
 
 #ifndef DSP_VIEWER_DEFAULT_FONT
@@ -64,26 +67,33 @@ Shader starSurfaceShader{};
 Shader starSpotShader{};
 Shader starBlackShader{};
 Shader galaxyStarPointShader{};
+Shader galaxyLineShader{};
 Shader bloomPrefilterShader{};
 Shader bloomDownsampleFirstShader{};
 Shader bloomDownsampleShader{};
 Shader bloomUpsampleShader{};
 Shader bloomCompositeShader{};
+Shader galaxyFxaaShader{};
 Model starMassModel{};
 Model starBlackModel{};
 Model starSpotModel{};
 Model galaxyStarPointModel{};
 Texture2D galaxyStarPointTexture{};
+Texture2D galaxyLineTexture{};
 Texture2D bloomLensDirtTexture{};
 Texture2D galaxyColorGradingLut{};
 bool hasStarSurfaceShader = false;
 bool hasStarSpotShader = false;
 bool hasStarBlackShader = false;
 bool hasGalaxyStarPointShader = false;
+bool hasGalaxyLineShader = false;
 bool hasBloomShaders = false;
+bool hasGalaxyFxaaShader = false;
 bool hasStarModels = false;
 bool hasGalaxyStarPointModel = false;
 RenderTexture2D galaxySceneTarget{};
+RenderTexture2D galaxySceneMultisampleTarget{};
+RenderTexture2D galaxyFxaaTarget{};
 RenderTexture2D bloomPrefilterTarget{};
 std::array<RenderTexture2D, kMaxBloomIterations> bloomDownLevels{};
 std::array<RenderTexture2D, kMaxBloomIterations> bloomUpLevels{};
@@ -91,6 +101,24 @@ int bloomTargetWidth = 0;
 int bloomTargetHeight = 0;
 int bloomIterationCount = 0;
 float bloomSampleScale = 1.0f;
+
+Texture2D LoadGalaxyLineTexture(const char *path) {
+    int size = 0;
+    unsigned char *data = LoadFileData(path, &size);
+    constexpr int expectedSize = 699056;
+    if (data == nullptr || size != expectedSize) {
+        if (data != nullptr) UnloadFileData(data);
+        return {};
+    }
+    Texture2D texture;
+    texture.id = rlLoadTexture(data, 256, 128, RL_PIXELFORMAT_UNCOMPRESSED_R32G32B32A32, 9);
+    texture.width = 256;
+    texture.height = 128;
+    texture.mipmaps = 9;
+    texture.format = PIXELFORMAT_UNCOMPRESSED_R32G32B32A32;
+    UnloadFileData(data);
+    return texture;
+}
 
 std::string ViewerAssetPath(const char *name) {
 #if defined(__EMSCRIPTEN__)
@@ -145,6 +173,11 @@ struct PanelData {
     std::vector<PanelRow> detailRows;
     std::string footerKey;
     std::string footerValue;
+};
+
+struct GalaxyLineData {
+    std::size_t start = 0;
+    std::size_t end = 0;
 };
 
 struct StarViewData {
@@ -298,6 +331,14 @@ Vector4 GalaxyStarColor(const dspugen::Star *star) {
     return keys[std::size(keys) - 1].color;
 }
 
+Vector4 GalaxyLineColor(Vector4 color) {
+    Vector4 result = Vector4Lerp(color, Vector4 {1.0f, 1.0f, 1.0f, 1.0f}, 0.65f);
+    result.x = GammaToLinearSpace(result.x);
+    result.y = GammaToLinearSpace(result.y);
+    result.z = GammaToLinearSpace(result.z);
+    return result;
+}
+
 float GalaxyStarScale(const dspugen::Star *star) {
     switch (star->type) {
         case dspugen::EStarType::GiantStar: return 3.0f;
@@ -306,6 +347,98 @@ float GalaxyStarScale(const dspugen::Star *star) {
         case dspugen::EStarType::BlackHole: return 0.8f;
         default: return 1.2f;
     }
+}
+
+void SortedAdd(std::vector<std::size_t> &nodes, std::size_t node) {
+    auto position = std::lower_bound(nodes.begin(), nodes.end(), node);
+    if (position == nodes.end() || *position != node) nodes.insert(position, node);
+}
+
+void RemoveNode(std::vector<std::size_t> &nodes, std::size_t node) {
+    auto position = std::lower_bound(nodes.begin(), nodes.end(), node);
+    if (position != nodes.end() && *position == node) nodes.erase(position);
+}
+
+std::vector<GalaxyLineData> CreateGalaxyLines(const dspugen::Galaxy *galaxy,
+                                              const std::vector<StarViewData> &stars) {
+    struct GraphNode {
+        std::vector<std::size_t> connections;
+        std::vector<std::size_t> lines;
+    };
+    std::vector<GraphNode> nodes(stars.size());
+    std::vector<int> state(stars.size());
+    for (std::size_t nodeIndex = 0; nodeIndex < stars.size(); ++nodeIndex) {
+        const auto &position = galaxy->stars[nodeIndex]->position;
+        for (std::size_t otherIndex = 0; otherIndex < nodeIndex; ++otherIndex) {
+            const auto &otherPosition = galaxy->stars[otherIndex]->position;
+            double dx = position.x - otherPosition.x;
+            double dy = position.y - otherPosition.y;
+            double dz = position.z - otherPosition.z;
+            if (dx * dx + dy * dy + dz * dz >= 64.0) continue;
+            SortedAdd(nodes[nodeIndex].connections, otherIndex);
+            SortedAdd(nodes[otherIndex].connections, nodeIndex);
+        }
+
+        std::fill(state.begin(), state.end(), 0);
+        Vector3 nodePosition = stars[nodeIndex].position;
+        const auto &connections = nodes[nodeIndex].connections;
+        for (std::size_t i = 0; i < connections.size(); ++i) {
+            std::size_t firstIndex = connections[i];
+            Vector3 firstPosition = stars[firstIndex].position;
+            for (std::size_t j = i + 1; j < connections.size(); ++j) {
+                std::size_t secondIndex = connections[j];
+                if (!std::binary_search(nodes[firstIndex].connections.begin(),
+                                        nodes[firstIndex].connections.end(), secondIndex)) continue;
+                Vector3 secondPosition = stars[secondIndex].position;
+                float firstDistance = Vector3DistanceSqr(firstPosition, nodePosition);
+                float secondDistance = Vector3DistanceSqr(secondPosition, nodePosition);
+                float otherDistance = Vector3DistanceSqr(firstPosition, secondPosition);
+                float largest = std::max(firstDistance, std::max(secondDistance, otherDistance));
+                float smallest = std::min(firstDistance, std::min(secondDistance, otherDistance));
+                float middle = (firstDistance + secondDistance + otherDistance - largest - smallest) * 1.001f;
+                smallest *= 1.01f;
+                if (firstDistance <= middle || firstDistance <= smallest) {
+                    if (state[i] == 0) {
+                        SortedAdd(nodes[nodeIndex].lines, firstIndex);
+                        SortedAdd(nodes[firstIndex].lines, nodeIndex);
+                        state[i] = 1;
+                    }
+                } else {
+                    state[i] = -1;
+                    RemoveNode(nodes[nodeIndex].lines, firstIndex);
+                    RemoveNode(nodes[firstIndex].lines, nodeIndex);
+                }
+                if (secondDistance <= middle || secondDistance <= smallest) {
+                    if (state[j] == 0) {
+                        SortedAdd(nodes[nodeIndex].lines, secondIndex);
+                        SortedAdd(nodes[secondIndex].lines, nodeIndex);
+                        state[j] = 1;
+                    }
+                } else {
+                    state[j] = -1;
+                    RemoveNode(nodes[nodeIndex].lines, secondIndex);
+                    RemoveNode(nodes[secondIndex].lines, nodeIndex);
+                }
+                if (otherDistance > middle && otherDistance > smallest) {
+                    RemoveNode(nodes[firstIndex].lines, secondIndex);
+                    RemoveNode(nodes[secondIndex].lines, firstIndex);
+                }
+            }
+            if (state[i] == 0) {
+                SortedAdd(nodes[nodeIndex].lines, firstIndex);
+                SortedAdd(nodes[firstIndex].lines, nodeIndex);
+                state[i] = 1;
+            }
+        }
+    }
+
+    std::vector<GalaxyLineData> result;
+    for (std::size_t nodeIndex = 0; nodeIndex < nodes.size(); ++nodeIndex) {
+        for (std::size_t otherIndex: nodes[nodeIndex].lines) {
+            if (otherIndex > nodeIndex) result.push_back(GalaxyLineData {nodeIndex, otherIndex});
+        }
+    }
+    return result;
 }
 
 Vector4 LerpColor(Vector4 left, Vector4 right, float t) {
@@ -727,6 +860,55 @@ void ConfigureGalaxyStarPointShader(Shader &shader) {
     shader.locs[SHADER_LOC_MAP_DIFFUSE] = GetShaderLocation(shader, "texture0");
 }
 
+void ConfigureGalaxyLineShader(Shader &shader) {
+    shader.locs[SHADER_LOC_VERTEX_POSITION] = GetShaderLocationAttrib(shader, "vertexPosition");
+    shader.locs[SHADER_LOC_VERTEX_TEXCOORD01] = GetShaderLocationAttrib(shader, "vertexTexCoord");
+    shader.locs[SHADER_LOC_MATRIX_MODEL] = -1;
+    shader.locs[SHADER_LOC_MATRIX_MVP] = -1;
+    shader.locs[SHADER_LOC_COLOR_DIFFUSE] = -1;
+    shader.locs[SHADER_LOC_MAP_DIFFUSE] = GetShaderLocation(shader, "texture0");
+}
+
+void DrawGalaxyLineQuad(Vector3 start, Vector3 end, const Camera3D &camera, float width) {
+    Vector3 forward = Vector3Normalize(camera.target - camera.position);
+    Vector3 right = Vector3Normalize(Vector3CrossProduct(forward, camera.up));
+    Vector3 up = Vector3CrossProduct(right, forward);
+    Vector3 segment = end - start;
+    Vector3 endRay = end - camera.position;
+    Vector3 rayView {
+        Vector3DotProduct(endRay, right),
+        Vector3DotProduct(endRay, up),
+        -Vector3DotProduct(endRay, forward),
+    };
+    Vector3 segmentView {
+        Vector3DotProduct(segment, right),
+        Vector3DotProduct(segment, up),
+        -Vector3DotProduct(segment, forward),
+    };
+    auto clampRayComponent = [](float value) {
+        return std::copysign(std::max(std::abs(value), 0.01f), value);
+    };
+    rayView.x = clampRayComponent(rayView.x);
+    rayView.y = clampRayComponent(rayView.y);
+    rayView.z = clampRayComponent(rayView.z);
+    float sideX = rayView.z * segmentView.y - rayView.y * segmentView.z;
+    float sideY = rayView.x * segmentView.z - rayView.z * segmentView.x;
+    float sideLengthSquared = sideX * sideX + sideY * sideY;
+    if (sideLengthSquared < 1.0e-8f) return;
+    float sideScale = width * 0.5f / std::sqrt(sideLengthSquared);
+    Vector3 side = right * (sideX * sideScale) + up * (sideY * sideScale);
+    rlBegin(RL_QUADS);
+    rlTexCoord2f(0.0f, 1.0f);
+    rlVertex3f(start.x - side.x, start.y - side.y, start.z - side.z);
+    rlTexCoord2f(1.0f, 1.0f);
+    rlVertex3f(end.x - side.x, end.y - side.y, end.z - side.z);
+    rlTexCoord2f(1.0f, 0.0f);
+    rlVertex3f(end.x + side.x, end.y + side.y, end.z + side.z);
+    rlTexCoord2f(0.0f, 0.0f);
+    rlVertex3f(start.x + side.x, start.y + side.y, start.z + side.z);
+    rlEnd();
+}
+
 void ConfigureScreenShader(Shader &shader) {
     shader.locs[SHADER_LOC_VERTEX_POSITION] = GetShaderLocationAttrib(shader, "vertexPosition");
     shader.locs[SHADER_LOC_VERTEX_TEXCOORD01] = GetShaderLocationAttrib(shader, "vertexTexCoord");
@@ -764,8 +946,106 @@ RenderTexture2D LoadHalfFloatRenderTexture(int width, int height, bool withDepth
     return target;
 }
 
+RenderTexture2D LoadMultisampleHalfFloatRenderTexture(int width, int height, int requestedSamples) {
+    RenderTexture2D target{};
+    GLint maxSamples = 0;
+    glGetIntegerv(GL_MAX_SAMPLES, &maxSamples);
+    int samples = 0;
+    for (int candidate: {requestedSamples, 4, 2, 1}) {
+        if (candidate > maxSamples) continue;
+        samples = candidate;
+        GLenum previousError = glGetError();
+        if (previousError != GL_NO_ERROR) {
+            TraceLog(LOG_WARNING, "FBO: OpenGL error before multisample target creation: 0x%04X", previousError);
+            return {};
+        }
+        target.id = rlLoadFramebuffer();
+        if (target.id == 0) return {};
+        glBindFramebuffer(GL_FRAMEBUFFER, target.id);
+
+        glGenRenderbuffers(1, &target.texture.id);
+        glBindRenderbuffer(GL_RENDERBUFFER, target.texture.id);
+        glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_RGBA16F, width, height);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, target.texture.id);
+
+        glGenRenderbuffers(1, &target.depth.id);
+        glBindRenderbuffer(GL_RENDERBUFFER, target.depth.id);
+        glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_DEPTH_COMPONENT24, width, height);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, target.depth.id);
+
+        bool complete = glGetError() == GL_NO_ERROR &&
+                        glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
+        glBindRenderbuffer(GL_RENDERBUFFER, 0);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        if (complete) break;
+
+        if (target.texture.id != 0) glDeleteRenderbuffers(1, &target.texture.id);
+        if (target.depth.id != 0) glDeleteRenderbuffers(1, &target.depth.id);
+        GLuint framebuffer = target.id;
+        glDeleteFramebuffers(1, &framebuffer);
+        target = {};
+    }
+    if (target.id == 0) return {};
+
+    target.texture.width = width;
+    target.texture.height = height;
+    target.texture.mipmaps = 1;
+    target.texture.format = PIXELFORMAT_UNCOMPRESSED_R16G16B16A16;
+    target.depth.width = width;
+    target.depth.height = height;
+    target.depth.mipmaps = 1;
+    target.depth.format = 19;
+    if (samples < requestedSamples)
+        TraceLog(LOG_WARNING, "FBO: Requested %i multisample HDR samples, using %i", requestedSamples, samples);
+    TraceLog(LOG_INFO, "FBO: [ID %i] Multisample HDR target loaded successfully (%ix%i | %i samples)",
+             target.id, width, height, samples);
+    return target;
+}
+
+void UnloadMultisampleRenderTexture(RenderTexture2D &target) {
+    if (target.texture.id != 0) glDeleteRenderbuffers(1, &target.texture.id);
+    if (target.depth.id != 0) glDeleteRenderbuffers(1, &target.depth.id);
+    if (target.id != 0) {
+        GLuint framebuffer = target.id;
+        glDeleteFramebuffers(1, &framebuffer);
+    }
+    target = {};
+}
+
+void BeginMultisampleTextureMode(const RenderTexture2D &target) {
+    rlDrawRenderBatchActive();
+    rlEnableFramebuffer(target.id);
+    rlViewport(0, 0, target.texture.width, target.texture.height);
+    rlSetFramebufferWidth(target.texture.width);
+    rlSetFramebufferHeight(target.texture.height);
+    rlMatrixMode(RL_PROJECTION);
+    rlLoadIdentity();
+    rlOrtho(0, target.texture.width, target.texture.height, 0, 0.0f, 1.0f);
+    rlMatrixMode(RL_MODELVIEW);
+    rlLoadIdentity();
+}
+
+void ResolveMultisampleTexture(const RenderTexture2D &source, const RenderTexture2D &destination) {
+    rlDrawRenderBatchActive();
+    rlBindFramebuffer(RL_READ_FRAMEBUFFER, source.id);
+    rlBindFramebuffer(RL_DRAW_FRAMEBUFFER, destination.id);
+    rlBlitFramebuffer(0, 0, source.texture.width, source.texture.height,
+                      0, 0, destination.texture.width, destination.texture.height, GL_COLOR_BUFFER_BIT);
+    rlDisableFramebuffer();
+    rlViewport(0, 0, GetRenderWidth(), GetRenderHeight());
+    rlSetFramebufferWidth(GetRenderWidth());
+    rlSetFramebufferHeight(GetRenderHeight());
+    rlMatrixMode(RL_PROJECTION);
+    rlLoadIdentity();
+    rlOrtho(0, GetRenderWidth(), GetRenderHeight(), 0, 0.0f, 1.0f);
+    rlMatrixMode(RL_MODELVIEW);
+    rlLoadIdentity();
+}
+
 void UnloadBloomTargets() {
+    UnloadMultisampleRenderTexture(galaxySceneMultisampleTarget);
     if (galaxySceneTarget.id != 0) UnloadRenderTexture(galaxySceneTarget);
+    if (galaxyFxaaTarget.id != 0) UnloadRenderTexture(galaxyFxaaTarget);
     if (bloomPrefilterTarget.id != 0) UnloadRenderTexture(bloomPrefilterTarget);
     for (auto &level: bloomDownLevels) {
         if (level.id != 0) UnloadRenderTexture(level);
@@ -775,7 +1055,9 @@ void UnloadBloomTargets() {
         if (level.id != 0) UnloadRenderTexture(level);
         level = {};
     }
+    galaxySceneMultisampleTarget = {};
     galaxySceneTarget = {};
+    galaxyFxaaTarget = {};
     bloomPrefilterTarget = {};
     bloomTargetWidth = 0;
     bloomTargetHeight = 0;
@@ -784,10 +1066,13 @@ void UnloadBloomTargets() {
 }
 
 bool EnsureBloomTargets(int width, int height) {
-    if (bloomTargetWidth == width && bloomTargetHeight == height && galaxySceneTarget.id != 0 &&
-        bloomPrefilterTarget.id != 0 && bloomDownLevels[0].id != 0) return true;
+    if (bloomTargetWidth == width && bloomTargetHeight == height && galaxySceneMultisampleTarget.id != 0 &&
+        galaxySceneTarget.id != 0 &&
+        galaxyFxaaTarget.id != 0 && bloomPrefilterTarget.id != 0 && bloomDownLevels[0].id != 0) return true;
     UnloadBloomTargets();
+    galaxySceneMultisampleTarget = LoadMultisampleHalfFloatRenderTexture(width, height, 8);
     galaxySceneTarget = LoadHalfFloatRenderTexture(width, height, true);
+    galaxyFxaaTarget = LoadHalfFloatRenderTexture(width, height, false);
     int levelWidth = std::max(1, width / 2);
     int levelHeight = std::max(1, height / 2);
     bloomPrefilterTarget = LoadHalfFloatRenderTexture(levelWidth, levelHeight, false);
@@ -805,7 +1090,8 @@ bool EnsureBloomTargets(int width, int height) {
         bloomUpLevels[static_cast<std::size_t>(i)] =
             LoadHalfFloatRenderTexture(down.texture.width, down.texture.height, false);
     }
-    bool complete = galaxySceneTarget.id != 0 && bloomPrefilterTarget.id != 0;
+    bool complete = galaxySceneMultisampleTarget.id != 0 && galaxySceneTarget.id != 0 &&
+                    galaxyFxaaTarget.id != 0 && bloomPrefilterTarget.id != 0;
     for (int i = 0; i < bloomIterationCount; ++i)
         complete = complete && bloomDownLevels[static_cast<std::size_t>(i)].id != 0;
     for (int i = 0; i < bloomIterationCount - 1; ++i)
@@ -1058,7 +1344,9 @@ void DrawGalaxyStarPoint(const StarViewData &star, const Camera3D &camera) {
     float fadeRadius = 0.0f;
     int fadeLocation = GetShaderLocation(galaxyStarPointShader, "_Global_GalaxyFadeRadius");
     if (fadeLocation >= 0) SetShaderValue(galaxyStarPointShader, fadeLocation, &fadeRadius, SHADER_UNIFORM_FLOAT);
-    float sceneLinear = galaxySceneTarget.id != 0 && rlGetActiveFramebuffer() == galaxySceneTarget.id ? 1.0f : 0.0f;
+    float sceneLinear = (galaxySceneTarget.id != 0 && rlGetActiveFramebuffer() == galaxySceneTarget.id) ||
+                        (galaxySceneMultisampleTarget.id != 0 &&
+                         rlGetActiveFramebuffer() == galaxySceneMultisampleTarget.id) ? 1.0f : 0.0f;
     int sceneLinearLocation = GetShaderLocation(galaxyStarPointShader, "_SceneLinear");
     if (sceneLinearLocation >= 0)
         SetShaderValue(galaxyStarPointShader, sceneLinearLocation, &sceneLinear, SHADER_UNIFORM_FLOAT);
@@ -1081,6 +1369,52 @@ void DrawGalaxyStarPoint(const StarViewData &star, const Camera3D &camera) {
     rlSetBlendMode(RL_BLEND_ALPHA);
     rlEnableBackfaceCulling();
     rlEnableDepthTest();
+    rlEnableDepthMask();
+}
+
+void DrawGalaxyLines(const std::vector<GalaxyLineData> &lines,
+                     const std::vector<StarViewData> &stars, const Camera3D &camera) {
+    if (!hasGalaxyLineShader || !IsTextureValid(galaxyLineTexture)) return;
+    rlDrawRenderBatchActive();
+    SetShaderMatrix(galaxyLineShader, "matViewProjection", ViewProjection());
+    SetShaderVector3(galaxyLineShader, "_WorldSpaceCameraPos", camera.position);
+    SetShaderFloat(galaxyLineShader, "_Multiplier", 0.349999994f);
+    SetShaderFloat(galaxyLineShader, "_TileScale", 6.0f);
+    SetShaderFloat(galaxyLineShader, "_DistScale", 0.0299999993f);
+    SetShaderFloat(galaxyLineShader, "_DistPower", 0.899999976f);
+    SetShaderFloat(galaxyLineShader, "_MinDistScale", 0.100000001f);
+    SetShaderFloat(galaxyLineShader, "_MaxDistScale", 10.0f);
+    SetShaderFloat(galaxyLineShader, "_Global_GalaxyFadeRadius", 0.0f);
+    float sceneLinear = (galaxySceneTarget.id != 0 && rlGetActiveFramebuffer() == galaxySceneTarget.id) ||
+                        (galaxySceneMultisampleTarget.id != 0 &&
+                         rlGetActiveFramebuffer() == galaxySceneMultisampleTarget.id) ? 1.0f : 0.0f;
+    SetShaderFloat(galaxyLineShader, "_SceneLinear", sceneLinear);
+    SetShaderVector4(galaxyLineShader, "_ScreenParams",
+                     Vector4 {static_cast<float>(rlGetFramebufferWidth()),
+                              static_cast<float>(rlGetFramebufferHeight()), 0.0f, 0.0f});
+    rlDisableDepthMask();
+    rlDisableBackfaceCulling();
+    rlSetBlendFactors(RL_SRC_ALPHA, RL_ONE, RL_FUNC_ADD);
+    rlSetBlendMode(RL_BLEND_CUSTOM);
+    BeginShaderMode(galaxyLineShader);
+    rlSetTexture(galaxyLineTexture.id);
+    for (const auto &line: lines) {
+        const auto &startStar = stars[line.start];
+        const auto &endStar = stars[line.end];
+        Vector3 span = endStar.position - startStar.position;
+        float distance = Vector3Length(span);
+        if (distance <= 0.0f) continue;
+        Vector3 start = startStar.position + span * ((startStar.galaxyScale * 0.25f + 0.35f) / distance);
+        Vector3 end = startStar.position + span * (1.0f - (endStar.galaxyScale * 0.25f + 0.35f) / distance);
+        SetShaderVector4(galaxyLineShader, "_LineColorA", GalaxyLineColor(startStar.galaxyColor));
+        SetShaderVector4(galaxyLineShader, "_LineColorB", GalaxyLineColor(endStar.galaxyColor));
+        DrawGalaxyLineQuad(start, end, camera, 1.0f);
+        rlDrawRenderBatchActive();
+    }
+    rlSetTexture(0);
+    EndShaderMode();
+    rlSetBlendMode(RL_BLEND_ALPHA);
+    rlEnableBackfaceCulling();
     rlEnableDepthMask();
 }
 
@@ -1293,26 +1627,32 @@ public:
         const auto blackFragment = ViewerAssetPath("star_black.fs");
         const auto galaxyPointVertex = ViewerAssetPath("galaxy_star_point.vs");
         const auto galaxyPointFragment = ViewerAssetPath("galaxy_star_point.fs");
+        const auto galaxyLineVertex = ViewerAssetPath("galaxy_line.vs");
+        const auto galaxyLineFragment = ViewerAssetPath("galaxy_line.fs");
         const auto bloomVertex = ViewerAssetPath("bloom.vs");
         const auto bloomPrefilterFragment = ViewerAssetPath("bloom_prefilter.fs");
         const auto bloomDownsampleFirstFragment = ViewerAssetPath("bloom_downsample_first.fs");
         const auto bloomDownsampleFragment = ViewerAssetPath("bloom_downsample.fs");
         const auto bloomUpsampleFragment = ViewerAssetPath("bloom_upsample.fs");
         const auto bloomCompositeFragment = ViewerAssetPath("bloom_composite.fs");
+        const auto galaxyFxaaFragment = ViewerAssetPath("galaxy_fxaa.fs");
         starSurfaceShader = LoadShader(surfaceVertex.c_str(), surfaceFragment.c_str());
         starSpotShader = LoadShader(spotVertex.c_str(), spotFragment.c_str());
         starBlackShader = LoadShader(blackVertex.c_str(), blackFragment.c_str());
         galaxyStarPointShader = LoadShader(galaxyPointVertex.c_str(), galaxyPointFragment.c_str());
+        galaxyLineShader = LoadShader(galaxyLineVertex.c_str(), galaxyLineFragment.c_str());
         bloomPrefilterShader = LoadShader(bloomVertex.c_str(), bloomPrefilterFragment.c_str());
         bloomDownsampleFirstShader = LoadShader(bloomVertex.c_str(), bloomDownsampleFirstFragment.c_str());
         bloomDownsampleShader = LoadShader(bloomVertex.c_str(), bloomDownsampleFragment.c_str());
         bloomUpsampleShader = LoadShader(bloomVertex.c_str(), bloomUpsampleFragment.c_str());
         bloomCompositeShader = LoadShader(bloomVertex.c_str(), bloomCompositeFragment.c_str());
+        galaxyFxaaShader = LoadShader(bloomVertex.c_str(), galaxyFxaaFragment.c_str());
         hasStarSurfaceShader = IsShaderValid(starSurfaceShader) && starSurfaceShader.id != rlGetShaderIdDefault();
         hasStarSpotShader = IsShaderValid(starSpotShader) && starSpotShader.id != rlGetShaderIdDefault();
         hasStarBlackShader = IsShaderValid(starBlackShader) && starBlackShader.id != rlGetShaderIdDefault();
         hasGalaxyStarPointShader = IsShaderValid(galaxyStarPointShader) &&
                                    galaxyStarPointShader.id != rlGetShaderIdDefault();
+        hasGalaxyLineShader = IsShaderValid(galaxyLineShader) && galaxyLineShader.id != rlGetShaderIdDefault();
         hasBloomShaders = IsShaderValid(bloomPrefilterShader) && IsShaderValid(bloomDownsampleFirstShader) &&
                           IsShaderValid(bloomDownsampleShader) && IsShaderValid(bloomUpsampleShader) &&
                           IsShaderValid(bloomCompositeShader) &&
@@ -1321,10 +1661,12 @@ public:
                           bloomDownsampleShader.id != rlGetShaderIdDefault() &&
                           bloomUpsampleShader.id != rlGetShaderIdDefault() &&
                           bloomCompositeShader.id != rlGetShaderIdDefault();
+        hasGalaxyFxaaShader = IsShaderValid(galaxyFxaaShader) && galaxyFxaaShader.id != rlGetShaderIdDefault();
         if (hasStarSurfaceShader) ConfigureStarShader(starSurfaceShader, true, false);
         if (hasStarSpotShader) ConfigureStarShader(starSpotShader, false, true);
         if (hasStarBlackShader) ConfigureStarShader(starBlackShader, false, false);
         if (hasGalaxyStarPointShader) ConfigureGalaxyStarPointShader(galaxyStarPointShader);
+        if (hasGalaxyLineShader) ConfigureGalaxyLineShader(galaxyLineShader);
         if (hasBloomShaders) {
             ConfigureScreenShader(bloomPrefilterShader);
             ConfigureScreenShader(bloomDownsampleFirstShader);
@@ -1332,6 +1674,7 @@ public:
             ConfigureScreenShader(bloomUpsampleShader);
             ConfigureScreenShader(bloomCompositeShader);
         }
+        if (hasGalaxyFxaaShader) ConfigureScreenShader(galaxyFxaaShader);
         const auto massVertices = ViewerAssetPath("star_mass_vertices.bin");
         const auto massNormals = ViewerAssetPath("star_mass_normals.bin");
         const auto massIndices = ViewerAssetPath("star_mass_indices.bin");
@@ -1344,6 +1687,7 @@ public:
         const auto galaxyPointTexcoords = ViewerAssetPath("galaxy_star_point_uv.bin");
         const auto galaxyPointIndices = ViewerAssetPath("galaxy_star_point_indices.bin");
         const auto galaxyPointTexturePath = ViewerAssetPath("galaxy_star_point.png");
+        const auto galaxyLineTexturePath = ViewerAssetPath("galaxy_line_texture.bin");
         const auto bloomLensDirtPath = ViewerAssetPath("LensDirt00.png");
         const auto galaxyColorGradingLutPath = ViewerAssetPath("galaxy_select_lut.bin");
         starMassModel = LoadStarModel(massVertices.c_str(), 2617, massIndices.c_str(), 5120, massNormals.c_str());
@@ -1352,6 +1696,7 @@ public:
         galaxyStarPointModel = LoadStarModel(galaxyPointVertices.c_str(), 4, galaxyPointIndices.c_str(), 2,
                                              nullptr, galaxyPointTexcoords.c_str());
         galaxyStarPointTexture = LoadTexture(galaxyPointTexturePath.c_str());
+        galaxyLineTexture = LoadGalaxyLineTexture(galaxyLineTexturePath.c_str());
         bloomLensDirtTexture = LoadTexture(bloomLensDirtPath.c_str());
         Image gradingLutImage = LoadImageRaw(galaxyColorGradingLutPath.c_str(), 1024, 32,
                                              PIXELFORMAT_UNCOMPRESSED_R32G32B32A32, 0);
@@ -1363,7 +1708,9 @@ public:
                         hasStarSurfaceShader && hasStarSpotShader && hasStarBlackShader;
         hasGalaxyStarPointModel = StarModelReady(galaxyStarPointModel) && IsTextureValid(galaxyStarPointTexture) &&
                                   hasGalaxyStarPointShader;
-        if (!hasStarModels || !hasGalaxyStarPointModel || !hasBloomShaders ||
+        if (!hasStarModels || !hasGalaxyStarPointModel || !hasGalaxyLineShader || !hasBloomShaders ||
+            !hasGalaxyFxaaShader ||
+            !IsTextureValid(galaxyLineTexture) ||
             !IsTextureValid(bloomLensDirtTexture) || !IsTextureValid(galaxyColorGradingLut)) {
             Shutdown();
             return false;
@@ -1375,6 +1722,8 @@ public:
         galaxyStarPointModel.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = galaxyStarPointTexture;
         SetTextureFilter(galaxyStarPointTexture, TEXTURE_FILTER_BILINEAR);
         SetTextureWrap(galaxyStarPointTexture, TEXTURE_WRAP_CLAMP);
+        SetTextureFilter(galaxyLineTexture, TEXTURE_FILTER_TRILINEAR);
+        SetTextureWrap(galaxyLineTexture, TEXTURE_WRAP_CLAMP);
         SetTextureFilter(bloomLensDirtTexture, TEXTURE_FILTER_BILINEAR);
         SetTextureWrap(bloomLensDirtTexture, TEXTURE_WRAP_CLAMP);
         SetTextureFilter(galaxyColorGradingLut, TEXTURE_FILTER_BILINEAR);
@@ -1422,6 +1771,7 @@ public:
         }
         stars.clear();
         systems.clear();
+        galaxyLines.clear();
         galaxyGridLines.clear();
         selectedStar = nullptr;
         hoveredStar = nullptr;
@@ -1457,6 +1807,7 @@ public:
             view.panel = CreateStarPanel(star, seed);
             stars.emplace_back(std::move(view));
         }
+        galaxyLines = CreateGalaxyLines(galaxy, stars);
         for (std::size_t i = 0; i < stars.size(); ++i) BuildSystemCache(i);
         galaxySummary = FormatString("seed %d  /  %d stars  /  birth star #%d", seed, galaxy->starCount, galaxy->birthStarId);
         galaxyGridLines.reserve(36);
@@ -1498,6 +1849,7 @@ private:
     ViewMode mode = ViewMode::Galaxy;
     std::vector<StarViewData> stars;
     std::vector<SystemViewCache> systems;
+    std::vector<GalaxyLineData> galaxyLines;
     std::vector<Line3DCache> galaxyGridLines;
     std::string galaxySummary;
     const StarViewData *selectedStar = nullptr;
@@ -1907,6 +2259,7 @@ private:
         DrawBackgroundStars(camera, false);
         float gridAlpha = std::clamp((Vector3Distance(camera.position, camera.target) - 22.0f) / 34.0f, 0.0f, 1.0f) * 0.3f;
         DrawCachedLines(galaxyGridLines, WithAlpha(Color {105, 153, 181, 255}, gridAlpha));
+        DrawGalaxyLines(galaxyLines, stars, camera);
         for (const auto &star: stars) DrawGalaxyStarPoint(star, camera);
     }
 
@@ -1999,14 +2352,14 @@ private:
         BeginDrawing();
         ClearBackground(Color {4, 8, 17, 255});
         if (mode == ViewMode::Galaxy && EnsureBloomTargets(GetScreenWidth(), GetScreenHeight())) {
-            BeginTextureMode(galaxySceneTarget);
+            BeginMultisampleTextureMode(galaxySceneMultisampleTarget);
             Color linearBackground = LinearBackground(Color {5, 21, 26, 255});
             rlClearColor(linearBackground.r, linearBackground.g, linearBackground.b, 255);
             rlClearScreenBuffers();
             BeginMode3D(camera);
             DrawGalaxyScene(time);
             EndMode3D();
-            EndTextureMode();
+            ResolveMultisampleTexture(galaxySceneMultisampleTarget, galaxySceneTarget);
 
             BeginTextureMode(bloomPrefilterTarget);
             BeginOpaqueBlit();
@@ -2056,6 +2409,7 @@ private:
                 bloomSource = level.texture;
             }
 
+            BeginTextureMode(galaxyFxaaTarget);
             BeginOpaqueBlit();
             BeginShaderMode(bloomCompositeShader);
             int bloomLocation = GetShaderLocation(bloomCompositeShader, "bloomTexture");
@@ -2070,7 +2424,19 @@ private:
             SetSourceTexelSize(bloomCompositeShader, bloomSource, bloomSampleScale);
             SetShaderFloat(bloomCompositeShader, "intensity", 0.3f);
             SetShaderFloat(bloomCompositeShader, "dirtIntensity", 3.0f);
-            DrawFlippedTexture(galaxySceneTarget.texture, GetScreenWidth(), GetScreenHeight());
+            DrawFlippedTexture(galaxySceneTarget.texture, galaxyFxaaTarget.texture.width,
+                               galaxyFxaaTarget.texture.height);
+            EndShaderMode();
+            EndOpaqueBlit();
+            EndTextureMode();
+
+            BeginOpaqueBlit();
+            BeginShaderMode(galaxyFxaaShader);
+            SetSourceTexelSize(galaxyFxaaShader, galaxyFxaaTarget.texture);
+            SetShaderFloat(galaxyFxaaShader, "qualitySubpix", 0.75f);
+            SetShaderFloat(galaxyFxaaShader, "qualityEdgeThreshold", 0.165999994f);
+            SetShaderFloat(galaxyFxaaShader, "qualityEdgeThresholdMin", 0.0833000019f);
+            DrawFlippedTexture(galaxyFxaaTarget.texture, GetScreenWidth(), GetScreenHeight());
             EndShaderMode();
             EndOpaqueBlit();
         } else {
@@ -2125,11 +2491,13 @@ private:
             UnloadModel(galaxyStarPointModel);
         }
         if (IsTextureValid(galaxyStarPointTexture)) UnloadTexture(galaxyStarPointTexture);
+        if (IsTextureValid(galaxyLineTexture)) UnloadTexture(galaxyLineTexture);
         if (IsTextureValid(galaxyColorGradingLut)) UnloadTexture(galaxyColorGradingLut);
         if (IsTextureValid(bloomLensDirtTexture)) UnloadTexture(bloomLensDirtTexture);
         galaxyColorGradingLut = {};
         bloomLensDirtTexture = {};
         UnloadBloomTargets();
+        if (hasGalaxyFxaaShader) UnloadShader(galaxyFxaaShader);
         if (hasBloomShaders) {
             UnloadShader(bloomCompositeShader);
             UnloadShader(bloomUpsampleShader);
@@ -2137,6 +2505,7 @@ private:
             UnloadShader(bloomDownsampleFirstShader);
             UnloadShader(bloomPrefilterShader);
         }
+        if (hasGalaxyLineShader) UnloadShader(galaxyLineShader);
         if (hasGalaxyStarPointShader) UnloadShader(galaxyStarPointShader);
         if (hasStarBlackShader) UnloadShader(starBlackShader);
         if (hasStarSpotShader) UnloadShader(starSpotShader);
