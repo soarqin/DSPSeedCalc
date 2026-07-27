@@ -1981,7 +1981,7 @@ private:
     bool generatorThreadsInitialized = false;
     double simulationTime = 0.0;
     double lastFrameTime = -1.0;
-    float timeScale = 10.0f;
+    float timeScale = 1.0f;
     float galaxyCameraYaw = 0.0f;
     float galaxyCameraPitch = kGalaxyCameraPitchBegin;
     float galaxyCameraDistance = kGalaxyCameraDistance;
