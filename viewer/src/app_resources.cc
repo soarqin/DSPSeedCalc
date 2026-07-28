@@ -32,6 +32,29 @@ Texture2D LoadGalaxyLineTexture(const char *path) {
     return texture;
 }
 
+Texture2D LoadAlphaMipTexture(const char *path, int width, int height, int mipmaps) {
+    int expectedSize = 0;
+    for (int level = 0, w = width, h = height; level < mipmaps; ++level) {
+        expectedSize += w * h;
+        w = w > 1 ? w / 2 : 1;
+        h = h > 1 ? h / 2 : 1;
+    }
+    int size = 0;
+    unsigned char *data = LoadFileData(path, &size);
+    if (data == nullptr || size != expectedSize) {
+        if (data != nullptr) UnloadFileData(data);
+        return {};
+    }
+    Texture2D texture{};
+    texture.id = rlLoadTexture(data, width, height, RL_PIXELFORMAT_UNCOMPRESSED_GRAYSCALE, mipmaps);
+    texture.width = width;
+    texture.height = height;
+    texture.mipmaps = mipmaps;
+    texture.format = PIXELFORMAT_UNCOMPRESSED_GRAYSCALE;
+    UnloadFileData(data);
+    return texture;
+}
+
 std::string ViewerAssetPath(const char *name) {
 #if defined(__EMSCRIPTEN__)
     return std::string("/assets/") + name;
@@ -108,6 +131,14 @@ const auto galaxyPointVertex = ViewerAssetPath("shaders/galaxy_star_point.vs");
 const auto galaxyPointFragment = ViewerAssetPath("shaders/galaxy_star_point.fs");
 const auto galaxyLineVertex = ViewerAssetPath("shaders/galaxy_line.vs");
 const auto galaxyLineFragment = ViewerAssetPath("shaders/galaxy_line.fs");
+const auto galaxyGridVertex = ViewerAssetPath("shaders/galaxy_grid.vs");
+const auto galaxyGridFragment = ViewerAssetPath("shaders/galaxy_grid.fs");
+const auto galaxyFrameVertex = ViewerAssetPath("shaders/galaxy_frame.vs");
+const auto galaxyFrameFragment = ViewerAssetPath("shaders/galaxy_frame.fs");
+const auto galaxyBackgroundStarVertex = ViewerAssetPath("shaders/galaxy_bgstars.vs");
+const auto galaxyBackgroundStarFragment = ViewerAssetPath("shaders/galaxy_bgstars.fs");
+const auto galaxyMarkerVertex = ViewerAssetPath("shaders/galaxy_marker.vs");
+const auto galaxyMarkerFragment = ViewerAssetPath("shaders/galaxy_marker.fs");
 const auto bloomVertex = ViewerAssetPath("shaders/bloom.vs");
 const auto bloomPrefilterFragment = ViewerAssetPath("shaders/bloom_prefilter.fs");
 const auto bloomDownsampleFirstFragment = ViewerAssetPath("shaders/bloom_downsample_first.fs");
@@ -121,6 +152,11 @@ resources.starBlackShader = LoadShader(blackVertex.c_str(), blackFragment.c_str(
 resources.planetThumbShader = LoadShader(planetThumbVertex.c_str(), planetThumbFragment.c_str());
 resources.galaxyStarPointShader = LoadShader(galaxyPointVertex.c_str(), galaxyPointFragment.c_str());
 resources.galaxyLineShader = LoadShader(galaxyLineVertex.c_str(), galaxyLineFragment.c_str());
+resources.galaxyGridShader = LoadShader(galaxyGridVertex.c_str(), galaxyGridFragment.c_str());
+resources.galaxyFrameShader = LoadShader(galaxyFrameVertex.c_str(), galaxyFrameFragment.c_str());
+resources.galaxyBackgroundStarShader =
+    LoadShader(galaxyBackgroundStarVertex.c_str(), galaxyBackgroundStarFragment.c_str());
+resources.galaxyMarkerShader = LoadShader(galaxyMarkerVertex.c_str(), galaxyMarkerFragment.c_str());
 resources.bloomPrefilterShader = LoadShader(bloomVertex.c_str(), bloomPrefilterFragment.c_str());
 resources.bloomDownsampleFirstShader = LoadShader(bloomVertex.c_str(), bloomDownsampleFirstFragment.c_str());
 resources.bloomDownsampleShader = LoadShader(bloomVertex.c_str(), bloomDownsampleFragment.c_str());
@@ -134,6 +170,14 @@ resources.hasPlanetThumbShader = IsShaderValid(resources.planetThumbShader) && r
 resources.hasGalaxyStarPointShader = IsShaderValid(resources.galaxyStarPointShader) &&
                            resources.galaxyStarPointShader.id != rlGetShaderIdDefault();
 resources.hasGalaxyLineShader = IsShaderValid(resources.galaxyLineShader) && resources.galaxyLineShader.id != rlGetShaderIdDefault();
+resources.hasGalaxyGridShaders = IsShaderValid(resources.galaxyGridShader) &&
+                       resources.galaxyGridShader.id != rlGetShaderIdDefault() &&
+                       IsShaderValid(resources.galaxyFrameShader) &&
+                       resources.galaxyFrameShader.id != rlGetShaderIdDefault();
+resources.hasGalaxyBackgroundStarShader = IsShaderValid(resources.galaxyBackgroundStarShader) &&
+                       resources.galaxyBackgroundStarShader.id != rlGetShaderIdDefault();
+resources.hasGalaxyMarkerShader = IsShaderValid(resources.galaxyMarkerShader) &&
+                       resources.galaxyMarkerShader.id != rlGetShaderIdDefault();
 resources.hasBloomShaders = IsShaderValid(resources.bloomPrefilterShader) && IsShaderValid(resources.bloomDownsampleFirstShader) &&
                   IsShaderValid(resources.bloomDownsampleShader) && IsShaderValid(resources.bloomUpsampleShader) &&
                   IsShaderValid(resources.bloomCompositeShader) &&
@@ -149,6 +193,13 @@ if (resources.hasStarBlackShader) ConfigureStarShader(resources.starBlackShader,
 if (resources.hasPlanetThumbShader) ConfigurePlanetThumbShader(resources.planetThumbShader);
 if (resources.hasGalaxyStarPointShader) ConfigureGalaxyStarPointShader(resources.galaxyStarPointShader);
 if (resources.hasGalaxyLineShader) ConfigureGalaxyLineShader(resources.galaxyLineShader);
+if (resources.hasGalaxyGridShaders) {
+    ConfigureGalaxyGridShader(resources.galaxyGridShader, false);
+    ConfigureGalaxyGridShader(resources.galaxyFrameShader, true);
+}
+if (resources.hasGalaxyBackgroundStarShader)
+    ConfigureGalaxyGridShader(resources.galaxyBackgroundStarShader, true);
+if (resources.hasGalaxyMarkerShader) ConfigureGalaxyGridShader(resources.galaxyMarkerShader, true);
 if (resources.hasBloomShaders) {
     ConfigureScreenShader(resources.bloomPrefilterShader);
     ConfigureScreenShader(resources.bloomDownsampleFirstShader);
@@ -176,6 +227,16 @@ CacheShaderUniforms(resources, resources.galaxyLineShader,
     {"matViewProjection", "_WorldSpaceCameraPos", "_Multiplier", "_TileScale", "_DistScale",
      "_DistPower", "_MinDistScale", "_MaxDistScale", "_Global_GalaxyFadeRadius", "_SceneLinear",
      "_ScreenParams", "_LineColorA", "_LineColorB"});
+CacheShaderUniforms(resources, resources.galaxyGridShader,
+    {"matModel", "matViewProjection", "_TintColor", "_Multiplier", "_AlphaMultiplier",
+     "_Tiling", "_AreaMin", "_AreaMax", "_NearFade", "_SceneLinear"});
+CacheShaderUniforms(resources, resources.galaxyFrameShader,
+    {"matModel", "matViewProjection", "_Color", "_Multiplier", "_SceneLinear"});
+CacheShaderUniforms(resources, resources.galaxyMarkerShader,
+    {"matModel", "matViewProjection", "_TintColor", "_Multiplier", "_AlphaMultiplier", "_SceneLinear"});
+CacheShaderUniforms(resources, resources.galaxyBackgroundStarShader,
+    {"matModel", "matViewProjection", "_NoiseMapTexelSize", "_StarSetting", "_RefValueA",
+     "_RefValueB", "_StarColor", "_StarColorChange", "_Time", "_SceneLinear"});
 CacheShaderUniforms(resources, resources.bloomPrefilterShader, {"sourceTexelSize", "prefilterOffset", "threshold", "curve"});
 CacheShaderUniforms(resources, resources.bloomDownsampleFirstShader, {"sourceTexelSize"});
 CacheShaderUniforms(resources, resources.bloomDownsampleShader, {"sourceTexelSize"});
@@ -194,6 +255,11 @@ const auto quadTexcoords = ViewerAssetPath("meshes/screen_quad_uv.bin");
 const auto quadIndices = ViewerAssetPath("meshes/screen_quad_indices.bin");
 const auto galaxyPointTexturePath = ViewerAssetPath("textures/galaxy_star_point.png");
 const auto galaxyLineTexturePath = ViewerAssetPath("textures/galaxy_line_texture.bin");
+const auto galaxyGridDotPath = ViewerAssetPath("textures/galaxy_grid_dot.bin");
+const auto galaxyGridLinePath = ViewerAssetPath("textures/galaxy_grid_line.bin");
+const auto galaxyGridFramePath = ViewerAssetPath("textures/galaxy_grid_frame.bin");
+const auto galaxyBackgroundStarNoisePath = ViewerAssetPath("textures/galaxy_bgstars_noise.bin");
+const auto galaxyStarRingPath = ViewerAssetPath("textures/galaxy_star_ring.bin");
 const auto bloomLensDirtPath = ViewerAssetPath("textures/LensDirt00.png");
 const auto galaxyColorGradingLutPath = ViewerAssetPath("textures/galaxy_select_lut.bin");
 resources.starMassModel = LoadStarModel(massVertices.c_str(), 2617, massIndices.c_str(), 5120, massNormals.c_str());
@@ -201,6 +267,16 @@ resources.starBlackModel = LoadStarModel(blackVertices.c_str(), 515, blackIndice
 resources.starSpotModel = LoadStarModel(quadVertices.c_str(), 4, quadIndices.c_str(), 2, nullptr, quadTexcoords.c_str());
 resources.galaxyStarPointTexture = LoadTexture(galaxyPointTexturePath.c_str());
 resources.galaxyLineTexture = LoadGalaxyLineTexture(galaxyLineTexturePath.c_str());
+resources.galaxyGridDotTexture = LoadAlphaMipTexture(galaxyGridDotPath.c_str(), 256, 256, 9);
+resources.galaxyGridLineTexture = LoadAlphaMipTexture(galaxyGridLinePath.c_str(), 256, 256, 9);
+resources.galaxyGridFrameTexture = LoadAlphaMipTexture(galaxyGridFramePath.c_str(), 1024, 1024, 11);
+resources.galaxyStarRingTexture = LoadAlphaMipTexture(galaxyStarRingPath.c_str(), 256, 256, 9);
+Image noiseImage = LoadImageRaw(galaxyBackgroundStarNoisePath.c_str(), 128, 128,
+                                PIXELFORMAT_UNCOMPRESSED_R8G8B8A8, 0);
+if (IsImageValid(noiseImage)) {
+    resources.galaxyBackgroundStarNoise = LoadTextureFromImage(noiseImage);
+    UnloadImage(noiseImage);
+}
 resources.bloomLensDirtTexture = LoadTexture(bloomLensDirtPath.c_str());
 Image gradingLutImage = LoadImageRaw(galaxyColorGradingLutPath.c_str(), 1024, 32,
                                      PIXELFORMAT_UNCOMPRESSED_R32G32B32A32, 0);
@@ -214,8 +290,12 @@ resources.hasPlanetThumbModel = StarModelReady(resources.starMassModel) && resou
 resources.hasGalaxyStarPointModel = StarModelReady(resources.starSpotModel) && IsTextureValid(resources.galaxyStarPointTexture) &&
                           resources.hasGalaxyStarPointShader;
 if (!resources.hasStarModels || !resources.hasGalaxyStarPointModel || !resources.hasGalaxyLineShader || !resources.hasBloomShaders ||
-    !resources.hasGalaxyFxaaShader ||
+    !resources.hasGalaxyFxaaShader || !resources.hasGalaxyGridShaders ||
+    !resources.hasGalaxyBackgroundStarShader || !IsTextureValid(resources.galaxyBackgroundStarNoise) ||
+    !resources.hasGalaxyMarkerShader || !IsTextureValid(resources.galaxyStarRingTexture) ||
     !IsTextureValid(resources.galaxyLineTexture) ||
+    !IsTextureValid(resources.galaxyGridDotTexture) || !IsTextureValid(resources.galaxyGridLineTexture) ||
+    !IsTextureValid(resources.galaxyGridFrameTexture) ||
     !IsTextureValid(resources.bloomLensDirtTexture) || !IsTextureValid(resources.galaxyColorGradingLut)) {
     return false;
 }
@@ -230,10 +310,31 @@ SetModelShader(resources.starSpotModel, resources.starSpotShader);
 resources.galaxyStarPointMaterial = LoadMaterialDefault();
 resources.galaxyStarPointMaterial.shader = resources.galaxyStarPointShader;
 resources.galaxyStarPointMaterial.maps[MATERIAL_MAP_DIFFUSE].texture = resources.galaxyStarPointTexture;
+resources.galaxyGridMaterial = LoadMaterialDefault();
+resources.galaxyGridMaterial.shader = resources.galaxyGridShader;
+resources.galaxyFrameMaterial = LoadMaterialDefault();
+resources.galaxyFrameMaterial.shader = resources.galaxyFrameShader;
+resources.galaxyBackgroundStarMaterial = LoadMaterialDefault();
+resources.galaxyBackgroundStarMaterial.shader = resources.galaxyBackgroundStarShader;
+resources.galaxyBackgroundStarMaterial.maps[MATERIAL_MAP_DIFFUSE].texture =
+    resources.galaxyBackgroundStarNoise;
+resources.galaxyMarkerMaterial = LoadMaterialDefault();
+resources.galaxyMarkerMaterial.shader = resources.galaxyMarkerShader;
+resources.galaxyMarkerMaterial.maps[MATERIAL_MAP_DIFFUSE].texture = resources.galaxyStarRingTexture;
 SetTextureFilter(resources.galaxyStarPointTexture, TEXTURE_FILTER_BILINEAR);
 SetTextureWrap(resources.galaxyStarPointTexture, TEXTURE_WRAP_CLAMP);
 SetTextureFilter(resources.galaxyLineTexture, TEXTURE_FILTER_TRILINEAR);
 SetTextureWrap(resources.galaxyLineTexture, TEXTURE_WRAP_CLAMP);
+SetTextureFilter(resources.galaxyStarRingTexture, TEXTURE_FILTER_BILINEAR);
+SetTextureWrap(resources.galaxyStarRingTexture, TEXTURE_WRAP_CLAMP);
+SetTextureFilter(resources.galaxyBackgroundStarNoise, TEXTURE_FILTER_POINT);
+SetTextureWrap(resources.galaxyBackgroundStarNoise, TEXTURE_WRAP_REPEAT);
+SetTextureFilter(resources.galaxyGridDotTexture, TEXTURE_FILTER_TRILINEAR);
+SetTextureWrap(resources.galaxyGridDotTexture, TEXTURE_WRAP_REPEAT);
+SetTextureFilter(resources.galaxyGridLineTexture, TEXTURE_FILTER_TRILINEAR);
+SetTextureWrap(resources.galaxyGridLineTexture, TEXTURE_WRAP_REPEAT);
+SetTextureFilter(resources.galaxyGridFrameTexture, TEXTURE_FILTER_TRILINEAR);
+SetTextureWrap(resources.galaxyGridFrameTexture, TEXTURE_WRAP_REPEAT);
 SetTextureFilter(resources.bloomLensDirtTexture, TEXTURE_FILTER_BILINEAR);
 SetTextureWrap(resources.bloomLensDirtTexture, TEXTURE_WRAP_CLAMP);
 SetTextureFilter(resources.galaxyColorGradingLut, TEXTURE_FILTER_BILINEAR);
@@ -286,8 +387,28 @@ if (resources.galaxyStarPointMaterial.maps != nullptr) {
     UnloadMaterial(resources.galaxyStarPointMaterial);
     resources.galaxyStarPointMaterial = {};
 }
+for (Material *material: {&resources.galaxyGridMaterial, &resources.galaxyFrameMaterial,
+                          &resources.galaxyBackgroundStarMaterial,
+                          &resources.galaxyMarkerMaterial}) {
+    if (material->maps == nullptr) continue;
+    material->shader.id = rlGetShaderIdDefault();
+    material->shader.locs = rlGetShaderLocsDefault();
+    material->maps[MATERIAL_MAP_DIFFUSE].texture = {};
+    UnloadMaterial(*material);
+    *material = {};
+}
 if (IsTextureValid(resources.galaxyStarPointTexture)) UnloadTexture(resources.galaxyStarPointTexture);
 if (IsTextureValid(resources.galaxyLineTexture)) UnloadTexture(resources.galaxyLineTexture);
+if (IsTextureValid(resources.galaxyGridDotTexture)) UnloadTexture(resources.galaxyGridDotTexture);
+if (IsTextureValid(resources.galaxyGridLineTexture)) UnloadTexture(resources.galaxyGridLineTexture);
+if (IsTextureValid(resources.galaxyGridFrameTexture)) UnloadTexture(resources.galaxyGridFrameTexture);
+if (IsTextureValid(resources.galaxyBackgroundStarNoise)) UnloadTexture(resources.galaxyBackgroundStarNoise);
+if (IsTextureValid(resources.galaxyStarRingTexture)) UnloadTexture(resources.galaxyStarRingTexture);
+resources.galaxyStarRingTexture = {};
+resources.galaxyBackgroundStarNoise = {};
+resources.galaxyGridDotTexture = {};
+resources.galaxyGridLineTexture = {};
+resources.galaxyGridFrameTexture = {};
 if (IsTextureValid(resources.galaxyColorGradingLut)) UnloadTexture(resources.galaxyColorGradingLut);
 if (IsTextureValid(resources.bloomLensDirtTexture)) UnloadTexture(resources.bloomLensDirtTexture);
 resources.galaxyColorGradingLut = {};
@@ -302,6 +423,10 @@ unloadCustomShader(resources.bloomUpsampleShader);
 unloadCustomShader(resources.bloomDownsampleShader);
 unloadCustomShader(resources.bloomDownsampleFirstShader);
 unloadCustomShader(resources.bloomPrefilterShader);
+unloadCustomShader(resources.galaxyMarkerShader);
+unloadCustomShader(resources.galaxyBackgroundStarShader);
+unloadCustomShader(resources.galaxyFrameShader);
+unloadCustomShader(resources.galaxyGridShader);
 unloadCustomShader(resources.galaxyLineShader);
 unloadCustomShader(resources.galaxyStarPointShader);
 unloadCustomShader(resources.starBlackShader);

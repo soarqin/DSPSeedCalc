@@ -17,6 +17,10 @@ struct RenderResources {
     Shader planetThumbShader{};
     Shader galaxyStarPointShader{};
     Shader galaxyLineShader{};
+    Shader galaxyGridShader{};
+    Shader galaxyFrameShader{};
+    Shader galaxyBackgroundStarShader{};
+    Shader galaxyMarkerShader{};
     Shader bloomPrefilterShader{};
     Shader bloomDownsampleFirstShader{};
     Shader bloomDownsampleShader{};
@@ -28,8 +32,17 @@ struct RenderResources {
     Model starSpotModel{};
     Material planetThumbMaterial{};
     Material galaxyStarPointMaterial{};
+    Material galaxyGridMaterial{};
+    Material galaxyFrameMaterial{};
+    Material galaxyBackgroundStarMaterial{};
+    Material galaxyMarkerMaterial{};
     Texture2D galaxyStarPointTexture{};
     Texture2D galaxyLineTexture{};
+    Texture2D galaxyGridDotTexture{};
+    Texture2D galaxyGridLineTexture{};
+    Texture2D galaxyGridFrameTexture{};
+    Texture2D galaxyBackgroundStarNoise{};
+    Texture2D galaxyStarRingTexture{};
     Texture2D bloomLensDirtTexture{};
     Texture2D galaxyColorGradingLut{};
     bool hasStarSurfaceShader = false;
@@ -38,6 +51,9 @@ struct RenderResources {
     bool hasPlanetThumbShader = false;
     bool hasGalaxyStarPointShader = false;
     bool hasGalaxyLineShader = false;
+    bool hasGalaxyGridShaders = false;
+    bool hasGalaxyBackgroundStarShader = false;
+    bool hasGalaxyMarkerShader = false;
     bool hasBloomShaders = false;
     bool hasGalaxyFxaaShader = false;
     bool hasStarModels = false;
@@ -58,6 +74,7 @@ void ConfigureStarShader(Shader &shader, bool hasNormal, bool hasTexcoord);
 void ConfigurePlanetThumbShader(Shader &shader);
 void ConfigureGalaxyStarPointShader(Shader &shader);
 void ConfigureGalaxyLineShader(Shader &shader);
+void ConfigureGalaxyGridShader(Shader &shader, bool hasTexcoord);
 void ConfigureScreenShader(Shader &shader);
 
 }

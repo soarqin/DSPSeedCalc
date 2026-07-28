@@ -54,10 +54,9 @@
 
 namespace viewer {
 
-constexpr int kScreenWidth = 1280;
-constexpr int kScreenHeight = 720;
+constexpr int kScreenWidth = 1920;
+constexpr int kScreenHeight = 1080;
 constexpr float kPanelWidth = 326.0f;
-constexpr float kGalaxyGridHeight = -15.0f;
 constexpr float kSystemOrbitScale = 10.0f;
 constexpr int kOrbitSegments = 72;
 constexpr int kEnterButtonTextWidth = 243;
@@ -104,7 +103,6 @@ public:
         stars.clear();
         systems.clear();
         galaxyLines.clear();
-        galaxyGridLines.clear();
         selectedStar = kInvalidIndex;
         hoveredStar = kInvalidIndex;
         selectedPlanet = kInvalidIndex;
@@ -147,17 +145,6 @@ public:
         std::snprintf(summary, sizeof(summary), "seed %d  /  %d stars  /  birth star #%d",
                       seed, galaxy->starCount, galaxy->birthStarId);
         galaxySummary = summary;
-        galaxyGridLines.reserve(36);
-        constexpr int gridSlices = 8;
-        constexpr float gridSpacing = 10.0f;
-        float halfGrid = gridSlices * 0.5f * gridSpacing;
-        for (int i = -gridSlices / 2; i <= gridSlices / 2; ++i) {
-            float offset = static_cast<float>(i) * gridSpacing;
-            galaxyGridLines.push_back(Line3DCache {{offset, kGalaxyGridHeight, -halfGrid},
-                                                    {offset, kGalaxyGridHeight, halfGrid}});
-            galaxyGridLines.push_back(Line3DCache {{-halfGrid, kGalaxyGridHeight, offset},
-                                                    {halfGrid, kGalaxyGridHeight, offset}});
-        }
         cameraController.ResetGalaxy(camera);
         return true;
     }
@@ -191,7 +178,6 @@ private:
     std::vector<StarViewData> stars;
     std::vector<SystemViewCache> systems;
     std::vector<GalaxyLineData> galaxyLines;
-    std::vector<Line3DCache> galaxyGridLines;
     std::string galaxySummary;
     std::size_t selectedStar = kInvalidIndex;
     std::size_t hoveredStar = kInvalidIndex;
@@ -224,8 +210,8 @@ private:
     static void DrawSceneCallback(const void *context, float time) {
         auto &viewer = *const_cast<Viewer *>(static_cast<const Viewer *>(context));
         if (viewer.mode == ViewMode::Galaxy)
-            viewer.sceneRenderer.DrawGalaxy(viewer.galaxyGridLines, viewer.galaxyLines,
-                                            viewer.stars, viewer.camera, time);
+            viewer.sceneRenderer.DrawGalaxy(viewer.galaxyLines, viewer.stars, viewer.camera, time,
+                                            viewer.selectedStar, kInvalidIndex);
         else
             viewer.sceneRenderer.DrawSystem(viewer.CurrentSystem(), viewer.camera, time,
                                             viewer.selectedPlanet, kInvalidIndex);
@@ -692,14 +678,21 @@ private:
                  Color {98, 131, 159, 255});
     }
 
+    void DrawStarLabel(const StarViewData &star) {
+        // `UIVirtualStarmap._OnLateUpdate` offsets the label by (18, 6) from the star's
+        // screen point, so it sits to the right instead of centred above it.
+        Vector2 screen = GetWorldToScreen(star.position, camera);
+        DrawTextEx(resources.font, star.data->name.c_str(),
+                   Vector2 {screen.x + 18.0f, screen.y - 6.0f}, 16.0f, 1.0f, LIGHTGRAY);
+    }
+
     void DrawHoverLabel() {
+        // `_OnLateUpdate` labels the birth star permanently and gates every other label on the
+        // ray hit alone, so a star keeps its label on hover whether or not it is the selected one.
+        if (mode == ViewMode::Galaxy && !stars.empty()) DrawStarLabel(stars[0]);
         if (IsCursorHidden()) return;
-        if (mode == ViewMode::Galaxy && hoveredStar != kInvalidIndex && hoveredStar != selectedStar) {
-            const auto &star = stars[hoveredStar];
-            Vector2 screen = GetWorldToScreen(star.position, camera);
-            DrawTextEx(resources.font, star.data->name.c_str(),
-                       Vector2 {screen.x - star.labelWidth * 0.5f, screen.y - 22.0f},
-                       16.0f, 1.0f, LIGHTGRAY);
+        if (mode == ViewMode::Galaxy && hoveredStar != kInvalidIndex && hoveredStar != 0) {
+            DrawStarLabel(stars[hoveredStar]);
         } else if (mode == ViewMode::System && hoveredPlanet != kInvalidIndex && hoveredPlanet != selectedPlanet) {
             const auto &planet = CurrentSystem().planets[hoveredPlanet];
             Vector2 screen = GetWorldToScreen(planet.position, camera);
@@ -711,6 +704,9 @@ private:
 
     void Draw() {
         BeginDrawing();
+        // Galaxy Select uses near 0.2 / far 10000, which the 5000 unit background cube needs.
+        if (mode == ViewMode::Galaxy) rlSetClipPlanes(0.2, 10000.0);
+        else rlSetClipPlanes(RL_CULL_DISTANCE_NEAR, RL_CULL_DISTANCE_FAR);
         ClearBackground(Color {4, 8, 17, 255});
         postProcess.Draw(camera, resources, this, DrawSceneCallback);
         DrawHoverLabel();

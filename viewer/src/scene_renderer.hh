@@ -15,10 +15,10 @@ public:
 
     float StarViewRadius(const dspugen::Star *star);
     float StarVisualScale(const StarViewData &star, const Camera3D &camera);
-    void DrawGalaxy(const std::vector<Line3DCache> &gridLines,
-                    const std::vector<GalaxyLineData> &lines,
+    void DrawGalaxy(const std::vector<GalaxyLineData> &lines,
                     const std::vector<StarViewData> &stars,
-                    const Camera3D &camera, float time);
+                    const Camera3D &camera, float time, std::size_t markedStar,
+                    std::size_t invalidIndex);
     void DrawSystem(const SystemViewCache &system, const Camera3D &camera,
                     float time, std::size_t selectedPlanet, std::size_t invalidIndex);
 
@@ -37,6 +37,15 @@ private:
     void DrawGalaxyStarPoint(const StarViewData &star, const Camera3D &camera);
     void DrawGalaxyLines(const std::vector<GalaxyLineData> &lines,
                          const std::vector<StarViewData> &stars, const Camera3D &camera);
+    float SceneLinear() const;
+    void DrawGalaxyGridPlane(const Texture2D &texture, float size, float height, Vector4 tint,
+                             float multiplier, float alphaMultiplier, float tiling,
+                             float areaMin, float areaMax, float nearFade);
+    void DrawGalaxyFrame(float size, float height, Vector4 color, float multiplier);
+    void DrawGalaxyGrid();
+    void DrawGalaxyBackgroundStars(float time);
+    void DrawGalaxyStarMarker(const Texture2D &texture, Vector3 position, float size, Vector4 tint,
+                              float multiplier, float alphaMultiplier);
     void DrawBackgroundStars(const Camera3D &camera, bool bloomVisible = true);
     void DrawCachedLines(const std::vector<Line3DCache> &lines, Color color);
     void DrawOrbit(Vector3 center, const PlanetViewData &planet);

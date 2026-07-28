@@ -82,6 +82,15 @@ void ConfigureGalaxyLineShader(Shader &shader) {
     shader.locs[SHADER_LOC_MAP_DIFFUSE] = GetShaderLocation(shader, "texture0");
 }
 
+void ConfigureGalaxyGridShader(Shader &shader, bool hasTexcoord) {
+    shader.locs[SHADER_LOC_VERTEX_POSITION] = GetShaderLocationAttrib(shader, "vertexPosition");
+    shader.locs[SHADER_LOC_VERTEX_TEXCOORD01] = hasTexcoord ? GetShaderLocationAttrib(shader, "vertexTexCoord") : -1;
+    shader.locs[SHADER_LOC_MATRIX_MODEL] = GetShaderLocation(shader, "matModel");
+    shader.locs[SHADER_LOC_MATRIX_MVP] = -1;
+    shader.locs[SHADER_LOC_COLOR_DIFFUSE] = -1;
+    shader.locs[SHADER_LOC_MAP_DIFFUSE] = GetShaderLocation(shader, "texture0");
+}
+
 void ConfigureScreenShader(Shader &shader) {
     shader.locs[SHADER_LOC_VERTEX_POSITION] = GetShaderLocationAttrib(shader, "vertexPosition");
     shader.locs[SHADER_LOC_VERTEX_TEXCOORD01] = GetShaderLocationAttrib(shader, "vertexTexCoord");
