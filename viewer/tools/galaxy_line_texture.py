@@ -75,7 +75,7 @@ def convert(source):
 
 
 def main():
-    output = Path(__file__).with_name("galaxy_line_texture.bin")
+    output = Path(__file__).resolve().parent.parent / "assets" / "textures" / "galaxy_line_texture.bin"
     if len(sys.argv) == 1:
         data = output.read_bytes()
     elif len(sys.argv) == 2:

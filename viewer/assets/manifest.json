@@ -1,0 +1,106 @@
+{
+  "reference": {
+    "game": "0.10.34.28529",
+    "unity": "2022.3.62f3c1",
+    "algorithm": 20200403
+  },
+  "staging": [
+    {"source": "assets", "runtime": "assets", "platform": "all"},
+    {"source": "shaders/desktop", "runtime": "assets/shaders", "platform": "desktop"},
+    {"source": "shaders/web", "runtime": "assets/shaders", "platform": "web"},
+    {"source": "../Prototypes/ThemeProtoSet.json", "runtime": "Prototypes/ThemeProtoSet.json", "platform": "all"},
+    {"source": "../Prototypes/ItemProtoSet.json", "runtime": "Prototypes/ItemProtoSet.json", "platform": "all"},
+    {"source": "../Prototypes/VeinProtoSet.json", "runtime": "Prototypes/VeinProtoSet.json", "platform": "all"}
+  ],
+  "assets": [
+    {
+      "path": "assets/meshes/screen_quad_indices.bin",
+      "size": 12,
+      "sha256": "87a2848d2d137388dae050ee16920af5b5808427aa09d0f85b52075bffa3879e",
+      "format": "uint16-le",
+      "elements": 6
+    },
+    {
+      "path": "assets/meshes/screen_quad_uv.bin",
+      "size": 32,
+      "sha256": "57a4ad6a5dda1d1cb845be6039169c69a740bc7ee39cd385ffa082da7104b769",
+      "format": "float32-le",
+      "elements": 8
+    },
+    {
+      "path": "assets/meshes/screen_quad_vertices.bin",
+      "size": 48,
+      "sha256": "487f976fd14ddebae85278721d74b80416f3df982a1079f3c48c453b9bcbd32f",
+      "format": "float32-le",
+      "elements": 12
+    },
+    {
+      "path": "assets/meshes/star_black_indices.bin",
+      "size": 4608,
+      "sha256": "4ce75e633c06ff44a657c178881175c294e5e38a29a884f895f3f2607aed08f7",
+      "format": "uint16-le",
+      "elements": 2304
+    },
+    {
+      "path": "assets/meshes/star_black_vertices.bin",
+      "size": 6180,
+      "sha256": "0461fa461fea2ab451fadba353a7493355d841abab54f17e126541f7b000c699",
+      "format": "float32-le",
+      "elements": 1545
+    },
+    {
+      "path": "assets/meshes/star_mass_indices.bin",
+      "size": 30720,
+      "sha256": "f7bd6e7b6192ef5a601c895c25895caa25069b0adda8dbd257860c7eeb15db69",
+      "format": "uint16-le",
+      "elements": 15360
+    },
+    {
+      "path": "assets/meshes/star_mass_normals.bin",
+      "size": 31404,
+      "sha256": "c2427aaaa84cdf46ca640aa1f14ea74e053733599b2f68ee12f426e4963fbb82",
+      "format": "float32-le",
+      "elements": 7851
+    },
+    {
+      "path": "assets/meshes/star_mass_vertices.bin",
+      "size": 31404,
+      "sha256": "ec19d6f86322601d45268fded5f67cb8adc6cf08079a44091c6638834fffd30d",
+      "format": "float32-le",
+      "elements": 7851
+    },
+    {
+      "path": "assets/textures/LensDirt00.png",
+      "size": 343366,
+      "sha256": "a6a4805ad6e8500ed535f5281f7ef3199b714c5732bf29080f4094587c0bfc1e",
+      "format": "png",
+      "width": 1024,
+      "height": 512
+    },
+    {
+      "path": "assets/textures/galaxy_line_texture.bin",
+      "size": 699056,
+      "sha256": "10fda98434a6d8c1165d0c914bb9c095aaa5eace66d39d78f3a350c4c090ad37",
+      "format": "rgba32f-le",
+      "width": 256,
+      "height": 128,
+      "mipmaps": 9
+    },
+    {
+      "path": "assets/textures/galaxy_select_lut.bin",
+      "size": 524288,
+      "sha256": "ad9ef2578683a7355fa2789f08e986eecc252f1049c83f4cd350681fffbedda0",
+      "format": "rgba32f-le",
+      "width": 1024,
+      "height": 32
+    },
+    {
+      "path": "assets/textures/galaxy_star_point.png",
+      "size": 379,
+      "sha256": "fc210707a3f7aa8563caf5d8b1b428731d1fb72b9571ff96b07a5525d43e8587",
+      "format": "png",
+      "width": 64,
+      "height": 64
+    }
+  ]
+}

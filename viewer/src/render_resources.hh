@@ -1,0 +1,63 @@
+#pragma once
+
+#include <raylib.h>
+
+#include <initializer_list>
+#include <string>
+#include <unordered_map>
+
+namespace viewer {
+
+struct RenderResources {
+    Font font{};
+    bool hasCustomFont = false;
+    Shader starSurfaceShader{};
+    Shader starSpotShader{};
+    Shader starBlackShader{};
+    Shader planetThumbShader{};
+    Shader galaxyStarPointShader{};
+    Shader galaxyLineShader{};
+    Shader bloomPrefilterShader{};
+    Shader bloomDownsampleFirstShader{};
+    Shader bloomDownsampleShader{};
+    Shader bloomUpsampleShader{};
+    Shader bloomCompositeShader{};
+    Shader galaxyFxaaShader{};
+    Model starMassModel{};
+    Model starBlackModel{};
+    Model starSpotModel{};
+    Material planetThumbMaterial{};
+    Material galaxyStarPointMaterial{};
+    Texture2D galaxyStarPointTexture{};
+    Texture2D galaxyLineTexture{};
+    Texture2D bloomLensDirtTexture{};
+    Texture2D galaxyColorGradingLut{};
+    bool hasStarSurfaceShader = false;
+    bool hasStarSpotShader = false;
+    bool hasStarBlackShader = false;
+    bool hasPlanetThumbShader = false;
+    bool hasGalaxyStarPointShader = false;
+    bool hasGalaxyLineShader = false;
+    bool hasBloomShaders = false;
+    bool hasGalaxyFxaaShader = false;
+    bool hasStarModels = false;
+    bool hasPlanetThumbModel = false;
+    bool hasGalaxyStarPointModel = false;
+    std::unordered_map<std::string, int> uniformLocations;
+
+    int Uniform(Shader shader, const char *name) const;
+    void SetVector3(Shader shader, const char *name, Vector3 value) const;
+    void SetFloat(Shader shader, const char *name, float value) const;
+    void SetVector4(Shader shader, const char *name, Vector4 value) const;
+    void SetMatrix(Shader shader, const char *name, Matrix value) const;
+    void SetSourceTexelSize(Shader shader, const Texture2D &texture, float scale = 1.0f) const;
+};
+
+void CacheShaderUniforms(RenderResources &resources, Shader shader, std::initializer_list<const char *> names);
+void ConfigureStarShader(Shader &shader, bool hasNormal, bool hasTexcoord);
+void ConfigurePlanetThumbShader(Shader &shader);
+void ConfigureGalaxyStarPointShader(Shader &shader);
+void ConfigureGalaxyLineShader(Shader &shader);
+void ConfigureScreenShader(Shader &shader);
+
+}

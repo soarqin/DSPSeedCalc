@@ -1,0 +1,314 @@
+#include "app_resources.hh"
+
+#include <raylib.h>
+#include <rlgl.h>
+
+#include <cstring>
+#include <string>
+
+namespace viewer {
+
+#ifndef DSP_VIEWER_DEFAULT_FONT
+#define DSP_VIEWER_DEFAULT_FONT ""
+#endif
+
+constexpr int kViewerFontSize = 64;
+
+Texture2D LoadGalaxyLineTexture(const char *path) {
+    int size = 0;
+    unsigned char *data = LoadFileData(path, &size);
+    constexpr int expectedSize = 699056;
+    if (data == nullptr || size != expectedSize) {
+        if (data != nullptr) UnloadFileData(data);
+        return {};
+    }
+    Texture2D texture;
+    texture.id = rlLoadTexture(data, 256, 128, RL_PIXELFORMAT_UNCOMPRESSED_R32G32B32A32, 9);
+    texture.width = 256;
+    texture.height = 128;
+    texture.mipmaps = 9;
+    texture.format = PIXELFORMAT_UNCOMPRESSED_R32G32B32A32;
+    UnloadFileData(data);
+    return texture;
+}
+
+std::string ViewerAssetPath(const char *name) {
+#if defined(__EMSCRIPTEN__)
+    return std::string("/assets/") + name;
+#else
+    return std::string(GetApplicationDirectory()) + "assets/" + name;
+#endif
+}
+
+std::string ViewerRuntimePath(const char *name) {
+#if defined(__EMSCRIPTEN__)
+    return std::string("/") + name;
+#else
+    return std::string(GetApplicationDirectory()) + name;
+#endif
+}
+
+template<typename T>
+T *LoadMeshArray(const char *path, int expectedCount) {
+    int size = 0;
+    unsigned char *data = LoadFileData(path, &size);
+    if (data == nullptr || size != expectedCount * static_cast<int>(sizeof(T))) {
+        if (data != nullptr) UnloadFileData(data);
+        return nullptr;
+    }
+    T *result = static_cast<T *>(MemAlloc(static_cast<unsigned int>(size)));
+    if (result == nullptr) {
+        UnloadFileData(data);
+        return nullptr;
+    }
+    std::memcpy(result, data, static_cast<std::size_t>(size));
+    UnloadFileData(data);
+    return result;
+}
+
+Model LoadStarModel(const char *verticesPath, int vertexCount, const char *indicesPath, int triangleCount,
+                    const char *normalsPath = nullptr, const char *texcoordsPath = nullptr) {
+    Mesh mesh{};
+    mesh.vertexCount = vertexCount;
+    mesh.triangleCount = triangleCount;
+    mesh.vertices = LoadMeshArray<float>(verticesPath, vertexCount * 3);
+    mesh.indices = LoadMeshArray<unsigned short>(indicesPath, triangleCount * 3);
+    if (normalsPath != nullptr) mesh.normals = LoadMeshArray<float>(normalsPath, vertexCount * 3);
+    if (texcoordsPath != nullptr) mesh.texcoords = LoadMeshArray<float>(texcoordsPath, vertexCount * 2);
+    if (mesh.vertices == nullptr || mesh.indices == nullptr || (normalsPath != nullptr && mesh.normals == nullptr) ||
+        (texcoordsPath != nullptr && mesh.texcoords == nullptr)) {
+        UnloadMesh(mesh);
+        return {};
+    }
+    UploadMesh(&mesh, false);
+    return LoadModelFromMesh(mesh);
+}
+
+void SetModelShader(Model &model, Shader shader) {
+    model.materials[0].shader = shader;
+    for (int i = 0; i <= MATERIAL_MAP_BRDF; ++i) model.materials[0].maps[i].texture = {};
+}
+
+bool StarModelReady(const Model &model) {
+    return IsModelValid(model) && model.meshCount == 1 && model.materialCount == 1;
+}
+
+
+bool LoadRenderResources(RenderResources &resources, const std::string &fontPath) {
+resources.font = GetFontDefault();
+const auto surfaceVertex = ViewerAssetPath("shaders/star_surface.vs");
+const auto surfaceFragment = ViewerAssetPath("shaders/star_surface.fs");
+const auto spotVertex = ViewerAssetPath("shaders/star_spot.vs");
+const auto spotFragment = ViewerAssetPath("shaders/star_spot.fs");
+const auto blackVertex = ViewerAssetPath("shaders/star_black.vs");
+const auto blackFragment = ViewerAssetPath("shaders/star_black.fs");
+const auto planetThumbVertex = ViewerAssetPath("shaders/planet_thumb.vs");
+const auto planetThumbFragment = ViewerAssetPath("shaders/planet_thumb.fs");
+const auto galaxyPointVertex = ViewerAssetPath("shaders/galaxy_star_point.vs");
+const auto galaxyPointFragment = ViewerAssetPath("shaders/galaxy_star_point.fs");
+const auto galaxyLineVertex = ViewerAssetPath("shaders/galaxy_line.vs");
+const auto galaxyLineFragment = ViewerAssetPath("shaders/galaxy_line.fs");
+const auto bloomVertex = ViewerAssetPath("shaders/bloom.vs");
+const auto bloomPrefilterFragment = ViewerAssetPath("shaders/bloom_prefilter.fs");
+const auto bloomDownsampleFirstFragment = ViewerAssetPath("shaders/bloom_downsample_first.fs");
+const auto bloomDownsampleFragment = ViewerAssetPath("shaders/bloom_downsample.fs");
+const auto bloomUpsampleFragment = ViewerAssetPath("shaders/bloom_upsample.fs");
+const auto bloomCompositeFragment = ViewerAssetPath("shaders/bloom_composite.fs");
+const auto galaxyFxaaFragment = ViewerAssetPath("shaders/galaxy_fxaa.fs");
+resources.starSurfaceShader = LoadShader(surfaceVertex.c_str(), surfaceFragment.c_str());
+resources.starSpotShader = LoadShader(spotVertex.c_str(), spotFragment.c_str());
+resources.starBlackShader = LoadShader(blackVertex.c_str(), blackFragment.c_str());
+resources.planetThumbShader = LoadShader(planetThumbVertex.c_str(), planetThumbFragment.c_str());
+resources.galaxyStarPointShader = LoadShader(galaxyPointVertex.c_str(), galaxyPointFragment.c_str());
+resources.galaxyLineShader = LoadShader(galaxyLineVertex.c_str(), galaxyLineFragment.c_str());
+resources.bloomPrefilterShader = LoadShader(bloomVertex.c_str(), bloomPrefilterFragment.c_str());
+resources.bloomDownsampleFirstShader = LoadShader(bloomVertex.c_str(), bloomDownsampleFirstFragment.c_str());
+resources.bloomDownsampleShader = LoadShader(bloomVertex.c_str(), bloomDownsampleFragment.c_str());
+resources.bloomUpsampleShader = LoadShader(bloomVertex.c_str(), bloomUpsampleFragment.c_str());
+resources.bloomCompositeShader = LoadShader(bloomVertex.c_str(), bloomCompositeFragment.c_str());
+resources.galaxyFxaaShader = LoadShader(bloomVertex.c_str(), galaxyFxaaFragment.c_str());
+resources.hasStarSurfaceShader = IsShaderValid(resources.starSurfaceShader) && resources.starSurfaceShader.id != rlGetShaderIdDefault();
+resources.hasStarSpotShader = IsShaderValid(resources.starSpotShader) && resources.starSpotShader.id != rlGetShaderIdDefault();
+resources.hasStarBlackShader = IsShaderValid(resources.starBlackShader) && resources.starBlackShader.id != rlGetShaderIdDefault();
+resources.hasPlanetThumbShader = IsShaderValid(resources.planetThumbShader) && resources.planetThumbShader.id != rlGetShaderIdDefault();
+resources.hasGalaxyStarPointShader = IsShaderValid(resources.galaxyStarPointShader) &&
+                           resources.galaxyStarPointShader.id != rlGetShaderIdDefault();
+resources.hasGalaxyLineShader = IsShaderValid(resources.galaxyLineShader) && resources.galaxyLineShader.id != rlGetShaderIdDefault();
+resources.hasBloomShaders = IsShaderValid(resources.bloomPrefilterShader) && IsShaderValid(resources.bloomDownsampleFirstShader) &&
+                  IsShaderValid(resources.bloomDownsampleShader) && IsShaderValid(resources.bloomUpsampleShader) &&
+                  IsShaderValid(resources.bloomCompositeShader) &&
+                  resources.bloomPrefilterShader.id != rlGetShaderIdDefault() &&
+                  resources.bloomDownsampleFirstShader.id != rlGetShaderIdDefault() &&
+                  resources.bloomDownsampleShader.id != rlGetShaderIdDefault() &&
+                  resources.bloomUpsampleShader.id != rlGetShaderIdDefault() &&
+                  resources.bloomCompositeShader.id != rlGetShaderIdDefault();
+resources.hasGalaxyFxaaShader = IsShaderValid(resources.galaxyFxaaShader) && resources.galaxyFxaaShader.id != rlGetShaderIdDefault();
+if (resources.hasStarSurfaceShader) ConfigureStarShader(resources.starSurfaceShader, true, false);
+if (resources.hasStarSpotShader) ConfigureStarShader(resources.starSpotShader, false, true);
+if (resources.hasStarBlackShader) ConfigureStarShader(resources.starBlackShader, false, false);
+if (resources.hasPlanetThumbShader) ConfigurePlanetThumbShader(resources.planetThumbShader);
+if (resources.hasGalaxyStarPointShader) ConfigureGalaxyStarPointShader(resources.galaxyStarPointShader);
+if (resources.hasGalaxyLineShader) ConfigureGalaxyLineShader(resources.galaxyLineShader);
+if (resources.hasBloomShaders) {
+    ConfigureScreenShader(resources.bloomPrefilterShader);
+    ConfigureScreenShader(resources.bloomDownsampleFirstShader);
+    ConfigureScreenShader(resources.bloomDownsampleShader);
+    ConfigureScreenShader(resources.bloomUpsampleShader);
+    ConfigureScreenShader(resources.bloomCompositeShader);
+}
+if (resources.hasGalaxyFxaaShader) ConfigureScreenShader(resources.galaxyFxaaShader);
+CacheShaderUniforms(resources, resources.starSurfaceShader,
+    {"_Color0_xyz", "_Color1_xyz", "_Color2_xyz", "_Color3_xyz",
+     "_Multiplier_and_NoiseTile_and_NoiseSpeed_and_ChaosTile",
+     "_ChaosDistort_and_ChaosOverlay_and_SpotIntens_and_RimPower", "_RotSpeed", "_Time",
+     "_WorldSpaceCameraPos", "matModel", "matViewProjection"});
+CacheShaderUniforms(resources, resources.starSpotShader,
+    {"_Multiplier", "_SunGlowColor_xyz", "_SunGlowPower", "_SunCenterColor_xyz",
+     "_SunCenterMultiplier_and_SunCenterSize_and_SunCenterBlur_and_SunCenterBlurPower",
+     "_Global_WhiteMode0", "matModel", "matViewProjection"});
+CacheShaderUniforms(resources, resources.starBlackShader, {"_TintColor", "matModel", "matViewProjection"});
+CacheShaderUniforms(resources, resources.planetThumbShader,
+    {"matModel", "matViewProjection", "_SunDir", "_Rotation", "_WorldSpaceCameraPos", "_Color", "_RimColor"});
+CacheShaderUniforms(resources, resources.galaxyStarPointShader,
+    {"matViewProjection", "_MainTex_ST", "_TintColor", "_ScreenParams", "_Global_GalaxyFadeRadius",
+     "_SceneLinear", "colDiffuse", "_PointGlow", "_Multiplier", "_AlphaMultiplier"});
+CacheShaderUniforms(resources, resources.galaxyLineShader,
+    {"matViewProjection", "_WorldSpaceCameraPos", "_Multiplier", "_TileScale", "_DistScale",
+     "_DistPower", "_MinDistScale", "_MaxDistScale", "_Global_GalaxyFadeRadius", "_SceneLinear",
+     "_ScreenParams", "_LineColorA", "_LineColorB"});
+CacheShaderUniforms(resources, resources.bloomPrefilterShader, {"sourceTexelSize", "prefilterOffset", "threshold", "curve"});
+CacheShaderUniforms(resources, resources.bloomDownsampleFirstShader, {"sourceTexelSize"});
+CacheShaderUniforms(resources, resources.bloomDownsampleShader, {"sourceTexelSize"});
+CacheShaderUniforms(resources, resources.bloomUpsampleShader, {"sourceTexelSize", "baseTexture"});
+CacheShaderUniforms(resources, resources.bloomCompositeShader,
+    {"sourceTexelSize", "bloomTexture", "lensDirtTexture", "gradingLutTexture", "intensity", "dirtIntensity"});
+CacheShaderUniforms(resources, resources.galaxyFxaaShader,
+    {"sourceTexelSize", "qualitySubpix", "qualityEdgeThreshold", "qualityEdgeThresholdMin"});
+const auto massVertices = ViewerAssetPath("meshes/star_mass_vertices.bin");
+const auto massNormals = ViewerAssetPath("meshes/star_mass_normals.bin");
+const auto massIndices = ViewerAssetPath("meshes/star_mass_indices.bin");
+const auto blackVertices = ViewerAssetPath("meshes/star_black_vertices.bin");
+const auto blackIndices = ViewerAssetPath("meshes/star_black_indices.bin");
+const auto quadVertices = ViewerAssetPath("meshes/screen_quad_vertices.bin");
+const auto quadTexcoords = ViewerAssetPath("meshes/screen_quad_uv.bin");
+const auto quadIndices = ViewerAssetPath("meshes/screen_quad_indices.bin");
+const auto galaxyPointTexturePath = ViewerAssetPath("textures/galaxy_star_point.png");
+const auto galaxyLineTexturePath = ViewerAssetPath("textures/galaxy_line_texture.bin");
+const auto bloomLensDirtPath = ViewerAssetPath("textures/LensDirt00.png");
+const auto galaxyColorGradingLutPath = ViewerAssetPath("textures/galaxy_select_lut.bin");
+resources.starMassModel = LoadStarModel(massVertices.c_str(), 2617, massIndices.c_str(), 5120, massNormals.c_str());
+resources.starBlackModel = LoadStarModel(blackVertices.c_str(), 515, blackIndices.c_str(), 768);
+resources.starSpotModel = LoadStarModel(quadVertices.c_str(), 4, quadIndices.c_str(), 2, nullptr, quadTexcoords.c_str());
+resources.galaxyStarPointTexture = LoadTexture(galaxyPointTexturePath.c_str());
+resources.galaxyLineTexture = LoadGalaxyLineTexture(galaxyLineTexturePath.c_str());
+resources.bloomLensDirtTexture = LoadTexture(bloomLensDirtPath.c_str());
+Image gradingLutImage = LoadImageRaw(galaxyColorGradingLutPath.c_str(), 1024, 32,
+                                     PIXELFORMAT_UNCOMPRESSED_R32G32B32A32, 0);
+if (IsImageValid(gradingLutImage)) {
+    resources.galaxyColorGradingLut = LoadTextureFromImage(gradingLutImage);
+    UnloadImage(gradingLutImage);
+}
+resources.hasStarModels = StarModelReady(resources.starMassModel) && StarModelReady(resources.starBlackModel) && StarModelReady(resources.starSpotModel) &&
+                resources.hasStarSurfaceShader && resources.hasStarSpotShader && resources.hasStarBlackShader;
+resources.hasPlanetThumbModel = StarModelReady(resources.starMassModel) && resources.hasPlanetThumbShader;
+resources.hasGalaxyStarPointModel = StarModelReady(resources.starSpotModel) && IsTextureValid(resources.galaxyStarPointTexture) &&
+                          resources.hasGalaxyStarPointShader;
+if (!resources.hasStarModels || !resources.hasGalaxyStarPointModel || !resources.hasGalaxyLineShader || !resources.hasBloomShaders ||
+    !resources.hasGalaxyFxaaShader ||
+    !IsTextureValid(resources.galaxyLineTexture) ||
+    !IsTextureValid(resources.bloomLensDirtTexture) || !IsTextureValid(resources.galaxyColorGradingLut)) {
+    return false;
+}
+SetModelShader(resources.starMassModel, resources.starSurfaceShader);
+if (resources.hasPlanetThumbModel) {
+    resources.planetThumbMaterial = LoadMaterialDefault();
+    resources.planetThumbMaterial.shader = resources.planetThumbShader;
+    for (int i = 0; i <= MATERIAL_MAP_BRDF; ++i) resources.planetThumbMaterial.maps[i].texture = {};
+}
+SetModelShader(resources.starBlackModel, resources.starBlackShader);
+SetModelShader(resources.starSpotModel, resources.starSpotShader);
+resources.galaxyStarPointMaterial = LoadMaterialDefault();
+resources.galaxyStarPointMaterial.shader = resources.galaxyStarPointShader;
+resources.galaxyStarPointMaterial.maps[MATERIAL_MAP_DIFFUSE].texture = resources.galaxyStarPointTexture;
+SetTextureFilter(resources.galaxyStarPointTexture, TEXTURE_FILTER_BILINEAR);
+SetTextureWrap(resources.galaxyStarPointTexture, TEXTURE_WRAP_CLAMP);
+SetTextureFilter(resources.galaxyLineTexture, TEXTURE_FILTER_TRILINEAR);
+SetTextureWrap(resources.galaxyLineTexture, TEXTURE_WRAP_CLAMP);
+SetTextureFilter(resources.bloomLensDirtTexture, TEXTURE_FILTER_BILINEAR);
+SetTextureWrap(resources.bloomLensDirtTexture, TEXTURE_WRAP_CLAMP);
+SetTextureFilter(resources.galaxyColorGradingLut, TEXTURE_FILTER_BILINEAR);
+SetTextureWrap(resources.galaxyColorGradingLut, TEXTURE_WRAP_CLAMP);
+std::string resolvedFontPath = fontPath;
+if (resolvedFontPath == DSP_VIEWER_DEFAULT_FONT && !resolvedFontPath.empty())
+    resolvedFontPath = ViewerRuntimePath(resolvedFontPath.c_str());
+if (!resolvedFontPath.empty() && FileExists(resolvedFontPath.c_str())) {
+    Font loadedFont = LoadFontEx(resolvedFontPath.c_str(), kViewerFontSize, nullptr, 0);
+    if (loadedFont.glyphCount > 0) {
+        resources.font = loadedFont;
+        resources.hasCustomFont = true;
+        SetTextureFilter(resources.font.texture, TEXTURE_FILTER_BILINEAR);
+    }
+}
+    return true;
+}
+
+
+void UnloadRenderResources(RenderResources &resources) {
+if (resources.hasCustomFont) {
+    UnloadFont(resources.font);
+    resources.hasCustomFont = false;
+}
+if (resources.starMassModel.meshCount != 0) {
+    resources.starMassModel.materials[0].shader.id = rlGetShaderIdDefault();
+    resources.starMassModel.materials[0].shader.locs = rlGetShaderLocsDefault();
+    UnloadModel(resources.starMassModel);
+}
+if (resources.starBlackModel.meshCount != 0) {
+    resources.starBlackModel.materials[0].shader.id = rlGetShaderIdDefault();
+    resources.starBlackModel.materials[0].shader.locs = rlGetShaderLocsDefault();
+    UnloadModel(resources.starBlackModel);
+}
+if (resources.starSpotModel.meshCount != 0) {
+    resources.starSpotModel.materials[0].shader.id = rlGetShaderIdDefault();
+    resources.starSpotModel.materials[0].shader.locs = rlGetShaderLocsDefault();
+    UnloadModel(resources.starSpotModel);
+}
+if (resources.planetThumbMaterial.maps != nullptr) {
+    resources.planetThumbMaterial.shader.id = rlGetShaderIdDefault();
+    resources.planetThumbMaterial.shader.locs = rlGetShaderLocsDefault();
+    UnloadMaterial(resources.planetThumbMaterial);
+    resources.planetThumbMaterial = {};
+}
+if (resources.galaxyStarPointMaterial.maps != nullptr) {
+    resources.galaxyStarPointMaterial.shader.id = rlGetShaderIdDefault();
+    resources.galaxyStarPointMaterial.shader.locs = rlGetShaderLocsDefault();
+    resources.galaxyStarPointMaterial.maps[MATERIAL_MAP_DIFFUSE].texture = {};
+    UnloadMaterial(resources.galaxyStarPointMaterial);
+    resources.galaxyStarPointMaterial = {};
+}
+if (IsTextureValid(resources.galaxyStarPointTexture)) UnloadTexture(resources.galaxyStarPointTexture);
+if (IsTextureValid(resources.galaxyLineTexture)) UnloadTexture(resources.galaxyLineTexture);
+if (IsTextureValid(resources.galaxyColorGradingLut)) UnloadTexture(resources.galaxyColorGradingLut);
+if (IsTextureValid(resources.bloomLensDirtTexture)) UnloadTexture(resources.bloomLensDirtTexture);
+resources.galaxyColorGradingLut = {};
+resources.bloomLensDirtTexture = {};
+auto unloadCustomShader = [](Shader &shader) {
+    if (IsShaderValid(shader) && shader.id != rlGetShaderIdDefault()) UnloadShader(shader);
+    shader = {};
+};
+unloadCustomShader(resources.galaxyFxaaShader);
+unloadCustomShader(resources.bloomCompositeShader);
+unloadCustomShader(resources.bloomUpsampleShader);
+unloadCustomShader(resources.bloomDownsampleShader);
+unloadCustomShader(resources.bloomDownsampleFirstShader);
+unloadCustomShader(resources.bloomPrefilterShader);
+unloadCustomShader(resources.galaxyLineShader);
+unloadCustomShader(resources.galaxyStarPointShader);
+unloadCustomShader(resources.starBlackShader);
+unloadCustomShader(resources.planetThumbShader);
+unloadCustomShader(resources.starSpotShader);
+unloadCustomShader(resources.starSurfaceShader);
+resources.uniformLocations.clear();
+}
+
+}

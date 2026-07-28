@@ -115,6 +115,7 @@ struct VeinProto : Proto {
 };
 
 extern void loadProtoSets();
+extern void loadProtoSets(const std::string &directory);
 
 class ThemeProtoSet final : public ProtoSet<ThemeProto> {
 public:

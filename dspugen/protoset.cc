@@ -120,28 +120,32 @@ void from_json(const nlohmann::json &j, VeinProto &p) {
 
 #undef JL
 
-void loadProtoSets() {
+void loadProtoSets(const std::string &directory) {
     {
         nlohmann::json j;
-        std::ifstream ifs("Prototypes/ThemeProtoSet.json");
+        std::ifstream ifs(directory + "/ThemeProtoSet.json");
         ifs >> j;
         j["dataArray"].get_to(themeProtoSet.dataArray);
         themeProtoSet.onLoaded();
     }
     {
         nlohmann::json j;
-        std::ifstream ifs("Prototypes/ItemProtoSet.json");
+        std::ifstream ifs(directory + "/ItemProtoSet.json");
         ifs >> j;
         j["dataArray"].get_to(itemProtoSet.dataArray);
         itemProtoSet.onLoaded();
     }
     {
         nlohmann::json j;
-        std::ifstream ifs("Prototypes/VeinProtoSet.json");
+        std::ifstream ifs(directory + "/VeinProtoSet.json");
         ifs >> j;
         j["dataArray"].get_to(veinProtoSet.dataArray);
         veinProtoSet.onLoaded();
     }
+}
+
+void loadProtoSets() {
+    loadProtoSets("Prototypes");
 }
 
 }
