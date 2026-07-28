@@ -830,7 +830,9 @@ profile 纹理 V 方向只有 128 texel，低分辨率下每像素的纹理足�
 
 #### 星点四边形不是billboard
 
-`Universe/Starmap/Point` 的顶点程序只做 `ObjectToWorld` 与 `unity_MatrixVP` 两级变换，没有任何朝向相机的展开；`star-point`、`starPointBirth`、`starPointSelection` 三个 Transform 的旋转都是单位四元数。因此官方的星点与标记都是固定在世界 XY 平面上的 Quad，随俯仰产生 `cos(pitch)` 的纵向压缩，而不是 billboard。viewer 原先按相机基向量构造 billboard，已改为单位旋转。默认俯仰 `-22` 下差异为 7% 的纵向压缩，俯仰越陡差异越大。
+`Universe/Starmap/Point` 的顶点程序只做 `ObjectToWorld` 与 `unity_MatrixVP` 两级变换，没有任何朝向相机的展开；`star-point`、`starPointBirth`、`starPointSelection` 三个 Transform 的旋转都是单位四元数。因此官方的星点与标记都是固定在世界 XY 平面上的 Quad。
+
+**本段结论已于 2026-07-29 第七条撤回，勿据此开工。** 三个对象都挂着 `Billboard` 组件，它在 `LateUpdate` 里覆盖 Transform 旋转，所以序列化的单位四元数不能作为「不是 billboard」的证据。顶点程序不展开这一点仍然成立，朝向来自 Transform 而不是 Shader。
 
 #### 星图标记
 
@@ -847,7 +849,7 @@ profile 纹理 V 方向只有 128 texel，低分辨率下每像素的纹理足�
 
 贴图 `_MainTex` = path ID `903` `circle-thin`，256×256 BC7、9 mip、sRGB、Bilinear、Clamp。RGB 在 `251` 至 `255`（BC7 量化噪声，原始应为纯白），图案在 alpha：一圈位于半径 `120/128` 的细环。viewer 只保存 alpha，存为 `viewer/assets/textures/galaxy_star_ring.bin`，提取工具并入 `viewer/tools/galaxy_grid_textures.py`。已知偏差为把 RGB 当作恒等于 1，误差不超过 `4/255`。
 
-状态：连接线为「已确认，无残留差异」；星点朝向与星图标记为「已确认并实现」。
+状态：连接线为「已确认，无残留差异」；星点朝向与星图标记为「已确认并实现」。（星点朝向的结论已于 2026-07-29 第七条更正为 billboard。）
 
 与既有结论的变化：连接线宽度问题最终关闭，残留 1.6 倍已归因为渲染分辨率而非实现差异（**该归因已于 2026-07-29 第六条撤回**）。新增星点朝向、出生星标记、选中标记与标签位置。
 
@@ -995,3 +997,91 @@ Debug 构建通过、无编译警告；运行日志无 `ERROR` 与 `WARNING`，`
 - 官方标签为两行，出生星额外带一行本地化的「即将登陆」，正文还包含光谱型后缀；按需求 viewer 保持只画星名。
 - Dithering 仍未实现。其幅度为 sRGB `±1/255`，不要与官方截图天区里 `±4` 字节的压缩噪声混为一谈。
 - 现有官方截图全部带 4:2:0 有损压缩。后续任何测光比对都必须先把 viewer 侧做同等编码，或获取无损官方截图。
+
+### 2026-07-29：星点与标记的朝向来自 Billboard 组件
+
+日期：2026-07-29
+
+参考版本和文件哈希：与「参考版本」一节相同，本次未发生变化。
+
+问题：实测反馈银河视图的恒星变成纸片，圆点不再始终面向镜头。
+
+重开既有区域的原因：新的运行态证据与既有结论矛盾。第五条记录判定官方星点「不是 billboard、固定在世界 XY 平面」，据此移除了 viewer 的 billboard。该判定错误。
+
+#### 原判定为什么站不住
+
+原判定用了两条证据：顶点程序不做朝向展开，以及三个 Transform 的序列化旋转都是单位四元数。第一条正确，第二条**不能推出结论**——如果对象挂了运行时改写旋转的组件，序列化值就只是初始值。
+
+而且原判定与官方自己的相机范围自相矛盾：`Galaxy Select` 的俯仰可在 `[-81.2, -4.9]` 内调整，固定在世界 XY 平面的 Quad 在 `-81.2` 下会被压成 `cos(81.2) = 0.153` 的细条。官方画面不是这样，所以朝向必然由别处提供。
+
+#### 证据
+
+反编译中存在 `Billboard.cs`：
+
+```csharp
+private void LateUpdate() {
+    Camera main = lookCamera;
+    if (main == null) main = Camera.main;
+    if (!(main == null)) {
+        if (vertical) {
+            Vector3 forward = main.transform.forward;
+            forward.y = 0f; forward.Normalize();
+            base.transform.rotation = Quaternion.LookRotation(forward, Vector3.up);
+        } else {
+            base.transform.rotation = main.transform.rotation;
+        }
+    }
+}
+```
+
+在 `level0` 里按组件枚举，三个星点对象都挂着它：
+
+| GameObject | GameObject path ID | MonoBehaviour path ID | `m_Enabled` | `lookCamera` | `vertical` |
+| --- | --- | --- | --- | --- | --- |
+| `star-point` | `5344` | `48916` | `1` | `PPtr(0, 0)` 空 | `0` |
+| `birth-star-point` | `3945` | `47273` | `1` | `PPtr(0, 0)` 空 | `0` |
+| `selected-star-point` | `259` | `42968` | `1` | `PPtr(0, 0)` 空 | `0` |
+
+三者的 `m_Script` 都指向 `globalgamemanagers.assets` 的 path ID `2473`，其 `MonoScript` 的 `m_ClassName` 为 `Billboard`、`m_AssemblyName` 为 `Assembly-CSharp`。`lookCamera` 为空因此回落到 `Camera.main`；`vertical` 为 `0` 因此走 `transform.rotation = main.transform.rotation`，即**整体对齐相机朝向的屏幕对齐 billboard**，不是逐个朝相机位置的 look-at。
+
+这三个 MonoBehaviour 的序列化长度都是 48 字节，与 `Billboard` 的字段布局一致：`MonoBehaviour` 基类 32 字节（`m_GameObject` PPtr 12、`m_Enabled` 1 加 3 对齐、`m_Script` PPtr 12、`m_Name` 长度 4），加 `Camera lookCamera` PPtr 12 与 `bool vertical` 1 加 3 对齐，共 16 字节。
+
+`level0` 中共有 10 个 `Billboard` 组件，全部 `vertical = 0`：`star-point`、`birth-star-point`、`selected-star-point`、`Point A`、`Point B`、`center-1`、`center-2`、`dot`、`text`、`text2`。**网格平面、白色边框和六个天空盒 Quad 都不在其中**，因此这些对象的朝向仍然只由序列化旋转决定，第二条与第四条记录中它们的实现不受影响。
+
+#### 实现
+
+viewer 恢复了 billboard，两处共用 `CameraBillboardRotation(...)`：星点与两个标记环。基向量按右手系构造为 `right = normalize(cross(forward, up))`、`up = cross(right, forward)`；此前的实现用的是 `cross(up, forward)`，方向相反，对径向对称的贴图不可见，但已一并改正。
+
+#### 验证
+
+seed `0`、64 星、`1920 x 1080`，用强度二阶矩量测星点核心的轴向长宽比。`height / width` 为轴对齐量度，直接反映压缩：
+
+```text
+capture                        n    height/width   若不做 billboard 的预测值
+修复前  yaw   0  pitch -22     54       0.873       0.927
+修复后  yaw   0  pitch -22     54       1.006        --
+修复后  yaw  70  pitch -22     68       1.000       0.342
+修复后  yaw   0  pitch -78     56       1.000       0.208
+修复后  yaw  45  pitch -60     77       0.995       0.707
+```
+
+修复后四个朝向全部为 `1.00`。修复前在默认俯仰下已有 `0.873`，与 `cos(22) = 0.927` 的量级一致；`yaw 70` 与 `pitch -78` 两种情况下不做 billboard 会分别压到 `0.342` 与 `0.208`，后者就是实测反馈的「纸片」。`pitch -78` 的截图另经目视确认：所有星点与出生星环均为正圆。
+
+状态：已确认并实现。
+
+与既有结论的变化：撤回第五条的「星点与标记不是 billboard、固定在世界 XY 平面」。顶点程序不做朝向展开这一点仍然成立；朝向由 `Billboard` 组件在 `LateUpdate` 中提供。
+
+代码位置：`viewer/src/scene_renderer.cc` 的 `CameraBillboardRotation(...)`、`DrawGalaxyStarPoint(...)` 与 `DrawGalaxyStarMarker(...)`。
+
+验证命令和结果：
+
+```powershell
+python viewer\tools\verify_assets.py         # verified 17 viewer assets
+python viewer\tools\verify_shader_pairs.py   # verified 27 desktop/web shader pairs
+cmake --build cmake-build-viewer-debug --target viewer
+cmake-build-viewer-debug\bin\viewer\viewer.exe 0 64
+```
+
+Debug 构建通过、无编译警告；运行日志无 `ERROR` 与 `WARNING`。量测用的临时插桩（指定帧截图、相机 yaw/pitch 覆盖）已回滚，`viewer_app.cc` 的 md5 与提交版本一致，`camera_controller.cc` 无改动。
+
+方法论教训：**序列化的 Transform 值只能作为初始值使用。判断朝向前必须枚举对象的组件列表，确认没有运行时改写旋转的 MonoBehaviour。** 本次的直接线索是组件枚举时出现「Expected to read 48 bytes, but only read 32 bytes」——那是一个类型树缺失、未被识别的 MonoBehaviour，不应忽略。

@@ -45,7 +45,7 @@ private:
     void DrawGalaxyGrid();
     void DrawGalaxyBackgroundStars(float time);
     void DrawGalaxyStarMarker(const Texture2D &texture, Vector3 position, float size, Vector4 tint,
-                              float multiplier, float alphaMultiplier);
+                              float multiplier, float alphaMultiplier, const Camera3D &camera);
     void DrawBackgroundStars(const Camera3D &camera, bool bloomVisible = true);
     void DrawCachedLines(const std::vector<Line3DCache> &lines, Color color);
     void DrawOrbit(Vector3 center, const PlanetViewData &planet);

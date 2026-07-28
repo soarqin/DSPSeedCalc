@@ -12,6 +12,23 @@
 namespace viewer {
 
 namespace {
+// `star-point`, `birth-star-point` and `selected-star-point` each carry a `Billboard`
+// component (globalgamemanagers.assets MonoScript 2473) with `lookCamera` null and
+// `vertical` false, so its `LateUpdate` assigns the camera's own rotation to the quad. The
+// quad is screen aligned; the identity rotation stored in the scene is what Billboard
+// overwrites, so it must not be read as evidence that the quad is fixed in a world plane.
+Matrix CameraBillboardRotation(const Camera3D &camera) {
+    Vector3 forward = Vector3Normalize(Vector3Subtract(camera.target, camera.position));
+    Vector3 up = Vector3Normalize(camera.up);
+    if (std::abs(Vector3DotProduct(forward, up)) > 0.999999f) up = Vector3 {0.0f, 0.0f, 1.0f};
+    Vector3 right = Vector3Normalize(Vector3CrossProduct(forward, up));
+    up = Vector3CrossProduct(right, forward);
+    return Matrix {right.x, up.x, forward.x, 0.0f,
+                   right.y, up.y, forward.y, 0.0f,
+                   right.z, up.z, forward.z, 0.0f,
+                   0.0f, 0.0f, 0.0f, 1.0f};
+}
+
 float Hash01(int value) {
     unsigned int hash = static_cast<unsigned int>(value);
     hash ^= hash >> 16;
@@ -208,11 +225,10 @@ void SceneRenderer::DrawStarSpot(const StarViewData &star, const Camera3D &camer
 
 void SceneRenderer::DrawGalaxyStarPoint(const StarViewData &star, const Camera3D &camera) {
     if (!resources.hasGalaxyStarPointShader || !resources.hasGalaxyStarPointModel) return;
-    (void)camera;
-    // `star-point` sits under an identity rotation in the reference build, so the quad stays
-    // in the world XY plane and is not turned towards the camera.
     Matrix transform = MatrixMultiply(MatrixScale(star.galaxyScale, star.galaxyScale, star.galaxyScale),
-                                      MatrixTranslate(star.position.x, star.position.y, star.position.z));
+                                      CameraBillboardRotation(camera));
+    transform = MatrixMultiply(transform,
+                               MatrixTranslate(star.position.x, star.position.y, star.position.z));
     rlDrawRenderBatchActive();
     resources.SetMatrix(resources.galaxyStarPointShader, "matViewProjection", SceneRenderer::ViewProjection());
     resources.SetVector4(resources.galaxyStarPointShader, "_MainTex_ST", Vector4 {1.0f, 1.0f, 0.0f, 0.0f});
@@ -362,12 +378,11 @@ void SceneRenderer::DrawGalaxyBackgroundStars(float time) {
 }
 
 void SceneRenderer::DrawGalaxyStarMarker(const Texture2D &texture, Vector3 position, float size,
-                                         Vector4 tint, float multiplier, float alphaMultiplier) {
+                                         Vector4 tint, float multiplier, float alphaMultiplier,
+                                         const Camera3D &camera) {
     if (!resources.hasGalaxyMarkerShader || !resources.hasStarModels) return;
-    // The official marker quads sit under an identity rotation, so they stay in the world
-    // XY plane instead of facing the camera.
-    Matrix transform = MatrixMultiply(MatrixScale(size, size, size),
-                                      MatrixTranslate(position.x, position.y, position.z));
+    Matrix transform = MatrixMultiply(MatrixScale(size, size, size), CameraBillboardRotation(camera));
+    transform = MatrixMultiply(transform, MatrixTranslate(position.x, position.y, position.z));
     rlDrawRenderBatchActive();
     resources.SetMatrix(resources.galaxyMarkerShader, "matViewProjection", SceneRenderer::ViewProjection());
     resources.SetVector4(resources.galaxyMarkerShader, "_TintColor", tint);
@@ -535,13 +550,13 @@ void SceneRenderer::DrawGalaxy(const std::vector<GalaxyLineData> &lines,
     if (!stars.empty()) {
         SceneRenderer::DrawGalaxyStarMarker(resources.galaxyStarRingTexture, stars[0].position, 1.4f,
                                             GalaxyGridColor(GalaxyStarGradient(stars[0].data->color)),
-                                            2.5f, 1.0f);
+                                            2.5f, 1.0f, camera);
     }
     if (markedStar != invalidIndex && markedStar < stars.size()) {
         const auto &star = stars[markedStar];
         SceneRenderer::DrawGalaxyStarMarker(resources.galaxyStarRingTexture, star.position,
                                             star.galaxyScale * 0.6f + 0.6f,
-                                            GalaxyGridColor(star.galaxyColor), 2.5f, 1.0f);
+                                            GalaxyGridColor(star.galaxyColor), 2.5f, 1.0f, camera);
     }
 }
 
