@@ -21,13 +21,14 @@ float GammaToLinearSpace(float value) {
     return std::pow((value + 0.055f) / 1.055f, 2.4f);
 }
 
-Color LinearBackground(Color color) {
-    auto convert = [](unsigned char value) {
-        float srgb = static_cast<float>(value) / 255.0f;
-        float linear = srgb <= 0.04045f ? srgb / 12.92f : std::pow((srgb + 0.055f) / 1.055f, 2.4f);
-        return static_cast<unsigned char>(std::round(linear * 255.0f));
-    };
-    return Color {convert(color.r), convert(color.g), convert(color.b), color.a};
+// The camera clears to sRGB (5, 21, 26). rlClearColor() only takes bytes, so quantising the
+// linear value back to 8 bits would round red from 0.00152 down to 0 and drop the channel
+// entirely, while pushing blue up by 14 percent. Clear with float precision instead.
+void ClearLinearBackground(unsigned char r, unsigned char g, unsigned char b) {
+    glClearColor(GammaToLinearSpace(static_cast<float>(r) / 255.0f),
+                 GammaToLinearSpace(static_cast<float>(g) / 255.0f),
+                 GammaToLinearSpace(static_cast<float>(b) / 255.0f), 1.0f);
+    rlClearScreenBuffers();
 }
 
 RenderTexture2D LoadHalfFloatRenderTexture(int width, int height, bool withDepth) {
@@ -194,9 +195,7 @@ bool PostProcess::Draw(const Camera3D &camera, const RenderResources &resources,
     }
 
     BeginMultisampleTextureMode(multisampleTarget);
-    Color linearBackground = LinearBackground(Color {5, 21, 26, 255});
-    rlClearColor(linearBackground.r, linearBackground.g, linearBackground.b, 255);
-    rlClearScreenBuffers();
+    ClearLinearBackground(5, 21, 26);
     BeginMode3D(camera);
     drawScene(context, time);
     EndMode3D();
