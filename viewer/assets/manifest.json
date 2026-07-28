@@ -5,12 +5,36 @@
     "algorithm": 20200403
   },
   "staging": [
-    {"source": "assets", "runtime": "assets", "platform": "all"},
-    {"source": "shaders/desktop", "runtime": "assets/shaders", "platform": "desktop"},
-    {"source": "shaders/web", "runtime": "assets/shaders", "platform": "web"},
-    {"source": "../Prototypes/ThemeProtoSet.json", "runtime": "Prototypes/ThemeProtoSet.json", "platform": "all"},
-    {"source": "../Prototypes/ItemProtoSet.json", "runtime": "Prototypes/ItemProtoSet.json", "platform": "all"},
-    {"source": "../Prototypes/VeinProtoSet.json", "runtime": "Prototypes/VeinProtoSet.json", "platform": "all"}
+    {
+      "source": "assets",
+      "runtime": "assets",
+      "platform": "all"
+    },
+    {
+      "source": "shaders/desktop",
+      "runtime": "assets/shaders",
+      "platform": "desktop"
+    },
+    {
+      "source": "shaders/web",
+      "runtime": "assets/shaders",
+      "platform": "web"
+    },
+    {
+      "source": "../Prototypes/ThemeProtoSet.json",
+      "runtime": "Prototypes/ThemeProtoSet.json",
+      "platform": "all"
+    },
+    {
+      "source": "../Prototypes/ItemProtoSet.json",
+      "runtime": "Prototypes/ItemProtoSet.json",
+      "platform": "all"
+    },
+    {
+      "source": "../Prototypes/VeinProtoSet.json",
+      "runtime": "Prototypes/VeinProtoSet.json",
+      "platform": "all"
+    }
   ],
   "assets": [
     {
@@ -78,6 +102,41 @@
       "height": 512
     },
     {
+      "path": "assets/textures/galaxy_bgstars_noise.bin",
+      "size": 65536,
+      "sha256": "39b586fa3699a83d35745eededc3832902087375288089870afa22106503a7ad",
+      "format": "rgba8",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "assets/textures/galaxy_grid_dot.bin",
+      "size": 87381,
+      "sha256": "3dddc88d77b6d55b0f2bd99964d7d276118b346424e18830e3cc3193ab998a04",
+      "format": "alpha8",
+      "width": 256,
+      "height": 256,
+      "mipmaps": 9
+    },
+    {
+      "path": "assets/textures/galaxy_grid_frame.bin",
+      "size": 1398101,
+      "sha256": "2390e7949c01fca0a675615a72d522c67575bf03fc643ee32267145c0cb237a3",
+      "format": "alpha8",
+      "width": 1024,
+      "height": 1024,
+      "mipmaps": 11
+    },
+    {
+      "path": "assets/textures/galaxy_grid_line.bin",
+      "size": 87381,
+      "sha256": "4b4301b0cecc99764d37dbfc0dbdecea719245182fca5336d36f5a8c0c0af72f",
+      "format": "alpha8",
+      "width": 256,
+      "height": 256,
+      "mipmaps": 9
+    },
+    {
       "path": "assets/textures/galaxy_line_texture.bin",
       "size": 699056,
       "sha256": "10fda98434a6d8c1165d0c914bb9c095aaa5eace66d39d78f3a350c4c090ad37",
@@ -101,6 +160,15 @@
       "format": "png",
       "width": 64,
       "height": 64
+    },
+    {
+      "path": "assets/textures/galaxy_star_ring.bin",
+      "size": 87381,
+      "sha256": "002d2eedec4d4888f958f0da359852b7295da6d19fb491469e46f7e37f325a9d",
+      "format": "alpha8",
+      "width": 256,
+      "height": 256,
+      "mipmaps": 9
     }
   ]
 }

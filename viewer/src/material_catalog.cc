@@ -14,12 +14,13 @@ float GammaToLinearSpace(float value) {
     return std::pow((value + 0.055f) / 1.055f, 2.4f);
 }
 
-Vector4 GalaxyStarColor(const dspugen::Star *star) {
-    static constexpr struct {
-        float position;
-        Vector4 color;
-    } keys[] = {
-        {0.0f, {1.0f, 0.229039833f, 0.174528301f, 1.0f}},
+namespace {
+struct GradientKey {
+    float position;
+    Vector4 color;
+};
+constexpr GradientKey kStarGradient[] = {
+    {0.0f, {1.0f, 0.229039833f, 0.174528301f, 1.0f}},
         {0.06999313f, {1.0f, 0.437254906f, 0.176470578f, 1.0f}},
         {0.31999695f, {1.0f, 0.951527596f, 0.155660391f, 1.0f}},
         {0.50000763f, {0.987870634f, 1.0f, 0.617924571f, 1.0f}},
@@ -27,19 +28,27 @@ Vector4 GalaxyStarColor(const dspugen::Star *star) {
         {0.8200046f, {0.580000043f, 0.896296144f, 1.0f, 1.0f}},
         {0.919996977f, {0.117647052f, 0.654785156f, 1.0f, 1.0f}},
         {1.0f, {0.0990566015f, 0.340047508f, 1.0f, 1.0f}},
-    };
+};
+}
+
+Vector4 GalaxyStarGradient(float color) {
+    float value = std::clamp(color, 0.0f, 1.0f);
+    for (std::size_t i = 1; i < std::size(kStarGradient); ++i) {
+        if (value > kStarGradient[i].position) continue;
+        float amount = (value - kStarGradient[i - 1].position) /
+                       (kStarGradient[i].position - kStarGradient[i - 1].position);
+        return Vector4Lerp(kStarGradient[i - 1].color, kStarGradient[i].color, amount);
+    }
+    return kStarGradient[std::size(kStarGradient) - 1].color;
+}
+
+Vector4 GalaxyStarColor(const dspugen::Star *star) {
     if (star->type == dspugen::EStarType::NeutronStar)
         return Vector4 {0.502143919f, 0.382075489f, 1.0f, 1.0f};
     if (star->type == dspugen::EStarType::WhiteDwarf)
         return Vector4 {0.46226418f, 0.46226418f, 0.46226418f, 1.0f};
     if (star->type == dspugen::EStarType::BlackHole) return Vector4 {0.0f, 0.0f, 0.0f, 1.0f};
-    float value = std::clamp(star->color, 0.0f, 1.0f);
-    for (std::size_t i = 1; i < std::size(keys); ++i) {
-        if (value > keys[i].position) continue;
-        float amount = (value - keys[i - 1].position) / (keys[i].position - keys[i - 1].position);
-        return Vector4Lerp(keys[i - 1].color, keys[i].color, amount);
-    }
-    return keys[std::size(keys) - 1].color;
+    return GalaxyStarGradient(star->color);
 }
 
 Vector4 GalaxyLineColor(Vector4 color) {
@@ -48,6 +57,11 @@ Vector4 GalaxyLineColor(Vector4 color) {
     result.y = GammaToLinearSpace(result.y);
     result.z = GammaToLinearSpace(result.z);
     return result;
+}
+
+Vector4 GalaxyGridColor(Vector4 color) {
+    return Vector4 {GammaToLinearSpace(color.x), GammaToLinearSpace(color.y), GammaToLinearSpace(color.z),
+                    color.w};
 }
 
 float GalaxyStarScale(const dspugen::Star *star) {

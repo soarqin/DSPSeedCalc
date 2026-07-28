@@ -208,17 +208,11 @@ void SceneRenderer::DrawStarSpot(const StarViewData &star, const Camera3D &camer
 
 void SceneRenderer::DrawGalaxyStarPoint(const StarViewData &star, const Camera3D &camera) {
     if (!resources.hasGalaxyStarPointShader || !resources.hasGalaxyStarPointModel) return;
-    Vector3 forward = Vector3Normalize(Vector3Subtract(camera.target, camera.position));
-    Vector3 up = Vector3Normalize(camera.up);
-    if (std::abs(Vector3DotProduct(forward, up)) > 0.999999f) up = Vector3 {0.0f, 0.0f, 1.0f};
-    Vector3 right = Vector3Normalize(Vector3CrossProduct(up, forward));
-    up = Vector3CrossProduct(forward, right);
-    Matrix rotation {right.x, up.x, forward.x, 0.0f,
-                     right.y, up.y, forward.y, 0.0f,
-                     right.z, up.z, forward.z, 0.0f,
-                     0.0f, 0.0f, 0.0f, 1.0f};
-    Matrix transform = MatrixMultiply(MatrixScale(star.galaxyScale, star.galaxyScale, star.galaxyScale), rotation);
-    transform = MatrixMultiply(transform, MatrixTranslate(star.position.x, star.position.y, star.position.z));
+    (void)camera;
+    // `star-point` sits under an identity rotation in the reference build, so the quad stays
+    // in the world XY plane and is not turned towards the camera.
+    Matrix transform = MatrixMultiply(MatrixScale(star.galaxyScale, star.galaxyScale, star.galaxyScale),
+                                      MatrixTranslate(star.position.x, star.position.y, star.position.z));
     rlDrawRenderBatchActive();
     resources.SetMatrix(resources.galaxyStarPointShader, "matViewProjection", SceneRenderer::ViewProjection());
     resources.SetVector4(resources.galaxyStarPointShader, "_MainTex_ST", Vector4 {1.0f, 1.0f, 0.0f, 0.0f});
@@ -258,6 +252,161 @@ void SceneRenderer::DrawGalaxyStarPoint(const StarViewData &star, const Camera3D
     rlEnableDepthMask();
 }
 
+float SceneRenderer::SceneLinear() const {
+    return (postProcess.SceneTarget().id != 0 && rlGetActiveFramebuffer() == postProcess.SceneTarget().id) ||
+                   (postProcess.MultisampleTarget().id != 0 &&
+                    rlGetActiveFramebuffer() == postProcess.MultisampleTarget().id)
+               ? 1.0f
+               : 0.0f;
+}
+
+// The official grid planes are unit quads laid into the XZ plane by a +90 degree
+// rotation about X, then scaled and lifted, so the quad spans size world units.
+static Matrix GalaxyGroundQuad(float size, float height) {
+    Matrix transform = MatrixMultiply(MatrixScale(size, size, 1.0f), MatrixRotateX(PI * 0.5f));
+    return MatrixMultiply(transform, MatrixTranslate(0.0f, height, 0.0f));
+}
+
+void SceneRenderer::DrawGalaxyGridPlane(const Texture2D &texture, float size, float height, Vector4 tint,
+                                        float multiplier, float alphaMultiplier, float tiling,
+                                        float areaMin, float areaMax, float nearFade) {
+    Matrix transform = GalaxyGroundQuad(size, height);
+    rlDrawRenderBatchActive();
+    resources.SetMatrix(resources.galaxyGridShader, "matViewProjection", SceneRenderer::ViewProjection());
+    resources.SetVector4(resources.galaxyGridShader, "_TintColor", tint);
+    resources.SetFloat(resources.galaxyGridShader, "_Multiplier", multiplier);
+    resources.SetFloat(resources.galaxyGridShader, "_AlphaMultiplier", alphaMultiplier);
+    resources.SetFloat(resources.galaxyGridShader, "_Tiling", tiling);
+    resources.SetFloat(resources.galaxyGridShader, "_AreaMin", areaMin);
+    resources.SetFloat(resources.galaxyGridShader, "_AreaMax", areaMax);
+    resources.SetFloat(resources.galaxyGridShader, "_NearFade", nearFade);
+    resources.SetFloat(resources.galaxyGridShader, "_SceneLinear", SceneRenderer::SceneLinear());
+    Material material = resources.galaxyGridMaterial;
+    material.maps[MATERIAL_MAP_DIFFUSE].texture = texture;
+    rlDisableDepthMask();
+    rlDisableDepthTest();
+    rlDisableBackfaceCulling();
+    rlColorMask(true, true, true, false);
+    rlSetBlendMode(RL_BLEND_ALPHA);
+    DrawMesh(resources.starSpotModel.meshes[0], material, transform);
+    rlDrawRenderBatchActive();
+    rlColorMask(true, true, true, true);
+    rlEnableBackfaceCulling();
+    rlEnableDepthTest();
+    rlEnableDepthMask();
+}
+
+void SceneRenderer::DrawGalaxyFrame(float size, float height, Vector4 color, float multiplier) {
+    Matrix transform = GalaxyGroundQuad(size, height);
+    rlDrawRenderBatchActive();
+    resources.SetMatrix(resources.galaxyFrameShader, "matViewProjection", SceneRenderer::ViewProjection());
+    resources.SetVector4(resources.galaxyFrameShader, "_Color", color);
+    resources.SetFloat(resources.galaxyFrameShader, "_Multiplier", multiplier);
+    resources.SetFloat(resources.galaxyFrameShader, "_SceneLinear", SceneRenderer::SceneLinear());
+    Material material = resources.galaxyFrameMaterial;
+    material.maps[MATERIAL_MAP_DIFFUSE].texture = resources.galaxyGridFrameTexture;
+    rlEnableDepthMask();
+    rlEnableDepthTest();
+    rlDisableBackfaceCulling();
+    rlSetBlendMode(RL_BLEND_ALPHA);
+    DrawMesh(resources.starSpotModel.meshes[0], material, transform);
+    rlDrawRenderBatchActive();
+    rlEnableBackfaceCulling();
+}
+
+// The official background is a 5000 unit cube of six outward facing quads centred on
+// the origin; the shader places one star per noise texel on each face.
+void SceneRenderer::DrawGalaxyBackgroundStars(float time) {
+    if (!resources.hasGalaxyBackgroundStarShader || !resources.hasStarModels) return;
+    static const struct {
+        Quaternion rotation;
+        Vector3 position;
+    } faces[] = {
+        {{0.0f, 0.0f, 0.0f, 1.0f}, {0.0f, 0.0f, 2500.0f}},
+        {{0.0f, -0.7071068f, 0.0f, 0.7071068f}, {-2500.0f, 0.0f, 0.0f}},
+        {{0.0f, 0.7071068f, 0.0f, 0.7071068f}, {2500.0f, 0.0f, 0.0f}},
+        {{0.0f, 1.0f, 0.0f, 0.0f}, {0.0f, 0.0f, -2500.0f}},
+        {{0.7071068f, 0.0f, 0.0f, 0.7071068f}, {0.0f, -2500.0f, 0.0f}},
+        {{-0.7071068f, 0.0f, 0.0f, 0.7071068f}, {0.0f, 2500.0f, 0.0f}},
+    };
+    rlDrawRenderBatchActive();
+    Shader shader = resources.galaxyBackgroundStarShader;
+    resources.SetMatrix(shader, "matViewProjection", SceneRenderer::ViewProjection());
+    resources.SetVector4(shader, "_StarSetting", Vector4 {0.200000003f, 0.200000003f, 1.10000002f, 0.400000006f});
+    resources.SetVector4(shader, "_RefValueA", GalaxyGridColor(Vector4 {0.274509804f, 0.490196078f, 0.360784314f, 1.0f}));
+    resources.SetVector4(shader, "_RefValueB", GalaxyGridColor(Vector4 {0.603921569f, 0.270588235f, 0.317400008f, 1.0f}));
+    resources.SetVector4(shader, "_StarColor", GalaxyGridColor(Vector4 {0.655700028f, 0.747900009f, 1.0f, 1.0f}));
+    // _StarColorChange is declared as a Vector, so it is not colour space converted.
+    resources.SetVector4(shader, "_StarColorChange", Vector4 {0.5f, 0.699999988f, 0.300000012f, 0.0f});
+    resources.SetVector4(shader, "_Time", Vector4 {time / 20.0f, time, time * 2.0f, time * 3.0f});
+    resources.SetFloat(shader, "_SceneLinear", SceneRenderer::SceneLinear());
+    int texelLocation = resources.Uniform(shader, "_NoiseMapTexelSize");
+    if (texelLocation >= 0) {
+        Vector2 texelSize {1.0f / 128.0f, 1.0f / 128.0f};
+        SetShaderValue(shader, texelLocation, &texelSize, SHADER_UNIFORM_VEC2);
+    }
+    rlDisableDepthMask();
+    rlEnableDepthTest();
+    rlDisableBackfaceCulling();
+    rlSetBlendMode(RL_BLEND_ALPHA);
+    for (const auto &face: faces) {
+        Matrix transform = MatrixMultiply(MatrixScale(5000.0f, 5000.0f, 5000.0f),
+                                          QuaternionToMatrix(face.rotation));
+        transform = MatrixMultiply(transform,
+                                   MatrixTranslate(face.position.x, face.position.y, face.position.z));
+        DrawMesh(resources.starSpotModel.meshes[0], resources.galaxyBackgroundStarMaterial, transform);
+    }
+    rlDrawRenderBatchActive();
+    rlEnableBackfaceCulling();
+    rlEnableDepthMask();
+}
+
+void SceneRenderer::DrawGalaxyStarMarker(const Texture2D &texture, Vector3 position, float size,
+                                         Vector4 tint, float multiplier, float alphaMultiplier) {
+    if (!resources.hasGalaxyMarkerShader || !resources.hasStarModels) return;
+    // The official marker quads sit under an identity rotation, so they stay in the world
+    // XY plane instead of facing the camera.
+    Matrix transform = MatrixMultiply(MatrixScale(size, size, size),
+                                      MatrixTranslate(position.x, position.y, position.z));
+    rlDrawRenderBatchActive();
+    resources.SetMatrix(resources.galaxyMarkerShader, "matViewProjection", SceneRenderer::ViewProjection());
+    resources.SetVector4(resources.galaxyMarkerShader, "_TintColor", tint);
+    resources.SetFloat(resources.galaxyMarkerShader, "_Multiplier", multiplier);
+    resources.SetFloat(resources.galaxyMarkerShader, "_AlphaMultiplier", alphaMultiplier);
+    resources.SetFloat(resources.galaxyMarkerShader, "_SceneLinear", SceneRenderer::SceneLinear());
+    Material material = resources.galaxyMarkerMaterial;
+    material.maps[MATERIAL_MAP_DIFFUSE].texture = texture;
+    rlDisableDepthMask();
+    rlDisableDepthTest();
+    rlDisableBackfaceCulling();
+    rlColorMask(true, true, true, false);
+    rlSetBlendMode(RL_BLEND_ALPHA);
+    DrawMesh(resources.starSpotModel.meshes[0], material, transform);
+    rlDrawRenderBatchActive();
+    rlColorMask(true, true, true, true);
+    rlEnableBackfaceCulling();
+    rlEnableDepthTest();
+    rlEnableDepthMask();
+}
+
+void SceneRenderer::DrawGalaxyGrid() {
+    if (!resources.hasGalaxyGridShaders || !resources.hasStarModels) return;
+    // Material constants come from galaxy-select-grid-1, -2, -4 and -5 in the reference build;
+    // the tints are the linear form of the serialised sRGB colours.
+    SceneRenderer::DrawGalaxyGridPlane(resources.galaxyGridDotTexture, 500.0f, -15.0f,
+                                       GalaxyGridColor(Vector4 {0.551886797f, 0.691747725f, 1.0f, 1.0f}),
+                                       1.0f, 0.0299999993f, 0.200000003f, 60.0f, 250.0f, 35.0f);
+    SceneRenderer::DrawGalaxyGridPlane(resources.galaxyGridLineTexture, 500.0f, -15.0f,
+                                       GalaxyGridColor(Vector4 {1.0f, 1.0f, 1.0f, 1.0f}),
+                                       1.0f, 0.0299999993f, 0.400000006f, 60.0f, 250.0f, 35.0f);
+    SceneRenderer::DrawGalaxyGridPlane(resources.galaxyGridDotTexture, 67.0f, -10.0f,
+                                       GalaxyGridColor(Vector4 {0.570754707f, 0.662471890f, 1.0f, 1.0f}),
+                                       1.0f, 0.100000001f, 0.200000003f, 50.0f, 250.0f, -10.0f);
+    SceneRenderer::DrawGalaxyGridPlane(resources.galaxyGridLineTexture, 67.0f, -10.0f,
+                                       GalaxyGridColor(Vector4 {0.636792421f, 0.739024401f, 1.0f, 1.0f}),
+                                       1.0f, 0.0500000007f, 0.400000006f, 50.0f, 250.0f, -10.0f);
+}
+
 void SceneRenderer::DrawGalaxyLines(const std::vector<GalaxyLineData> &lines,
                      const std::vector<StarViewData> &stars, const Camera3D &camera) {
     if (!resources.hasGalaxyLineShader || !IsTextureValid(resources.galaxyLineTexture)) return;
@@ -271,10 +420,7 @@ void SceneRenderer::DrawGalaxyLines(const std::vector<GalaxyLineData> &lines,
     resources.SetFloat(resources.galaxyLineShader, "_MinDistScale", 0.100000001f);
     resources.SetFloat(resources.galaxyLineShader, "_MaxDistScale", 10.0f);
     resources.SetFloat(resources.galaxyLineShader, "_Global_GalaxyFadeRadius", 0.0f);
-    float sceneLinear = (postProcess.SceneTarget().id != 0 && rlGetActiveFramebuffer() == postProcess.SceneTarget().id) ||
-                        (postProcess.MultisampleTarget().id != 0 &&
-                         rlGetActiveFramebuffer() == postProcess.MultisampleTarget().id) ? 1.0f : 0.0f;
-    resources.SetFloat(resources.galaxyLineShader, "_SceneLinear", sceneLinear);
+    resources.SetFloat(resources.galaxyLineShader, "_SceneLinear", SceneRenderer::SceneLinear());
     resources.SetVector4(resources.galaxyLineShader, "_ScreenParams",
                      Vector4 {static_cast<float>(rlGetFramebufferWidth()),
                               static_cast<float>(rlGetFramebufferHeight()), 0.0f, 0.0f});
@@ -283,7 +429,6 @@ void SceneRenderer::DrawGalaxyLines(const std::vector<GalaxyLineData> &lines,
     rlSetBlendFactors(RL_SRC_ALPHA, RL_ONE, RL_FUNC_ADD);
     rlSetBlendMode(RL_BLEND_CUSTOM);
     BeginShaderMode(resources.galaxyLineShader);
-    rlSetTexture(resources.galaxyLineTexture.id);
     for (const auto &line: lines) {
         const auto &startStar = stars[line.start];
         const auto &endStar = stars[line.end];
@@ -294,6 +439,9 @@ void SceneRenderer::DrawGalaxyLines(const std::vector<GalaxyLineData> &lines,
         Vector3 end = startStar.position + span * (1.0f - (endStar.galaxyScale * 0.25f + 0.35f) / distance);
         resources.SetVector4(resources.galaxyLineShader, "_LineColorA", GalaxyLineColor(startStar.galaxyColor));
         resources.SetVector4(resources.galaxyLineShader, "_LineColorB", GalaxyLineColor(endStar.galaxyColor));
+        // rlDrawRenderBatchActive() below resets every batch draw slot back to the default 1x1
+        // white texture, so the profile texture has to be re-bound for every line.
+        rlSetTexture(resources.galaxyLineTexture.id);
         SceneRenderer::DrawGalaxyLineQuad(start, end, camera, 1.0f);
         rlDrawRenderBatchActive();
     }
@@ -369,19 +517,32 @@ void SceneRenderer::DrawPlanet(const PlanetViewData &planet, const Camera3D &cam
     }
 }
 
-void SceneRenderer::DrawGalaxy(const std::vector<Line3DCache> &gridLines,
-                               const std::vector<GalaxyLineData> &lines,
+void SceneRenderer::DrawGalaxy(const std::vector<GalaxyLineData> &lines,
                                const std::vector<StarViewData> &stars,
-                               const Camera3D &camera, float time) {
-    (void)time;
-    DrawBackgroundStars(camera, false);
-    float gridAlpha = std::clamp((Vector3Distance(camera.position, camera.target) - 22.0f) / 34.0f,
-                                 0.0f, 1.0f) * 0.3f;
-    Color gridColor {105, 153, 181,
-                     static_cast<unsigned char>(std::clamp(gridAlpha, 0.0f, 1.0f) * 255.0f)};
-    DrawCachedLines(gridLines, gridColor);
+                               const Camera3D &camera, float time, std::size_t markedStar,
+                               std::size_t invalidIndex) {
+    // Official render queues: background 1000, frame 2499, connection lines 2999,
+    // grid planes and star points 3000 with the grid planes sorting behind the points.
+    DrawGalaxyBackgroundStars(time);
+    DrawGalaxyFrame(67.0f, -10.0f, Vector4 {1.0f, 1.0f, 1.0f, 1.0f}, 1.0f);
     DrawGalaxyLines(lines, stars, camera);
+    DrawGalaxyGrid();
     for (const auto &star: stars) DrawGalaxyStarPoint(star, camera);
+    // `starPointBirth` follows stars[0] with the plain gradient colour and a fixed 1.4 scale;
+    // `starPointSelection` uses the star type colour overrides and a scale of
+    // `typeScale * 0.6 + 0.6`. The reference build drives it from the ray hit because its starmap
+    // has no click selection; the viewer drives it from the clicked star instead.
+    if (!stars.empty()) {
+        SceneRenderer::DrawGalaxyStarMarker(resources.galaxyStarRingTexture, stars[0].position, 1.4f,
+                                            GalaxyGridColor(GalaxyStarGradient(stars[0].data->color)),
+                                            2.5f, 1.0f);
+    }
+    if (markedStar != invalidIndex && markedStar < stars.size()) {
+        const auto &star = stars[markedStar];
+        SceneRenderer::DrawGalaxyStarMarker(resources.galaxyStarRingTexture, star.position,
+                                            star.galaxyScale * 0.6f + 0.6f,
+                                            GalaxyGridColor(star.galaxyColor), 2.5f, 1.0f);
+    }
 }
 
 void SceneRenderer::DrawSystem(const SystemViewCache &system, const Camera3D &camera,
