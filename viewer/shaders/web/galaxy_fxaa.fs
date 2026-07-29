@@ -9,6 +9,7 @@ uniform highp vec2 sourceTexelSize;
 uniform highp float qualitySubpix;
 uniform highp float qualityEdgeThreshold;
 uniform highp float qualityEdgeThresholdMin;
+uniform highp float fxaaEnabled;
 
 out highp vec4 finalColor;
 
@@ -115,5 +116,9 @@ highp vec3 ApplyFxaa(highp vec2 uv)
 
 void main()
 {
-    finalColor = vec4(LinearToSrgb(clamp(ApplyFxaa(fragTexCoord), 0.0, 1.0)), 1.0);
+    // PostEffectController drives antialiasing.enabled from the FXAA option, and the game still
+    // writes the graded result straight to the display when it is off.
+    highp vec3 color = fxaaEnabled > 0.5 ? ApplyFxaa(fragTexCoord)
+                                         : textureLod(texture0, fragTexCoord, 0.0).rgb;
+    finalColor = vec4(LinearToSrgb(clamp(color, 0.0, 1.0)), 1.0);
 }

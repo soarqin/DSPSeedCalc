@@ -29,6 +29,11 @@ void ClearLinearBackground(unsigned char r, unsigned char g, unsigned char b) {
                  GammaToLinearSpace(static_cast<float>(g) / 255.0f),
                  GammaToLinearSpace(static_cast<float>(b) / 255.0f), 1.0f);
     rlClearScreenBuffers();
+    // `Universe/Starmap/Planet Orbit` rejects a fragment whose stencil already holds its own
+    // `_Stencil` reference, so the buffer has to start each frame at a value no orbit uses.
+    // rlClearScreenBuffers() only clears colour and depth.
+    glStencilMask(0xFF);
+    glClear(GL_STENCIL_BUFFER_BIT);
 }
 
 RenderTexture2D LoadHalfFloatRenderTexture(int width, int height, bool withDepth) {
@@ -83,8 +88,11 @@ RenderTexture2D LoadMultisampleHalfFloatRenderTexture(int width, int height, int
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, target.texture.id);
         glGenRenderbuffers(1, &target.depth.id);
         glBindRenderbuffer(GL_RENDERBUFFER, target.depth.id);
-        glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_DEPTH_COMPONENT24, width, height);
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, target.depth.id);
+        // Packed depth-stencil rather than plain depth: the planet orbit pass needs a stencil to
+        // suppress the double additive blend where its camera-facing ribbon overlaps itself.
+        // DEPTH24_STENCIL8 is core in both desktop GL 3.3 and WebGL2, including multisampled.
+        glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_DEPTH24_STENCIL8, width, height);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, target.depth.id);
         bool complete = glGetError() == GL_NO_ERROR &&
                         glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
         glBindRenderbuffer(GL_RENDERBUFFER, 0);
@@ -122,6 +130,16 @@ void UnloadMultisampleRenderTexture(RenderTexture2D &target) {
     target = {};
 }
 
+}
+
+void PostProcess::SetPostEffects(bool fxaa, int level) {
+    fxaaEnabled = fxaa;
+    bloomLevel = std::clamp(level, 0, 2);
+}
+
+float PostProcess::BloomIntensity() const {
+    if (bloomLevel <= 0) return 0.0f;
+    return bloomLevel >= 2 ? 0.3f : 0.2f;
 }
 
 void PostProcess::Unload() {
@@ -188,6 +206,10 @@ bool PostProcess::Draw(const Camera3D &camera, const RenderResources &resources,
                        const void *context, void (*drawScene)(const void *, float)) {
     float time = static_cast<float>(GetTime());
     if (!EnsureTargets(GetScreenWidth(), GetScreenHeight())) {
+        // Without the HDR targets the scene lands in the window framebuffer, which viewer_app.cc
+        // clears through ClearBackground(). That leaves the stencil untouched, so clear it here.
+        glStencilMask(0xFF);
+        glClear(GL_STENCIL_BUFFER_BIT);
         BeginMode3D(camera);
         drawScene(context, time);
         EndMode3D();
@@ -259,7 +281,7 @@ bool PostProcess::Draw(const Camera3D &camera, const RenderResources &resources,
     if (lutLocation >= 0)
         SetShaderValueTexture(resources.bloomCompositeShader, lutLocation, resources.galaxyColorGradingLut);
     resources.SetSourceTexelSize(resources.bloomCompositeShader, bloomSource, sampleScale);
-    resources.SetFloat(resources.bloomCompositeShader, "intensity", 0.3f);
+    resources.SetFloat(resources.bloomCompositeShader, "intensity", BloomIntensity());
     resources.SetFloat(resources.bloomCompositeShader, "dirtIntensity", 3.0f);
     DrawFlippedTexture(sceneTarget.texture, fxaaTarget.texture.width, fxaaTarget.texture.height);
     EndShaderMode();
@@ -272,6 +294,7 @@ bool PostProcess::Draw(const Camera3D &camera, const RenderResources &resources,
     resources.SetFloat(resources.galaxyFxaaShader, "qualitySubpix", 0.75f);
     resources.SetFloat(resources.galaxyFxaaShader, "qualityEdgeThreshold", 0.165999994f);
     resources.SetFloat(resources.galaxyFxaaShader, "qualityEdgeThresholdMin", 0.0833000019f);
+    resources.SetFloat(resources.galaxyFxaaShader, "fxaaEnabled", fxaaEnabled ? 1.0f : 0.0f);
     DrawFlippedTexture(fxaaTarget.texture, GetScreenWidth(), GetScreenHeight());
     EndShaderMode();
     EndOpaqueBlit();

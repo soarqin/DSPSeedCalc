@@ -47,26 +47,42 @@
 | 两点线 emitter UV / POSITION.w / 索引 | 已确认 | 四个顶点使用 `V=1/0`、`POSITION.w=1`，索引为 `(0,1,2)`、`(1,3,2)` | 否，当前输入值和拓扑等价 |
 | 顶点 Shader 矩阵 | 已确认 | 官方的 ObjectToWorld 在当前单位 Transform 下为 identity；viewer 在 CPU 生成世界坐标后应用等价 VP | 否 |
 | 顶点输入和 Unity 内建量替代 | 已确认 | program、attribute、uniform、FBO 和采样数与 viewer 的预期值一致 | 否 |
-| 连接线纹理绑定 | 已确认并实现 | raylib batch flush 会把纹理槽重置为默认白色纹理，除首条线外所有连接线都采样到 1×1 白纹理 | 是，这是线芯偏粗的主因；同分辨率下仍有 19% 至 31% 残留，见 2026-07-29 第六条 |
+| 连接线纹理绑定 | 已确认并实现 | raylib batch flush 会把纹理槽重置为默认白色纹理，除首条线外所有连接线都采样到 1×1 白纹理 | 是，这是线芯偏粗的主因；修好后的残留不属于连接线，见 2026-07-29 第八条 |
+| 后处理选项不匹配 | 已确认并实现 | 参考机器 `<FXAA>0</FXAA>`、`<BloomLevel>0</BloomLevel>`、`<Dithering>0</Dithering>`，viewer 原先无条件启用 FXAA 与 Bloom | 是，已由 `--fxaa` / `--bloom` 解决 |
+| 各向异性过滤 | 已确认并实现 | 按资产 `m_Aniso`：`galaxy-select-frame` `2`、两张网格纹理 `5`、`star-line` `1`（不加）。原先 viewer 全部各向同性 | 是，网格对比偏低与边框偏宽的共同原因 |
 | 连接线颜色输入 | 已确认 | `starColors` 渐变八个键、三个特殊类型颜色与资产逐位一致；`Color.Lerp` 在 gamma 空间做、再转线性的顺序也一致 | 否 |
 | Galaxy Select 网格 | 已确认并实现 | 官方为五个平面：两层 500×500 外网格、两层 67×67 内网格、一个 67×67 白色边框 | 否，属于独立的画面差异 |
 | Galaxy Select 背景星空 | 已确认并实现 | 官方为六个 5000 单位天空盒 Quad，材质 `bgstars-galaxy-select`，每个噪声纹素一颗星的程序化星场 | 否 |
 | Galaxy Select 星点 Shader | 已确认 | `Universe/Starmap/Point` 片元程序与 viewer 的 `galaxy_star_point.fs` 逐项等价 | 否 |
 | Galaxy Select 相机 | 已确认 | 直接从 `ThirdPersonPoser` 序列化字节复核，距离恒为 `80.9`，俯仰可由玩家在 `[-81.2, -4.9]` 内调整 | 否 |
-| HDR scene MSAA | 已确认并实现 | 官方为 8 样本；viewer 现用 8-sample RGBA16F / depth24 FBO 并在 Bloom 前 resolve；`12.png` 证明它未解决线芯偏粗 | 已排除为主因 |
+| HDR scene MSAA | 已确认并实现 | 官方为 8 样本；viewer 同样 8 样本。减法 A/B 显示 8 样本与 1 样本的边框宽度只差 `0.005 px` | 已排除，见 2026-07-29 第九条 |
 | 片元 Shader 和材质 | 已确认 | profile、距离缩放、裁剪、颜色和混合常量均已恢复 | 否 |
 | `star-line` 纹理 | 已确认 | 尺寸、BC1 mip、方向、采样和重建数据已验证 | 否 |
 | Galaxy 相机 | 已确认 | FOV、距离、目标、俯仰范围均来自官方对象和运行路径 | 否 |
 | Bloom / Color Grading | 已确认并实现 | 属于 HDR 后处理，不改变 ribbon 几何 | 否 |
-| FXAA | 已确认并实现 | 官方启用 Default preset 39；加入后 `10.png` 线宽基本不变 | 已排除为主因 |
+| FXAA | 已确认并实现 | 由玩家选项控制。profile 预设为 Default 39，但 `PostEffectController` 用 `aaOn` 开关组件；参考机器 `<FXAA>0</FXAA>`，所以 `15.png` 没有 FXAA。viewer 现由 `--fxaa` 控制 | 是，这是第八条那份「全画面模糊」的主要来源 |
 | Dithering | 已确认但未实现 | 最终低幅度颜色扰动，不参与 FXAA 边缘搜索和几何。幅度为 sRGB `±1/255`，不是官方截图天区里观测到的 `±4` 字节噪声，后者是有损压缩 | 否 |
+| 星图轨道线 | 已确认并实现 | `Universe/Starmap/Planet Orbit` 是解析式射线与圆求交，环带只是光栅化画布，`uv.y` 完全不参与 | 不适用，属星系内视图 |
+| 星图轨道盘 | 已确认并实现 | `orbit-disk` 为 `YC Shaders/Particle/Add`，`_Multiplier = 0.015` 的极淡附加盘 | 不适用 |
+| 星图行星材质 | 已确认并实现 | `Planet Thumb New` 已逐指令移植；`_HeightMap` 属性默认值为 `black`，官方 32 个 thumb 材质全部不赋值 | 不适用 |
+| 星图背景星空 | 已确认并实现 | 与银河视图同一个 Shader `1391` 和同一张噪声 `605`，只换常量；两层壳随相机 `0.93` / `0.96` 跟随 | 不适用 |
+| 星图基础网格 | 已确认不适用 | `dist < 15000` 时 `SetActive(false)`，星系内视图不可见 | 不适用 |
+| Starmap Camera 近远面与 FOV | 已确认并实现 | near `0.02`、far `150000` 无运行时覆盖；序列化 FOV `50` 被运行时 `60` 覆盖 | 不适用 |
 
 ### 星系内视图
 
-- 普通恒星后处理：已实现，待截图验收。星系内视图现进入与银河视图相同的 8-sample HDR、Bloom、Color Grading 和 FXAA 管线；恒星仍按官方距离公式切换表面与 Spot，并按 Black、Mass、Spot 顺序绘制。
-- 行星实体几何：已实现，待截图验收。`UIStarmapPlanet` 使用固定 `GeoSphere`；viewer 复用字节一致的 `star_mass_*` 网格，使用官方 `realRadius * 2 * 0.00025` Transform 缩放，并移除常驻线框层。
-- 行星主题材质：部分实现。viewer 已按 `theme` 和 `themeSeed % 60` 选择官方 thumb 材质的 `_Color.rgb` 与 `_RimColor`，并移除临时程序化条纹。当前 Shader 为近似实现，尚未移植完整 `Planet Thumb New` 和黑色 `_HeightMap` 路径。
+2026-07-29 第十条对整个 `Game Starmap` 做了一轮完整调查与实现，本节按其结果重写。
+
+- 普通恒星后处理：已实现并截图验收。星系内视图进入与银河视图相同的 8-sample HDR、Bloom、Color Grading 和 FXAA 管线。
+- 恒星亮度与绘制顺序：已确认并实现。`UIStarmapStarObject._OnLateUpdate` 每帧把混合材质的 `_Multiplier` 覆盖为常量 `4 * bodyLevel`（mass）与 `0.3 * spotLevel`（spot）；顺序按 render queue 为 black `2980`、当前 view star 的 spot `2981`、其余恒星的 spot `2979`、mass 全部 `2982`。原实现用的是混合后的 `multiplier`，且 mass 与 spot 顺序颠倒。
+- 行星实体几何：已实现并截图验收。`UIStarmapPlanet` 使用固定 `GeoSphere`（AABB extent `0.5`，即单位直径）；viewer 复用字节一致的 `star_mass_*` 网格，缩放为官方 `realRadius * 2 * 0.00025`。
+- 行星主题材质：已确认并实现。`VF Shaders/Forward/Planet Thumb New`（`resources.assets:10085`）已逐指令移植，32 个 thumb 材质的完整常量集已写入 `material_catalog.cc`，`_HeightMap` 绑定 1×1 黑色 Cubemap。
+- 轨道线与轨道盘：已确认并实现。`Universe/Starmap/Planet Orbit`（`sharedassets0.assets:1371`）是解析式射线与圆求交，`YC Shaders/Particle/Add`（`1396`）负责轨道盘。
+- 背景星空：已确认并实现。官方为 `bg-stars-near` 与 `bg-stars-far` 两层 6-Quad 天空盒，随相机以 `0.93` / `0.96` 跟随。原实现是程序化小球。
+- 近远裁剪面：已确认并实现。`Starmap Camera` 序列化 near `0.02`、far `150000`，运行时无覆盖。原实现用 raylib 默认值。
+- 其它恒星：已确认并实现。星系内视图仍渲染整个星团，位置为 `position * 600`。
 - 相机操作：已实现，待交互验收。viewer 已按 `StarmapCamera.CameraControl()` 改为中键旋转、右键滚转、滚轮指数缩放；中键的纵向灵敏度为横向的一半，右键滚转灵敏度为横向的 `0.7`。缩放范围对应官方 `0.0375` 至 `45000`，但为适配离散滚轮输入，单级缩放倍率调整为 `1.2`。双击行星会把视图目标切到该行星，`Z` 恢复恒星系中心。
+- FOV：`Starmap Camera` 序列化的 `50` 被 `StarmapCamera.RefreshCameraPose()` 的 `tarCam.fieldOfView = fov` 覆盖，`fov` 初值为 `60`。**不要按序列化值改成 50。**
 
 星图行星证据来自参考构建中的 `UIStarmapPlanet`、`ThemeProto`、`PlanetGen`、`level0`、`resources.assets` 和 `sharedassets0.assets`。Prefab 关系为 `UIStarmap:46333 -> planetUIPrefab:46827 -> starmap-planet-obj:2667`，实体网格为 `sharedassets0.assets:1153`（`GeoSphere`，2617 个顶点、5120 个三角形），材质 Shader 为 `resources.assets:10085`（`VF Shaders/Forward/Planet Thumb New`）。官方 thumb 材质不序列化 `_HeightMap`，远程未加载行星也可以没有高度 Cubemap；因此完整 Shader 移植时应绑定黑色 Cubemap，不应虚构静态地形纹理。
 
@@ -326,7 +342,7 @@ FXAA 配置：
 - 通过纹理翻转、固定 mip / LOD 或修改过滤方式解决线芯宽度。
 - 通过 Bloom、Color Grading、FXAA 或 Dithering 解释几何线宽差异。
 - 依据 `2.png`、`8.png`、`9.png` 或 `10.png` 直接反推常量。截图尺寸和裁剪不同，只能做定性验收。
-- 用各向异性过滤解释线芯宽度。官方 `QualitySettings.anisotropicTextures = 2`（ForceEnable）确实与 viewer 默认的各向同性采样不同，但在 viewer 上把线纹理设为 16x 各向异性后画面无可测量变化。
+- 用各向异性过滤解释**连接线**宽度。`star-line` 的 `m_Aniso` 就是 `1`，连接线本来就不该有各向异性；在 viewer 上给线纹理设 9 或 16 倍后画面无可测量变化。**该结论仅限连接线**：网格与边框纹理的 `m_Aniso` 分别是 `5` 与 `2`，缺失各向异性正是它们的差异来源，见 2026-07-29 第九条。
 - 用纹理 wrap 模式解释线芯宽度。官方为 Clamp、raylib 默认为 Repeat，改为 Clamp 后画面无可测量变化。
 - 用渲染分辨率解释线芯宽度。同一相机下把 viewer 从 1280×720 提高到 2560×1440，`FWHM / discard 带宽` 仍为 1.00，未向官方的 0.28 靠拢。
 
@@ -366,20 +382,25 @@ Debug、Release 和 Emscripten 均已构建成功；Release Native 运行日志�
 
 | 项 | 状态 | 证据是否齐备 | 记录位置 |
 | --- | --- | --- | --- |
-| 连接线同分辨率残留展宽 | 未定位 | 是，1:1 逐像素量测已完成 | 2026-07-29 第六条 |
+| 连接线偏宽 9% | 未归因 | 是，同姿态 1:1 量测已完成，方法离散度已标定 | 2026-07-29 第九条 |
+| 边框偏窄 4.5% | 未归因 | 是 | 2026-07-29 第九条 |
+| 星名标签的背景面板与描边 | 未实现 | 是 | 2026-07-29 第八条 |
 | 星名标签文案与光谱型后缀 | 未实现 | 是 | 2026-07-29 第五条 |
-| Dithering | 未实现 | 部分，缺 64 张 `LDR_LLL1_*` 的提取 | P1 与「后处理顺序」 |
+| Dithering | 未实现 | 部分，缺 64 张 `LDR_LLL1_*` 的提取。参考机器该选项为 `0`，复现 `15.png` 不需要它 | P1 与「后处理顺序」 |
 | 选中环鼠标点击的人工验收 | 已实现并截图验收 | 不适用，仅缺人工点击确认 | 2026-07-29 第六条 |
-| Emscripten 构建验证 | 未执行 | 不适用，本机缺 emsdk | 2026-07-29 第三条 |
 | 两个同姿态 67×67 Quad 的用途 | 未确认 | 否 | 2026-07-29 第二条 |
-| 无损官方截图 | 未获取 | 现有官方截图均带 4:2:0 有损压缩，限制测光精度 | 2026-07-29 第六条 |
-| 行星主题材质 | 部分实现 | 否，未移植完整 `Planet Thumb New` 与黑色 `_HeightMap` 路径 | 「星系内视图」 |
-| 星系内视图后处理与行星几何 | 已实现待验收 | 不适用，缺截图验收 | 「星系内视图」 |
 | 星系内视图相机操作 | 已实现待验收 | 不适用，缺交互验收 | 「星系内视图」 |
+| 轨道环带宽度是否随 Transform 缩放 | 未确认 | 否，Unity 原生行为未取证；对可见线宽无影响，只影响极端缩放下的画布裁剪 | 2026-07-29 第十条 |
+| `starmap-gizmo` 方位控件 | 未实现 | 是，已定位为独立相机渲进 RenderTexture 的 UI 部件 | 2026-07-29 第十条 |
+| 行星自转改用官方 `runtimeRotation` | 未实现 | 是 | 2026-07-29 第十条 |
 
 `starPointSelection` 与 `starPointBirth` 已于 2026-07-29 第五条完成调查与实现。
 
 以下三项已于 2026-07-29 第六条关闭，不再是待办：银河视图背景星点亮度（等条件下匹配，原「3 倍」为测量方法造成）、银河区域偏红底光来源（viewer 清屏色红色通道被 8 位量化抹掉，已修复）、连接线逐像素亮度比对（已在 1080p 对 1080p 下执行）。
+
+以下两项已于 2026-07-29 第八条关闭：「无损官方截图」（`15.png` 经编码取证确认无损）、「Emscripten 构建验证」（Release 构建通过，Chrome + WebGL2 运行无 raylib 告警，8 样本 multisample FBO 可用）。
+
+「连接线同分辨率残留展宽」也已在第八条改写：残留不属于连接线，而是全画面共有的 σ ≈ 0.5 px 各向同性模糊。
 
 ## 截图记录
 
@@ -389,6 +410,10 @@ Debug、Release 和 Emscripten 均已构建成功；Release Native 运行日志�
 - `C:\Users\soar\Pictures\10.png`：加入官方 FXAA 后的结果；线芯仍基本未变化。
 - `C:\Users\soar\Pictures\11.png`：改用 Unity 两点 emitter 的终点候选侧向量后；线芯仍无可见变化。
 - `C:\Users\soar\Pictures\12.png`：连接线改为 8-sample HDR scene target 后；亮芯仍未朝官方结果产生实质变化。
+- `C:\Users\soar\Pictures\15.png`：官方 1080p 无损截图，同 seed，带小的非零偏航。
+- `C:\Users\soar\Pictures\16.png`：viewer 1080p 截图，偏航为 `0`。与 `15.png` 构成当前唯一可用的等条件 A/B。
+
+`13.png` 与 `14.png` 已删除。`14.png` 曾被证明缩放过约 `1.148` 倍，引用它的像素尺度得出的结论已在第六条与第八条撤回。
 
 这些截图证明对应修改没有解决目标问题，但不证明任何具体宽度系数。
 
@@ -996,7 +1021,7 @@ Debug 构建通过、无编译警告；运行日志无 `ERROR` 与 `WARNING`，`
 - 选中环只做了强制选中路径的截图验收，鼠标点击的人工验收未做。
 - 官方标签为两行，出生星额外带一行本地化的「即将登陆」，正文还包含光谱型后缀；按需求 viewer 保持只画星名。
 - Dithering 仍未实现。其幅度为 sRGB `±1/255`，不要与官方截图天区里 `±4` 字节的压缩噪声混为一谈。
-- 现有官方截图全部带 4:2:0 有损压缩。后续任何测光比对都必须先把 viewer 侧做同等编码，或获取无损官方截图。
+- ~~现有官方截图全部带 4:2:0 有损压缩。后续任何测光比对都必须先把 viewer 侧做同等编码，或获取无损官方截图。~~ 已于 2026-07-29 第八条部分作废：`15.png` 为无损官方截图，与 `16.png` 的比对不需要同等编码。该约束仍适用于 `2.png`。
 
 ### 2026-07-29：星点与标记的朝向来自 Billboard 组件
 
@@ -1085,3 +1110,505 @@ cmake-build-viewer-debug\bin\viewer\viewer.exe 0 64
 Debug 构建通过、无编译警告；运行日志无 `ERROR` 与 `WARNING`。量测用的临时插桩（指定帧截图、相机 yaw/pitch 覆盖）已回滚，`viewer_app.cc` 的 md5 与提交版本一致，`camera_controller.cc` 无改动。
 
 方法论教训：**序列化的 Transform 值只能作为初始值使用。判断朝向前必须枚举对象的组件列表，确认没有运行时改写旋转的 MonoBehaviour。** 本次的直接线索是组件枚举时出现「Expected to read 48 bytes, but only read 32 bytes」——那是一个类型树缺失、未被识别的 MonoBehaviour，不应忽略。
+
+### 2026-07-29：1080p 无损 A/B 复核，连接线残留归结为 σ≈0.6 px 模糊
+
+日期：2026-07-29
+
+参考版本和文件哈希：与「参考版本」一节相同，本次未发生变化。
+
+问题：用新的同 seed 1080p 截图 `15.png`（游戏）与 `16.png`（viewer）复核银河视图，确认连接线的同分辨率残留展宽是否仍然存在，并核查其余可见差异。
+
+重开既有区域的原因：新增等条件证据。原 `13.png` 与 `14.png` 已删除，其中 `14.png` 曾被证明缩放过约 `1.148` 倍，像素尺度不可用于测光。
+
+调查范围：两张新截图的编码取证、星场配准、白色边框姿态反解、连接线横截面的配对量测与模糊核拟合、FXAA 输入色彩空间的官方托管代码复核、网格高通对比、天区底色复核。
+
+#### 截图编码取证：`15.png` 为无损
+
+方法与第六条相同，取各图最暗且最平静的 `140 x 70` 天区：
+
+```text
+                Cb 水平 |diff| 偶数对 / 奇数对    G 字节残差 std
+官方 2.png      0.110 / 0.119  = 1.08 倍           1.94
+官方 15.png     0.001 / 0.001  = 1.01 倍           0.62
+viewer 16.png   0.024 / 0.029  = 1.22 倍           0.64
+```
+
+`15.png` 没有色度亚采样的偶奇不对称，字节残差 std 与 viewer 自己的截图同级（`0.62` 对 `0.64`），远低于已删除的 `13.png` 的 `3.98`。因此 **`15.png` 是无损截图**，第六条「后续任何测光比对都必须先把 viewer 侧做同等编码」的约束对本对不再适用。
+
+#### 配准与姿态
+
+两图均为 1080p 渲染后的裁剪，用星点质心做相似变换配准：尺度 `1.00543`、31 个内点、残差中位 `1.19 px`、最大 `2.71 px`。星场可配准即确认两图为同一 seed。
+
+但两图的机位并不完全相同。对 67×67 白色边框的两条侧边做带剔除的直线拟合（斜率为 `dx/dy`，对平移不变，因此裁剪不影响该量）：
+
+```text
+              左侧边                    右侧边                   残差
+官方 15.png   x = -0.66833y +333.198    x = +0.62995y +578.898   0.25 / 0.60 px
+viewer 16.png x = -0.60051y +341.998    x = +0.60015y +605.287   0.24 / 0.25 px
+```
+
+viewer 两侧严格对称（`±0.600`），即偏航为 `0`；官方两侧不对称（`-0.668` 对 `+0.630`），说明 `15.png` 带一个小的非零偏航，俯仰也与 viewer 略有差别。**因此本对可用于连接线横截面这类局部测光，不可用于全局几何比例比对。**
+
+#### 连接线：残留确认，且是纯模糊
+
+改用配对的脊线量测，不再靠星点连线猜测线段位置：对官方图做 `σ = 1.0 px` 平滑后取 Hessian 最负主曲率作为脊线响应，用其特征向量作为横截面方向；候选点经星点掩模（半径 `18 px`）与标签矩形剔除；横截面窗口 `±16 px`，基线取两侧 `|offset| >= 8 px` 中位数连成的直线，并要求两侧基线一致、窗口内无第二条脊线。同一方向与配准后的坐标同时在两图上采样，得到 137 组配对横截面。
+
+```text
+                 官方      viewer    viewer / 官方
+FWHM             1.63 px   2.17 px   1.33
+四分之一宽        2.34 px   3.14 px   1.34
+峰值                                 0.81
+±6 px 内积分通量                      1.02
+```
+
+总能量一致而峰值下降、宽度上升，与第六条的定性判断（「被抹开」而非几何变宽）相同，比值也与第六条的 `1.19` 至 `1.31` 同级。
+
+在此基础上新增一步定量归因：把两图的叠加横截面各自按峰值归一化，再拟合 `viewer ≈ a · (官方 ⊛ Gauss(σ))`。
+
+```text
+最佳 σ = 0.60 px    残差 RMS = 峰值的 0.77%
+不做卷积的基线      残差 RMS = 峰值的 4.35%
+```
+
+即 **viewer 的连接线就是官方连接线卷积一个 σ ≈ 0.60 px 的高斯核**，单一小核即可解释全部残留，残差降到峰值的 0.8%。这把该项从「未定位的展宽」收窄为「栅格化之后某一步多了一次约 0.6 px 的模糊」。
+
+#### FXAA 输入色彩空间：提出并否定
+
+本轮提出的假设是：viewer 在线性值上跑 FXAA，而官方在 gamma 编码值上跑，导致边缘判定与 subpixel 混合幅度不同。查官方托管代码后该假设**不成立**：
+
+- `PostProcessingBehaviour.cs:189` 至 `:234`：FXAA 生效的分支里，Uber 材质在 `material.shaderKeywords = null` 之后**从未** `EnableKeyword("UNITY_COLORSPACE_GAMMA")`；该调用只存在于 FXAA 不生效的 `else` 分支。
+- `Uber.shader:280` 附近：`color = saturate(color)` 之后只在 `UNITY_COLORSPACE_GAMMA` 下才 `LinearToGammaSpace`。游戏为 Linear 色彩空间，因此 Uber 输出保持线性。
+- `RenderTextureFactory.cs:15` 至 `:28`：`Get(RenderTexture)` 继承源 RT 的 `format` 与 `sRGB` 标志。Uber 到 FXAA 的中间 RT 由相机 HDR RT（`ARGBHalf`）派生，浮点格式不带 sRGB，所以 FXAA 读到的是**线性、已 saturate 到 `[0,1]`** 的值。
+
+`viewer/shaders/desktop/galaxy_fxaa.fs` 用线性绿通道作 luma、在 `ApplyFxaa` 之后才 `LinearToSrgb`，与官方一致，无需改动。
+
+该复核另外给出一条比原结论更强的推论：按官方 preset 的 `edgeThresholdMin = 0.0833`，一条连接线的线性亮度范围只有约 `0.039`（峰值 `0.044`、天区 `0.005`），低于该阈值，**两侧实现都会在边缘判定处直接跳过连接线**。因此 FXAA 不参与线宽，也不是那 `0.60 px` 模糊的来源。原先「加入 FXAA 后 `10.png` 线宽基本不变」这条依据是在纹理绑定修好之前、线还是 `5.7 px` 平顶带时得到的，本身不足以支撑排除；现在的依据换成了阈值与色彩空间的源码级判定。
+
+#### 网格：疑似偏弱，但需同姿态复核
+
+先由上面的边框拟合确定两图各自的边框内外分界，再在无星、无连接线的扫描行上取水平高通的 `p99 - p1`：
+
+```text
+                  边框内      边框外（左侧带）
+官方 15.png       0.00859     0.00298
+viewer 16.png     0.00642     0.00121
+viewer / 官方      0.75        0.41
+```
+
+边框内偏弱 25%，边框外偏弱约 2.5 倍。但外层网格的 `areaFade` 与 `nearFade` 都依赖世界半径，而两图姿态不同，同一屏幕区域对应的世界半径并不相同，因此该结果只能作为疑点，不能直接当作实现偏差。第四条中「量级一致」的验证用的是 `2.png` 且未区分边框内外，两者不冲突。
+
+#### 该模糊是全局且各向同性的，不属于连接线
+
+这一段是本条记录最重要的结论。白色边框是一个独立探针：它由 `galaxy_frame` Shader 绘制，用 `galaxy-select-frame` 贴图，不采样 profile 纹理、不含 `_DistScale`、渲染队列也不同（`2499` 对 `2999`）。沿上面拟合出的两条侧边逐行取横截面，官方 456 条、viewer 618 条：
+
+```text
+              官方      viewer    比值
+FWHM          1.667 px  2.097 px  1.258
+四分之一宽     2.361 px  2.918 px  1.236
+最佳 σ                  0.51 px   残差 0.50%（不卷积 4.35%）
+```
+
+即**边框也被同一量级的模糊展宽**（`0.51 px` 对连接线的 `0.60 px`）。再按横截面方向分组拟合连接线的 σ：
+
+```text
+横截面轴向      样本数    σ        残差
+20-40 deg        67     0.59 px   1.31%
+50-70 deg        34     0.52 px   0.88%
+70-90 deg        17     0.64 px   3.53%
+```
+
+σ 不随方向变化，因此该模糊是**各向同性**的，不是单轴半纹素偏移。
+
+结合三点——两个互不相干的 Shader 与贴图给出同一 σ、各向同性、宽特征（星点核心 `r25` 比值 `1.01`）几乎不受影响——可以判定：**viewer 全画面比官方多了一次 σ ≈ 0.5 px 的等效模糊，位置在栅格化之后的共享路径上，与连接线本身无关。** 这同时给网格那一段提供了另一个解释：σ ≈ 0.5 px 的模糊本身就会压低细网格线的高通对比，不必假设网格参数有误。
+
+因此后续排查应离开连接线，转向 MSAA resolve、全屏 blit 与 Bloom 合成这条共享链。σ = 0.5 px 恰好是一次双线性半纹素取样（两抽头箱式滤波，方差 `0.25`）的特征值，可作为首要假设。已核对但未发现问题的地方：`ResolveMultisampleTexture(...)` 的 `rlBlitFramebuffer` 源与目标矩形为 1:1；`DrawFlippedTexture(...)` 的 `DrawTexturePro` 源矩形与目标矩形逐边对齐；scene、fxaa 两个 target 与 `GetScreenWidth/Height()` 同尺寸。所有全屏 target 都设了 `TEXTURE_FILTER_BILINEAR`，一旦某一趟出现任何非整数尺寸或半纹素偏移就会产生正是这一量级的模糊。
+
+#### 天区底色
+
+暗角 `110 x 50` 区域的 sRGB 均值为官方 `(3.13, 16.12, 22.12)`、viewer `(3.02, 17.04, 23.05)`，三通道相差不超过 1 个字节。第六条的清屏色修复结论成立。
+
+#### 星名标签的新增细节
+
+`15.png` 的标签是一块深色面板加一圈浅色描边，内含两行：`>> 任务开始 <<` 与 `Iota Sagittae G 型恒星`。第五条已记录两行文案、光谱型后缀与 `(18, 6)` 偏移，但**未记录标签有背景面板与描边**。viewer 目前画的是无背景的单行白字。
+
+#### Emscripten 构建验证
+
+本机的 emsdk 位于 `C:\Users\soar\scoop\apps\emscripten\current`（emcc `6.0.4`），其自带的 `.emscripten` 为空，需要显式提供 `EM_CONFIG`（写明 `NODE_JS`、`LLVM_ROOT`、`BINARYEN_ROOT`、`EMSCRIPTEN_ROOT` 四项绝对路径）才能使用。
+
+Release 构建通过，`viewer` 目标产出 `index.html`、`index.js`、`index.wasm`、`index.data` 与 `assets` / `Prototypes` 目录。11 条编译警告全部来自 vendored raylib（`miniaudio.h` 的大写宏弃用、`stb_vorbis.c` 的恒假指针比较），viewer 自身代码无警告。
+
+在 Chrome 上以 HTTP 载入后运行日志共 163 条，**没有任何 raylib `WARNING` 或 `ERROR`**（唯一的 error 是缺失的 `favicon.ico`）。WebGL2 下：
+
+```text
+GL: OpenGL ES 3.0 (WebGL 2.0)   GLSL ES 3.00
+全部 web Shader 编译并链接成功
+FBO: [ID 81] Multisample HDR target loaded successfully (1280x720 | 8 samples)
+```
+
+8 样本 multisample FBO 在 WebGL2 上同样可用，没有回落到更低采样数。截图确认网格、白色边框、连接线、星点、出生星环、背景星空、Bloom 与 UI 面板都正常绘制。该项从「未执行」转为「已通过」。
+
+结论：连接线残留在无损、1:1 条件下确认存在，但它不是连接线的问题——白色边框以同一量级被展宽，且 σ 与方向无关，因此 viewer 全画面比官方多了一次 σ ≈ 0.5 px 的各向同性模糊。FXAA 作为来源被源码级排除。网格「偏弱」很可能是同一模糊的后果。Emscripten 构建与运行验证通过。
+
+状态：全局 σ ≈ 0.5 px 模糊为「已量化，未归因」；FXAA 色彩空间为「已排除」；`15.png` 无损为「已确认」；网格强度为「疑似为该模糊的后果」；标签面板为「已确认但未实现」；Emscripten 构建为「已通过」。
+
+与既有结论的变化：`15.png` 为无损截图，关闭「无损官方截图未获取」。**连接线残留展宽这一条目本身应被取消**：它由「连接线专有的 19% 至 31% 展宽，来源未定位」改写为「全画面共有的 σ ≈ 0.5 px 各向同性模糊」，排查范围从连接线转到栅格化之后的共享路径。FXAA 的排除依据由截图比对换为托管代码与阈值判定。网格强度疑点降级为该模糊的可能后果。新增标签背景面板这一未实现项。Emscripten 构建验证关闭。新增一条测量约束：`15.png` 与 `16.png` 的偏航与俯仰不同，只能做局部测光。
+
+代码位置：本轮为只读调查，未改动代码。涉及的既有实现为 `viewer/shaders/desktop/galaxy_fxaa.fs`、`viewer/src/post_process.cc` 的 Uber 与 FXAA 两个 pass、`viewer/src/scene_renderer.cc` 的 `DrawGalaxyLines(...)` 与 `DrawGalaxyGrid(...)`。
+
+验证命令和结果：量测脚本位于 `%TEMP%\dsp-1516`（`reg.py` 配准、`ridge.py` 配对横截面、`blurfit.py` 模糊核拟合、`aniso.py` 各向同性检查、`frame.py` 边框与网格、`frameblur.py` 边框模糊核、`lossy.py` 编码取证），用 `uv run --with numpy --with pillow python <script>` 执行。官方证据取自既有反编译目录，未重新反编译或导出资产。
+
+Emscripten 验证：
+
+```powershell
+# EM_CONFIG 需显式指向一份写明四项绝对路径的配置，scoop 自带的 .emscripten 为空
+emcmake cmake -S . -B cmake-build-viewer-web -G Ninja `
+  -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=17 -DBUILD_VIEWER=ON -DFMT_TEST=OFF
+cmake --build cmake-build-viewer-web --target viewer
+python -m http.server 8791   # 在 cmake-build-viewer-web\bin\viewer 下
+```
+
+构建返回 `0`；Chrome + WebGL2 运行日志 163 条，无 raylib `WARNING` 与 `ERROR`，全部 web Shader 编译链接成功，8 样本 multisample FBO 可用。
+
+剩余问题：
+
+- 全局 σ ≈ 0.5 px 模糊尚未归因。已排除：FXAA、渲染分辨率、各向异性、采样数、纹理绑定、几何与材质常量，以及「连接线专有」这一整类假设。下一步应在 viewer 侧做减法 A/B，每组都同时重测**连接线与白色边框**两条横截面：Bloom `intensity = 0`、绕过 FXAA pass、绕过 Bloom 合成直接呈现 `sceneTarget`、把 multisample 采样数强制为 `1`。哪一趟让边框回到 `1.67 px` 就定位到了对应的 pass。
+- 网格强度需要一张与 `15.png` 同偏航同俯仰的 viewer 截图才能与该模糊的影响分离。
+- 标签背景面板与描边未实现，光谱型后缀与两行文案仍按需求搁置。
+- Dithering 仍未实现。
+
+### 2026-07-29：残留差异归因完成——后处理选项不匹配与缺失的各向异性过滤
+
+日期：2026-07-29
+
+参考版本和文件哈希：与「参考版本」一节相同，本次未发生变化。
+
+问题：按第八条的计划做减法 A/B，定位并修复那一份「全画面多出的模糊」。
+
+重开既有区域的原因：第八条登记的待办。另外重新打开了 FXAA、MSAA 与各向异性三个「已排除」结论，原因是第八条给出了与它们冲突的量化证据，且减法 A/B 直接推翻了其中两条。
+
+调查范围：viewer 侧的采样数、FXAA、Bloom 减法 A/B；参考机器的游戏图形选项；`PostEffectController` 的开关语义；Material `112` 与 Shader `1439` 的实际常量；纹理 `823` 的 RGBA 与全部相关纹理的 `m_Aniso`；`15.png` 的相机姿态反解。
+
+#### 减法 A/B：MSAA 无关，FXAA 与 Bloom 才是大头
+
+在 `1920 x 1080`、seed `0`、64 星、固定第 90 帧下捕获：
+
+```text
+变体                                边框 FWHM
+基线（8 样本，FXAA 开，Bloom 开）      2.072
+采样数改为 1                          2.077     <- 无变化
+绕过 FXAA                             1.873
+Bloom intensity = 0                   2.070
+采样数 1 + 绕过 FXAA                   1.871
+```
+
+**MSAA 被直接排除**：8 样本与 1 样本相差 `0.005 px`。第八条把 MSAA 列为候选是错的。
+
+#### 参考机器的图形选项：FXAA 与 Bloom 本来就是关的
+
+`C:\Users\soar\Documents\Dyson Sphere Program\options.xml` 的 `<Video>` 段：
+
+```xml
+<ResolutionWidth>1920</ResolutionWidth>  <ResolutionHeight>1080</ResolutionHeight>
+<ImageFXMaster>1</ImageFXMaster>  <BloomLevel>0</BloomLevel>
+<MSAA>8</MSAA>  <FXAA>0</FXAA>  <Dithering>0</Dithering>
+```
+
+`GameOption.cs:1088` 把 `MSAA` 写进 `QualitySettings.antiAliasing`，并设 `PostEffectController.aaOn = fxaa`、`bloomLevel = bloomLevel`、`masterToggle = imfxMasterToggle`。`PostEffectController.cs:171` 与 `:434` 再把它们落到组件上：
+
+```csharp
+inst.antialiasing.enabled = aaOn;          // FXAA 0 -> 关
+inst.bloom.enabled = bloomLevel > 0;       // BloomLevel 0 -> 关
+postScript.enabled = masterToggle;         // 1 -> Uber pass（含调色）仍然运行
+```
+
+因此 **`15.png` 是在没有 FXAA、没有 Bloom、没有 Dithering 的配置下截的**，而 viewer 无条件启用 FXAA 与 Bloom。这就是第八条那份「全画面多出的模糊」的主要来源：不是实现缺陷，而是后处理选项不匹配。
+
+第三条记录里「官方启用 Default preset 39」的依据是 profile 资产里配置的预设值，那只说明预设是什么，不说明组件是否开启。**这条依据不足以断定官方画面里有 FXAA。**
+
+同时它也让 Dithering 这一项对本参考失效：参考机器 `<Dithering>0</Dithering>`，所以复现 `15.png` 不需要 Dithering。
+
+#### 缺失的各向异性过滤
+
+从 `sharedassets0.assets` 直接取每张纹理的 `m_TextureSettings`：
+
+| 纹理 | path ID | 尺寸 | mip | `m_FilterMode` | `m_Aniso` |
+| --- | --- | --- | --- | --- | --- |
+| `star-line` | 531 | 256×128 | 9 | 2 Trilinear | **1** |
+| `grid-256-dot` | 602 | 256×256 | 9 | 2 Trilinear | **5** |
+| `grid-256` | 666 | 256×256 | 9 | 2 Trilinear | **5** |
+| `galaxy-select-frame` | 823 | 1024×1024 | 11 | 2 Trilinear | **2** |
+| `circle-thin` | 903 | 256×256 | 9 | 1 Bilinear | 0 |
+| `galaxy-select-starpoint` | 950 | 64×64 | 1 | 2 | 0 |
+| `random-colors-128-2` | 605 | 128×128 | 1 | 0 Point | 1 |
+
+配合 `QualitySettings.anisotropicTextures = 2`，官方的网格与边框是带各向异性采样的，而 viewer 全部是各向同性。这三个平面在 Galaxy Select 里都被大角度斜视，各向异性对它们影响很大——这也是为什么第六条只在**连接线**纹理上试过各向异性却看不出变化：`star-line` 的 `m_Aniso` 本来就是 `1`，连接线**不应该**有各向异性。
+
+给边框设 `2`、两张网格设 `5`、连接线保持无各向异性后，边框和网格同时收敛。
+
+#### 顺带复核的材质与纹理
+
+- Material `112` 名为 `galaxy-select-grid-3`，Shader `1439` 为 `VF Shaders/Unlit/AlphaBlend ZWrite`，pass tag `QUEUE Geometry+499`（即 `2499`，与既有记录一致）。声明属性只有 `_Color`、`_Multiplier`、`_MainTex`；`_Color = (1,1,1,1)`、`_Multiplier = 1.0`。材质里还有 `_AreaMin`、`_Glossiness`、`_Metallic` 等一批 Standard shader 残留属性，该 Shader 不使用。**viewer 的取值本来就是对的。**
+- 纹理 `823` 的 RGB 在整张图（含全部 mip 采样点）**只有一个值 `(255,255,255)`**，图案确实只在 alpha 上，viewer 只存 alpha 的做法正确。但 alpha 不是硬边：第 2 行的 alpha 取值有 `[5, 76, 145, 198, 232, 248]`，第 3 行有 `[16, 128, 234, 235, 255]`，即边框本身是抗锯齿的两行带，既有记录「仅在第 2、3 行列为白色」这句容易被误读成硬边。
+
+#### `15.png` 的相机姿态
+
+用 67×67 边框两条侧边的斜率反解（斜率对平移不变，裁剪不影响）。先用 viewer 默认姿态验证模型：解析预测 `∓0.60540`，实测 `-0.60051 / +0.60015`，吻合。再对 `15.png` 的 `-0.66833 / +0.62995` 求解：
+
+```text
+15.png 姿态：yaw = -0.60 deg   pitch = -19.90 deg   （拟合 rms 0.0002）
+```
+
+顺带否掉第八条的一个猜测：该姿态下边框远边的投影长度为 `524.2 px`，viewer 默认姿态为 `523.0 px`，差 `0.2%`。**姿态不改变边框的投影尺度**，所以边框宽度差不是姿态造成的。
+
+#### 量测方法的修正
+
+第八条的脊线检测只剔除了星点与标签，**没有剔除白色边框和网格线**，所以「连接线」样本里混进了这两类脊线。加各向异性后边框变锐，混入样本的成分随之改变，导致「连接线」读数出现虚假变化。
+
+正确做法靠亮度分离：连接线峰值约 `0.044` 线性亮度，白色边框约 `0.65` 至 `0.92`，网格线不到 `0.008`。以 `lum > 0.12` 膨胀 7 px 作为边框掩模、脊线幅度下限取 `0.020`，两类就干净分开了。第八条给出的连接线 `σ = 0.60 px` 因此不可靠；边框的 `σ = 0.51 px` 由 456 / 618 条独立横截面得出，仍然有效。
+
+#### 修正结果
+
+全部在 `15.png` 的姿态、`1920 x 1080`、seed `0`、64 星下量测，同一套代码同时跑官方与 viewer。连接线一列给出三组检测阈值的读数，用来体现方法本身的离散度：
+
+```text
+                                   边框 FWHM    连接线 FWHM             网格高通 p99-p1
+官方 15.png                          1.680     1.460 / 1.513 / 1.441      0.00893
+viewer 修正前（无各向异性）            1.898     1.684 / 1.669              0.00663
+viewer 修正后（参考配置）              1.605     1.623 / 1.639              0.00898
+viewer 修正后（默认配置）              1.604     1.755 / 1.721 / 1.834      0.00873
+```
+
+以官方为基准：
+
+```text
+             修正前      修正后（参考配置）
+边框宽度      +13.0%      -4.5%
+网格对比      -25.8%      +0.6%
+连接线宽度    +13.0%      +9.0%
+```
+
+**网格已经是等值匹配**（`0.00898` 对 `0.00893`）。第八条登记的「网格强度疑点」由此关闭，原因就是缺失的各向异性过滤，不是网格参数错误。边框由偏宽 13% 变为偏窄 4.5%。天区底色为官方 sRGB `(3.1, 16.1, 22.1)` 对 viewer `(3.1, 17.1, 23.1)`，绿蓝各差 1 个字节。
+
+状态：已确认并实现。
+
+与既有结论的变化：
+
+- **MSAA 由「候选」改为「已排除」**：8 样本与 1 样本的边框宽度差 `0.005 px`。
+- **FXAA 与 Bloom 由「官方启用」改为「由玩家选项控制，参考截图下为关闭」**，第三条依据 profile 预设值得出的判断被修正。
+- **新增：各向异性过滤缺失**，这是网格对比偏低与边框偏宽的共同原因。第六条「各向异性不解释该差异」的结论只在连接线上成立，不能推广到网格与边框。
+- **撤回第八条的连接线 `σ = 0.60 px`**，该读数的样本混入了边框与网格脊线。边框的 `σ = 0.51 px` 保留。
+- **撤回第八条「排查应转向 MSAA resolve、全屏 blit 与 Bloom 合成」这一方向**：全屏路径没有问题。
+- Dithering 对复现 `15.png` 不再必要，参考机器该项为 `0`。
+- 新增 `15.png` 的姿态：yaw `-0.60`、pitch `-19.90`。
+
+代码位置：
+
+- `viewer/src/app_resources.cc`：新增 `SetTextureAnisotropy(...)`，按资产的 `m_Aniso` 给边框设 `2`、两张网格纹理设 `5`；连接线纹理保持各向同性。走 `rlTextureParameters(..., RL_TEXTURE_FILTER_ANISOTROPIC, ...)`，它在桌面 GL 与 WebGL 上都会检查扩展并按设备上限截断。
+- `viewer/src/post_process.{hh,cc}`：新增 `SetPostEffects(bool fxaa, int bloomLevel)`，对应 `PostEffectController` 的 `aaOn` 与 `bloomLevel > 0`；默认值取游戏自身的默认值 `true` 与 `2`。等级 1 只实现了强度 `0.2`，其半径 `1.7`（等级 2 为 `5`）未建模。
+- `viewer/shaders/{desktop,web}/galaxy_fxaa.fs`：新增 `fxaaEnabled` uniform，关闭时直接取中心采样再做 sRGB 编码，对应官方在 FXAA 关闭时把调色结果直接写到显示目标的路径。
+- `viewer/src/viewer_app.cc`：新增 `--fxaa=` 与 `--bloom=` 两个命令行选项，不影响原有位置参数。
+
+验证命令和结果：
+
+```powershell
+python viewer\tools\verify_assets.py            # verified 17 viewer assets
+python viewer\tools\verify_shader_pairs.py      # verified 27 desktop/web shader pairs
+python viewer\tools\galaxy_grid_textures.py     # 四个文件 SHA-256 与登记值一致
+python viewer\tools\galaxy_bgstars_texture.py   # SHA-256 与登记值一致
+python viewer\tools\galaxy_line_texture.py      # SHA-256 与登记值一致
+cmake --build cmake-build-viewer-refactor-release --target viewer   # 0 error / 0 warning
+cmake --build cmake-build-viewer-refactor-debug   --target viewer   # 通过
+cmake --build cmake-build-viewer-web             --target viewer   # 通过
+cmake-build-viewer-refactor-release\bin\viewer\viewer.exe 0 64 --fxaa=0 --bloom=0
+```
+
+Native Debug、Native Release 与 Emscripten Release 三种构建全部通过，viewer 自身代码无警告。Web 端在 Chrome + WebGL2 下运行日志 163 条，51 次 Shader 编译与链接全部成功，无 raylib `WARNING` 或 `ERROR`，8 样本 multisample FBO 可用，截图确认网格因各向异性明显变锐。
+
+量测用的临时插桩（`DSPV_SHOT` 定帧截图、`DSPV_YAW` / `DSPV_PITCH` 姿态覆盖、`DSPV_SAMPLES` / `DSPV_NO_FXAA` / `DSPV_NO_BLOOM` / `DSPV_ANISO` 开关）已全部回滚，`git diff` 只包含上面四处实现改动；`camera_controller.cc` 已还原为无改动。要复现本条的量测，需临时重新加入前三个钩子；后三个已由 `--fxaa` / `--bloom` 与按资产设定的各向异性取代。
+
+剩余问题：
+
+- 连接线仍偏宽 `9%`。三组检测阈值下 viewer 的离散度约 `±1%`、官方约 `±3%`，所以这 `9%` 略高于方法噪声，但已远小于最初的 `19%` 至 `33%`。各向异性不适用（`star-line` 的 `m_Aniso = 1`），几何、材质常量、片元公式、纹理数据与绑定、相机、采样数、后处理均已逐项排除。
+- 边框偏窄 `4.5%`，方向与连接线相反，因此不是同一个成因。
+- 天区底色绿蓝各高 1 个字节。
+- 孤立星点核心 `r25` 为官方 `3.87 px` 对 viewer `3.34` 至 `3.43 px`，但合格样本不足 10 个，且与第五条用配准星对量出的 `1.01` 方法不同，暂不作为结论。
+- Bloom 等级 1 的半径 `1.7` 未建模。
+
+### 2026-07-29：星系内视图完整调查——轨道解析式 Shader、行星材质、双层天空盒与全星团
+
+日期：2026-07-29
+
+参考版本和文件哈希：与「参考版本」一节相同，本次未发生变化。`level0`、`sharedassets0.assets`、`resources.assets`、`Assembly-CSharp.dll` 均与既有记录一致。
+
+问题：银河视图收口后转向星系内视图。用户要求三件事：保留轨道线但比游戏细，保留选择指示但改成银河视图那种白色圆环（原实现的线框盒糊住了本体），其余全部对齐游戏。
+
+重开既有区域的原因：「星系内视图」小节的四条此前是「部分实现」或「待验收」，属于「待解决问题明确依赖该区域」。`Game Starmap` 层级、轨道 Shader、`Planet Thumb New` 片元程序与 `Starmap Camera` 序列化字段此前均未调查。
+
+调查范围：`level0` 的 `Game Starmap` 全部子对象及其材质、Shader、贴图；`UIStarmapPlanet`、`UIStarmapStar`、`UIStarmapStarObject`、`StarmapCamera`、`UIStarmap` 的托管逻辑；Shader `1371`、`10085`、`1396` 的 DXBC；`ThemeProtoSet` 的 `thumbMat` 数组结构。
+
+证据位置：`C:\Users\soar\AppData\Local\Temp\dsp-sysview-shaders\`。`extract.py` 是第二条「常量缓冲区映射方法」那条路径的通用化版本（`m_NameIndices` 合并 `m_ConstantBuffers[].m_VectorParams[]`），产出 `shaders.json` 与八个 `*.dxbc`；`disassemble_dxbc.py` 取自 `dsp-connline-research`，走 `D3DCompiler_47.dll` 的 `D3DDisassemble`，产出配对的 `*.asm.txt`。`thumb_emit.py` 由资产反查并生成 `material_catalog.cc` 的常量表，`thumb_table.txt` 是其输出。托管代码为 `C:\Users\soar\AppData\Local\Temp\dsp-decompile\` 下的 `UIStarmap.cs`、`UIStarmapPlanet.cs`、`UIStarmapStar.cs`、`UIStarmapStarObject.cs`、`StarmapCamera.cs`、`PlanetData.cs`、`StarData.cs`、`StarGen.cs`。
+
+#### 场景层级
+
+`Game Starmap` = `level0:15`。子对象：
+
+| 对象 | path ID | 内容 |
+| --- | --- | --- |
+| `Starmap Camera` | `5396` | Camera + `StarmapCamera` + FlareLayer |
+| `bg-stars-near` | `3236` | 父 scale `0.7`、父 rot `(0.353553385, 0.353553385, -0.146446600, 0.853553474)`，下挂 6 个 Quad |
+| `bg-stars-far` | `510` | 父单位变换，同样 6 个 Quad |
+| `player-track` | `4841` | 玩家指针，种子计算器不适用 |
+| `planetary-group` | `6292` | `starmap-planet-obj 2667` |
+| `hive-group` | `578` | `starmap-hive-obj 11548`，材质 `184 hive-orbit`，依赖存档 |
+| `star-group` | `718` | `starmap-star-obj 632` |
+| `starmap-gizmo` | `5095` | 独立 Camera `2187` 渲进 RenderTexture，再由 `gizmoImage` 作 UI RawImage 显示 |
+| `starmap-grid` | `5959` | Quad `10210`，rot 绕 X `+90`度，scale `60000`，材质 `139 starmap-grid` |
+
+两层天空盒的 6 个 Quad 变换完全相同：位置 `(0,0,50000)`、`(∓50000.00390625,0,0)`、`(0,0,-50000)`、`(0,∓50000.00390625,0)`，缩放 `100000` 或 `100000.0625`，旋转为把面法线转向中心的 90 度。编辑期的浮点尾差原样保留。
+
+`starmap-planet-obj 2667`：
+
+- `sphere 3354`：MeshFilter `sharedassets0.assets:1153` `GeoSphere`（`m_LocalAABB.m_Extent = 0.5`，即单位直径），MeshRenderer 材质 `180 surface-default`（运行时被 thumb 材质替换），SphereCollider。
+- `line-renderer 2464`：LineRenderer `16281`，材质 `189 planet-orbit`，`widthMultiplier = 0.5`（运行时覆盖）、width curve 恒 `1`、`alignment = 0`（View）、`textureMode = 0`（Stretch）、`useWorldSpace = false`、**`loop = true`**、角/端点顶点 `0`。
+  - 子对象 `orbit-disk 4378`：Quad `10210`，rot 绕 X `+90` 度，scale `2.052`，材质 `188 orbit-disk`。
+
+`starmap-star-obj 632`：`spot 4626` scale `3.7` + Quad；`mass 3612` scale `1.0` + `GeoSphere`；`black 2324` scale `1.005` + mesh `10207`，材质 `192 black-mask`。viewer 既有的 `3.7` 与 `1.005` 与之一致。
+
+#### 托管逻辑
+
+`UIStarmapPlanet._OnCreate` 写入 60 个位置的单位圆：`f = i * (MathF.PI / 180f) * 6f`，`pos = (Mathf.Cos(f), 0f, Mathf.Sin(f))`。
+
+`UIStarmapPlanet._OnInit`：
+
+```text
+orbitRenderer.widthMultiplier = (orbitAroundPlanet == null) ? 0.7f * star.orbitScaler : 0.1f
+planetRenderer.transform.localScale = (float)((double)(realRadius * 2f) * 0.00025)
+orbitRenderer.transform.localScale = (float)((double)orbitRadius * 10.0)
+orbitMat.SetFloat("_Radius", orbitRadius * 10f)
+orbitMat.SetInt("_Stencil", planet.index + 101)
+```
+
+`UIStarmapPlanet._OnLateUpdate`：轨道中心为 `((orbitAroundPlanet == null) ? star : orbitAroundPlanet).uPosition - viewTargetUPos) * 0.00025`；轨道朝向为 `runtimeOrbitRotation * Quaternion.Euler(0f, 0f - runtimeOrbitPhase, 0f)`，并同时写进 `_Position` 与 `_Rotation`。行星材质每帧写 `_SunDir = ((star.uPosition - uPosition) * 0.00025).normalized`、`_Rotation = runtimeRotation`、`_HeightMap = planet.heightmap`。
+
+标签偏移：行星 `x += 5f + 420f / num`、`y += 6f`，`num = Mathf.Max(1f, magnitude / planetRenderer.transform.localScale.x)`，并在 `magnitude > systemRadius * 40000 * 7 * 0.00025` 时隐藏；恒星 `x += 8f + 600f / num3`、`y += 4f`，`num3 = Mathf.Max(1f, vdist / vscale.x)`，`EPin.Auto` 下的可见范围是 `systemRadius * 40000 * 12 * 0.00025`。
+
+`UIStarmapStarObject._OnLateUpdate` 的亮度是**常量**，不取 `StarMaterialBlender` 混合后的 `_Multiplier`：
+
+```text
+massMat.SetFloat("_Multiplier", 4f * num6)      // num6 = Mathf.Sqrt(Mathf.Clamp01(1f - num5))
+spotMat.SetFloat("_Multiplier", 0.3f * num5)    // num5 = 双 log 压缩并夹到 2 的 spotLevel
+spotMat.renderQueue = (viewStar == star || viewStarSystem == star) ? 2981 : 2979
+```
+
+`StarData.viewRadius => radius * 800f`，与 viewer 的 `StarViewRadius(...)` 一致。`StarData.systemRadius` 为最外行星的 `sunDistance`，无行星时为 `dysonRadius`。
+
+`StarmapCamera`：`RefreshCameraPose()` 写 `tarCam.fieldOfView = fov`，`fov` 与 `fovWanted` 初值均为 `60`，因此 Camera 上序列化的 `50` 被覆盖。`LateUpdate()` 写 `bgStarNear.localPosition = base.transform.localPosition * 0.93f`、`bgStarFar.localPosition = base.transform.localPosition * 0.96f`——viewer 旧的程序化背景星里那两个 `0.93` / `0.96` 就是从这里来的。`dist` 夹在 `[0.0375, 45000]`，缩放为 `Math.Pow(7.0, -axis)`，旋转灵敏度比 `1 : 0.5 : 0.7`。
+
+`Starmap Camera` 的 Camera 序列化：near `0.02`、far `150000`、FOV `50`（被覆盖）、HDR、MSAA、`m_CullingMask = 0x100000`、depth `2`。
+
+`UIStarmap` 对基础网格的门控：`screenCameraController.dist < 15000.0` 时 `starmapBaseGrid.gameObject.SetActive(false)`，否则 `_AlphaMultiplier = Mathf.Clamp01((dist - 15000) / 10000f) * 0.3f`。星系内视图的 `dist` 只有几十，**因此 `starmap-grid` 不属于星系内视图**，本次不实现。
+
+`StarGen.cs:197`：`starData.uPosition = starData.position * 2400000.0`，乘 `0.00025` 后一个生成器单位等于 600 星图单位。
+
+#### 材质常量
+
+| 用途 | Material | Shader | 关键常量 |
+| --- | --- | --- | --- |
+| 轨道线 | `189 planet-orbit` | `1371` `Universe/Starmap/Planet Orbit` | `_LineTexture = 531 star-line`、`_Multiplier = 1`、`_TileScale = 7`、`_DistScale = 0.05`、`_DistPower = 1`、`_MinDistScale = 0.001`、`_MaxDistScale = 100`、`_LineColorA = (0.016820932, 0.148948908, 0.169811279, 1)`、`_LineColorB = (0.425373763, 0.707084894, 0.745283008, 1)` |
+| 轨道盘 | `188 orbit-disk`，queue `2999` | `1396` `YC Shaders/Particle/Add` | `_MainTex = 1083 orbit-disk`、`_Multiplier = 0.014999999664723873`、`_TintColor = (0.221698105, 0.868282259, 1, 1)` |
+| 行星 | `resources.assets` 32 个 `thumb` | `10085` `VF Shaders/Forward/Planet Thumb New` | 见下 |
+| 背景星空 | `103 bgstars-game-starmap` | `1391` `Universe/Star/Star Mono-Layer`（与银河视图同一个） | `_NoiseMap = 605 random-colors-128-2`（与银河视图同一张）、`_StarSetting = (0.270000011, 0.319999993, 1.02999997, 0.25)`、`_RefValueA = (0.654901981, 0.668705046, 1, 1)`、`_RefValueB = (0.654901981, 0.834364772, 1, 1)`；`_StarColor` 与 `_StarColorChange` 与银河视图相同 |
+| 恒星 mass | `193` 至 `204` `star-mass-*` | 已实现 | queue **`2982`** |
+
+`1371` 的属性类型与固定状态（`m_PropInfo` 与 pass `m_State` 直读）：`_LineColorA` / `_LineColorB` 为 `type 0`（Color，需 sRGB 转线性），`_Position` / `_Rotation` 为 `type 1`（Vector，不转换）。渲染状态 `Blend One One`（`srcBlend = 1`、`destBlend = 1`）、`colMask 15`、`ZWrite Off`、`ZTest Off`（`zTest = 0`）、`Cull Off`。**Stencil**：`ref = _Stencil`、读写掩码 `255`、`comp = 6`（NotEqual）、`pass = 2`（Replace）、fail/zFail `Keep`。材质里的 `_LineCenter*`、`_LineGlow*`、`_LineLength` 不在 Shader 属性表内，是遗留值。
+
+`1418` `VF Shaders/Gizmos/Starmap Base Grid` 的属性集等于已移植的 `1373` 再加 `_ZMin` / `_ZMax`，`Blend SrcAlpha OneMinusSrcAlpha`、`colMask 14`。因门控结论未实现。
+
+#### 轨道 Shader 是解析式射线与圆求交
+
+这是本条最重要的结论。`1371` 的顶点程序（blob 1，`vs_4_0`）把两个向量转进轨道自身的坐标系：`TEXCOORD1 = M(_Rotation)^T * (_WorldSpaceCameraPos - _Position)`、`TEXCOORD2 = M(_Rotation)^T * (worldPos - _WorldSpaceCameraPos)`，另外只转发 `uv`。片元程序（blob 3，`ps_4_0`，168 条）在该坐标系里：
+
+```text
+d      = normalize(TEXCOORD2)
+t0     = dot(O, d)                     O = TEXCOORD1
+perp   = length(O - d * t0)            到圆心的射线距离
+discard if perp > 1.01 * _Radius  或  perp <= 0
+inside = perp < 0.9999 * _Radius
+h      = inside ? sqrt(_Radius^2 - perp^2) : 0
+tFar   = inside ? max(h - t0, 0) : 0
+tNear  = inside ? max(-h - t0, 0) : 0
+tPlane = (d.y == 0) ? 0 : max(-O.y / d.y, 0)
+```
+
+随后取三个候选命中点：球面远交点与近交点用**离面偏移** `|p.y|` 作横向坐标，轨道平面交点用**径向偏移** `|length(p) - _Radius|`。每个候选各自算
+`s = clamp(pow(t * _DistScale, _DistPower), _MinDistScale, _MaxDistScale)`、`profile = |offset| / s * _TileScale`，`profile > 0.5` 或 `t == 0` 时该候选归零，否则采样 `_LineTexture(uv.x, 2 * profile)` 并乘 `lerp(_LineColorA, _LineColorB, u^5)`，`u = frac(atan2(p.z, p.x) / 2pi)`。三者取 `max`，最后乘 `_Multiplier`。
+
+由此得到三条实现层面的直接后果：
+
+1. **`uv.y` 完全不参与**，片元输入签名里 `TEXCOORD0` 只标了 `x` 为 used。LineRenderer 生成的宽环带只是光栅化画布，可见线宽由 `_DistScale / _TileScale` 决定并在屏幕空间近似恒定。因此「把轨道线画细」的唯一正确旋钮是 `_TileScale`，不是几何宽度。
+2. **`u^5` 的亮端正好落在行星上**。局部参数 `g` 与 `runtimeOrbitRotation` 参数的关系是 `g + phase`，而行星位于 `runtimeOrbitRotation` 参数 `phase` 处（`PlanetData.UpdateRuntimePose`：`runtimePosition = QRotate(runtimeOrbitRotation, (cos * R, 0, sin * R))`），所以行星在 `g = 0`、`u = 0` 处。`u` 从行星沿运动方向增长到 `1`，即亮段是行星身后的尾迹，`u` 的不连续点就在行星上。
+3. **Stencil 是必需的**。`Blend One One` 下，60 段 View 对齐环带在每个接缝处自交，没有 `NotEqual` / `Replace` 就会出现 60 个亮结。
+
+`1396` 的片元（blob 6，无软粒子）为 `out = saturate(vec4(_TintColor.rgb * _Multiplier, saturate(_TintColor.a)) * vertexColor * tex)`，`Blend SrcAlpha One`、`colMask 14`、`ZTest LEqual`、`ZWrite Off`、`Cull Off`。
+
+#### `Planet Thumb New` 与 `_HeightMap`
+
+`10085` 的顶点程序转发**物体空间**单位方向（不是世界法线）、世界坐标，以及 `dot(M(_Rotation) * n, _SunDir)`。片元程序（170 条）由经纬网格、高度重映射、朗伯与边缘光、海岸线、三段 bio 混色组成，最终 `rgb = min(NdotV * 10, 1) * (累加.a * 累加.rgb)`、`a = 1`。`_HeightMap` 是 Cubemap，用物体空间方向采样，因此地形随 Transform 旋转。
+
+关键取证：`_HeightMap` 属性的 `m_DefTexture.m_DefaultName` 为 **`"black"`**，且 32 个官方 thumb 材质全部不赋值该贴图。因此游戏里未生成地形的远程行星本来就采样到全黑。viewer 绑定 1x1 黑色 Cubemap 走同一条路径，不虚构地形。
+
+网格由 `far = max(cameraDistance / _Diameter - 2, 0)` 驱动：`wireWidth = (1 + 0.6 * far) * 0.04`，`far` 一大两条斜坡就双双饱和，网格退化成一层均匀抬亮而不是线；只有相机贴近行星（`far` 接近 0）时才解析成真正的经纬线。**所以对齐官方不会在正常观察距离引入可见线框。**
+
+`_HeightSettings` 与 `_Diameter` 并非全材质一致：多数为 `(-0.1, 0.3, 0.1, 0.1)` 与 `0.1`，但也有 `(1.5, 2.3, 0.16, 0.05)` 与 `0.4`。前者的 `w - z = 0` 使高度项恒为 `z`，后者则随距离在 `0.16` 与 `0.05` 之间过渡。
+
+#### thumbMat 表的推导
+
+viewer 既有的 26 行主题表加 6 行 style 覆盖恰好是 32 行，与 32 个 thumb 材质一一对应。用 `(_Color, _RimColor)` 匹配，29 行唯一命中；`1298` 与 `1326` 共享这两个颜色，但两者的**全部常量逐位相同**，因此命中哪一个都等价；第 0 行是 viewer 自造的 theme 0 兜底，`PlanetGen` 只产出 1 至 25，永不到达。`resources.assets:148444` 的 9444 字节 MonoBehaviour 按 12 字节 PPtr 步长引用全部 32 个材质，分组为 11 个单元素、4 个双元素（对应主题 2 至 5）、1 个单元素、1 个三元素（主题 10）、9 个单元素，共 26 组；比主题数多出的那一组正好是 viewer 未引用的材质 `1291`。
+
+#### 实现
+
+刻意偏离官方的两处（用户要求，已在代码注释里标明不是 parity 修正）：
+
+1. **轨道线宽取官方的一半**：`_TileScale = 7 / factor`，`factor` 默认 `0.5`，即上传 `14`。新增 `--orbit-width=` 覆盖，`--orbit-width=1` 复现游戏。
+2. **选择指示改为白色圆环**：删除 `DrawCubeWiresV` 与 `DrawSphereWires`，改用银河视图的 `circle-thin`（`galaxy_star_ring.bin`）加 `galaxy_marker` Shader 做 billboard 环。`circle-thin` 的环位于 quad 半宽的 `0.957` 处，所以 quad 边长取环半径的 `2.0898` 倍。环半径为行星本体半径的 `1.6` 倍、恒星 `StarVisualScale` 的 `2.2` 倍（后者要越过 `3.7` 倍的 spot 四边形）。`_Multiplier` 取 `1` 而非银河标记的 `2.5`：`2.5` 远超 Bloom 阈值，近距离选中会糊成一片白光。
+
+其余按官方实现：
+
+- 新 Shader 对 `viewer/shaders/{desktop,web}/starmap_orbit.{vs,fs}` 与 `starmap_disk.{vs,fs}`。
+- 新贴图 `viewer/assets/textures/starmap_orbit_disk.bin`（`sharedassets0.assets:1083`，512x512 BC7 10 mip）。解码后 R = G = B 且 alpha 恒为 255，所以只存红通道并原样保留源字节，由 Shader 做 sRGB 转线性；工具为 `viewer/tools/starmap_orbit_disk_texture.py`。
+- `viewer/src/post_process.cc`：多重采样 scene FBO 的深度附件由 `GL_DEPTH_COMPONENT24` / `GL_DEPTH_ATTACHMENT` 改为 `GL_DEPTH24_STENCIL8` / `GL_DEPTH_STENCIL_ATTACHMENT`，并在清屏时补 `glClear(GL_STENCIL_BUFFER_BIT)`。
+- `viewer/src/scene_renderer.cc`：新增 `DrawStarmapOrbit(...)`、`DrawStarmapOrbitDisk(...)`、`DrawStarmapBackgroundStars(...)`、`DrawStarmapSelectionRing(...)`；删除 `DrawOrbit(...)` 与程序化 `DrawBackgroundStars(...)`；`DrawGalaxyLineQuad(...)` 增加 U 区间参数以支持 60 段闭环；`DrawSystem(...)` 改为官方队列顺序；mass 与 spot 的 `_Multiplier` 改为常量公式；`DrawPlanet(...)` 上传完整常量集，并改用 `QuaternionToMatrix(rotation)` 构造模型矩阵，保证它与 `_Rotation` 是同一个旋转（原先一处是 `MatrixRotateY(-theta)`、另一处是绕 `-Y` 的 `+theta`，方向相反，会让世界法线算错、行星整体变黑）。
+- `viewer/src/viewer_app.cc`：星系内视图改用 `rlSetClipPlanes(0.02, 150000.0)`；轨道点由 72 段改为官方 60 段闭环；新增 `orbitAngle`、`orbitWidth`、`orbitStencilRef`；`SystemViewCache` 增加全星团的其它恒星；标签按官方偏移公式绘制；新增 `--orbit-width=`。
+- `viewer/src/material_catalog.cc`：`PlanetThumbMaterial(...)` 扩展为 32 行完整常量集，六个 Color 属性统一转线性。
+- `viewer/src/{render_resources,app_resources}.{hh,cc}`：新增两个 Shader、盘材质、盘贴图与 1x1 黑色 Cubemap 及其释放路径。
+
+明确不做，理由已在上文取证：`starmap-grid`（星系内视图不可见）、`starmap-gizmo`（独立相机的 UI 部件）、`player-track` / `hive-group` / `UIStarmapMarker` / Dyson sphere（依赖存档运行态数据）、行星自转改用官方 `runtimeRotation`（黑 Cubemap 下表面除经纬线外无特征，自转几乎不可见）。
+
+#### 验证
+
+```powershell
+python viewer\tools\verify_assets.py                  # verified 18 viewer assets
+python viewer\tools\verify_shader_pairs.py            # verified 31 desktop/web shader pairs
+python viewer\tools\starmap_orbit_disk_texture.py     # 349525 bytes，SHA-256 与登记值一致
+python viewer\tools\galaxy_grid_textures.py           # 四个文件 SHA-256 一致
+python viewer\tools\galaxy_bgstars_texture.py         # SHA-256 一致
+python viewer\tools\galaxy_line_texture.py            # SHA-256 一致
+cmake --build cmake-build-viewer-refactor-debug   --target viewer                      # 0 error / 0 warning
+cmake --build cmake-build-viewer-refactor-release --target viewer dspugen DSPSeedCalc  # 0 error / 0 warning
+cmake --build cmake-build-viewer-web              --target viewer                      # 0 error / 0 warning
+DSPSeedCalc.exe -t 1 -p -n -o smoke.csv "0-0,64"      # 1 found from 1 processed seeds
+```
+
+Native Debug、Native Release 与 Emscripten Release 三种构建全部通过，viewer 自身代码无警告。Release Native 运行日志无 `ERROR` 与 `WARNING`，19 个 Shader program 全部加载成功（原 17 个），`starmap_orbit_disk` 以 `512x512 | GRAYSCALE | 10 mipmaps` 加载，1x1 Cubemap 加载成功，`Multisample HDR target loaded successfully (1920x1080 | 8 samples)`。Chrome 加 WebGL2 下 176 条日志、0 警告、0 错误（唯一 error 是 `favicon.ico` 404），同样 19 个 program、同样的 8 样本 FBO，`DEPTH24_STENCIL8` 的 stencil 路径工作正常，系统内视图与 Native 一致。
+
+截图验收（只用于分类症状与最终验收，未用于反推常量）：seed `0` 下多个恒星系，含 M / G / B 型主序星与带双卫星的气态巨星。确认轨道线闭合无亮结（stencil 生效）、亮端落在行星上、行星显示官方颜色与近距离经纬线、卫星轨道绕父行星而非恒星、选择环不遮盖本体、背景星空双层跟随、远处其它恒星只剩 spot 光点。
+
+量测与验收用的临时插桩（`DSPV_SYSTEM` / `DSPV_PLANET` / `DSPV_DIST` / `DSPV_SHOT` / `DSPV_MOONS`）已全部回滚，`grep` 确认源码中不再出现。
+
+剩余问题：
+
+- **LineRenderer 环带宽度是否随 Transform 缩放未取证**。`useWorldSpace = false` 且 Transform 缩放为 `orbitRadius * 10`，Unity 原生是否把该缩放乘进宽度没有直接证据。当前实现取世界宽度 `widthMultiplier` 本身（与银河 `star-conn` 的 `widthMultiplier = 1` 对应 1 世界单位一致）。因为环带只是画布，这不影响可见线宽，只影响极端缩放下画布是否裁掉解析线；卫星的 `0.1` 本来就靠画布裁剪压细，这正是官方用固定 `0.1` 区分卫星的机制。
+- `_HeightSettings` 为 `(-0.1, 0.3, 0.1, 0.1)` 的材质高度项恒为 `0.1`，即使有真实 heightmap 也不起作用。是否为官方有意如此未确认。
+- 行星标签在多颗行星投影重叠时会叠字。官方另有 `EPin`、工厂标记与 focus 目标参与过滤，viewer 没有这些数据源。
+- `starmap-gizmo`、`hive-orbit`（材质 `184`，与轨道线同一个 Shader、`_TileScale = 14`）未实现。

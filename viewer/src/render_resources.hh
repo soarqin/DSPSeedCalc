@@ -21,6 +21,8 @@ struct RenderResources {
     Shader galaxyFrameShader{};
     Shader galaxyBackgroundStarShader{};
     Shader galaxyMarkerShader{};
+    Shader starmapOrbitShader{};
+    Shader starmapDiskShader{};
     Shader bloomPrefilterShader{};
     Shader bloomDownsampleFirstShader{};
     Shader bloomDownsampleShader{};
@@ -36,6 +38,7 @@ struct RenderResources {
     Material galaxyFrameMaterial{};
     Material galaxyBackgroundStarMaterial{};
     Material galaxyMarkerMaterial{};
+    Material starmapDiskMaterial{};
     Texture2D galaxyStarPointTexture{};
     Texture2D galaxyLineTexture{};
     Texture2D galaxyGridDotTexture{};
@@ -43,8 +46,13 @@ struct RenderResources {
     Texture2D galaxyGridFrameTexture{};
     Texture2D galaxyBackgroundStarNoise{};
     Texture2D galaxyStarRingTexture{};
+    Texture2D starmapOrbitDiskTexture{};
     Texture2D bloomLensDirtTexture{};
     Texture2D galaxyColorGradingLut{};
+    // Every official thumb material leaves `_HeightMap` unassigned, so the shader property falls
+    // back to Unity's built in black cubemap. The viewer has no terrain to sample, so it binds a
+    // 1x1 black cubemap and keeps the same code path rather than inventing a height texture.
+    unsigned int planetHeightCubemapId = 0;
     bool hasStarSurfaceShader = false;
     bool hasStarSpotShader = false;
     bool hasStarBlackShader = false;
@@ -54,6 +62,7 @@ struct RenderResources {
     bool hasGalaxyGridShaders = false;
     bool hasGalaxyBackgroundStarShader = false;
     bool hasGalaxyMarkerShader = false;
+    bool hasStarmapOrbitShaders = false;
     bool hasBloomShaders = false;
     bool hasGalaxyFxaaShader = false;
     bool hasStarModels = false;

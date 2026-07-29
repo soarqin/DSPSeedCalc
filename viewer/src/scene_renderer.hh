@@ -13,6 +13,12 @@ class SceneRenderer {
 public:
     SceneRenderer(const RenderResources &resources, const PostProcess &postProcess);
 
+    // The visible orbit line width is `_TileScale` in `Universe/Starmap/Planet Orbit`: the shader
+    // draws an analytic tube whose half thickness is `distanceScale / (2 * _TileScale)`, so a larger
+    // value is a thinner line at the same screen size. `factor` is the fraction of the official
+    // width to draw, which the viewer deliberately keeps below 1 so orbits do not hide planets.
+    void SetOrbitWidthFactor(float factor);
+
     float StarViewRadius(const dspugen::Star *star);
     float StarVisualScale(const StarViewData &star, const Camera3D &camera);
     void DrawGalaxy(const std::vector<GalaxyLineData> &lines,
@@ -23,7 +29,8 @@ public:
                     float time, std::size_t selectedPlanet, std::size_t invalidIndex);
 
 private:
-    void DrawGalaxyLineQuad(Vector3 start, Vector3 end, const Camera3D &camera, float width);
+    void DrawGalaxyLineQuad(Vector3 start, Vector3 end, const Camera3D &camera, float width,
+                            float texcoordStart = 0.0f, float texcoordEnd = 1.0f);
     float RawStarSpotLevel(const StarViewData &star, const Camera3D &camera);
     float StarSpotLevel(const StarViewData &star, const Camera3D &camera);
     Matrix ViewProjection();
@@ -46,13 +53,16 @@ private:
     void DrawGalaxyBackgroundStars(float time);
     void DrawGalaxyStarMarker(const Texture2D &texture, Vector3 position, float size, Vector4 tint,
                               float multiplier, float alphaMultiplier, const Camera3D &camera);
-    void DrawBackgroundStars(const Camera3D &camera, bool bloomVisible = true);
     void DrawCachedLines(const std::vector<Line3DCache> &lines, Color color);
-    void DrawOrbit(Vector3 center, const PlanetViewData &planet);
-    void DrawPlanet(const PlanetViewData &planet, const Camera3D &camera, float time, bool selected);
+    void DrawStarmapBackgroundStars(const Camera3D &camera, float time);
+    void DrawStarmapOrbit(const PlanetViewData &planet, Vector3 center, const Camera3D &camera);
+    void DrawStarmapOrbitDisk(const PlanetViewData &planet, Vector3 center);
+    void DrawStarmapSelectionRing(Vector3 position, float ringRadius, const Camera3D &camera);
+    void DrawPlanet(const PlanetViewData &planet, const Camera3D &camera, float time);
 
     const RenderResources &resources;
     const PostProcess &postProcess;
+    float orbitTileScale = 14.0f;
 };
 
 }
