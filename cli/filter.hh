@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "dspugen/galaxy.hh"
+#include "galaxy.hh"
 
 #include <cstdint>
 #include <string>
@@ -33,6 +33,7 @@ extern std::uint64_t prePlanetRequirements();
 extern std::uint64_t outputRequirements();
 extern bool pluginsAllowBlockScheduling();
 extern bool pluginsRequireSerializedFilters();
+extern bool pluginsHaveOutputCallbacks();
 extern void initPluginThread(std::uint32_t);
 extern void finishPluginThread();
 extern void mergePluginThreads();

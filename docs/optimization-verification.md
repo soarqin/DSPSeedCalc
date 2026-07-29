@@ -48,20 +48,52 @@ python tools/verify_oracle.py cmake-build-clang-release-parity/bin/dspugen_oracl
 python tools/audit_fp_flags.py cmake-build-clang-release-parity/compile_commands.json
 ```
 
+## 全流程摘要验证
+
+固定 fixture 只覆盖两个 seed。为了验证跨全流程的改动，`benchmarks/plugins/` 增加了两个校验插件，配合改造后的 `pose_sink`：
+
+| 插件 | 覆盖内容 |
+|---|---|
+| `galaxy_digest` | 声明全部需求位，对每颗恒星与行星的所有字段（含名字、气体、`veinSpot`、全部浮点字段）取位级摘要，按 seed 异或折叠，因此与线程调度和 seed 顺序无关 |
+| `owned_output` | 实现 `formatOutput` 并写两个通道，覆盖宿主的 owned-output 路径——仓库内没有任何插件实现 `formatOutput`，该路径此前无覆盖 |
+| `pose_sink` | 对 x/y/z 三个坐标取位模式并在卸载时打印，作为大范围位置 parity 检查 |
+
+已记录的参考值（`Prototypes/` 当前快照，seed `0-1999`，`-t 4`）：
+
+| 星数 | `galaxy_digest` | 恒星数 | 行星数 |
+|---:|---|---:|---:|
+| 16 | `63981f89400edae8` | 32000 | 105443 |
+| 64 | `be0243dc0a38f6bd` | 128000 | 488267 |
+
+`pose_sink` 参考值（seed `0-19999`，`-P`）：16 星 `9d727cec36ceed84`、64 星 `3277ef00c03ce146`、256 星 `1dca6c7f8fab9af3`。
+
+已验证：GCC Debug、GCC Release、Clang Release 三种构建的摘要与上表逐位相同；优化前后的摘要相同；新增 `Star::planetGenSeed` 之前构建的插件 DLL 配新宿主仍得到相同摘要（字段追加在末尾，未移动既有偏移）。
+
 ## Smoke 验证
 
 - 合成基准插件全部构建成功。
 - smoke tier 覆盖位置、恒星和行星三种模式；runner 完成预热和正式采样，输出中位数与 MAD。
-- GCC Release LTO 已完成 core 的 42 个 case 和 scaling 的 216 个 case；每个 case 预热 1 次并正式运行 7 次。core 全 case wall median 的中位数为 `0.04064345 s`，scaling 全 case wall median 的中位数为 `0.04418915 s`。原始结果由 runner 写入忽略的 `benchmark-results-core.json` 和 `benchmark-results-scaling.json`。
 - `-b -n -t 1 "0-10,64"` 完成 11 个 seed，退出码 0。
-- instrumentation JSON 成功输出位置候选、单位球拒绝、碰撞比较、碰撞拒绝、对象池、行星、主题、Prototype、插件和 RNG trace 计数。
+- instrumentation JSON 成功输出位置候选、单位球拒绝、碰撞比较、碰撞拒绝、对象池、行星、稀有矿、主题、Prototype、插件和 RNG trace 计数。
 
-完整 7 次、全星数和全线程性能矩阵可通过以下命令复现：
+### 已失效的历史基准数据
+
+`benchmark-results-core.json` 与 `benchmark-results-scaling.json` 是在 `CMAKE_BUILD_TYPE` 为空的 `cmake-build-benchmark` 目录下测得的，即无优化构建，同一负载比正确的 Release 慢 3.8 倍（853 对 224 µs/seed）。**这两份数据不可用作基线。** 现已增加 `benchmark` preset，`tools/benchmark.py` 会读取可执行文件旁的 `CMakeCache.txt`、把构建配置写进结果，并拒绝在非优化构建上运行。
+
+同时 runner 改用程序自身的 `Nms used` 作为主指标：原 100 个 seed 的区间使内部计时只有 4–19 ms，而进程 wall 是 28–40 ms，被启动与 Prototype 解析主导。区间规模现在由 `benchmarks/workloads.json` 的 `seedsAt64` 按星数与线程数缩放。
+
+完整性能矩阵复现命令：
 
 ```powershell
+cmake --preset benchmark
+cmake --build --preset benchmark
 python tools/benchmark.py cmake-build-benchmark/bin/DSPSeedCalc.exe `
   --plugin-dir cmake-build-benchmark/bin/benchmark-plugins `
   --tier scaling --runs 7 --compiler "GCC 16.1.0"
 ```
 
 该矩阵会覆盖 16、32、64、96、128、256 星和 1、8、16、24、31、32 线程，并分别运行位置、恒星拒绝、star callback、planet callback、无插件高命中和高命中输出场景。
+
+## 优化轮次记录
+
+本轮实施的优化项、实测提升与被实测推翻的预期见 `docs/performance-opportunities.md`。所有项均通过上述 oracle、FP flag audit 与全流程摘要验证；单线程各模式提升 1.65×–2.82×，31 线程扩展性从 11.2×（16 线程）提升到 21.0×（31 线程）。

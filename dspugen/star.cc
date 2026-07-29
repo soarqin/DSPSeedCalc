@@ -73,6 +73,7 @@ void Star::reset() {
     classFactor = 0.0f;
     resourceCoef = 0.0f;
     habitableRadiusSqrt = 0.0f;
+    planetGenSeed = 0;
 }
 
 void Star::release() {
@@ -100,6 +101,8 @@ Star *Star::createStar(Galaxy *galaxy,
     util::DotNet35Random dotNet35Random(seed);
     auto seed2 = dotNet35Random.next();
     auto seed3 = dotNet35Random.next();
+    dotNet35Random.next();
+    star->planetGenSeed = dotNet35Random.next();
     star->position = pos;
     auto distance = float(pos.magnitude());
     auto distanceFactor = distance / 32.0f;
@@ -160,11 +163,17 @@ Star *Star::createStar(Galaxy *galaxy,
             break;
     }
 
+    // The giant branch used to overwrite this assignment with the same expression and a
+    // 0.58 factor, so the default result was dead work for giants: one pow and two log10
+    // per giant star. Selecting the factor up front computes it once. For mass >= 2.0f the
+    // divisor is exactly 5.0, so the cached log10_5 is the same bit pattern std::log10(d)
+    // would return.
     auto d = star->mass < 2.0f ? (2.0 + 0.4 * (1.0 - star->mass)) : 5.0;
-    star->lifetime = 10000.0 * std::pow(0.1, std::log10(star->mass * 0.5) / std::log10(d) + 1.0) * num6;
+    auto logD = star->mass < 2.0f ? std::log10(d) : log10_5;
+    auto massFactor = needtype == EStarType::GiantStar ? 0.58 : 0.5;
+    star->lifetime = 10000.0 * std::pow(0.1, std::log10(star->mass * massFactor) / logD + 1.0) * num6;
     switch (needtype) {
         case EStarType::GiantStar:
-            star->lifetime = 10000.0 * std::pow(0.1, std::log10(star->mass * 0.58) / std::log10(d) + 1.0) * num6;
             star->age = float(num4) * 0.04f + 0.96f;
             break;
         case EStarType::WhiteDwarf:
@@ -249,6 +258,8 @@ Star *Star::createBirthStar(Galaxy *galaxy, int seed) {
     util::DotNet35Random dotNet35Random(seed);
     auto seed2 = dotNet35Random.next();
     auto seed3 = dotNet35Random.next();
+    dotNet35Random.next();
+    star->planetGenSeed = dotNet35Random.next();
     util::DotNet35Random dotNet35Random2(seed3);
     auto r = dotNet35Random2.nextDouble();
     auto r2 = dotNet35Random2.nextDouble();
@@ -362,11 +373,9 @@ void Star::setStarAge(double rn, double rt) {
 
 void Star::createStarPlanets() {
     if (habitableRadiusSqrt == 0.0f) habitableRadiusSqrt = util::mathfSqrt(habitableRadius);
-    util::DotNet35Random dotNet35Random(seed);
-    dotNet35Random.next();
-    dotNet35Random.next();
-    dotNet35Random.next();
-    util::DotNet35Random dotNet35Random2(dotNet35Random.next());
+    // planetGenSeed is the fourth value of the generator seeded with `seed`, which star
+    // creation already walked; see Star::planetGenSeed.
+    util::DotNet35Random dotNet35Random2(planetGenSeed);
     auto num = dotNet35Random2.nextDouble();
     auto num2 = dotNet35Random2.nextDouble();
     auto num3 = dotNet35Random2.nextDouble();

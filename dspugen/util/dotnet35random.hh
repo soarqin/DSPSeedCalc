@@ -25,14 +25,17 @@ private:
 
     int inext = 0;
     int inextp = 31;
-    int seedArray[56] = {};
+    // Deliberately not zero-initialized: the constructor writes every slot before any
+    // read, and slot 0 is never read. See dotnet35random.cc for the argument.
+    int seedArray[56];
 
 private:
     inline double sample() {
         if (++inext >= 56) inext = 1;
         if (++inextp >= 56) inextp = 1;
         int num = seedArray[inext] - seedArray[inextp];
-        if (num < 0) num += MBIG;
+        // Same wrap as `if (num < 0) num += MBIG`, without the unpredictable branch.
+        num += MBIG & -static_cast<int>(num < 0);
         seedArray[inext] = num;
         DSP_INSTRUMENT(
             auto &counters = instrumentation::local();

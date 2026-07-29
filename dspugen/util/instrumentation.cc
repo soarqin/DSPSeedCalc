@@ -34,6 +34,7 @@ void mergeThread() {
         std::max(totalCounters.poolFreeListHighWater, threadCounters.poolFreeListHighWater);
     ADD_COUNTER(planetsCreated);
     ADD_COUNTER(gasEntriesGenerated);
+    ADD_COUNTER(rareVeinRolls);
     ADD_COUNTER(themeRowsExamined);
     ADD_COUNTER(prototypeLookups);
     ADD_COUNTER(pluginCallbacks);
@@ -59,6 +60,7 @@ void writeReport(const std::string &filename) {
            << "  \"poolFreeListHighWater\": " << totalCounters.poolFreeListHighWater << ",\n"
            << "  \"planetsCreated\": " << totalCounters.planetsCreated << ",\n"
            << "  \"gasEntriesGenerated\": " << totalCounters.gasEntriesGenerated << ",\n"
+           << "  \"rareVeinRolls\": " << totalCounters.rareVeinRolls << ",\n"
            << "  \"themeRowsExamined\": " << totalCounters.themeRowsExamined << ",\n"
            << "  \"prototypeLookups\": " << totalCounters.prototypeLookups << ",\n"
            << "  \"pluginCallbacks\": " << totalCounters.pluginCallbacks << ",\n"

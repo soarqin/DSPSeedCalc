@@ -498,6 +498,7 @@ void Planet::generateVeins() {
 
         auto rareVeinsSize = static_cast<int>(themeProto->rareVeins.size());
         for (auto n = 0; n < rareVeinsSize; n++) {
+            DSP_INSTRUMENT(++util::instrumentation::local().rareVeinRolls);
             auto num2 = themeProto->rareVeins[n];
             auto num3 = themeProto->rareSettings[star->index == 0 ? (n * 4) : (n * 4 + 1)];
             auto num4 = themeProto->rareSettings[n * 4 + 2];
