@@ -85,17 +85,15 @@ std::string NameGen::randomStarName(int seed, Star *starData, Galaxy *galaxy) {
     int num = 0;
     while (num++ < 256) {
         std::string text = _randomStarName(dotNet35Random.next(), starData);
-        bool flag = false;
-        for (std::size_t i = 0; i < galaxy->stars.size(); i++) {
-            if (galaxy->stars[i] != nullptr && galaxy->stars[i]->name == text) {
-                flag = true;
-                break;
-            }
-        }
-        if (!flag) {
+        // Same predicate as scanning galaxy->stars for an equal name, but filtered by
+        // hash first; see Galaxy::hasStarName. The fallback below is registered too,
+        // because the old scan also saw an assigned "XStar".
+        if (!galaxy->hasStarName(text)) {
+            galaxy->addStarName(text);
             return text;
         }
     }
+    galaxy->addStarName("XStar");
     return "XStar";
 }
 

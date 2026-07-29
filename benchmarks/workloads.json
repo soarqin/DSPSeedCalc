@@ -1,27 +1,34 @@
 {
-  "version": 1,
+  "version": 2,
+  "notes": [
+    "seedsAt64 is the seed budget for 64 stars on one thread. tools/benchmark.py scales it by",
+    "64/starCount and by the thread count so every case keeps the program's own timer in the",
+    "same duration band. A 100-seed range leaves that timer at a few milliseconds, where",
+    "process startup and Prototype parsing dominate and A/B comparison is meaningless.",
+    "Use --seed-scale to trade precision for runtime."
+  ],
   "tiers": {
     "smoke": [
-      {"name": "poses-64-t1", "range": "1-100,64", "threads": 1, "mode": ["-P"], "plugin": "pose_sink"},
-      {"name": "stars-64-t1", "range": "1-100,64", "threads": 1, "mode": [], "plugin": "reject_galaxy"},
-      {"name": "planets-64-t1", "range": "1-50,64", "threads": 1, "mode": ["-p"], "plugin": "reject_galaxy"}
+      {"name": "poses-64-t1", "range": "1-5000,64", "threads": 1, "mode": ["-P"], "plugin": "pose_sink"},
+      {"name": "stars-64-t1", "range": "1-5000,64", "threads": 1, "mode": [], "plugin": "reject_galaxy"},
+      {"name": "planets-64-t1", "range": "1-2500,64", "threads": 1, "mode": ["-p"], "plugin": "reject_galaxy"}
     ],
     "core": [
-      {"name": "positions", "starCounts": [16, 32, 64, 96, 128, 256], "threads": [1], "mode": ["-P"], "plugin": "pose_sink"},
-      {"name": "stars", "starCounts": [16, 32, 64, 96, 128, 256], "threads": [1], "mode": [], "plugin": "reject_galaxy"},
-      {"name": "no-positions", "starCounts": [16, 32, 64, 96, 128, 256], "threads": [1], "mode": ["-Z"], "plugin": "reject_galaxy"},
-      {"name": "birth", "starCounts": [16, 32, 64, 96, 128, 256], "threads": [1], "mode": ["-b"], "plugin": "reject_galaxy"},
-      {"name": "birth-no-positions", "starCounts": [16, 32, 64, 96, 128, 256], "threads": [1], "mode": ["-b", "-Z"], "plugin": "reject_galaxy"},
-      {"name": "planets", "starCounts": [16, 32, 64, 96, 128, 256], "threads": [1], "mode": ["-p"], "plugin": "reject_galaxy"},
-      {"name": "names", "starCounts": [16, 32, 64, 96, 128, 256], "threads": [1], "mode": ["-n"], "plugin": "reject_galaxy"}
+      {"name": "positions", "starCounts": [16, 32, 64, 96, 128, 256], "threads": [1], "mode": ["-P"], "plugin": "pose_sink", "seedsAt64": 5000},
+      {"name": "stars", "starCounts": [16, 32, 64, 96, 128, 256], "threads": [1], "mode": [], "plugin": "reject_galaxy", "seedsAt64": 5000},
+      {"name": "no-positions", "starCounts": [16, 32, 64, 96, 128, 256], "threads": [1], "mode": ["-Z"], "plugin": "reject_galaxy", "seedsAt64": 25000},
+      {"name": "birth", "starCounts": [16, 32, 64, 96, 128, 256], "threads": [1], "mode": ["-b"], "plugin": "reject_galaxy", "seedsAt64": 5000},
+      {"name": "birth-no-positions", "starCounts": [16, 32, 64, 96, 128, 256], "threads": [1], "mode": ["-b", "-Z"], "plugin": "reject_galaxy", "seedsAt64": 200000},
+      {"name": "planets", "starCounts": [16, 32, 64, 96, 128, 256], "threads": [1], "mode": ["-p"], "plugin": "reject_galaxy", "seedsAt64": 2500},
+      {"name": "names", "starCounts": [16, 32, 64, 96, 128, 256], "threads": [1], "mode": ["-n"], "plugin": "reject_galaxy", "seedsAt64": 4000}
     ],
     "scaling": [
-      {"name": "positions", "starCounts": [16, 32, 64, 96, 128, 256], "threads": [1, 8, 16, 24, 31, 32], "mode": ["-P"], "plugin": "pose_sink"},
-      {"name": "stars-reject", "starCounts": [16, 32, 64, 96, 128, 256], "threads": [1, 8, 16, 24, 31, 32], "mode": [], "plugin": "reject_galaxy"},
-      {"name": "star-filter", "starCounts": [16, 32, 64, 96, 128, 256], "threads": [1, 8, 16, 24, 31, 32], "mode": [], "plugin": "reject_star"},
-      {"name": "planet-filter", "starCounts": [16, 32, 64, 96, 128, 256], "threads": [1, 8, 16, 24, 31, 32], "mode": ["-p"], "plugin": "reject_planet"},
-      {"name": "no-plugin-high-hit", "starCounts": [16, 32, 64, 96, 128, 256], "threads": [1, 8, 16, 24, 31, 32], "mode": [], "plugin": null},
-      {"name": "high-output", "starCounts": [16, 32, 64, 96, 128, 256], "threads": [1, 8, 16, 24, 31, 32], "mode": [], "plugin": "high_output"}
+      {"name": "positions", "starCounts": [16, 32, 64, 96, 128, 256], "threads": [1, 8, 16, 24, 31, 32], "mode": ["-P"], "plugin": "pose_sink", "seedsAt64": 2000},
+      {"name": "stars-reject", "starCounts": [16, 32, 64, 96, 128, 256], "threads": [1, 8, 16, 24, 31, 32], "mode": [], "plugin": "reject_galaxy", "seedsAt64": 2000},
+      {"name": "star-filter", "starCounts": [16, 32, 64, 96, 128, 256], "threads": [1, 8, 16, 24, 31, 32], "mode": [], "plugin": "reject_star", "seedsAt64": 2000},
+      {"name": "planet-filter", "starCounts": [16, 32, 64, 96, 128, 256], "threads": [1, 8, 16, 24, 31, 32], "mode": ["-p"], "plugin": "reject_planet", "seedsAt64": 1000},
+      {"name": "no-plugin-high-hit", "starCounts": [16, 32, 64, 96, 128, 256], "threads": [1, 8, 16, 24, 31, 32], "mode": [], "plugin": null, "seedsAt64": 2000},
+      {"name": "high-output", "starCounts": [16, 32, 64, 96, 128, 256], "threads": [1, 8, 16, 24, 31, 32], "mode": [], "plugin": "high_output", "seedsAt64": 2000}
     ]
   }
 }

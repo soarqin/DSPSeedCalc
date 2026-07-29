@@ -58,6 +58,21 @@ struct OutputSet {
 };
 
 static std::vector<FilterSet> filters;
+
+// Compact dispatch lists built once at load time. hasFinalFilter() and the null-callback
+// checks used to be re-evaluated inside the star and planet loops, i.e. up to
+// stars * planets * filters times per seed, for a result that is fixed after loadFilters().
+// `index` is the position in FilterInvocation::contexts.
+template<typename F>
+struct FilterEntry {
+    F callback;
+    std::size_t index;
+};
+static std::vector<FilterEntry<GalaxyFilterFunc>> galaxyFilterList;
+static std::vector<FilterEntry<StarFilterFunc>> starFilterList;
+static std::vector<FilterEntry<PlanetFilterFunc>> planetFilterList;
+static std::vector<FilterEntry<SeedEndFunc>> seedEndList;
+
 static std::vector<OutputSet> outputFuncs;
 static std::vector<PoseFunc> poseFuncs;
 static std::vector<PluginUninitFunc> uninitFuncs;
@@ -96,8 +111,27 @@ static bool hasFinalFilter(const FilterSet &filter) {
            filter.planetFilter || filter.seedEnd;
 }
 
+static void buildDispatchLists() {
+    galaxyFilterList.clear();
+    starFilterList.clear();
+    planetFilterList.clear();
+    seedEndList.clear();
+    for (std::size_t i = 0; i < filters.size(); ++i) {
+        const auto &fs = filters[i];
+        if (fs.seedEnd) seedEndList.push_back({fs.seedEnd, i});
+        if (!hasFinalFilter(fs)) continue;
+        if (fs.galaxyFilter) galaxyFilterList.push_back({fs.galaxyFilter, i});
+        if (fs.starFilter) starFilterList.push_back({fs.starFilter, i});
+        if (fs.planetFilter) planetFilterList.push_back({fs.planetFilter, i});
+    }
+}
+
 void loadFilters() {
     filters.clear();
+    galaxyFilterList.clear();
+    starFilterList.clear();
+    planetFilterList.clear();
+    seedEndList.clear();
     outputFuncs.clear();
     poseFuncs.clear();
     uninitFuncs.clear();
@@ -219,6 +253,7 @@ void loadFilters() {
             }
         }
     }
+    buildDispatchLists();
 }
 
 bool runPrePlanetFilters(const dspugen::Galaxy *galaxy, FilterInvocation &invocation) {
@@ -235,41 +270,32 @@ bool runPrePlanetFilters(const dspugen::Galaxy *galaxy, FilterInvocation &invoca
 }
 
 bool runFilters(const dspugen::Galaxy *galaxy, const FilterInvocation &invocation) {
-    for (std::size_t i = 0; i < filters.size(); ++i) {
-        const auto &fs = filters[i];
-        if (!hasFinalFilter(fs)) continue;
-        if (fs.galaxyFilter && !runPluginCallback([&] {
-            return fs.galaxyFilter(galaxy, invocation.contexts[i]);
+    for (const auto &entry: galaxyFilterList)
+        if (!runPluginCallback([&] {
+            return entry.callback(galaxy, invocation.contexts[entry.index]);
         })) return false;
-    }
     if (hasPlanetFilter) {
         bool pass = true;
         for (auto &s: galaxy->stars) {
             pass = true;
-            for (std::size_t i = 0; i < filters.size(); ++i) {
-                const auto &fs = filters[i];
-                if (!hasFinalFilter(fs)) continue;
-                if(fs.starFilter && !runPluginCallback([&] {
-                    return fs.starFilter(s, invocation.contexts[i]);
+            for (const auto &entry: starFilterList)
+                if (!runPluginCallback([&] {
+                    return entry.callback(s, invocation.contexts[entry.index]);
                 })) {
                     pass = false;
                     break;
                 }
-            }
             if (!pass) { continue; }
             pass = false;
             for (const auto &p: s->planets) {
                 bool planetPass = true;
-                for (std::size_t i = 0; i < filters.size(); ++i) {
-                    const auto &fs = filters[i];
-                    if (!hasFinalFilter(fs)) continue;
-                    if (fs.planetFilter && !runPluginCallback([&] {
-                            return fs.planetFilter(p, invocation.contexts[i]);
+                for (const auto &entry: planetFilterList)
+                    if (!runPluginCallback([&] {
+                            return entry.callback(p, invocation.contexts[entry.index]);
                         })) {
                         planetPass = false;
                         break;
                     }
-                }
                 if (planetPass) {
                     pass = true;
                     break;
@@ -284,28 +310,22 @@ bool runFilters(const dspugen::Galaxy *galaxy, const FilterInvocation &invocatio
         bool pass = true;
         for (auto &s: galaxy->stars) {
             pass = true;
-            for (std::size_t i = 0; i < filters.size(); ++i) {
-                const auto &fs = filters[i];
-                if (!hasFinalFilter(fs)) continue;
-                if(fs.starFilter && !runPluginCallback([&] {
-                    return fs.starFilter(s, invocation.contexts[i]);
+            for (const auto &entry: starFilterList)
+                if (!runPluginCallback([&] {
+                    return entry.callback(s, invocation.contexts[entry.index]);
                 })) {
                     pass = false;
                     break;
                 }
-            }
             if (pass) {
                 break;
             }
         }
         if (!pass) { return false; }
     }
-    for (std::size_t i = 0; i < filters.size(); ++i) {
-        const auto &fs = filters[i];
-        if (fs.seedEnd && !runPluginCallback([&] { return fs.seedEnd(invocation.contexts[i]); })) {
+    for (const auto &entry: seedEndList)
+        if (!runPluginCallback([&] { return entry.callback(invocation.contexts[entry.index]); }))
             return false;
-        }
-    }
     return true;
 }
 
@@ -331,6 +351,10 @@ void unloadFilters() {
         func();
     }
     filters.clear();
+    galaxyFilterList.clear();
+    starFilterList.clear();
+    planetFilterList.clear();
+    seedEndList.clear();
     outputFuncs.clear();
     poseFuncs.clear();
     uninitFuncs.clear();
@@ -369,6 +393,14 @@ bool pluginsAllowBlockScheduling() {
 
 bool pluginsRequireSerializedFilters() {
     return serializeFilters;
+}
+
+// Lets the caller skip taking the output mutex when no plugin has an output() callback,
+// which is the common case for filter-only scans.
+bool pluginsHaveOutputCallbacks() {
+    for (const auto &output: outputFuncs)
+        if (output.output) return true;
+    return false;
 }
 
 void initPluginThread(std::uint32_t workerIndex) {

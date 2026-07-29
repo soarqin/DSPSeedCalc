@@ -23,8 +23,12 @@ if(DSP_ENABLE_INSTRUMENTATION)
     target_compile_definitions(dspugen PUBLIC DSP_ENABLE_INSTRUMENTATION=1)
 endif()
 
+# PUBLIC, not PRIVATE: util/maths.hh and vectors.hh are inline headers, so every
+# consumer compiles parity-sensitive arithmetic into its own translation unit and
+# needs the same strict floating-point contract. Plugins do not link dspugen; they
+# get these options from dsp_plugin_abi in cli/CMakeLists.txt.
 if(MSVC)
-    target_compile_options(dspugen PRIVATE /fp:strict)
+    target_compile_options(dspugen PUBLIC /fp:strict)
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    target_compile_options(dspugen PRIVATE -fno-fast-math -ffp-contract=off)
+    target_compile_options(dspugen PUBLIC -fno-fast-math -ffp-contract=off)
 endif()

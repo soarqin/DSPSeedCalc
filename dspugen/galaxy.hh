@@ -9,6 +9,8 @@
 #pragma once
 
 #include "star.hh"
+#include <cstddef>
+#include <string>
 #include <vector>
 
 namespace dspugen {
@@ -44,6 +46,19 @@ public:
     float habitableTarget = 0.0f;
 
     std::vector<Star *> stars;
+
+    // Hashes of the star names assigned so far, in the same order as `stars`, so entry i
+    // belongs to stars[i]. NameGen scans this instead of comparing the candidate against
+    // every existing name, which turns the uniqueness retry loop from O(S) string
+    // comparisons per candidate into O(S) integer comparisons. Appended after the
+    // existing members because plugins inline this header.
+    std::vector<std::size_t> starNameHashes;
+
+    // True when some already-created star carries this exact name. Hash equality is only
+    // a filter: the real name is compared on a hit, so a hash collision cannot change
+    // which candidate NameGen accepts.
+    [[nodiscard]] bool hasStarName(const std::string &name) const;
+    void addStarName(const std::string &name);
 
     [[nodiscard]] inline Star *starById(int starId) const {
         auto num = starId - 1;

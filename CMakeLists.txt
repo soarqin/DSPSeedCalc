@@ -31,13 +31,12 @@ project(DSPSeedCalc CXX)
 
 add_subdirectory(dspugen)
 
-add_project(${PROJECT_NAME} EXECUTABLE
-    main.cc filter.cc filter.hh
-    FOLDER "cli"
-    LANGUAGES CXX)
+if(WIN32)
+    add_subdirectory(getopt)
+    add_subdirectory(dlfcn-win32)
+endif()
 
-target_link_libraries(${PROJECT_NAME} dspugen)
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
+add_subdirectory(cli)
 
 set(DSP_PGO_TARGETS ${PROJECT_NAME} dspugen)
 if(DSP_ENABLE_NATIVE_ARCH)
@@ -88,14 +87,6 @@ elseif(DSP_PGO STREQUAL "USE")
         message(FATAL_ERROR "DSP_PGO=USE supports GCC and Clang only")
     endif()
 endif()
-if(WIN32)
-    add_subdirectory(getopt)
-    add_subdirectory(dlfcn-win32)
-    target_link_libraries(${PROJECT_NAME} wingetopt dl)
-else()
-    target_link_libraries(${PROJECT_NAME} ${CMAKE_DL_LIBS})
-endif()
-
 add_subdirectory(filters)
 
 if(DSP_BUILD_ORACLE)

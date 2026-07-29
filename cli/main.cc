@@ -9,6 +9,7 @@
 #include <getopt.h>
 #include <algorithm>
 #include <atomic>
+#include <iterator>
 #include <chrono>
 #include <condition_variable>
 #include <cstdint>
@@ -177,7 +178,34 @@ static void calc(std::uint32_t workerIndex) {
     dspugen::Star::initThread();
     dspugen::Planet::initThread();
     initPluginThread(workerIndex);
-    auto serializeLegacyFilters = pluginsRequireSerializedFilters();
+    // Plugin-set properties are fixed once loadFilters() has run, so resolve them once
+    // instead of per seed.
+    const auto serializeLegacyFilters = pluginsRequireSerializedFilters();
+    const auto needsOutputLock = serializeLegacyFilters && pluginsHaveOutputCallbacks();
+    const auto prePlanetNeeds = prePlanetRequirements();
+    const auto filterNeeds = filterRequirements();
+    const auto outputNeeds = outputRequirements();
+    // Legacy plugins keep per-seed state across seedBegin/filters/seedEnd, so their whole
+    // callback sequence has to stay one critical section. Generating planets inside that
+    // section would serialize generation itself, so when serialization is required the
+    // staged generation is hoisted ahead of the lock instead.
+    const auto hoistedNeeds = serializeLegacyFilters
+                              ? (prePlanetNeeds | filterNeeds | outputNeeds) : prePlanetNeeds;
+    constexpr std::uint64_t planetNeeds =
+        NeedsPlanetTopology | NeedsPlanetTheme | NeedsVeinMetadata | NeedsGas;
+    // Reused across seeds: both were heap-allocated once per seed before.
+    FilterInvocation invocation;
+    std::vector<OwnedOutputRecord> ownedOutput;
+    // Hits are batched before being handed to the writer thread. One enqueue per hit costs
+    // a mutex plus a condition-variable notify, which became the limiting factor for
+    // high-hit-rate scans once generation itself got faster. Flushing on either a byte
+    // threshold or a seed count keeps rare hits visible promptly instead of sitting in a
+    // worker buffer until the scan ends.
+    constexpr std::size_t flushBytes = 16 * 1024;
+    constexpr int flushSeeds = 4096;
+    std::string rowBatch;
+    std::vector<OwnedOutputRecord> batchRecords;
+    int seedsSinceFlush = 0;
     int blockCurrent = 0;
     int blockEnd = 0;
     while (true) {
@@ -186,43 +214,53 @@ static void calc(std::uint32_t workerIndex) {
         if (seed % 500000 == 0) {
             fmt::print(std::cerr, "Processed to: {},{}. Currently found: {}. {}ms elapsed.\n", seed, starCount, found.load(std::memory_order_relaxed), std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - *startTime).count());
         }
+        if (++seedsSinceFlush >= flushSeeds || rowBatch.size() >= flushBytes) {
+            if (!rowBatch.empty() || !batchRecords.empty()) {
+                outputWriter->enqueue(std::move(rowBatch), std::move(batchRecords));
+                rowBatch.clear();
+                batchRecords.clear();
+            }
+            seedsSinceFlush = 0;
+        }
         auto galaxy = dspugen::Galaxy::create(dspugen::DefaultAlgoVersion, seed, starCount);
         if (!galaxy) continue;
-        FilterInvocation invocation;
+        if (hoistedNeeds & planetNeeds) galaxy->ensureAllPlanets();
+        if (hoistedNeeds & NeedsGas) galaxy->ensureAllGas();
         std::unique_lock<std::mutex> legacyFilterLock(mutex2, std::defer_lock);
         if (serializeLegacyFilters) legacyFilterLock.lock();
-        auto requirements = prePlanetRequirements();
-        if (requirements & (NeedsPlanetTopology | NeedsPlanetTheme | NeedsVeinMetadata | NeedsGas))
-            galaxy->ensureAllPlanets();
-        if (requirements & NeedsGas) galaxy->ensureAllGas();
         if (!runPrePlanetFilters(galaxy, invocation)) {
             galaxy->release();
             continue;
         }
-        requirements = filterRequirements();
-        if (requirements & (NeedsPlanetTopology | NeedsPlanetTheme | NeedsVeinMetadata | NeedsGas))
-            galaxy->ensureAllPlanets();
-        if (requirements & NeedsGas) galaxy->ensureAllGas();
+        if (!serializeLegacyFilters) {
+            if (filterNeeds & planetNeeds) galaxy->ensureAllPlanets();
+            if (filterNeeds & NeedsGas) galaxy->ensureAllGas();
+        }
         if (!runFilters(galaxy, invocation)) {
             galaxy->release();
             continue;
         }
-        requirements = outputRequirements();
-        if (requirements & (NeedsPlanetTopology | NeedsPlanetTheme | NeedsVeinMetadata | NeedsGas))
-            galaxy->ensureAllPlanets();
-        if (requirements & NeedsGas) galaxy->ensureAllGas();
-        std::vector<OwnedOutputRecord> ownedOutput;
+        if (!serializeLegacyFilters) {
+            if (outputNeeds & planetNeeds) galaxy->ensureAllPlanets();
+            if (outputNeeds & NeedsGas) galaxy->ensureAllGas();
+        }
+        ownedOutput.clear();
         formatOutput(galaxy, ownedOutput);
         if (legacyFilterLock.owns_lock()) legacyFilterLock.unlock();
-        {
+        found.fetch_add(1, std::memory_order_relaxed);
+        if (needsOutputLock) {
             std::unique_lock lk(mutex2);
-            found.fetch_add(1, std::memory_order_relaxed);
+            runOutput(galaxy);
+        } else {
             runOutput(galaxy);
         }
-        outputWriter->enqueue(fmt::format("{},{}\n", seed, galaxy->starCount),
-                              std::move(ownedOutput));
+        fmt::format_to(std::back_inserter(rowBatch), "{},{}\n", seed, galaxy->starCount);
+        for (auto &record: ownedOutput) batchRecords.emplace_back(std::move(record));
+        ownedOutput.clear();
         galaxy->release();
     }
+    if (!rowBatch.empty() || !batchRecords.empty())
+        outputWriter->enqueue(std::move(rowBatch), std::move(batchRecords));
     finishPluginThread();
     dspugen::util::instrumentation::mergeThread();
     dspugen::Planet::releaseThread();

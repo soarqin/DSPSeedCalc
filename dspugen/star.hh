@@ -82,6 +82,16 @@ public:
     std::vector<Planet*> planets;
     std::string name;
 
+    // Fourth value of the generator seeded with `seed`. createStarPlanets() needs only
+    // that value, and star creation already walks the same stream, so taking two extra
+    // next() calls there (about 3 ns) avoids reconstructing the generator later (about
+    // 67 ns). Reset with the rest of the fields; the pool reuses Star objects.
+    //
+    // Appended after the existing members on purpose: plugins inline this header, so
+    // inserting a field earlier would shift planets and name and silently break every
+    // already-built plugin DLL.
+    int planetGenSeed = 0;
+
     static Star *createStar(Galaxy *galaxy, const VectorLF3 &pos, int id, int seed, EStarType needtype,
                                 ESpectrType needSpectr = ESpectrType::X);
     static Star *createBirthStar(Galaxy *galaxy, int seed);

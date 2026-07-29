@@ -51,6 +51,15 @@
       }
     },
     {
+      "name": "benchmark",
+      "inherits": "gcc-release-parity",
+      "binaryDir": "${sourceDir}/cmake-build-benchmark",
+      "cacheVariables": {
+        "DSP_BUILD_ORACLE": "OFF",
+        "DSP_BUILD_BENCHMARK_PLUGINS": "ON"
+      }
+    },
+    {
       "name": "emscripten-viewer",
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/cmake-build-emscripten-viewer",
@@ -69,6 +78,7 @@
     {"name": "gcc-release-parity", "configurePreset": "gcc-release-parity", "targets": ["dspugen_oracle", "DSPSeedCalc"]},
     {"name": "clang-release-parity", "configurePreset": "clang-release-parity", "targets": ["dspugen_oracle", "DSPSeedCalc"]},
     {"name": "gcc-release-instrumented", "configurePreset": "gcc-release-instrumented", "targets": ["dspugen_oracle", "DSPSeedCalc"]},
+    {"name": "benchmark", "configurePreset": "benchmark"},
     {"name": "emscripten-viewer", "configurePreset": "emscripten-viewer", "targets": ["viewer"]}
   ]
 }

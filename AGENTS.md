@@ -21,15 +21,15 @@ Do not assume that behavior from an older Unity, Mono, or game build is still co
 
 ## Repository Map
 
-- `main.cc`: CLI parsing and multi-threaded seed scanning.
-- `filter.cc`, `filter.hh`: dynamic filter and output plugin host.
+- `cli/main.cc`: CLI parsing and multi-threaded seed scanning.
+- `cli/filter.cc`, `cli/filter.hh`: dynamic filter and output plugin host. `filter.hh` is the plugin ABI contract, exported to plugin targets through the `dsp_plugin_abi` INTERFACE target in `cli/CMakeLists.txt`.
 - `dspugen/`: deterministic generator library.
 - `dspugen/galaxy.cc`: star positions and galaxy composition.
 - `dspugen/star.cc`: star properties and planetary-system topology.
 - `dspugen/planet.cc`: planet metadata, type, theme, gas, and partial vein data.
 - `dspugen/util/dotnet35random.*`: game-compatible legacy .NET random generator.
 - `Prototypes/`: AssetStudio exports used at runtime. Treat these files as versioned game data.
-- `filters/`: plugins; each `.cc` file becomes a shared library.
+- `filters/`: plugins; each `.cc` file becomes a shared library that links `dsp_plugin_abi` for `filter.hh` and the `dspugen` headers.
 - `viewer/`: incomplete and out of scope unless a task explicitly includes it.
 - `dspugen/fmt/`, `dspugen/nlohmann/`, `getopt/`, `dlfcn-win32/`: vendored code. Do not edit without a specific dependency task.
 

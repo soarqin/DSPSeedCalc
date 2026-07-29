@@ -39,19 +39,15 @@ inline float mathfSqrt(float value) {
     return static_cast<float>(std::sqrt(static_cast<double>(value)));
 }
 
+// Banker's rounding, matching Math.Round / Mathf.Round. std::nearbyint rounds according
+// to the current rounding mode, which is round-half-to-even here: nothing in this project
+// calls fesetround, and tests/oracle.cc asserts std::fegetround() == FE_TONEAREST before
+// emitting fixtures. That makes it bit-identical to the explicit floor/fraction/fmod form
+// this replaces, including the cases that form special-cased: signed zero is preserved,
+// non-finite values pass through, and values at or above 2^52 are already integral.
+// Do not introduce fesetround anywhere in the generator without revisiting this.
 inline double roundToEven(double value) {
-    if (!std::isfinite(value) || value == 0.0 || std::abs(value) >= 0x1p52) return value;
-    auto lower = std::floor(value);
-    auto fraction = value - lower;
-    double result;
-    if (fraction < 0.5) {
-        result = lower;
-    } else if (fraction > 0.5) {
-        result = lower + 1.0;
-    } else {
-        result = std::fmod(std::abs(lower), 2.0) == 0.0 ? lower : lower + 1.0;
-    }
-    return std::copysign(result, value);
+    return std::nearbyint(value);
 }
 
 inline float mathfRound(float value) {

@@ -9,6 +9,7 @@ import json
 import os
 import pathlib
 import platform
+import re
 import shutil
 import statistics
 import subprocess
@@ -41,6 +42,61 @@ def seed_count(range_text: str) -> int:
         return 1
     start, end = seed_part.split("-", 1)
     return int(end) - int(start) + 1
+
+
+GENERATE_PATTERN = re.compile(r"(\d+)ms used, (\d+) found from (\d+) processed seeds")
+
+
+def parse_generate(stderr: str) -> dict:
+    """Extract the program's own timer, which excludes startup and Prototype parsing."""
+    match = GENERATE_PATTERN.search(stderr)
+    if not match:
+        return {}
+    return {
+        "generateSeconds": int(match.group(1)) / 1000.0,
+        "found": int(match.group(2)),
+        "processedSeeds": int(match.group(3)),
+    }
+
+
+OPTIMIZED_BUILD_TYPES = {"release", "relwithdebinfo", "minsizerel"}
+
+
+def read_build_config(executable: pathlib.Path) -> dict:
+    """Find the CMakeCache.txt that produced `executable` and read the build settings.
+
+    A build directory left with an empty CMAKE_BUILD_TYPE produces an unoptimized
+    binary that still links and runs, which silently invalidates every number the
+    runner reports. Recording the setting makes that visible in the result file.
+    """
+    wanted = {"CMAKE_BUILD_TYPE", "RELEASE_USE_LTO", "CMAKE_CXX_COMPILER",
+              "DSP_PGO", "DSP_ENABLE_NATIVE_ARCH", "DSP_ENABLE_INSTRUMENTATION"}
+    for directory in executable.resolve().parents:
+        cache = directory / "CMakeCache.txt"
+        if not cache.is_file():
+            continue
+        config = {}
+        for line in cache.read_text(encoding="utf-8", errors="replace").splitlines():
+            name, separator, value = line.partition(":")
+            if not separator or "=" not in value:
+                continue
+            if name in wanted:
+                config[name] = value.split("=", 1)[1]
+        config["cmakeCache"] = str(cache)
+        return config
+    return {}
+
+
+def plan_seeds(case: dict, stars: int, threads: int, scale: float) -> int:
+    """Size a case so the program's own timer stays far above its 1 ms resolution.
+
+    `seedsAt64` is the budget for 64 stars on one thread. Per-seed cost grows
+    roughly linearly with the star count, and wall time shrinks roughly linearly
+    with the thread count, so both are compensated to keep every case in the same
+    duration band instead of letting process startup dominate the short ones.
+    """
+    base = case.get("seedsAt64", 5000) * 64.0 / max(1, stars) * max(1, threads)
+    return max(case.get("minSeeds", 200), int(round(base * scale)))
 
 
 def run_once(command: list[str], cwd: pathlib.Path) -> dict:
@@ -90,7 +146,23 @@ def main() -> int:
     parser.add_argument("--result", type=pathlib.Path,
                         default=pathlib.Path("benchmark-results.json"))
     parser.add_argument("--compiler", default="unknown")
+    parser.add_argument("--seed-scale", type=float, default=1.0,
+                        help="multiplier on the planned seed count; lower it for a quick pass")
+    parser.add_argument("--allow-unoptimized", action="store_true",
+                        help="run even when the build directory is not an optimized build")
     args = parser.parse_args()
+
+    build_config = read_build_config(args.executable)
+    build_type = build_config.get("CMAKE_BUILD_TYPE", "")
+    if build_type.lower() not in OPTIMIZED_BUILD_TYPES:
+        message = (f"build type {build_type!r} is not optimized "
+                   f"(cache: {build_config.get('cmakeCache', 'not found')})")
+        if not args.allow_unoptimized:
+            print(f"refusing to benchmark: {message}\n"
+                  f"configure with --preset benchmark, or pass --allow-unoptimized",
+                  file=sys.stderr)
+            return 2
+        print(f"warning: {message}", file=sys.stderr)
 
     manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
     cases = manifest["tiers"][args.tier]
@@ -102,8 +174,9 @@ def main() -> int:
             for stars in case["starCounts"]:
                 for threads in case["threads"]:
                     item = dict(case)
+                    seeds = plan_seeds(case, stars, threads, args.seed_scale)
                     item.update(name=f"{case['name']}-{stars}-t{threads}",
-                                range=f"1-100,{stars}", threads=threads)
+                                range=f"1-{seeds},{stars}", threads=threads)
                     expanded.append(item)
 
     report = {
@@ -115,6 +188,8 @@ def main() -> int:
         "processor": platform.processor(),
         "cpuCount": os.cpu_count(),
         "compiler": args.compiler,
+        "buildConfig": build_config,
+        "seedScale": args.seed_scale,
         "workingDirectory": str(pathlib.Path.cwd()),
         "prototypeSha256": {
             path.name: sha256(path) for path in sorted(args.prototypes.glob("*.json"))
@@ -142,17 +217,36 @@ def main() -> int:
                 if sample["returncode"]:
                     print(sample["stderr"], file=sys.stderr)
                     return sample["returncode"]
+                sample.update(parse_generate(sample["stderr"]))
                 if run:
                     samples.append(sample)
             wall_median, wall_mad = median_mad([sample["wallSeconds"] for sample in samples])
-            report["cases"].append({
+            seeds = seed_count(case["range"])
+            entry = {
                 "case": case,
                 "samples": samples,
                 "wallMedianSeconds": wall_median,
                 "wallMadSeconds": wall_mad,
-                "processedSeeds": seed_count(case["range"]),
-                "seedsPerSecond": seed_count(case["range"]) / wall_median,
-            })
+                "processedSeeds": seeds,
+                "wallSeedsPerSecond": seeds / wall_median,
+            }
+            generate = [sample["generateSeconds"] for sample in samples
+                        if "generateSeconds" in sample]
+            if len(generate) == len(samples) and all(value > 0.0 for value in generate):
+                generate_median, generate_mad = median_mad(generate)
+                entry.update(generateMedianSeconds=generate_median,
+                             generateMadSeconds=generate_mad,
+                             seedsPerSecond=seeds / generate_median)
+            else:
+                # No usable internal timer: fall back to wall time and say so, rather
+                # than silently reporting a number dominated by process startup.
+                entry.update(generateMedianSeconds=None, generateMadSeconds=None,
+                             seedsPerSecond=seeds / wall_median,
+                             seedsPerSecondSource="wall")
+            report["cases"].append(entry)
+            print(f"{case['name']}: {entry['seedsPerSecond']:.0f} seeds/s "
+                  f"({seeds} seeds, generate median "
+                  f"{entry['generateMedianSeconds'] or wall_median:.3f}s)", flush=True)
     finally:
         shutil.rmtree(temp_root, ignore_errors=True)
     args.result.write_text(json.dumps(report, indent=2), encoding="utf-8")
