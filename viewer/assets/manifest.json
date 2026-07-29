@@ -169,6 +169,15 @@
       "width": 256,
       "height": 256,
       "mipmaps": 9
+    },
+    {
+      "path": "assets/textures/starmap_orbit_disk.bin",
+      "size": 349525,
+      "sha256": "73366399a14a853e0e342f900fdec61bc8ccbf6e625e22ad984e117687916a62",
+      "format": "red8-srgb",
+      "width": 512,
+      "height": 512,
+      "mipmaps": 10
     }
   ]
 }

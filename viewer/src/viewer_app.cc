@@ -58,7 +58,11 @@ constexpr int kScreenWidth = 1920;
 constexpr int kScreenHeight = 1080;
 constexpr float kPanelWidth = 326.0f;
 constexpr float kSystemOrbitScale = 10.0f;
-constexpr int kOrbitSegments = 72;
+// `UIStarmapPlanet._OnCreate` writes 60 positions at six degree steps and leaves `loop` on.
+constexpr int kOrbitSegments = 60;
+// Star positions reach the starmap as `uPosition * 0.00025` and `StarGen.cs:197` sets
+// `uPosition = position * 2400000`, so one generator unit is 600 starmap units.
+constexpr float kStarmapPositionScale = 600.0f;
 constexpr int kEnterButtonTextWidth = 243;
 constexpr int kBackButtonTextWidth = 80;
 constexpr int kViewerFontSize = 64;
@@ -70,6 +74,9 @@ public:
         : seed(seed), starCount(starCount), fontPath(std::move(fontPath)),
           seedInput(std::to_string(seed)), starCountInput(std::to_string(starCount)),
           sceneRenderer(resources, postProcess) {}
+
+    void SetPostEffects(bool fxaa, int bloomLevel) { postProcess.SetPostEffects(fxaa, bloomLevel); }
+    void SetOrbitWidth(float factor) { sceneRenderer.SetOrbitWidthFactor(factor); }
 
     bool Init() {
         SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_HIGHDPI | FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
@@ -132,7 +139,6 @@ public:
             view.galaxyColor = GalaxyStarColor(star);
             view.galaxyScale = GalaxyStarScale(star);
             view.radius = view.galaxyScale * 0.5f;
-            view.selectionSize = Vector3 {view.galaxyScale, view.galaxyScale, view.galaxyScale};
             view.labelWidth = MeasureTextEx(resources.font, star->name.c_str(), 16.0f, 1.0f).x;
             view.panel = CreateStarPanel(star, seed);
             view.massMaterial = StarMassMaterial(star);
@@ -261,17 +267,22 @@ private:
             view.radius = radius;
             view.color = PlanetColor(planet->type);
             view.flickerPhase = planet->seed * 0.02f;
-            view.selectionRadius = radius * 1.35f;
             view.parentIndex = parentIndex;
             view.orbitRadius = orbitRadius;
             view.orbitInclination = inclination;
             view.orbitLongitude = longitude;
             view.orbitPhase = angle;
+            view.orbitAngle = angle;
+            // `orbitRenderer.widthMultiplier = (orbitAroundPlanet == null) ? 0.7f * star.orbitScaler : 0.1f`
+            view.orbitWidth = planet->orbitAroundPlanet == nullptr
+                                  ? 0.7f * starView.data->orbitScaler
+                                  : 0.1f;
+            view.orbitStencilRef = planet->index + 101;
             view.orbitalPeriod = std::max(orbit.period, 1.0);
             view.orbitRotation = orbitRotation;
-            view.orbitPoints.reserve(kOrbitSegments + 1);
-            for (int i = 0; i <= kOrbitSegments; ++i) {
-                float orbitAngle = static_cast<float>(i) / kOrbitSegments * 2.0f * PI;
+            view.orbitPoints.reserve(kOrbitSegments);
+            for (int i = 0; i < kOrbitSegments; ++i) {
+                float orbitAngle = static_cast<float>(i) * (PI / 180.0f) * 6.0f;
                 view.orbitPoints.push_back(OrbitPoint(Vector3 {}, orbitRadius, orbitAngle, orbitRotation));
             }
             view.name = PlanetName(planet);
@@ -284,8 +295,21 @@ private:
         system.star = starView;
         system.star.position = Vector3 {};
         system.star.radius = sceneRenderer.StarViewRadius(starView.data);
-        system.star.selectionSize = Vector3 {system.star.radius * 1.8f, system.star.radius * 1.8f,
-                                             system.star.radius * 1.8f};
+        // The whole cluster stays in the scene, so build the light copies the star draw calls need.
+        // The panel and label are deliberately left empty: only the current star has a panel.
+        system.otherStars.reserve(stars.size() - 1);
+        for (std::size_t other = 0; other < stars.size(); ++other) {
+            if (other == starIndex) continue;
+            StarViewData view;
+            view.data = stars[other].data;
+            view.position = (stars[other].position - starView.position) * kStarmapPositionScale;
+            view.galaxyColor = stars[other].galaxyColor;
+            view.galaxyScale = stars[other].galaxyScale;
+            view.radius = sceneRenderer.StarViewRadius(stars[other].data);
+            view.massMaterial = stars[other].massMaterial;
+            view.spotMaterial = stars[other].spotMaterial;
+            system.otherStars.push_back(view);
+        }
         char summary[96];
         std::snprintf(summary, sizeof(summary), "system view  /  %d planets  /  click a planet for details",
                       static_cast<int>(system.planets.size()));
@@ -303,8 +327,9 @@ private:
                           static_cast<float>(simulationTime * 60.0 / planet.orbitalPeriod * 2.0 * PI);
             double phase = static_cast<double>(angle) / (2.0 * PI);
             phase -= std::floor(phase + 0.1);
-            planet.position = OrbitPoint(center, planet.orbitRadius,
-                                         static_cast<float>(phase * 2.0 * PI), planet.orbitRotation);
+            planet.orbitAngle = static_cast<float>(phase * 2.0 * PI);
+            planet.position = OrbitPoint(center, planet.orbitRadius, planet.orbitAngle,
+                                         planet.orbitRotation);
         }
         (void)now;
     }
@@ -686,27 +711,58 @@ private:
                    Vector2 {screen.x + 18.0f, screen.y - 6.0f}, 16.0f, 1.0f, LIGHTGRAY);
     }
 
+    // `StarData.systemRadius` is the outermost planet's sun distance, or the dyson radius when the
+    // star has no planets.
+    static float SystemRadius(const dspugen::Star *star) {
+        if (star->planets.empty()) return star->dysonRadius;
+        return star->planets.back()->sunDistance;
+    }
+
+    // `UIStarmapPlanet._OnLateUpdate` offsets the name by `(5 + 420 / num, 6)` where `num` is the
+    // camera distance over the planet's world diameter, and drops the label past
+    // `systemRadius * 40000 * 7 * 0.00025`. `UIStarmapStar` uses `(8 + 600 / num, 4)` and a limit of
+    // `systemRadius * 40000 * 12 * 0.00025`. The viewer has no pins, factories or focus target, so
+    // those gates are the whole rule here.
+    void DrawSystemLabels() {
+        const auto &system = CurrentSystem();
+        float systemRadius = SystemRadius(stars[selectedStar].data);
+        float starDistance = Vector3Length(Vector3Subtract(system.star.position, camera.position));
+        if (starDistance < systemRadius * 10.0f * 12.0f) {
+            Vector2 screen = GetWorldToScreen(system.star.position, camera);
+            float scale = std::max(1.0f, starDistance /
+                                             std::max(0.0001f, sceneRenderer.StarVisualScale(system.star, camera)));
+            DrawTextEx(resources.font, stars[selectedStar].data->name.c_str(),
+                       Vector2 {screen.x + 8.0f + 600.0f / scale, screen.y - 4.0f}, 16.0f, 1.0f, LIGHTGRAY);
+        }
+        for (const auto &planet: system.planets) {
+            float distance = Vector3Length(Vector3Subtract(planet.position, camera.position));
+            if (distance > systemRadius * 10.0f * 7.0f) continue;
+            Vector2 screen = GetWorldToScreen(planet.position, camera);
+            float scale = std::max(1.0f, distance / std::max(0.0001f, planet.radius * 2.0f));
+            DrawTextEx(resources.font, planet.name.c_str(),
+                       Vector2 {screen.x + 5.0f + 420.0f / scale, screen.y - 6.0f}, 16.0f, 1.0f, LIGHTGRAY);
+        }
+    }
+
     void DrawHoverLabel() {
         // `_OnLateUpdate` labels the birth star permanently and gates every other label on the
         // ray hit alone, so a star keeps its label on hover whether or not it is the selected one.
-        if (mode == ViewMode::Galaxy && !stars.empty()) DrawStarLabel(stars[0]);
-        if (IsCursorHidden()) return;
-        if (mode == ViewMode::Galaxy && hoveredStar != kInvalidIndex && hoveredStar != 0) {
-            DrawStarLabel(stars[hoveredStar]);
-        } else if (mode == ViewMode::System && hoveredPlanet != kInvalidIndex && hoveredPlanet != selectedPlanet) {
-            const auto &planet = CurrentSystem().planets[hoveredPlanet];
-            Vector2 screen = GetWorldToScreen(planet.position, camera);
-            DrawTextEx(resources.font, planet.name.c_str(),
-                       Vector2 {screen.x - planet.labelWidth * 0.5f, screen.y - 22.0f},
-                       16.0f, 1.0f, LIGHTGRAY);
+        if (mode == ViewMode::Galaxy) {
+            if (!stars.empty()) DrawStarLabel(stars[0]);
+            if (!IsCursorHidden() && hoveredStar != kInvalidIndex && hoveredStar != 0)
+                DrawStarLabel(stars[hoveredStar]);
+            return;
         }
+        DrawSystemLabels();
     }
 
     void Draw() {
         BeginDrawing();
-        // Galaxy Select uses near 0.2 / far 10000, which the 5000 unit background cube needs.
+        // Galaxy Select uses near 0.2 / far 10000, which the 5000 unit background cube needs. The
+        // Starmap Camera serialises near 0.02 / far 150000 and nothing overrides it at runtime; the
+        // 50000 unit background shells and the rest of the cluster need that range.
         if (mode == ViewMode::Galaxy) rlSetClipPlanes(0.2, 10000.0);
-        else rlSetClipPlanes(RL_CULL_DISTANCE_NEAR, RL_CULL_DISTANCE_FAR);
+        else rlSetClipPlanes(0.02, 150000.0);
         ClearBackground(Color {4, 8, 17, 255});
         postProcess.Draw(camera, resources, this, DrawSceneCallback);
         DrawHoverLabel();
@@ -738,11 +794,33 @@ private:
 Viewer *Viewer::current = nullptr;
 
 int RunViewer(int argc, char *argv[]) {
-    int seed = argc > 1 ? std::atoi(argv[1]) : 0;
-    int starCount = argc > 2 ? std::atoi(argv[2]) : 64;
+    // --fxaa and --bloom mirror the game's FXAA and BloomLevel video options, so a capture can be
+    // reproduced under the same post-effect configuration. Defaults match the game's own defaults.
+    bool fxaa = true;
+    int bloomLevel = 2;
+    // --orbit-width scales the drawn orbit line against the game's own width. The viewer defaults
+    // to half so the lines stop hiding the planets sitting on them; 1 reproduces the game.
+    float orbitWidth = 0.5f;
+    const char *positional[3] = {nullptr, nullptr, nullptr};
+    int positionalCount = 0;
+    for (int i = 1; i < argc; ++i) {
+        if (std::strncmp(argv[i], "--fxaa=", 7) == 0) {
+            fxaa = std::atoi(argv[i] + 7) != 0;
+        } else if (std::strncmp(argv[i], "--bloom=", 8) == 0) {
+            bloomLevel = std::atoi(argv[i] + 8);
+        } else if (std::strncmp(argv[i], "--orbit-width=", 14) == 0) {
+            orbitWidth = static_cast<float>(std::atof(argv[i] + 14));
+        } else if (positionalCount < 3) {
+            positional[positionalCount++] = argv[i];
+        }
+    }
+    int seed = positional[0] != nullptr ? std::atoi(positional[0]) : 0;
+    int starCount = positional[1] != nullptr ? std::atoi(positional[1]) : 64;
     starCount = std::clamp(starCount, 1, 256);
-    Viewer viewer(seed, starCount, argc > 3 ? argv[3] : DSP_VIEWER_DEFAULT_FONT);
+    Viewer viewer(seed, starCount, positional[2] != nullptr ? positional[2] : DSP_VIEWER_DEFAULT_FONT);
     if (!viewer.Init()) return 1;
+    viewer.SetPostEffects(fxaa, bloomLevel);
+    viewer.SetOrbitWidth(orbitWidth);
     viewer.Run();
     return 0;
 }

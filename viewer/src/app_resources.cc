@@ -3,6 +3,7 @@
 #include <raylib.h>
 #include <rlgl.h>
 
+#include <algorithm>
 #include <cstring>
 #include <string>
 
@@ -13,6 +14,13 @@ namespace viewer {
 #endif
 
 constexpr int kViewerFontSize = 64;
+
+// rlTextureParameters() already guards the anisotropic extension and clamps to the device limit on
+// both desktop GL and WebGL, so route through it rather than touching GL_TEXTURE_MAX_ANISOTROPY.
+void SetTextureAnisotropy(const Texture2D &texture, int level) {
+    if (texture.id == 0) return;
+    rlTextureParameters(texture.id, RL_TEXTURE_FILTER_ANISOTROPIC, level);
+}
 
 Texture2D LoadGalaxyLineTexture(const char *path) {
     int size = 0;
@@ -139,6 +147,10 @@ const auto galaxyBackgroundStarVertex = ViewerAssetPath("shaders/galaxy_bgstars.
 const auto galaxyBackgroundStarFragment = ViewerAssetPath("shaders/galaxy_bgstars.fs");
 const auto galaxyMarkerVertex = ViewerAssetPath("shaders/galaxy_marker.vs");
 const auto galaxyMarkerFragment = ViewerAssetPath("shaders/galaxy_marker.fs");
+const auto starmapOrbitVertex = ViewerAssetPath("shaders/starmap_orbit.vs");
+const auto starmapOrbitFragment = ViewerAssetPath("shaders/starmap_orbit.fs");
+const auto starmapDiskVertex = ViewerAssetPath("shaders/starmap_disk.vs");
+const auto starmapDiskFragment = ViewerAssetPath("shaders/starmap_disk.fs");
 const auto bloomVertex = ViewerAssetPath("shaders/bloom.vs");
 const auto bloomPrefilterFragment = ViewerAssetPath("shaders/bloom_prefilter.fs");
 const auto bloomDownsampleFirstFragment = ViewerAssetPath("shaders/bloom_downsample_first.fs");
@@ -157,6 +169,8 @@ resources.galaxyFrameShader = LoadShader(galaxyFrameVertex.c_str(), galaxyFrameF
 resources.galaxyBackgroundStarShader =
     LoadShader(galaxyBackgroundStarVertex.c_str(), galaxyBackgroundStarFragment.c_str());
 resources.galaxyMarkerShader = LoadShader(galaxyMarkerVertex.c_str(), galaxyMarkerFragment.c_str());
+resources.starmapOrbitShader = LoadShader(starmapOrbitVertex.c_str(), starmapOrbitFragment.c_str());
+resources.starmapDiskShader = LoadShader(starmapDiskVertex.c_str(), starmapDiskFragment.c_str());
 resources.bloomPrefilterShader = LoadShader(bloomVertex.c_str(), bloomPrefilterFragment.c_str());
 resources.bloomDownsampleFirstShader = LoadShader(bloomVertex.c_str(), bloomDownsampleFirstFragment.c_str());
 resources.bloomDownsampleShader = LoadShader(bloomVertex.c_str(), bloomDownsampleFragment.c_str());
@@ -178,6 +192,10 @@ resources.hasGalaxyBackgroundStarShader = IsShaderValid(resources.galaxyBackgrou
                        resources.galaxyBackgroundStarShader.id != rlGetShaderIdDefault();
 resources.hasGalaxyMarkerShader = IsShaderValid(resources.galaxyMarkerShader) &&
                        resources.galaxyMarkerShader.id != rlGetShaderIdDefault();
+resources.hasStarmapOrbitShaders = IsShaderValid(resources.starmapOrbitShader) &&
+                       resources.starmapOrbitShader.id != rlGetShaderIdDefault() &&
+                       IsShaderValid(resources.starmapDiskShader) &&
+                       resources.starmapDiskShader.id != rlGetShaderIdDefault();
 resources.hasBloomShaders = IsShaderValid(resources.bloomPrefilterShader) && IsShaderValid(resources.bloomDownsampleFirstShader) &&
                   IsShaderValid(resources.bloomDownsampleShader) && IsShaderValid(resources.bloomUpsampleShader) &&
                   IsShaderValid(resources.bloomCompositeShader) &&
@@ -200,6 +218,12 @@ if (resources.hasGalaxyGridShaders) {
 if (resources.hasGalaxyBackgroundStarShader)
     ConfigureGalaxyGridShader(resources.galaxyBackgroundStarShader, true);
 if (resources.hasGalaxyMarkerShader) ConfigureGalaxyGridShader(resources.galaxyMarkerShader, true);
+if (resources.hasStarmapOrbitShaders) {
+    // The orbit ribbon is generated in world space like the connection lines, so it wants the same
+    // attribute and matrix layout; the disk is an ordinary transformed quad like the grid planes.
+    ConfigureGalaxyLineShader(resources.starmapOrbitShader);
+    ConfigureGalaxyGridShader(resources.starmapDiskShader, true);
+}
 if (resources.hasBloomShaders) {
     ConfigureScreenShader(resources.bloomPrefilterShader);
     ConfigureScreenShader(resources.bloomDownsampleFirstShader);
@@ -219,7 +243,16 @@ CacheShaderUniforms(resources, resources.starSpotShader,
      "_Global_WhiteMode0", "matModel", "matViewProjection"});
 CacheShaderUniforms(resources, resources.starBlackShader, {"_TintColor", "matModel", "matViewProjection"});
 CacheShaderUniforms(resources, resources.planetThumbShader,
-    {"matModel", "matViewProjection", "_SunDir", "_Rotation", "_WorldSpaceCameraPos", "_Color", "_RimColor"});
+    {"matModel", "matViewProjection", "_SunDir", "_Rotation", "_WorldSpaceCameraPos", "_Color",
+     "_ShoreLineColor", "_RimColor", "_ColorBio0", "_ColorBio1", "_ColorBio2", "_HeightSettings",
+     "_ShoreInvThick", "_ShoreHeight", "_WireIntens", "_BioStrength", "_FarHeight", "_Diameter",
+     "_SceneLinear"});
+CacheShaderUniforms(resources, resources.starmapOrbitShader,
+    {"matViewProjection", "matOrbitRotation", "_WorldSpaceCameraPos", "_Position", "_LineColorA",
+     "_LineColorB", "_Multiplier", "_TileScale", "_DistScale", "_DistPower", "_MinDistScale",
+     "_MaxDistScale", "_Radius", "_SceneLinear"});
+CacheShaderUniforms(resources, resources.starmapDiskShader,
+    {"matModel", "matViewProjection", "_MainTex_ST", "_TintColor", "_Multiplier", "_SceneLinear"});
 CacheShaderUniforms(resources, resources.galaxyStarPointShader,
     {"matViewProjection", "_MainTex_ST", "_TintColor", "_ScreenParams", "_Global_GalaxyFadeRadius",
      "_SceneLinear", "colDiffuse", "_PointGlow", "_Multiplier", "_AlphaMultiplier"});
@@ -260,6 +293,7 @@ const auto galaxyGridLinePath = ViewerAssetPath("textures/galaxy_grid_line.bin")
 const auto galaxyGridFramePath = ViewerAssetPath("textures/galaxy_grid_frame.bin");
 const auto galaxyBackgroundStarNoisePath = ViewerAssetPath("textures/galaxy_bgstars_noise.bin");
 const auto galaxyStarRingPath = ViewerAssetPath("textures/galaxy_star_ring.bin");
+const auto starmapOrbitDiskPath = ViewerAssetPath("textures/starmap_orbit_disk.bin");
 const auto bloomLensDirtPath = ViewerAssetPath("textures/LensDirt00.png");
 const auto galaxyColorGradingLutPath = ViewerAssetPath("textures/galaxy_select_lut.bin");
 resources.starMassModel = LoadStarModel(massVertices.c_str(), 2617, massIndices.c_str(), 5120, massNormals.c_str());
@@ -271,6 +305,12 @@ resources.galaxyGridDotTexture = LoadAlphaMipTexture(galaxyGridDotPath.c_str(), 
 resources.galaxyGridLineTexture = LoadAlphaMipTexture(galaxyGridLinePath.c_str(), 256, 256, 9);
 resources.galaxyGridFrameTexture = LoadAlphaMipTexture(galaxyGridFramePath.c_str(), 1024, 1024, 11);
 resources.galaxyStarRingTexture = LoadAlphaMipTexture(galaxyStarRingPath.c_str(), 256, 256, 9);
+// `orbit-disk` is greyscale with alpha 1, so only its red channel is stored; the single channel
+// loader is the same one the alpha only textures use.
+resources.starmapOrbitDiskTexture = LoadAlphaMipTexture(starmapOrbitDiskPath.c_str(), 512, 512, 10);
+const unsigned char blackCubemapFace[24] = {};
+resources.planetHeightCubemapId =
+    rlLoadTextureCubemap(blackCubemapFace, 1, RL_PIXELFORMAT_UNCOMPRESSED_R8G8B8A8, 1);
 Image noiseImage = LoadImageRaw(galaxyBackgroundStarNoisePath.c_str(), 128, 128,
                                 PIXELFORMAT_UNCOMPRESSED_R8G8B8A8, 0);
 if (IsImageValid(noiseImage)) {
@@ -293,6 +333,8 @@ if (!resources.hasStarModels || !resources.hasGalaxyStarPointModel || !resources
     !resources.hasGalaxyFxaaShader || !resources.hasGalaxyGridShaders ||
     !resources.hasGalaxyBackgroundStarShader || !IsTextureValid(resources.galaxyBackgroundStarNoise) ||
     !resources.hasGalaxyMarkerShader || !IsTextureValid(resources.galaxyStarRingTexture) ||
+    !resources.hasStarmapOrbitShaders || !IsTextureValid(resources.starmapOrbitDiskTexture) ||
+    resources.planetHeightCubemapId == 0 ||
     !IsTextureValid(resources.galaxyLineTexture) ||
     !IsTextureValid(resources.galaxyGridDotTexture) || !IsTextureValid(resources.galaxyGridLineTexture) ||
     !IsTextureValid(resources.galaxyGridFrameTexture) ||
@@ -304,6 +346,11 @@ if (resources.hasPlanetThumbModel) {
     resources.planetThumbMaterial = LoadMaterialDefault();
     resources.planetThumbMaterial.shader = resources.planetThumbShader;
     for (int i = 0; i <= MATERIAL_MAP_BRDF; ++i) resources.planetThumbMaterial.maps[i].texture = {};
+    resources.planetThumbMaterial.maps[MATERIAL_MAP_CUBEMAP].texture.id = resources.planetHeightCubemapId;
+    resources.planetThumbMaterial.maps[MATERIAL_MAP_CUBEMAP].texture.width = 1;
+    resources.planetThumbMaterial.maps[MATERIAL_MAP_CUBEMAP].texture.height = 1;
+    resources.planetThumbMaterial.maps[MATERIAL_MAP_CUBEMAP].texture.mipmaps = 1;
+    resources.planetThumbMaterial.maps[MATERIAL_MAP_CUBEMAP].texture.format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8;
 }
 SetModelShader(resources.starBlackModel, resources.starBlackShader);
 SetModelShader(resources.starSpotModel, resources.starSpotShader);
@@ -321,12 +368,18 @@ resources.galaxyBackgroundStarMaterial.maps[MATERIAL_MAP_DIFFUSE].texture =
 resources.galaxyMarkerMaterial = LoadMaterialDefault();
 resources.galaxyMarkerMaterial.shader = resources.galaxyMarkerShader;
 resources.galaxyMarkerMaterial.maps[MATERIAL_MAP_DIFFUSE].texture = resources.galaxyStarRingTexture;
+resources.starmapDiskMaterial = LoadMaterialDefault();
+resources.starmapDiskMaterial.shader = resources.starmapDiskShader;
+resources.starmapDiskMaterial.maps[MATERIAL_MAP_DIFFUSE].texture = resources.starmapOrbitDiskTexture;
 SetTextureFilter(resources.galaxyStarPointTexture, TEXTURE_FILTER_BILINEAR);
 SetTextureWrap(resources.galaxyStarPointTexture, TEXTURE_WRAP_CLAMP);
 SetTextureFilter(resources.galaxyLineTexture, TEXTURE_FILTER_TRILINEAR);
 SetTextureWrap(resources.galaxyLineTexture, TEXTURE_WRAP_CLAMP);
 SetTextureFilter(resources.galaxyStarRingTexture, TEXTURE_FILTER_BILINEAR);
 SetTextureWrap(resources.galaxyStarRingTexture, TEXTURE_WRAP_CLAMP);
+// `orbit-disk` imports with filter mode 2 (trilinear), aniso 1 and clamp on both axes.
+SetTextureFilter(resources.starmapOrbitDiskTexture, TEXTURE_FILTER_TRILINEAR);
+SetTextureWrap(resources.starmapOrbitDiskTexture, TEXTURE_WRAP_CLAMP);
 SetTextureFilter(resources.galaxyBackgroundStarNoise, TEXTURE_FILTER_POINT);
 SetTextureWrap(resources.galaxyBackgroundStarNoise, TEXTURE_WRAP_REPEAT);
 SetTextureFilter(resources.galaxyGridDotTexture, TEXTURE_FILTER_TRILINEAR);
@@ -339,6 +392,12 @@ SetTextureFilter(resources.bloomLensDirtTexture, TEXTURE_FILTER_BILINEAR);
 SetTextureWrap(resources.bloomLensDirtTexture, TEXTURE_WRAP_CLAMP);
 SetTextureFilter(resources.galaxyColorGradingLut, TEXTURE_FILTER_BILINEAR);
 SetTextureWrap(resources.galaxyColorGradingLut, TEXTURE_WRAP_CLAMP);
+// The game runs with QualitySettings.anisotropicTextures = ForceEnable, and each source texture
+// carries its own m_Aniso. Only the two grid textures and the frame ask for more than one sample;
+// star-line is m_Aniso = 1, so the connection lines must stay isotropic.
+SetTextureAnisotropy(resources.galaxyGridDotTexture, 5);
+SetTextureAnisotropy(resources.galaxyGridLineTexture, 5);
+SetTextureAnisotropy(resources.galaxyGridFrameTexture, 2);
 std::string resolvedFontPath = fontPath;
 if (resolvedFontPath == DSP_VIEWER_DEFAULT_FONT && !resolvedFontPath.empty())
     resolvedFontPath = ViewerRuntimePath(resolvedFontPath.c_str());
@@ -377,8 +436,14 @@ if (resources.starSpotModel.meshCount != 0) {
 if (resources.planetThumbMaterial.maps != nullptr) {
     resources.planetThumbMaterial.shader.id = rlGetShaderIdDefault();
     resources.planetThumbMaterial.shader.locs = rlGetShaderLocsDefault();
+    // Detach the shared black cubemap first: UnloadMaterial() deletes every map texture it holds.
+    resources.planetThumbMaterial.maps[MATERIAL_MAP_CUBEMAP].texture = {};
     UnloadMaterial(resources.planetThumbMaterial);
     resources.planetThumbMaterial = {};
+}
+if (resources.planetHeightCubemapId != 0) {
+    rlUnloadTexture(resources.planetHeightCubemapId);
+    resources.planetHeightCubemapId = 0;
 }
 if (resources.galaxyStarPointMaterial.maps != nullptr) {
     resources.galaxyStarPointMaterial.shader.id = rlGetShaderIdDefault();
@@ -389,7 +454,7 @@ if (resources.galaxyStarPointMaterial.maps != nullptr) {
 }
 for (Material *material: {&resources.galaxyGridMaterial, &resources.galaxyFrameMaterial,
                           &resources.galaxyBackgroundStarMaterial,
-                          &resources.galaxyMarkerMaterial}) {
+                          &resources.galaxyMarkerMaterial, &resources.starmapDiskMaterial}) {
     if (material->maps == nullptr) continue;
     material->shader.id = rlGetShaderIdDefault();
     material->shader.locs = rlGetShaderLocsDefault();
@@ -404,6 +469,8 @@ if (IsTextureValid(resources.galaxyGridLineTexture)) UnloadTexture(resources.gal
 if (IsTextureValid(resources.galaxyGridFrameTexture)) UnloadTexture(resources.galaxyGridFrameTexture);
 if (IsTextureValid(resources.galaxyBackgroundStarNoise)) UnloadTexture(resources.galaxyBackgroundStarNoise);
 if (IsTextureValid(resources.galaxyStarRingTexture)) UnloadTexture(resources.galaxyStarRingTexture);
+if (IsTextureValid(resources.starmapOrbitDiskTexture)) UnloadTexture(resources.starmapOrbitDiskTexture);
+resources.starmapOrbitDiskTexture = {};
 resources.galaxyStarRingTexture = {};
 resources.galaxyBackgroundStarNoise = {};
 resources.galaxyGridDotTexture = {};
@@ -423,6 +490,8 @@ unloadCustomShader(resources.bloomUpsampleShader);
 unloadCustomShader(resources.bloomDownsampleShader);
 unloadCustomShader(resources.bloomDownsampleFirstShader);
 unloadCustomShader(resources.bloomPrefilterShader);
+unloadCustomShader(resources.starmapDiskShader);
+unloadCustomShader(resources.starmapOrbitShader);
 unloadCustomShader(resources.galaxyMarkerShader);
 unloadCustomShader(resources.galaxyBackgroundStarShader);
 unloadCustomShader(resources.galaxyFrameShader);

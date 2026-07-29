@@ -8,7 +8,7 @@ uniform highp vec4 _Rotation;
 layout(location = 0) in highp vec3 vertexPosition;
 out highp float sunAmount;
 out highp vec3 worldPosition;
-out highp vec3 worldNormal;
+out highp vec3 surfaceNormal;
 
 highp vec3 RotateByQuaternion(highp vec3 value, highp vec4 rotation)
 {
@@ -17,10 +17,13 @@ highp vec3 RotateByQuaternion(highp vec3 value, highp vec4 rotation)
 
 void main()
 {
+    // The official program forwards the object space unit direction, not a world normal: the height
+    // cubemap is sampled in the planet's own frame, so the surface turns with the mesh transform
+    // while `_Rotation` only carries the normal into world space for the sun term.
     highp vec3 planetDirection = normalize(vertexPosition);
     sunAmount = dot(RotateByQuaternion(planetDirection, _Rotation), _SunDir);
     highp vec4 world = matModel * vec4(vertexPosition, 1.0);
     worldPosition = world.xyz;
-    worldNormal = normalize(mat3(matModel) * vertexPosition);
+    surfaceNormal = planetDirection;
     gl_Position = matViewProjection * world;
 }

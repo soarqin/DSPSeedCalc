@@ -8,6 +8,11 @@ struct RenderResources;
 
 class PostProcess {
 public:
+    // Mirrors PostEffectController: `antialiasing.enabled = aaOn` and `bloom.enabled = bloomLevel > 0`.
+    // The game defaults are aaOn = true and bloomLevel = 2, so those are the defaults here too.
+    // Level 1's smaller bloom radius (1.7 against 5) is not modelled; only its intensity is.
+    void SetPostEffects(bool fxaa, int bloomLevel);
+
     bool EnsureTargets(int width, int height);
     void Unload();
 
@@ -27,6 +32,8 @@ public:
               const void *context, void (*drawScene)(const void *, float));
 
 private:
+    float BloomIntensity() const;
+
     static constexpr int kMaxBloomIterations = 16;
     RenderTexture2D sceneTarget{};
     RenderTexture2D multisampleTarget{};
@@ -40,6 +47,8 @@ private:
     int failedHeight = 0;
     int iterationCount = 0;
     float sampleScale = 1.0f;
+    bool fxaaEnabled = true;
+    int bloomLevel = 2;
 };
 
 void BeginMultisampleTextureMode(const RenderTexture2D &target);

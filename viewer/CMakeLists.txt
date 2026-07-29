@@ -66,6 +66,7 @@ add_project(viewer EXECUTABLE
     ${DSP_VIEWER_STAGE_FILES}
     "${CMAKE_CURRENT_SOURCE_DIR}/web/shell.html"
     "${CMAKE_CURRENT_SOURCE_DIR}/tools/galaxy_line_texture.py"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tools/starmap_orbit_disk_texture.py"
     "${CMAKE_CURRENT_SOURCE_DIR}/tools/verify_assets.py"
     "${CMAKE_CURRENT_SOURCE_DIR}/tools/verify_shader_pairs.py"
     LANGUAGES CXX

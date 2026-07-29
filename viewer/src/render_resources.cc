@@ -61,6 +61,9 @@ void ConfigurePlanetThumbShader(Shader &shader) {
     shader.locs[SHADER_LOC_VERTEX_TEXCOORD01] = -1;
     shader.locs[SHADER_LOC_MATRIX_MODEL] = GetShaderLocation(shader, "matModel");
     shader.locs[SHADER_LOC_MATRIX_MVP] = -1;
+    // DrawMesh() binds maps[MATERIAL_MAP_CUBEMAP] as a cubemap and writes its slot into
+    // locs[SHADER_LOC_MAP_CUBEMAP], which is how `_HeightMap` reaches the fragment program.
+    shader.locs[SHADER_LOC_MAP_CUBEMAP] = GetShaderLocation(shader, "_HeightMap");
 }
 
 void ConfigureGalaxyStarPointShader(Shader &shader) {
