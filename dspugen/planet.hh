@@ -121,37 +121,31 @@ public:
     float temperatureBias = 0.0f;
     float luminosity = 0.0f;
 
-/*
-    int infoSeed;
-    int style = 0;
-    int precision = 160;
+    std::vector<int> gasItems;
+    std::vector<float> gasSpeeds;
+    int veinSpot[15] = {};
+    int themeSeed = 0;
+
+    // Appended parity fields used only by the opt-in terrain/vein path.  Keep
+    // them after the historical public members because plugins inline this
+    // header and read the old layout directly.
     float orbitInclination = 0.0f;
     double orbitalPeriod = 3600.0;
     float orbitLongitude = 0.0f;
     float orbitPhase = 0.0f;
-    float rotationPeriod = 480.0f;
+    float obliquity = 0.0f;
+    double rotationPeriod = 480.0;
     float rotationPhase = 0.0f;
-    int segment = 5;
     double modX = 0.0;
     double modY = 0.0;
-    float ionHeight = 0.0f;
-    float windStrength = 0.0f;
     float waterHeight = 0.0f;
     int waterItemId = 0;
-    bool levelized = false;
-    int iceFlag = 0;
-*/
-    std::vector<int> gasItems;
-    std::vector<float> gasSpeeds;
-/*
-    std::vector<float> gasHeatValues;
-    double gasTotalHeat = 0.0;
-*/
-    int veinSpot[15] = {};
-    int themeSeed = 0;
 
     [[nodiscard]] const VeinAmountSummary *veinAmountSummary() const;
-    void ensureVeinAmounts();
+    [[nodiscard]] VeinAmountGenerationResult ensureVeinAmounts();
+    [[nodiscard]] VeinAmountGenerationResult veinAmountGenerationResult() const {
+        return veinAmountResult;
+    }
 
     static Planet *create(Star *star, int index, int orbitAround, int orbitIndex, int number, bool gasGiant, int infoSeed, int genSeed);
 
@@ -164,7 +158,8 @@ private:
     void generateVeins();
 
     std::unique_ptr<VeinAmountSummary> veinAmountData;
-    bool veinAmountReady = false;
+    VeinAmountGenerationResult veinAmountResult =
+        VeinAmountGenerationResult::NotGenerated;
 };
 
 }

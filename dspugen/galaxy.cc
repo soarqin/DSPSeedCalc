@@ -13,10 +13,12 @@
 #include "util/mempool.hh"
 #include "util/instrumentation.hh"
 #include "vectors.hh"
+#include <fmt/format.h>
 #include <algorithm>
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
+#include <stdexcept>
 #include <vector>
 
 namespace dspugen {
@@ -305,6 +307,7 @@ void Galaxy::reset() {
     }
     stars.clear();
     starNameHashes.clear();
+    birthPlanetId = 0;
     birthStarId = 0;
     HabitableCount = 0;
     seed = 0;
@@ -339,9 +342,33 @@ void Galaxy::ensureAllGas() {
 
 void Galaxy::ensureAllVeinAmounts() {
     ensureAllPlanets();
-    for (auto *star: stars)
-        for (auto *planet: star->planets)
-            planet->ensureVeinAmounts();
+    for (auto *star: stars) {
+        for (auto *planet: star->planets) {
+            const auto result = planet->ensureVeinAmounts();
+            if (result == VeinAmountGenerationResult::Generated) continue;
+            const char *reason = "invalid planet";
+            switch (result) {
+            case VeinAmountGenerationResult::UnsupportedAlgorithm:
+                reason = "unsupported algorithm";
+                break;
+            case VeinAmountGenerationResult::MissingTheme:
+                reason = "missing theme";
+                break;
+            case VeinAmountGenerationResult::InvalidPlanet:
+                reason = "invalid planet";
+                break;
+            case VeinAmountGenerationResult::NotGenerated:
+                reason = "not generated";
+                break;
+            case VeinAmountGenerationResult::Generated:
+                break;
+            }
+            throw std::runtime_error(fmt::format(
+                "vein amount generation failed for seed {}, planet {}, "
+                "algorithm {}: {}",
+                seed, planet->id, planet->algoId, reason));
+        }
+    }
 }
 
 Galaxy *Galaxy::create(int algoVersion, int galaxySeed, int starCount) {

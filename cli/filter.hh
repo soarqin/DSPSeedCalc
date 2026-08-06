@@ -9,6 +9,7 @@
 #pragma once
 
 #include "galaxy.hh"
+#include "vein/vein_amounts.hh"
 
 #include <cstdint>
 #include <string>
@@ -31,6 +32,7 @@ extern void unloadFilters();
 extern std::uint64_t filterRequirements();
 extern std::uint64_t prePlanetRequirements();
 extern std::uint64_t outputRequirements();
+extern bool pluginsRequireVeinAmounts();
 extern bool pluginsAllowBlockScheduling();
 extern bool pluginsRequireSerializedFilters();
 extern bool pluginsHaveOutputCallbacks();
@@ -49,6 +51,19 @@ struct PluginAPI {
     void (*GeneratePlanetGas)(const dspugen::Planet *planet);
 };
 
+// V2 is intentionally a separate, versioned API.  New plugins must export
+// init3 rather than passing the extended callbacks through the V1 layout.
+// This keeps old plugin binaries safe when Planet grows new sidecar state.
+struct PluginAPIV2 {
+    std::uint32_t structSize = sizeof(PluginAPIV2);
+    std::uint32_t abiVersion = 2;
+    void (*GenerateAllPlanets)(const dspugen::Galaxy *galaxy);
+    void (*GeneratePlanetGas)(const dspugen::Planet *planet);
+    void (*GenerateAllVeinAmounts)(const dspugen::Galaxy *galaxy);
+    const dspugen::VeinAmountSummary *(*GetPlanetVeinAmountSummary)(
+        const dspugen::Planet *planet);
+};
+
 enum PluginRequirement : std::uint64_t {
     NeedsPositions = 1ULL << 0U,
     NeedsStars = 1ULL << 1U,
@@ -57,6 +72,7 @@ enum PluginRequirement : std::uint64_t {
     NeedsPlanetTheme = 1ULL << 4U,
     NeedsGas = 1ULL << 5U,
     NeedsVeinMetadata = 1ULL << 6U,
+    NeedsVeinAmounts = 1ULL << 7U,
 };
 
 enum PluginCapability : std::uint64_t {
@@ -78,6 +94,15 @@ struct PluginDescriptorV1 {
     std::uint64_t capabilities = 0;
 };
 
+struct PluginDescriptorV2 {
+    std::uint32_t structSize = sizeof(PluginDescriptorV2);
+    std::uint32_t abiVersion = 2;
+    std::uint64_t prePlanetRequirements = 0;
+    std::uint64_t filterRequirements = 0;
+    std::uint64_t outputRequirements = 0;
+    std::uint64_t capabilities = 0;
+};
+
 struct OutputSinkV1 {
     void *context;
     void (*append)(void *, std::uint32_t, const char *, std::size_t);
@@ -85,6 +110,7 @@ struct OutputSinkV1 {
 
 using PluginInitFunc = const char*(FILTERAPI*)(PluginAPI*, int*);
 using PluginInit2Func = const char*(FILTERAPI*)(PluginAPI*, int*, bool);
+using PluginInit3Func = const char*(FILTERAPI*)(PluginAPIV2*, int*);
 using PluginUninitFunc = void(FILTERAPI*)();
 using SeedBeginFunc = void*(FILTERAPI*)(int);
 using GalaxyFilterFunc = bool(FILTERAPI*)(const dspugen::Galaxy*, void*);
@@ -93,6 +119,7 @@ using PlanetFilterFunc = bool(FILTERAPI*)(const dspugen::Planet*, void*);
 using SeedEndFunc = bool(FILTERAPI*)(void*);
 using PrePlanetFilterFunc = bool(FILTERAPI*)(const dspugen::Galaxy*, void*);
 using DescribePluginFunc = bool(FILTERAPI*)(std::uint32_t, PluginDescriptorV1*);
+using DescribePluginV2Func = bool(FILTERAPI*)(std::uint32_t, PluginDescriptorV2*);
 using ThreadInitFunc = void*(FILTERAPI*)(std::uint32_t);
 using ThreadFinishFunc = void*(FILTERAPI*)(void*);
 using MergeThreadResultFunc = void(FILTERAPI*)(void*);

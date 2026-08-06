@@ -13,6 +13,7 @@ struct Settings {
     bool birthOnly = false;
     bool genName = false;
     bool noPosition = false;
+    bool enableVeinAmounts = false;
 };
 
 extern Settings settings;

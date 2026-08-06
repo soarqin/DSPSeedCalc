@@ -76,6 +76,29 @@ python tools/audit_fp_flags.py cmake-build-clang-release-parity/compile_commands
 - `-b -n -t 1 "0-10,64"` 完成 11 个 seed，退出码 0。
 - instrumentation JSON 成功输出位置候选、单位球拒绝、碰撞比较、碰撞拒绝、对象池、行星、稀有矿、主题、Prototype、插件和 RNG trace 计数。
 
+## 精确矿量验证
+
+精确矿量功能使用独立 fixture：`tests/fixtures/vein-amounts-v1.txt`。fixture 覆盖 seed `0`、`1` 的 64 星星系，并按恒星和行星顺序记录 `veinSpot`、实际矿点数和普通资源模式的基础矿量。
+
+参考构建为 Dyson Sphere Program `0.10.34.28529`、Steam build `23109513`、Unity `2022.3.62f3c1`、Mono、算法 `20200403`。游戏安装位置通过 Steam 注册表、`libraryfolders.vdf` 和 `appmanifest_1366540.acf` 静态定位；验证过程未启动游戏，也未附加调试器。
+
+检查命令：
+
+```powershell
+cmake --build cmake-build-gcc-debug-parity --target dspugen_vein_amount_oracle
+python tools/verify_vein_amounts.py `
+  cmake-build-gcc-debug-parity/bin/dspugen_vein_amount_oracle.exe
+```
+
+CLI 与插件 smoke 使用隔离目录，仅保留匹配的 `Prototypes/` 和 `vein_amount_v2_test.dll`：
+
+- `-t 2 -V -o vein-v2-smoke.csv "0-2,64"` 生成 3 行两列结果；
+- 不带 `-V` 时，声明 `NeedsVeinAmounts` 的插件在扫描前被拒绝；
+- `-V -P` 和 `-V -Z` 在生成前返回冲突错误；
+- 默认 oracle SHA-256 保持 `ABADE2F14F3112ADB20D37E4AD29BDC90203C4174F908749A0EC59EBAEA73B6F`。
+
+GPU 研究结论见 `docs/vein-amounts-gpu-research.md`。当前版本只使用 CPU 权威生成，不增加 GPU 依赖。
+
 ### 已失效的历史基准数据
 
 `benchmark-results-core.json` 与 `benchmark-results-scaling.json` 是在 `CMAKE_BUILD_TYPE` 为空的 `cmake-build-benchmark` 目录下测得的，即无优化构建，同一负载比正确的 Release 慢 3.8 倍（853 对 224 µs/seed）。**这两份数据不可用作基线。** 现已增加 `benchmark` preset，`tools/benchmark.py` 会读取可执行文件旁的 `CMakeCache.txt`、把构建配置写进结果，并拒绝在非优化构建上运行。
