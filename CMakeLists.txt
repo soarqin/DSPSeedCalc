@@ -16,6 +16,7 @@ include(ProjectMacros)
 
 option(BUILD_VIEWER "Build viewer application" OFF)
 option(DSP_BUILD_ORACLE "Build the bit-exact parity oracle" OFF)
+option(DSP_BUILD_TESTS "Build deterministic generator unit tests" OFF)
 option(DSP_BUILD_BENCHMARK_PLUGINS "Build synthetic benchmark plugins" OFF)
 option(DSP_ENABLE_INSTRUMENTATION "Enable read-only performance counters" OFF)
 option(DSP_ENABLE_NATIVE_ARCH "Enable native CPU tuning for local benchmarks" OFF)
@@ -107,6 +108,14 @@ if(DSP_BUILD_ORACLE)
         endif()
     endif()
     set_target_properties(dspugen_oracle PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+endif()
+
+if(DSP_BUILD_TESTS)
+    add_executable(dspugen_vein_tests tests/vein_amounts_test.cc)
+    target_link_libraries(dspugen_vein_tests PRIVATE dspugen)
+    target_compile_features(dspugen_vein_tests PRIVATE cxx_std_17)
+    set_target_properties(dspugen_vein_tests PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 endif()
 

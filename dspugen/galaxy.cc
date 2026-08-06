@@ -337,6 +337,13 @@ void Galaxy::ensureAllGas() {
             planet->generateGas();
 }
 
+void Galaxy::ensureAllVeinAmounts() {
+    ensureAllPlanets();
+    for (auto *star: stars)
+        for (auto *planet: star->planets)
+            planet->ensureVeinAmounts();
+}
+
 Galaxy *Galaxy::create(int algoVersion, int galaxySeed, int starCount) {
     util::DotNet35Random dotNet35Random(galaxySeed);
     if (settings.noPosition) {

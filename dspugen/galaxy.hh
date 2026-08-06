@@ -36,6 +36,7 @@ public:
     void reset();
     void ensureAllPlanets();
     void ensureAllGas();
+    void ensureAllVeinAmounts();
 /*
     int birthPlanetId = 0;
 */

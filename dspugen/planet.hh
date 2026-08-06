@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include "vein/vein_amounts.hh"
+
 #include <vector>
 #include <memory>
 
@@ -148,6 +150,9 @@ public:
     int veinSpot[15] = {};
     int themeSeed = 0;
 
+    [[nodiscard]] const VeinAmountSummary *veinAmountSummary() const;
+    void ensureVeinAmounts();
+
     static Planet *create(Star *star, int index, int orbitAround, int orbitIndex, int number, bool gasGiant, int infoSeed, int genSeed);
 
     [[nodiscard]] inline float realRadius() const { return radius * scale; }
@@ -157,6 +162,9 @@ public:
 private:
     void setPlanetTheme(double rand1, double rand2, double rand3, double rand4, int thmSeed);
     void generateVeins();
+
+    std::unique_ptr<VeinAmountSummary> veinAmountData;
+    bool veinAmountReady = false;
 };
 
 }

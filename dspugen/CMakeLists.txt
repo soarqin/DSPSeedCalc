@@ -2,6 +2,7 @@ add_project(dspugen STATIC
     galaxy.cc galaxy.hh
     star.cc star.hh
     planet.cc planet.hh
+    vein/vein_amounts.hh
     protoset.cc protoset.hh
     namegen.cc namegen.hh
     settings.hh
