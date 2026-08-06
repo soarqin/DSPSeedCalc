@@ -65,18 +65,35 @@ void Planet::reset() {
     gasSpeeds.clear();
     std::memset(veinSpot, 0, sizeof(veinSpot));
     themeSeed = 0;
+    orbitInclination = 0.0f;
+    orbitalPeriod = 3600.0;
+    orbitLongitude = 0.0f;
+    orbitPhase = 0.0f;
+    obliquity = 0.0f;
+    rotationPeriod = 480.0;
+    rotationPhase = 0.0f;
+    modX = 0.0;
+    modY = 0.0;
+    waterHeight = 0.0f;
+    waterItemId = 0;
     veinAmountData.reset();
-    veinAmountReady = false;
+    veinAmountResult = VeinAmountGenerationResult::NotGenerated;
 }
 
 const VeinAmountSummary *Planet::veinAmountSummary() const {
-    return veinAmountReady ? veinAmountData.get() : nullptr;
+    return veinAmountResult == VeinAmountGenerationResult::Generated
+               ? veinAmountData.get()
+               : nullptr;
 }
 
-void Planet::ensureVeinAmounts() {
-    if (veinAmountReady) return;
+VeinAmountGenerationResult Planet::ensureVeinAmounts() {
+    if (veinAmountResult != VeinAmountGenerationResult::NotGenerated)
+        return veinAmountResult;
     veinAmountData = std::make_unique<VeinAmountSummary>();
-    veinAmountReady = true;
+    veinAmountResult = generateVeinAmountSummary(*this, *veinAmountData);
+    if (veinAmountResult != VeinAmountGenerationResult::Generated)
+        veinAmountData.reset();
+    return veinAmountResult;
 }
 
 Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, int number,
@@ -136,10 +153,9 @@ Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, i
     }
 
     planet->orbitRadius = num16;
-/*
-    planet->orbitInclination = float(num4 * 16.0 - 8.0);
+    planet->orbitInclination = static_cast<float>(num4 * 16.0 - 8.0);
     if (orbitAround > 0) planet->orbitInclination *= 2.2f;
-    planet->orbitLongitude = float(num5 * 360.0);
+    planet->orbitLongitude = static_cast<float>(num5 * 360.0);
     if (star->type >= EStarType::NeutronStar) {
         if (planet->orbitInclination > 0.0f)
             planet->orbitInclination += 3.0f;
@@ -147,34 +163,29 @@ Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, i
             planet->orbitInclination -= 3.0f;
     }
 
-    planet->orbitalPeriod =
-        std::sqrt(39.478417604357432 * num16 * num16 * num16 / (planet->orbitAroundPlanet == nullptr
-                                                                ? 1.3538551990520382E-06 * star->mass
-                                                                : 1.0830842106853677E-08));
-    planet->orbitPhase = float(num6 * 360.0);
-*/
+    planet->orbitalPeriod = std::sqrt(
+        39.478417604357432 * num16 * num16 * num16 /
+        (planet->orbitAroundPlanet == nullptr
+             ? 1.3538551990520382E-06 * star->mass
+             : 1.0830842106853677E-08));
+    planet->orbitPhase = static_cast<float>(num6 * 360.0);
     if (num14 < 0.039999999105930328) {
-/*
-        planet->obliquity = float(num7 * (num8 - 0.5) * 39.9);
+        planet->obliquity = static_cast<float>(num7 * (num8 - 0.5) * 39.9);
         if (planet->obliquity < 0.0f)
             planet->obliquity -= 70.0f;
         else
             planet->obliquity += 70.0f;
-*/
         planet->singularity |= EPlanetSingularity::LaySide;
-    }/* else if (num14 < 0.10000000149011612) {
-
-        planet->obliquity = float(num7 * (num8 - 0.5) * 80.0);
+    } else if (num14 < 0.10000000149011612) {
+        planet->obliquity = static_cast<float>(num7 * (num8 - 0.5) * 80.0);
         if (planet->obliquity < 0.0f)
             planet->obliquity -= 30.0f;
         else
             planet->obliquity += 30.0f;
     } else {
-        planet->obliquity = float(num7 * (num8 - 0.5) * 60.0);
+        planet->obliquity = static_cast<float>(num7 * (num8 - 0.5) * 60.0);
     }
-*/
 
-/*
     planet->rotationPeriod = (num9 * num10 * 1000.0 + 400.0) *
         (orbitAround == 0 ? std::pow(num16, 0.25f) : 1.0f) *
         (gasGiant ? 0.2f : 1.0f);
@@ -186,41 +197,30 @@ Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, i
         else if (star->type == EStarType::BlackHole) planet->rotationPeriod *= 0.15000000596046448;
     }
 
-    planet->rotationPhase = float(num11 * 360.0);
-*/
+    planet->rotationPhase = static_cast<float>(num11 * 360.0);
     planet->sunDistance =
         orbitAround == 0 ? planet->orbitRadius : planet->orbitAroundPlanet->orbitRadius;
     planet->scale = 1.0f;
-/*
     auto num18 = orbitAround == 0 ? planet->orbitalPeriod : planet->orbitAroundPlanet->orbitalPeriod;
     planet->rotationPeriod = 1.0 / (1.0 / num18 + 1.0 / planet->rotationPeriod);
-*/
     if (orbitAround == 0 && orbitIndex <= 4 && !gasGiant) {
         if (num14 > 0.95999997854232788) {
-/*
             planet->obliquity *= 0.01f;
             planet->rotationPeriod = planet->orbitalPeriod;
-*/
             planet->singularity |= EPlanetSingularity::TidalLocked;
         } else if (num14 > 0.93000000715255737) {
-/*
             planet->obliquity *= 0.1f;
             planet->rotationPeriod = planet->orbitalPeriod * 0.5;
-*/
             planet->singularity |= EPlanetSingularity::TidalLocked2;
         } else if (num14 > 0.89999997615814209) {
-/*
             planet->obliquity *= 0.2f;
             planet->rotationPeriod = planet->orbitalPeriod * 0.25;
-*/
             planet->singularity |= EPlanetSingularity::TidalLocked4;
         }
     }
 
     if (num14 > 0.85 && num14 <= 0.9) {
-/*
         planet->rotationPeriod = 0.0 - planet->rotationPeriod;
-*/
         planet->singularity |= EPlanetSingularity::ClockwiseRotate;
     }
 
@@ -397,23 +397,16 @@ void Planet::setPlanetTheme(double rand1, double rand2, double rand3, double ran
     if (themeProto4 != nullptr && !themeProto4->algos.empty()) {
         auto count = static_cast<int>(themeProto4->algos.size());
         algoId = themeProto4->algos[static_cast<int>(rand2 * count) % count];
-/*
         modX = themeProto4->modX.x + rand3 * (themeProto4->modX.y - themeProto4->modX.x);
         modY = themeProto4->modY.x + rand4 * (themeProto4->modY.y - themeProto4->modY.x);
-*/
     }
 
     if (themeProto4 == nullptr) return;
     type = static_cast<EPlanetType>(themeProto4->planetType);
-/*
-    style = themeSeed % 60;
-    ionHeight = themeProto4->ionHeight;
-    windStrength = themeProto4->wind;
+    if (themeProto4->distribute == EThemeDistribute::Birth)
+        galaxy->birthPlanetId = id;
     waterHeight = themeProto4->waterHeight;
     waterItemId = themeProto4->waterItemId;
-    levelized = themeProto4->useHeightForBuild;
-    iceFlag = themeProto4->iceFlag;
-*/
 }
 
 void Planet::generateVeins() {

@@ -37,9 +37,6 @@ public:
     void ensureAllPlanets();
     void ensureAllGas();
     void ensureAllVeinAmounts();
-/*
-    int birthPlanetId = 0;
-*/
     int birthStarId = 0;
     int HabitableCount = 0;
     int seed = 0;
@@ -54,6 +51,10 @@ public:
     // comparisons per candidate into O(S) integer comparisons. Appended after the
     // existing members because plugins inline this header.
     std::vector<std::size_t> starNameHashes;
+
+    // Exact birth-planet identity used by the opt-in terrain/vein path.  This
+    // must remain after the historical plugin-visible members.
+    int birthPlanetId = 0;
 
     // True when some already-created star carries this exact name. Hash equality is only
     // a filter: the real name is compared on a hit, so a hash collision cannot change

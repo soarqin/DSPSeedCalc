@@ -100,9 +100,27 @@ static void generatePlanetGas(const dspugen::Planet *planet) {
     const_cast<dspugen::Planet*>(planet)->generateGas();
 }
 
+static void generateAllVeinAmounts(const dspugen::Galaxy *galaxy) {
+    const_cast<dspugen::Galaxy*>(galaxy)->ensureAllVeinAmounts();
+}
+
+static const dspugen::VeinAmountSummary *getPlanetVeinAmountSummary(
+    const dspugen::Planet *planet) {
+    return planet->veinAmountSummary();
+}
+
 static PluginAPI api = {
     &generateAllPlanets,
     &generatePlanetGas,
+};
+
+static PluginAPIV2 apiV2 = {
+    sizeof(PluginAPIV2),
+    2,
+    &generateAllPlanets,
+    &generatePlanetGas,
+    &generateAllVeinAmounts,
+    &getPlanetVeinAmountSummary,
 };
 
 static bool hasFinalFilter(const FilterSet &filter) {
@@ -157,8 +175,12 @@ void loadFilters() {
             auto filename = path.string();
             if (auto *lib = dlopen(filename.c_str(), RTLD_LAZY)) {
                 int type = 0;
-                const char *pname;
-                if (const auto initfunc = reinterpret_cast<PluginInitFunc>(dlsym(lib, "init"))) {
+                const char *pname = nullptr;
+                const bool isV2 = dlsym(lib, "init3") != nullptr;
+                if (const auto init3func = reinterpret_cast<PluginInit3Func>(
+                        isV2 ? dlsym(lib, "init3") : nullptr)) {
+                    pname = init3func(&apiV2, &type);
+                } else if (const auto initfunc = reinterpret_cast<PluginInitFunc>(dlsym(lib, "init"))) {
                     pname = initfunc(&api, &type);
                 } else {
                     if (const auto init2func = reinterpret_cast<PluginInit2Func>(dlsym(lib, "init2"))) {
@@ -172,10 +194,38 @@ void loadFilters() {
                     uninitFuncs.emplace_back(uninitfunc);
                 }
                 PluginDescriptorV1 descriptor;
-                auto describe = reinterpret_cast<DescribePluginFunc>(dlsym(lib, "describePlugin"));
-                auto hasDescriptor = describe && describe(1, &descriptor) &&
-                                     descriptor.abiVersion == 1 &&
-                                     descriptor.structSize >= sizeof(PluginDescriptorV1);
+                bool hasDescriptor = false;
+                if (isV2) {
+                    PluginDescriptorV2 descriptorV2;
+                    auto describe = reinterpret_cast<DescribePluginV2Func>(
+                        dlsym(lib, "describePlugin"));
+                    if (describe && describe(2, &descriptorV2) &&
+                        descriptorV2.abiVersion == 2 &&
+                        descriptorV2.structSize >= sizeof(PluginDescriptorV2)) {
+                        descriptor.structSize = descriptorV2.structSize;
+                        descriptor.abiVersion = descriptorV2.abiVersion;
+                        descriptor.prePlanetRequirements = descriptorV2.prePlanetRequirements;
+                        descriptor.filterRequirements = descriptorV2.filterRequirements;
+                        descriptor.outputRequirements = descriptorV2.outputRequirements;
+                        descriptor.capabilities = descriptorV2.capabilities;
+                        hasDescriptor = true;
+                    }
+                } else {
+                    auto describe = reinterpret_cast<DescribePluginFunc>(
+                        dlsym(lib, "describePlugin"));
+                    hasDescriptor = describe && describe(1, &descriptor) &&
+                                    descriptor.abiVersion == 1 &&
+                                    descriptor.structSize >= sizeof(PluginDescriptorV1);
+                }
+                if (isV2 && !hasDescriptor) {
+                    if (!uninitFuncs.empty() &&
+                        uninitFuncs.back() == reinterpret_cast<PluginUninitFunc>(
+                            dlsym(lib, "uninit"))) {
+                        uninitFuncs.pop_back();
+                    }
+                    dlclose(lib);
+                    continue;
+                }
                 if (!hasDescriptor ||
                     !(descriptor.capabilities & SupportsBlockScheduling) ||
                     !(descriptor.capabilities & OrderIndependent)) {
@@ -385,6 +435,11 @@ std::uint64_t prePlanetRequirements() {
 
 std::uint64_t outputRequirements() {
     return requiredForOutput;
+}
+
+bool pluginsRequireVeinAmounts() {
+    return ((requiredForPrePlanet | requiredForFilters | requiredForOutput) &
+            NeedsVeinAmounts) != 0;
 }
 
 bool pluginsAllowBlockScheduling() {

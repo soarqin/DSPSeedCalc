@@ -94,6 +94,9 @@ if(DSP_BUILD_ORACLE)
     add_executable(dspugen_oracle tests/oracle.cc)
     target_link_libraries(dspugen_oracle PRIVATE dspugen)
     target_compile_features(dspugen_oracle PRIVATE cxx_std_17)
+    add_executable(dspugen_vein_amount_oracle tests/vein_amount_oracle.cc)
+    target_link_libraries(dspugen_vein_amount_oracle PRIVATE dspugen)
+    target_compile_features(dspugen_vein_amount_oracle PRIVATE cxx_std_17)
     if(DSP_PGO STREQUAL "GENERATE")
         if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
             target_link_options(dspugen_oracle PRIVATE -fprofile-generate=${DSP_PGO_PROFILE_DIR} -fprofile-update=atomic)
@@ -108,6 +111,8 @@ if(DSP_BUILD_ORACLE)
         endif()
     endif()
     set_target_properties(dspugen_oracle PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+    set_target_properties(dspugen_vein_amount_oracle PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 endif()
 
