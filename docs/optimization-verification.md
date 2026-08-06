@@ -6,7 +6,7 @@
 
 固定 fixture：`tests/fixtures/oracle-v1.txt`
 
-SHA-256：`ABADE2F14F3112ADB20D37E4AD29BDC90203C4174F908749A0EC59EBAEA73B6F`
+SHA-256：`D48DF98E29FF60F00658DF2B5A5F4B8D57DD915C80BB8557498B913D6A63D8DA`
 
 覆盖内容：
 
@@ -62,8 +62,10 @@ python tools/audit_fp_flags.py cmake-build-clang-release-parity/compile_commands
 
 | 星数 | `galaxy_digest` | 恒星数 | 行星数 |
 |---:|---|---:|---:|
-| 16 | `63981f89400edae8` | 32000 | 105443 |
-| 64 | `be0243dc0a38f6bd` | 128000 | 488267 |
+| 16 | `89abf279dec86713` | 32000 | 105443 |
+| 64 | `3a20b6a07a8dca04` | 128000 | 488267 |
+
+这两个摘要在「恒星与行星字段按 Mono 语义对齐」一轮中更新过（旧值 `63981f89400edae8` / `be0243dc0a38f6bd`）。恒星数与行星数不变，说明改动只移动了浮点值，没有改变任何整数判定或对象数量；`pose_sink` 的三个校验和同样保持不变。
 
 `pose_sink` 参考值（seed `0-19999`，`-P`）：16 星 `9d727cec36ceed84`、64 星 `3277ef00c03ce146`、256 星 `1dca6c7f8fab9af3`。
 
@@ -78,26 +80,52 @@ python tools/audit_fp_flags.py cmake-build-clang-release-parity/compile_commands
 
 ## 精确矿量验证
 
-精确矿量功能使用独立 fixture：`tests/fixtures/vein-amounts-v1.txt`。fixture 覆盖 seed `0`、`1` 的 64 星星系，并按恒星和行星顺序记录 `veinSpot`、实际矿点数和普通资源模式的基础矿量。
+精确矿量有两层检查，作用不同，不要混为一谈。
+
+`tests/fixtures/vein-amounts-v1.txt` 由 C++ oracle 自己生成，**只是回归锁，不构成与游戏一致的证据**。它覆盖 seed `0`、`1` 的 64 星星系，按恒星和行星顺序记录 `veinSpot`、矿点数和普通资源模式的基础矿量。
+
+与游戏的一致性由 `tools/verify_vein_parity.py` 对照 `tests/fixtures/game/` 下的游戏内导出结果检查，导出工具、方法、当前结果和浮点结论见 `docs/vein-amount-parity-evidence.md`。扩展样本覆盖 101 个 seed、24,586 颗行星，当前差异为 0。
 
 地形 dispatch 支持算法 `0–14`。当前 Prototype 快照的 `Algos` 并集仍为 `0–13`，因此固定 seed fixture 不会自然覆盖算法 `14`；测试使用合成行星验证 `PlanetAlgorithm14.GenerateTerrain`，随后复用基类 `PlanetAlgorithm.GenerateVeins`。算法 `15` 继续返回明确的不支持结果。
 
-参考构建为 Dyson Sphere Program `0.10.34.28529`、Steam build `23109513`、Unity `2022.3.62f3c1`、Mono、算法 `20200403`。游戏安装位置通过 Steam 注册表、`libraryfolders.vdf` 和 `appmanifest_1366540.acf` 静态定位；验证过程未启动游戏，也未附加调试器。
+参考构建为 Dyson Sphere Program `0.10.34.28529`、Steam build `23109513`、Unity `2022.3.62f3c1`、Mono、算法 `20200403`。生成游戏侧对照时会启动一次游戏并加载 `tools/vein-oracle-mod`；未使用存档，也未附加调试器。
 
 检查命令：
 
 ```powershell
-cmake --build cmake-build-gcc-debug-parity --target dspugen_vein_amount_oracle
+cmake --build cmake-build-gcc-release-parity --target dspugen_vein_amount_oracle
+# 回归锁
 python tools/verify_vein_amounts.py `
-  cmake-build-gcc-debug-parity/bin/dspugen_vein_amount_oracle.exe
+  cmake-build-gcc-release-parity/bin/dspugen_vein_amount_oracle.exe
+# 与游戏对照
+python tools/verify_vein_parity.py `
+  cmake-build-gcc-release-parity/bin/dspugen_vein_amount_oracle.exe
 ```
 
 CLI 与插件 smoke 使用隔离目录，仅保留匹配的 `Prototypes/` 和 `vein_amount_v2_test.dll`：
 
-- `-t 2 -V -o vein-v2-smoke.csv "0-2,64"` 生成 3 行两列结果；
+- ABI v2 插件先用 `birthPlanetId` 初筛，只对每个 seed 的出生行星调用 `GeneratePlanetVeinAmounts()`；调用前后遍历所有行星，确认汇总数量从 0 变为 1；
+- `-t 1 -V -o vein.csv "0-1,64"` 生成 2 行两列结果，GCC Release parity 构建连续 5 次为 12、12、12、12、13 ms；
 - 不带 `-V` 时，声明 `NeedsVeinAmounts` 的插件在扫描前被拒绝；
-- `-V -P` 和 `-V -Z` 在生成前返回冲突错误；
-- 默认 oracle SHA-256 保持 `ABADE2F14F3112ADB20D37E4AD29BDC90203C4174F908749A0EC59EBAEA73B6F`。
+- 测试插件省略 `NeedsVeinAmounts` 后调用精算接口时，宿主返回 `ServiceUnavailable`、停止扫描并以非零状态退出，且不会加载未校验的顶点网格；
+- `-V -P` 和 `-V -Z` 在加载插件之前返回冲突错误，因此被拒绝的命令行不会触发插件 `init`；
+- 导出 `init3` 但缺少有效 ABI 2 `describePlugin` 的插件被显式拒绝，并打印原因、调用 `uninit` 后卸载；
+- 默认 oracle SHA-256 保持 `D48DF98E29FF60F00658DF2B5A5F4B8D57DD915C80BB8557498B913D6A63D8DA`；
+- 精确矿量回归锁 SHA-256 保持 `5AADE6936C1421AF1A7F6BAB63EA1CF2E74A784E4C94A094A003AFE9CFF9DC52`。
+
+### 成本
+
+每个被插件显式请求的非气态行星都会运行精确地形采样与矿脉放置。GCC Release parity 构建、单线程历史测量：
+
+| 阶段 | 每行星 |
+| --- | --- |
+| `PlanetRawData` 构造 | 0.43 ms |
+| `calcVerts()`（已消除） | 19.5 ms |
+| `dispatchTerrain()` | 58.1 ms |
+
+`Galaxy::ensureAllVeinAmounts()` 与 `dspugen_vein_amount_oracle` 仍可用于全星系校验。生产插件不再因为声明 `NeedsVeinAmounts` 而自动进入该路径；实际成本由插件请求的候选行星数量决定。
+
+顶点网格与索引映射只由 precision 决定，参考实现把它们缓存为 `verts200` 与 `indexMap200` 后复制复用。C++ 侧同样按 precision 做线程局部缓存，并在同一线程内复用一个 `PlanetRawData` 实例，仅在行星之间清空高度与生物群系数据。改动前后 fixture 完全一致，用时从 41.1 s 降到 28.9 s。
 
 GPU 研究结论见 `docs/vein-amounts-gpu-research.md`。当前版本只使用 CPU 权威生成，不增加 GPU 依赖。
 

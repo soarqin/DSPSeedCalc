@@ -36,6 +36,8 @@ extern bool pluginsRequireVeinAmounts();
 extern bool pluginsAllowBlockScheduling();
 extern bool pluginsRequireSerializedFilters();
 extern bool pluginsHaveOutputCallbacks();
+extern void setVeinAmountServiceAvailable(bool);
+extern bool pluginRuntimeFailed();
 extern void initPluginThread(std::uint32_t);
 extern void finishPluginThread();
 extern void mergePluginThreads();
@@ -59,7 +61,14 @@ struct PluginAPIV2 {
     std::uint32_t abiVersion = 2;
     void (*GenerateAllPlanets)(const dspugen::Galaxy *galaxy);
     void (*GeneratePlanetGas)(const dspugen::Planet *planet);
-    void (*GenerateAllVeinAmounts)(const dspugen::Galaxy *galaxy);
+    // Generate the exact summary for one candidate after cheap planet fields
+    // have passed the plugin's initial checks.  The result is cached on the
+    // Planet; other planets remain untouched.  Any non-Generated result is a
+    // host-level failure that stops the scan after the current callbacks return.
+    dspugen::VeinAmountGenerationResult (*GeneratePlanetVeinAmounts)(
+        const dspugen::Planet *planet);
+    // Returns the cached summary only after GeneratePlanetVeinAmounts succeeds.
+    // The pointer is borrowed and becomes invalid when the Galaxy is released.
     const dspugen::VeinAmountSummary *(*GetPlanetVeinAmountSummary)(
         const dspugen::Planet *planet);
 };
@@ -72,6 +81,9 @@ enum PluginRequirement : std::uint64_t {
     NeedsPlanetTheme = 1ULL << 4U,
     NeedsGas = 1ULL << 5U,
     NeedsVeinMetadata = 1ULL << 6U,
+    // Enables the exact vein service and version-matched vertex grid for this
+    // callback stage.  The host prepares complete planet metadata but does not
+    // calculate summaries; plugins request candidates through the V2 API.
     NeedsVeinAmounts = 1ULL << 7U,
 };
 

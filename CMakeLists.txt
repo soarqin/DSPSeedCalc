@@ -117,11 +117,20 @@ if(DSP_BUILD_ORACLE)
 endif()
 
 if(DSP_BUILD_TESTS)
+    enable_testing()
     add_executable(dspugen_vein_tests tests/vein_amounts_test.cc)
     target_link_libraries(dspugen_vein_tests PRIVATE dspugen)
     target_compile_features(dspugen_vein_tests PRIVATE cxx_std_17)
+    # The checks are assert()-based, so a Release configure would otherwise
+    # compile them away and report a green, empty run.
+    target_compile_options(dspugen_vein_tests PRIVATE
+        $<$<CXX_COMPILER_ID:MSVC>:/UNDEBUG>
+        $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-UNDEBUG>)
     set_target_properties(dspugen_vein_tests PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+    add_test(NAME vein_amounts
+             COMMAND dspugen_vein_tests
+             WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 endif()
 
 if(DSP_BUILD_BENCHMARK_PLUGINS)

@@ -17,6 +17,9 @@ struct Counters {
     std::uint64_t planetsCreated = 0;
     std::uint64_t gasEntriesGenerated = 0;
     std::uint64_t rareVeinRolls = 0;
+    std::uint64_t terrainHeightQueries = 0;
+    std::uint64_t terrainSparseBatches = 0;
+    std::uint64_t terrainVertexEvaluations = 0;
     std::uint64_t themeRowsExamined = 0;
     std::uint64_t prototypeLookups = 0;
     std::uint64_t pluginCallbacks = 0;

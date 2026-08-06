@@ -90,7 +90,7 @@ python tools/verify_vein_amounts.py cmake-build-gcc-debug-parity/bin/dspugen_vei
 
 构建并运行 `dspugen_vein_tests`、默认 Oracle 和精确矿量 Oracle，预期全部返回 `0`。
 
-- [ ] **Step 4: 提交修正**
+- [x] **Step 4: 提交修正**
 
 ```powershell
 git add docs dspugen tests

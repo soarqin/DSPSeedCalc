@@ -1,0 +1,6 @@
+# dsp-icall-addresses v1
+UnityPlayer.dll base=7FFC21380000
+UnityEngine.Quaternion.AngleAxis_Injected addr=7FFC21473130 rva=F3130 ida=1800F3130
+UnityEngine.Quaternion.FromToRotation_Injected addr=7FFC21472D20 rva=F2D20 ida=1800F2D20
+UnityEngine.Vector3.Slerp_Injected addr=7FFC21472C30 rva=F2C30 ida=1800F2C30
+UnityEngine.Quaternion.Internal_ToAxisAngleRad_Injected addr=7FFC21473050 rva=F3050 ida=1800F3050

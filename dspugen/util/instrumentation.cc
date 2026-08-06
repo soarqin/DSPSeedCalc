@@ -35,6 +35,9 @@ void mergeThread() {
     ADD_COUNTER(planetsCreated);
     ADD_COUNTER(gasEntriesGenerated);
     ADD_COUNTER(rareVeinRolls);
+    ADD_COUNTER(terrainHeightQueries);
+    ADD_COUNTER(terrainSparseBatches);
+    ADD_COUNTER(terrainVertexEvaluations);
     ADD_COUNTER(themeRowsExamined);
     ADD_COUNTER(prototypeLookups);
     ADD_COUNTER(pluginCallbacks);
@@ -61,6 +64,9 @@ void writeReport(const std::string &filename) {
            << "  \"planetsCreated\": " << totalCounters.planetsCreated << ",\n"
            << "  \"gasEntriesGenerated\": " << totalCounters.gasEntriesGenerated << ",\n"
            << "  \"rareVeinRolls\": " << totalCounters.rareVeinRolls << ",\n"
+           << "  \"terrainHeightQueries\": " << totalCounters.terrainHeightQueries << ",\n"
+           << "  \"terrainSparseBatches\": " << totalCounters.terrainSparseBatches << ",\n"
+           << "  \"terrainVertexEvaluations\": " << totalCounters.terrainVertexEvaluations << ",\n"
            << "  \"themeRowsExamined\": " << totalCounters.themeRowsExamined << ",\n"
            << "  \"prototypeLookups\": " << totalCounters.prototypeLookups << ",\n"
            << "  \"pluginCallbacks\": " << totalCounters.pluginCallbacks << ",\n"

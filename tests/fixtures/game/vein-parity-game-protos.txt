@@ -1,0 +1,43 @@
+# dsp-vein-parity-protos v1
+# gameVersion=0.10.34.28529
+themeCount=25
+theme id=1 distribute=1 planetType=2 waterItemId=1000 waterHeight=0 modX0=0 modX1=0 modY0=0 modY1=0 algos=1 veinSpot=7;5;0;0;8;11;18 veinCount=0.7;0.6;0;0;1;1;1 veinOpacity=0.6;0.5;0;0;0.7;1;1 rareVeins=11 rareSettings=0;1;0.3;0.3
+theme id=2 distribute=0 planetType=5 waterItemId=0 waterHeight=0 modX0=0 modX1=0 modY0=0 modY1=0 algos=0 veinSpot=- veinCount=- veinOpacity=- rareVeins=- rareSettings=-
+theme id=3 distribute=0 planetType=5 waterItemId=0 waterHeight=0 modX0=0 modX1=0 modY0=0 modY1=0 algos=0 veinSpot=- veinCount=- veinOpacity=- rareVeins=- rareSettings=-
+theme id=4 distribute=0 planetType=5 waterItemId=0 waterHeight=0 modX0=0 modX1=0 modY0=0 modY1=0 algos=0 veinSpot=- veinCount=- veinOpacity=- rareVeins=- rareSettings=-
+theme id=5 distribute=0 planetType=5 waterItemId=0 waterHeight=0 modX0=0 modX1=0 modY0=0 modY1=0 algos=0 veinSpot=- veinCount=- veinOpacity=- rareVeins=- rareSettings=-
+theme id=6 distribute=0 planetType=3 waterItemId=0 waterHeight=0 modX0=1 modX1=1 modY0=0 modY1=0 algos=2 veinSpot=3;10;0;6;10;1;0 veinCount=0.5;1;0;1;1;0.3;0 veinOpacity=0.6;0.6;0;1;1;0.3;0 rareVeins=9 rareSettings=0;0.18;0.2;0.3
+theme id=7 distribute=0 planetType=3 waterItemId=0 waterHeight=0 modX0=0 modX1=0 modY0=1 modY1=1 algos=2 veinSpot=7;2;7;3;8;1;0 veinCount=1;0.5;1;1;0.7;0.3;0 veinOpacity=0.6;0.6;1;1;0.5;0.3;0 rareVeins=8;10 rareSettings=0.3;0.5;0.7;0.5;0;0.3;0.2;0.6
+theme id=8 distribute=2 planetType=2 waterItemId=1000 waterHeight=0 modX0=0 modX1=0 modY0=0 modY1=0 algos=1 veinSpot=7;2;12;0;4;10;22 veinCount=0.6;0.3;0.9;0;0.8;1;1 veinOpacity=0.6;0.6;0.6;0;0.5;1;1 rareVeins=11;13 rareSettings=0;1;0.3;1;0;0.5;0.2;1
+theme id=9 distribute=0 planetType=1 waterItemId=-1 waterHeight=-2.5 modX0=0 modX1=0 modY0=0 modY1=0 algos=5 veinSpot=15;15;2;9;4;2;0 veinCount=1;1;0.6;1;0.6;0.3;0 veinOpacity=1;1;0.6;1;0.5;0.3;0 rareVeins=9;10;12 rareSettings=0;0.2;0.6;0.7;0;0.2;0.6;0.7;0;0.1;0.2;0.8
+theme id=10 distribute=0 planetType=4 waterItemId=1000 waterHeight=0 modX0=0 modX1=0 modY0=0.34 modY1=-0.15 algos=3 veinSpot=5;1;3;10;2;1;0 veinCount=0.6;0.2;0.8;1;0.8;0.2;0 veinOpacity=1;0.5;1;1;1;0.3;0 rareVeins=8;10;12 rareSettings=0.3;1;0.8;1;0;0.2;0.6;0.4;0;0.1;0.2;0.4
+theme id=11 distribute=0 planetType=3 waterItemId=0 waterHeight=0 modX0=0 modX1=0 modY0=1 modY1=1 algos=4 veinSpot=3;3;3;6;12;0;0 veinCount=0.5;0.5;0.5;1;1.2;0;0 veinOpacity=0.6;0.6;0.9;0.9;1.5;0;0 rareVeins=8;9;12;13 rareSettings=0.25;0.5;0.6;0.8;0;0.2;0.6;0.7;0;0.2;0.3;0.7;0.1;0.2;0.2;0.7
+theme id=12 distribute=0 planetType=3 waterItemId=0 waterHeight=0 modX0=0 modX1=0 modY0=1 modY1=1 algos=3 veinSpot=2;7;8;0;7;3;0 veinCount=0.4;1;1;0;1;0.7;0 veinOpacity=0.8;1;1;0;1;0.7;0 rareVeins=9;10;12 rareSettings=0;0.25;0.6;0.6;0;0.25;0.6;0.6;0;0.1;0.2;0.5
+theme id=13 distribute=2 planetType=1 waterItemId=1116 waterHeight=0 modX0=0 modX1=0 modY0=1 modY1=1 algos=3 veinSpot=10;10;2;7;4;1;0 veinCount=1;1;0.6;1;0.6;0.3;0 veinOpacity=1;1;0.6;1;0.5;0.3;0 rareVeins=- rareSettings=-
+theme id=14 distribute=2 planetType=2 waterItemId=1000 waterHeight=0 modX0=0 modX1=0 modY0=0 modY1=0 algos=1 veinSpot=4;6;0;0;10;8;12 veinCount=0.7;0.7;0;0;1;1;1 veinOpacity=0.5;0.6;0;0;0.8;1;1 rareVeins=9;11;13 rareSettings=0;0.4;0.3;0.5;0;1;0.3;0.8;0;0.5;0.2;0.8
+theme id=15 distribute=2 planetType=2 waterItemId=1000 waterHeight=0 modX0=0 modX1=0 modY0=1 modY1=1 algos=6 veinSpot=7;4;7;1;2;7;18 veinCount=0.7;0.6;0.7;0.4;0.5;1;1 veinOpacity=0.6;0.5;0.6;0.5;0.7;1;1.2 rareVeins=11;13 rareSettings=0;1;0.3;1;0;0.5;0.2;1
+theme id=16 distribute=2 planetType=2 waterItemId=1000 waterHeight=0 modX0=0 modX1=0 modY0=1 modY1=1 algos=7 veinSpot=0;0;0;0;0;2;10 veinCount=0;0;0;0;0;0.5;5 veinOpacity=0;0;0;0;0;0.8;2 rareVeins=13 rareSettings=1;1;1;0.9
+theme id=17 distribute=0 planetType=3 waterItemId=0 waterHeight=0 modX0=0 modX1=0 modY0=1 modY1=1 algos=2 veinSpot=2;8;9;1;3;1;0 veinCount=1;0.8;0.8;1;0.7;0.3;0 veinOpacity=0.6;0.6;1;1;0.5;0.3;0 rareVeins=9;12 rareSettings=0;0.7;0.7;0.5;0;0.1;0.2;0.7
+theme id=18 distribute=2 planetType=2 waterItemId=1000 waterHeight=0 modX0=0 modX1=0 modY0=0 modY1=0 algos=1 veinSpot=5;6;8;0;4;8;22 veinCount=0.6;0.5;0.8;0;0.8;1;1 veinOpacity=0.6;0.6;0.6;0;0.5;1;1 rareVeins=11;13 rareSettings=0;1;0.3;1;0;0.5;0.2;1
+theme id=19 distribute=2 planetType=3 waterItemId=0 waterHeight=0 modX0=1.5 modX1=1.5 modY0=-5 modY1=-5 algos=8 veinSpot=2;8;2;7;4;1;0 veinCount=1;1;1;1;1;0.5;0 veinOpacity=0.6;0.8;1;0.8;0.6;0.3;0 rareVeins=9;10;12 rareSettings=0;0.25;0.6;0.6;0;0.25;0.6;0.6;0;0.4;0.3;0.9
+theme id=20 distribute=0 planetType=3 waterItemId=-2 waterHeight=0 modX0=6 modX1=6 modY0=8 modY1=8 algos=9 veinSpot=5;11;1;8;3;1;0 veinCount=0.8;1;0.5;1;0.7;0.3;0 veinOpacity=1;1;1;1;0.5;0.3;0 rareVeins=8;9;12 rareSettings=0.25;1;0.6;0.7;0;0.2;0.6;0.9;0;0.3;0.4;1
+theme id=21 distribute=2 planetType=5 waterItemId=0 waterHeight=0 modX0=0 modX1=0 modY0=0 modY1=0 algos=0 veinSpot=- veinCount=- veinOpacity=- rareVeins=- rareSettings=-
+theme id=22 distribute=2 planetType=2 waterItemId=1000 waterHeight=-0.7 modX0=1 modX1=1 modY0=1 modY1=1 algos=10 veinSpot=7;4;7;2;3;6;14 veinCount=0.7;0.6;1;0.8;0.7;1;1 veinOpacity=0.7;0.6;0.8;0.7;1;1.2;1 rareVeins=11;13 rareSettings=0;1;0.5;1;0;0.6;0.25;1
+theme id=23 distribute=2 planetType=3 waterItemId=0 waterHeight=0 modX0=1.5 modX1=1.5 modY0=1 modY1=1 algos=11 veinSpot=13;2;0;2;0;2;0 veinCount=1;0.5;0;0.7;0;0.6;0 veinOpacity=1.2;0.8;0;1;0;0.5;0 rareVeins=11;12 rareSettings=0;0.7;0.2;0.6;0;1;1;0.84
+theme id=24 distribute=0 planetType=4 waterItemId=0 waterHeight=0 modX0=1 modX1=1 modY0=1 modY1=1 algos=12 veinSpot=9;2;2;6;2;1;0 veinCount=0.8;0.5;0.8;1;0.7;0.3;0 veinOpacity=0.8;0.8;1.2;1;1;0.3;0 rareVeins=8;9;12 rareSettings=0.3;1;0.8;1;0;1;0.7;1;0;0.4;0.5;0.7
+theme id=25 distribute=2 planetType=2 waterItemId=0 waterHeight=-2 modX0=1 modX1=1 modY0=3 modY1=3 algos=13 veinSpot=8;3;8;1;3;9;20 veinCount=0.7;0.6;1;1;0.6;1;1 veinOpacity=0.7;0.5;1;1;0.7;1.2;1 rareVeins=10;11;13 rareSettings=0;0.5;0.3;1;0;1;0.3;1;0;0.5;0.2;1
+veinProtoCount=14
+vein id=1 modelIndex=1 modelCount=1 miningItem=1001
+vein id=2 modelIndex=1 modelCount=1 miningItem=1002
+vein id=3 modelIndex=1 modelCount=1 miningItem=1003
+vein id=4 modelIndex=1 modelCount=1 miningItem=1004
+vein id=5 modelIndex=2 modelCount=1 miningItem=1005
+vein id=6 modelIndex=2 modelCount=1 miningItem=1006
+vein id=7 modelIndex=6 modelCount=1 miningItem=1007
+vein id=8 modelIndex=2 modelCount=1 miningItem=1011
+vein id=9 modelIndex=4 modelCount=1 miningItem=1012
+vein id=10 modelIndex=4 modelCount=1 miningItem=1013
+vein id=11 modelIndex=7 modelCount=1 miningItem=1117
+vein id=12 modelIndex=7 modelCount=1 miningItem=1014
+vein id=13 modelIndex=3 modelCount=1 miningItem=1015
+vein id=14 modelIndex=5 modelCount=1 miningItem=1016

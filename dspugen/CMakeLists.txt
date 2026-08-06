@@ -5,6 +5,7 @@ add_project(dspugen STATIC
     vein/vein_amounts.hh vein/vein_amounts.cc
     terrain/simplex_noise.cc terrain/simplex_noise.hh
     terrain/unity_math.cc terrain/unity_math.hh
+    terrain/ucrt_trig.cc terrain/ucrt_trig.hh
     terrain/planet_raw_data.cc terrain/planet_raw_data.hh
     terrain/planet_algorithm.cc terrain/planet_algorithm.hh
     terrain/planet_geometry.cc terrain/planet_geometry.hh

@@ -2,6 +2,7 @@
 
 #include "simplex_noise.hh"
 #include "../util/dotnet35random.hh"
+#include "../util/maths.hh"
 
 #include <algorithm>
 #include <array>
@@ -13,7 +14,47 @@ namespace dspugen::terrain {
 
 namespace {
 
-constexpr float Pi = 3.14159265358979323846f;
+class TerrainIndexRange {
+public:
+    explicit TerrainIndexRange(const PlanetAlgorithmContext &context)
+        : sparse(context.indices), count(
+              sparse == nullptr
+                  ? static_cast<std::size_t>(context.data.dataLength())
+                  : context.indexCount) {}
+
+    class Iterator {
+    public:
+        Iterator(const int *indices, std::size_t position)
+            : sparse(indices), offset(position) {}
+
+        int operator*() const {
+            return sparse == nullptr ? static_cast<int>(offset)
+                                     : sparse[offset];
+        }
+        Iterator &operator++() {
+            ++offset;
+            return *this;
+        }
+        bool operator!=(const Iterator &other) const {
+            return offset != other.offset;
+        }
+
+    private:
+        const int *sparse;
+        std::size_t offset;
+    };
+
+    Iterator begin() const { return {sparse, 0}; }
+    Iterator end() const { return {sparse, count}; }
+
+private:
+    const int *sparse;
+    std::size_t count;
+};
+
+TerrainIndexRange terrainIndices(const PlanetAlgorithmContext &context) {
+    return TerrainIndexRange(context);
+}
 
 double levelize(double value, double level = 1.0, double offset = 0.0) {
     value = value / level - offset;
@@ -61,9 +102,13 @@ double lerpUnclamped(double a, double b, double t) {
     return a + (b - a) * t;
 }
 
+// Mathf.Lerp is a single managed expression: Mono evaluates it in double and
+// rounds once, when the float32 return value is produced.
 float mathfLerp(float a, float b, float t) {
-    t = std::clamp(t, 0.0f, 1.0f);
-    return a + (b - a) * t;
+    t = util::mathfClamp01(t);
+    return static_cast<float>(static_cast<double>(a) +
+                              (static_cast<double>(b) - static_cast<double>(a)) *
+                                  static_cast<double>(t));
 }
 
 float mathfCos(float value) {
@@ -75,16 +120,22 @@ float mathfPow(float value, float power) {
                                        static_cast<double>(power)));
 }
 
+// Mathf.Sign is (f >= 0f) ? 1f : -1f, so zero yields +1 rather than 0.
 float mathfSign(float value) {
-    if (value > 0.0f) return 1.0f;
-    if (value < 0.0f) return -1.0f;
-    return 0.0f;
+    return (value >= 0.0f) ? 1.0f : -1.0f;
 }
 
+// Mono keeps float32 values on the evaluation stack in double precision and
+// rounds only when one is stored to a float32 location, so each managed
+// statement below rounds exactly once, at its assignment.
 float terrainCurve(float value) {
-    auto curve = mathfCos(value * Pi) * 1.1f;
-    curve = mathfSign(curve) * mathfPow(curve, 4.0f);
-    return std::clamp(curve, -1.0f, 1.0f);
+    auto curve = static_cast<float>(
+        static_cast<double>(mathfCos(static_cast<float>(
+            static_cast<double>(value) * static_cast<double>(MathfPi)))) *
+        static_cast<double>(1.1f));
+    curve = static_cast<float>(static_cast<double>(mathfSign(curve)) *
+                               static_cast<double>(mathfPow(curve, 4.0f)));
+    return util::mathfClamp(curve, -1.0f, 1.0f);
 }
 
 struct SphericVector {
@@ -201,10 +252,20 @@ SphericVector nextSphericNormal(int &seed) {
     return sphericNormalTable()[static_cast<std::size_t>(seed)];
 }
 
-void normalizeUnityVector3(Vector3 &value) {
-    auto dotValue = (value.x * value.x + value.y * value.y) +
-                    value.z * value.z;
-    auto length = static_cast<float>(std::sqrt(static_cast<double>(dotValue)));
+// UnityEngine.Vector4.Normalize, for the `new Vector4(x, y, z)` that
+// algorithms 4 and 10 build (that constructor leaves w at 0, so w is omitted).
+// Vector4.Magnitude is (float)Math.Sqrt(Dot(a, a)) and Vector4.Dot returns
+// float32, so the sum of squares is evaluated in double and then narrowed once
+// before the square root.  Two neighbouring shapes are both wrong here and were
+// measured against the game to rule them out: summing stepwise in float (the
+// original port) misses 3 of ~50 algorithm 4 planets, and keeping the sum in
+// double all the way into Math.Sqrt (the Vector3.Magnitude shape) misses 6.
+void normalizeUnityVector4(Vector3 &value) {
+    const auto dotValue = static_cast<float>(
+        static_cast<double>(value.x) * static_cast<double>(value.x) +
+        static_cast<double>(value.y) * static_cast<double>(value.y) +
+        static_cast<double>(value.z) * static_cast<double>(value.z));
+    const auto length = static_cast<float>(std::sqrt(static_cast<double>(dotValue)));
     if (length > 1.0E-05f) {
         value.x /= length;
         value.y /= length;
@@ -215,13 +276,14 @@ void normalizeUnityVector3(Vector3 &value) {
 }
 
 void generateTerrain0(PlanetAlgorithmContext &context) {
-    auto height = static_cast<std::uint16_t>(
+    auto height = util::narrowToUInt16(
         static_cast<double>(context.radius) * 100.0);
     auto &heightData = context.data.heightData();
     auto &biomoData = context.data.biomoData();
-    for (int i = 0; i < context.data.dataLength(); ++i) {
+    for (int i: terrainIndices(context)) {
         heightData[static_cast<std::size_t>(i)] = height;
-        biomoData[static_cast<std::size_t>(i)] = 0;
+        if (context.generateBiomes)
+            biomoData[static_cast<std::size_t>(i)] = 0;
     }
 }
 
@@ -244,13 +306,12 @@ void generateTerrain1(PlanetAlgorithmContext &context) {
     auto &heightData = data.heightData();
     auto &biomoData = data.biomoData();
     const auto &vertices = data.vertices();
-    for (int i = 0; i < data.dataLength(); ++i) {
+    for (int i: terrainIndices(context)) {
         const auto &vertex = vertices[static_cast<std::size_t>(i)];
-        double num12 = static_cast<double>(vertex.x * context.radius);
-        double num13 = static_cast<double>(vertex.y * context.radius);
-        double num14 = static_cast<double>(vertex.z * context.radius);
+        double num12 = static_cast<double>(vertex.x) * static_cast<double>(context.radius);
+        double num13 = static_cast<double>(vertex.y) * static_cast<double>(context.radius);
+        double num14 = static_cast<double>(vertex.z) * static_cast<double>(context.radius);
         double num15 = 0.0;
-        double num16 = 0.0;
         double num17 = simplexNoise.Noise3DFBM(
             num12 * num, num13 * num2, num14 * num3, 6) * num4 + num5;
         double num18 = simplexNoise2.Noise3DFBM(
@@ -261,20 +322,23 @@ void generateTerrain1(PlanetAlgorithmContext &context) {
         double num21 = ((num20 > 0.0) ? (num20 * 0.5) : (num20 * 1.6));
         double num22 = ((num21 > 0.0) ? levelize3(num21, 0.7)
                                        : levelize2(num21, 0.5));
-        double num23 = simplexNoise2.Noise3DFBM(
-            num12 * num * 2.5, num13 * num2 * 8.0,
-            num14 * num3 * 2.5, 2) * 0.6 - 0.3;
-        double num24 = num21 * num8 + num23 + num9;
-        double num25 = ((num24 < 1.0) ? num24
-                                      : ((num24 - 1.0) * 0.8 + 1.0));
         num15 = num22;
-        num16 = num25;
+        double num16 = 0.0;
+        if (context.generateBiomes) {
+            double num23 = simplexNoise2.Noise3DFBM(
+                num12 * num * 2.5, num13 * num2 * 8.0,
+                num14 * num3 * 2.5, 2) * 0.6 - 0.3;
+            double num24 = num21 * num8 + num23 + num9;
+            num16 = ((num24 < 1.0) ? num24
+                                    : ((num24 - 1.0) * 0.8 + 1.0));
+        }
         heightData[static_cast<std::size_t>(i)] =
-            static_cast<std::uint16_t>(
+            util::narrowToUInt16(
                 (static_cast<double>(context.radius) + num15 + 0.2) * 100.0);
         float biome = static_cast<float>(num16 * 100.0);
-        biomoData[static_cast<std::size_t>(i)] = static_cast<std::uint8_t>(
-            std::clamp(biome, 0.0f, 200.0f));
+        if (context.generateBiomes)
+            biomoData[static_cast<std::size_t>(i)] = util::narrowToUInt8(
+                util::mathfClamp(biome, 0.0f, 200.0f));
     }
 }
 
@@ -299,33 +363,34 @@ void generateTerrain2(PlanetAlgorithmContext &context,
     auto &heightData = data.heightData();
     auto &biomoData = data.biomoData();
     const auto &vertices = data.vertices();
-    for (int i = 0; i < data.dataLength(); ++i) {
+    for (int i: terrainIndices(context)) {
         const auto &vertex = vertices[static_cast<std::size_t>(i)];
-        double num8 = static_cast<double>(vertex.x * context.radius);
-        double num9 = static_cast<double>(vertex.y * context.radius);
-        double num10 = static_cast<double>(vertex.z * context.radius);
+        double num8 = static_cast<double>(vertex.x) * static_cast<double>(context.radius);
+        double num9 = static_cast<double>(vertex.y) * static_cast<double>(context.radius);
+        double num10 = static_cast<double>(vertex.z) * static_cast<double>(context.radius);
         double num11 = static_cast<double>(vertex.y);
         double num12 = 0.0;
-        double num13 = 0.0;
         double num14 = simplexNoise.Noise3DFBM(
             num8 * num, num9 * num2, num10 * num3, 6, 0.45, 1.8);
-        double num15 = simplexNoise2.Noise3DFBM(
-            num8 * num * 2.0, num9 * num2 * 2.0,
-            num10 * num3 * 2.0, 3);
         double value = num14 * num4 + num4 * 0.4;
         double num16 = 0.6 / (std::abs(value) + 0.6) - 0.25;
         double num17 = ((num16 < 0.0) ? (num16 * 0.3) : num16);
-        double num18 = std::pow(std::abs(num11 * 1.01), 3.0) * 1.0;
-        double num19 = ((num15 < 0.0) ? 0.0 : num15);
-        double num20 = ((num18 > 1.0) ? 1.0 : num18);
         num12 = num17;
-        num13 = num17 * 1.5 + num19 * 1.0 + num20;
         heightData[static_cast<std::size_t>(i)] =
-            static_cast<std::uint16_t>(
+            util::narrowToUInt16(
                 (static_cast<double>(context.radius) + num12 + 0.1) * 100.0);
-        float biome = static_cast<float>(num13 * 100.0);
-        biomoData[static_cast<std::size_t>(i)] = static_cast<std::uint8_t>(
-            std::clamp(biome, 0.0f, 200.0f));
+        if (context.generateBiomes) {
+            double num15 = simplexNoise2.Noise3DFBM(
+                num8 * num * 2.0, num9 * num2 * 2.0,
+                num10 * num3 * 2.0, 3);
+            double num18 = std::pow(std::abs(num11 * 1.01), 3.0) * 1.0;
+            double num19 = ((num15 < 0.0) ? 0.0 : num15);
+            double num20 = ((num18 > 1.0) ? 1.0 : num18);
+            double num13 = num17 * 1.5 + num19 * 1.0 + num20;
+            float biome = static_cast<float>(num13 * 100.0);
+            biomoData[static_cast<std::size_t>(i)] = util::narrowToUInt8(
+                util::mathfClamp(biome, 0.0f, 200.0f));
+        }
     }
 }
 
@@ -342,11 +407,11 @@ void generateTerrain3(PlanetAlgorithmContext &context, double modX) {
     auto &heightData = data.heightData();
     auto &biomoData = data.biomoData();
     const auto &vertices = data.vertices();
-    for (int i = 0; i < data.dataLength(); ++i) {
+    for (int i: terrainIndices(context)) {
         const auto &vertex = vertices[static_cast<std::size_t>(i)];
-        double num6 = static_cast<double>(vertex.x * context.radius);
-        double num7 = static_cast<double>(vertex.y * context.radius);
-        double num8 = static_cast<double>(vertex.z * context.radius);
+        double num6 = static_cast<double>(vertex.x) * static_cast<double>(context.radius);
+        double num7 = static_cast<double>(vertex.y) * static_cast<double>(context.radius);
+        double num8 = static_cast<double>(vertex.z) * static_cast<double>(context.radius);
         num6 += std::sin(num7 * 0.15) * 3.0;
         num7 += std::sin(num8 * 0.15) * 3.0;
         num8 += std::sin(num6 * 0.15) * 3.0;
@@ -366,10 +431,11 @@ void generateTerrain3(PlanetAlgorithmContext &context, double modX) {
             num6 * num * 0.8, num7 * num2 * 0.8,
             num8 * num3 * 0.8, 2) * 2.0;
         double num15 = num11 * 2.0 + 0.92;
-        double num16 = num12 * static_cast<double>(
-            std::abs(static_cast<float>(num14) + 0.5f));
-        num15 += static_cast<double>(std::clamp(
-            static_cast<float>(num16 - 0.35) * 1.0f, 0.0f, 1.0f));
+        double num16 = num12 * static_cast<double>(std::abs(static_cast<float>(
+            static_cast<double>(static_cast<float>(num14)) +
+            static_cast<double>(0.5f))));
+        num15 += static_cast<double>(util::mathfClamp01(
+            static_cast<float>(num16 - 0.35) * 1.0f));
         if (num15 < 0.0) num15 *= 2.0;
         double num17 = num15;
         num17 = levelize2(num15);
@@ -379,7 +445,7 @@ void generateTerrain3(PlanetAlgorithmContext &context, double modX) {
         }
         double b = ((!(num17 > 0.0))
                         ? static_cast<double>(mathfLerp(
-                              -1.0f, 0.0f, static_cast<float>(num17) + 1.0f))
+                              -1.0f, 0.0f, static_cast<float>(static_cast<double>(static_cast<float>(num17)) + static_cast<double>(1.0f))))
                         : ((!(num17 > 1.0))
                                ? static_cast<double>(mathfLerp(
                                      0.0f, 0.3f, static_cast<float>(num17))) +
@@ -387,15 +453,15 @@ void generateTerrain3(PlanetAlgorithmContext &context, double modX) {
                                : ((num17 > 2.0)
                                       ? static_cast<double>(mathfLerp(
                                             1.2f, 2.0f,
-                                            static_cast<float>(num17) - 2.0f)) +
+                                            static_cast<float>(static_cast<double>(static_cast<float>(num17)) - static_cast<double>(2.0f)))) +
                                             num13 * 0.12
                                       : static_cast<double>(mathfLerp(
                                             0.3f, 1.2f,
-                                            static_cast<float>(num17) - 1.0f)) +
+                                            static_cast<float>(static_cast<double>(static_cast<float>(num17)) - static_cast<double>(1.0f)))) +
                                             num13 * 0.12)));
         double a = ((!(num17 > 0.0))
                         ? static_cast<double>(mathfLerp(
-                              -4.0f, 0.0f, static_cast<float>(num17) + 1.0f))
+                              -4.0f, 0.0f, static_cast<float>(static_cast<double>(static_cast<float>(num17)) + static_cast<double>(1.0f))))
                         : ((!(num17 > 1.0))
                                ? static_cast<double>(mathfLerp(
                                      0.0f, 0.3f, static_cast<float>(num17))) +
@@ -403,11 +469,11 @@ void generateTerrain3(PlanetAlgorithmContext &context, double modX) {
                                : ((num17 > 2.0)
                                       ? static_cast<double>(mathfLerp(
                                             1.4f, 2.7f,
-                                            static_cast<float>(num17) - 2.0f)) +
+                                            static_cast<float>(static_cast<double>(static_cast<float>(num17)) - static_cast<double>(2.0f)))) +
                                             num13 * 0.12
                                       : static_cast<double>(mathfLerp(
                                             0.3f, 1.4f,
-                                            static_cast<float>(num17) - 1.0f)) +
+                                            static_cast<float>(static_cast<double>(static_cast<float>(num17)) - static_cast<double>(1.0f)))) +
                                             num13 * 0.12)));
         double num18 = lerpUnclamped(a, b, modX);
         if (num15 < 0.0) num15 *= 2.0;
@@ -418,11 +484,12 @@ void generateTerrain3(PlanetAlgorithmContext &context, double modX) {
         num10 += ((num10 > 1.8) ? ((0.0 - num13) * 0.8)
                                 : (num13 * 0.2));
         heightData[static_cast<std::size_t>(i)] =
-            static_cast<std::uint16_t>(
+            util::narrowToUInt16(
                 (static_cast<double>(context.radius) + num9 + 0.2) * 100.0);
         float biome = static_cast<float>(num10 * 100.0);
-        biomoData[static_cast<std::size_t>(i)] = static_cast<std::uint8_t>(
-            std::clamp(biome, 0.0f, 200.0f));
+        if (context.generateBiomes)
+            biomoData[static_cast<std::size_t>(i)] = util::narrowToUInt8(
+                util::mathfClamp(biome, 0.0f, 200.0f));
     }
 }
 
@@ -443,7 +510,7 @@ void generateTerrain4(PlanetAlgorithmContext &context) {
         Vector3 vector{static_cast<float>(vectorLF.x),
                        static_cast<float>(vectorLF.y),
                        static_cast<float>(vectorLF.z)};
-        normalizeUnityVector3(vector);
+        normalizeUnityVector4(vector);
         vector = vector * context.radius;
         float w = static_cast<float>(vectorLF.magnitude()) * 8.0f + 8.0f;
         w *= w;
@@ -456,11 +523,11 @@ void generateTerrain4(PlanetAlgorithmContext &context) {
     auto &heightData = data.heightData();
     auto &biomoData = data.biomoData();
     const auto &vertices = data.vertices();
-    for (int j = 0; j < data.dataLength(); ++j) {
+    for (int j: terrainIndices(context)) {
         const auto &vertex = vertices[static_cast<std::size_t>(j)];
-        double num7 = static_cast<double>(vertex.x * context.radius);
-        double num8 = static_cast<double>(vertex.y * context.radius);
-        double num9 = static_cast<double>(vertex.z * context.radius);
+        double num7 = static_cast<double>(vertex.x) * static_cast<double>(context.radius);
+        double num8 = static_cast<double>(vertex.y) * static_cast<double>(context.radius);
+        double num9 = static_cast<double>(vertex.z) * static_cast<double>(context.radius);
         double num10 = 0.0;
         double num11 = 0.0;
         double num12 = simplexNoise.Noise3DFBM(
@@ -498,11 +565,12 @@ void generateTerrain4(PlanetAlgorithmContext &context) {
         num11 += ((num11 > 1.5) ? (0.0 - num17) : num17) * 0.5;
         num11 += num13 * 0.63;
         heightData[static_cast<std::size_t>(j)] =
-            static_cast<std::uint16_t>(
+            util::narrowToUInt16(
                 (static_cast<double>(context.radius) + num10 + 0.1) * 100.0);
         float biome = static_cast<float>(num11 * 100.0);
-        biomoData[static_cast<std::size_t>(j)] = static_cast<std::uint8_t>(
-            std::clamp(biome, 0.0f, 200.0f));
+        if (context.generateBiomes)
+            biomoData[static_cast<std::size_t>(j)] = util::narrowToUInt8(
+                util::mathfClamp(biome, 0.0f, 200.0f));
     }
 }
 
@@ -516,11 +584,11 @@ void generateTerrain5(PlanetAlgorithmContext &context) {
     auto &heightData = data.heightData();
     auto &biomoData = data.biomoData();
     const auto &vertices = data.vertices();
-    for (int i = 0; i < data.dataLength(); ++i) {
+    for (int i: terrainIndices(context)) {
         const auto &vertex = vertices[static_cast<std::size_t>(i)];
-        double num3 = static_cast<double>(vertex.x * context.radius);
-        double num4 = static_cast<double>(vertex.y * context.radius);
-        double num5 = static_cast<double>(vertex.z * context.radius);
+        double num3 = static_cast<double>(vertex.x) * static_cast<double>(context.radius);
+        double num4 = static_cast<double>(vertex.y) * static_cast<double>(context.radius);
+        double num5 = static_cast<double>(vertex.z) * static_cast<double>(context.radius);
         double num6 = 0.0;
         double num7 = 0.0;
         double num8 = levelize(num3 * 0.007);
@@ -543,16 +611,20 @@ void generateTerrain5(PlanetAlgorithmContext &context) {
                                    : ((num13 > 1.0) ? 1.0 : num13));
         double num14 = std::abs(simplexNoise2.Noise3DFBM(
             num8 * 1.5, num9 * 1.5, num10 * 1.5, 2));
-        double num15 = simplexNoise.Noise3DFBM(
-            num5 * 0.06, num4 * 0.06, num3 * 0.06, 2);
+        double num15 = 0.0;
+        if (context.generateBiomes)
+            num15 = simplexNoise.Noise3DFBM(
+                num5 * 0.06, num4 * 0.06, num3 * 0.06, 2);
         num6 -= num12 * 1.2 * num13;
         if (num6 >= 0.0) num6 += num11 * 0.25 + num14 * 0.6;
         num6 -= 0.1;
-        num7 = num11 * 2.1;
-        if (num7 < 0.0) num7 *= 5.0;
-        num7 = ((!(num7 > -1.0)) ? -1.0
-                                  : ((num7 > 2.0) ? 2.0 : num7));
-        num7 += num15 * 0.6 * num7;
+        if (context.generateBiomes) {
+            num7 = num11 * 2.1;
+            if (num7 < 0.0) num7 *= 5.0;
+            num7 = ((!(num7 > -1.0)) ? -1.0
+                                      : ((num7 > 2.0) ? 2.0 : num7));
+            num7 += num15 * 0.6 * num7;
+        }
         double num16 = -0.3 - num6;
         if (num16 > 0.0) {
             double num17 = simplexNoise2.Noise(
@@ -563,11 +635,12 @@ void generateTerrain5(PlanetAlgorithmContext &context) {
                    num16 * num16 * num16 * num16 * num17 * 0.5;
         }
         heightData[static_cast<std::size_t>(i)] =
-            static_cast<std::uint16_t>(
+            util::narrowToUInt16(
                 (static_cast<double>(context.radius) + num6 + 0.2) * 100.0);
         float biome = static_cast<float>(num7 * 100.0);
-        biomoData[static_cast<std::size_t>(i)] = static_cast<std::uint8_t>(
-            std::clamp(biome, 0.0f, 200.0f));
+        if (context.generateBiomes)
+            biomoData[static_cast<std::size_t>(i)] = util::narrowToUInt8(
+                util::mathfClamp(biome, 0.0f, 200.0f));
     }
 }
 
@@ -581,11 +654,11 @@ void generateTerrain6(PlanetAlgorithmContext &context) {
     auto &heightData = data.heightData();
     auto &biomoData = data.biomoData();
     const auto &vertices = data.vertices();
-    for (int i = 0; i < data.dataLength(); ++i) {
+    for (int i: terrainIndices(context)) {
         const auto &vertex = vertices[static_cast<std::size_t>(i)];
-        double num3 = static_cast<double>(vertex.x * context.radius);
-        double num4 = static_cast<double>(vertex.y * context.radius);
-        double num5 = static_cast<double>(vertex.z * context.radius);
+        double num3 = static_cast<double>(vertex.x) * static_cast<double>(context.radius);
+        double num4 = static_cast<double>(vertex.y) * static_cast<double>(context.radius);
+        double num5 = static_cast<double>(vertex.z) * static_cast<double>(context.radius);
         double num6 = 0.0;
         double num7 = 0.0;
         double num8 = levelize(num3 * 0.007);
@@ -631,11 +704,12 @@ void generateTerrain6(PlanetAlgorithmContext &context) {
         num7 += num11 * 2.1 + 0.800000011920929;
         if (num7 > 1.7000000476837158 && num7 < 2.0) num7 = 2.0;
         heightData[static_cast<std::size_t>(i)] =
-            static_cast<std::uint16_t>(
+            util::narrowToUInt16(
                 (static_cast<double>(context.radius) + num6 + 0.2) * 100.0);
         float biome = static_cast<float>(num7 * 100.0);
-        biomoData[static_cast<std::size_t>(i)] = static_cast<std::uint8_t>(
-            std::clamp(biome, 0.0f, 200.0f));
+        if (context.generateBiomes)
+            biomoData[static_cast<std::size_t>(i)] = util::narrowToUInt8(
+                util::mathfClamp(biome, 0.0f, 200.0f));
     }
 }
 
@@ -652,23 +726,35 @@ void generateTerrain8(PlanetAlgorithmContext &context,
     auto &heightData = data.heightData();
     auto &biomoData = data.biomoData();
     const auto &vertices = data.vertices();
-    for (int i = 0; i < data.dataLength(); ++i) {
+    for (int i: terrainIndices(context)) {
         const auto &vertex = vertices[static_cast<std::size_t>(i)];
         // The managed operands are Vector3/float values.  Their product is
         // rounded to single precision before the local is widened to double.
-        double num4 = static_cast<double>(vertex.x * context.radius);
-        double num5 = static_cast<double>(vertex.y * context.radius);
-        double num6 = static_cast<double>(vertex.z * context.radius);
-        float num9 = static_cast<float>(simplexNoise.Noise3DFBM(
-            num4 * num, num5 * num2, num6 * num3, 6, 0.45, 1.8));
-        num9 += 1.0f + static_cast<float>(modY) * 0.01f;
-        num9 = std::clamp(num9, 0.0f, 2.0f);
+        double num4 = static_cast<double>(vertex.x) * static_cast<double>(context.radius);
+        double num5 = static_cast<double>(vertex.y) * static_cast<double>(context.radius);
+        double num6 = static_cast<double>(vertex.z) * static_cast<double>(context.radius);
+        // One managed statement: the sum is evaluated in double and rounded
+        // once, where Mathf.Clamp takes its float32 argument.
+        float num9 = util::mathfClamp(
+            static_cast<float>(
+                static_cast<double>(static_cast<float>(simplexNoise.Noise3DFBM(
+                    num4 * num, num5 * num2, num6 * num3, 6, 0.45, 1.8))) +
+                1.0 +
+                static_cast<double>(static_cast<float>(modY)) *
+                    static_cast<double>(0.01f)),
+            0.0f, 2.0f);
 
         float num10;
         if (static_cast<double>(num9) < 1.0) {
-            num10 = 1.0f - (terrainCurve(num9) + 1.0f) * 0.5f;
+            num10 = static_cast<float>(
+                1.0 - (static_cast<double>(terrainCurve(num9)) + 1.0) *
+                          static_cast<double>(0.5f));
         } else {
-            num10 = 2.0f - (terrainCurve(num9 - 1.0f) + 1.0f) * 0.5f;
+            num10 = static_cast<float>(
+                2.0 - (static_cast<double>(terrainCurve(static_cast<float>(
+                           static_cast<double>(num9) - 1.0))) +
+                       1.0) *
+                          static_cast<double>(0.5f));
         }
         double num7 = num10;
         double num8 = num10;
@@ -677,12 +763,13 @@ void generateTerrain8(PlanetAlgorithmContext &context,
         num8 = ((num8 > 1.0) ? std::min(num8 * num8, 2.0) : num8);
         num8 = levelize2(num8);
         heightData[static_cast<std::size_t>(i)] =
-            static_cast<std::uint16_t>(
+            util::narrowToUInt16(
                 (static_cast<double>(context.radius) + num7 + 0.1) * 100.0);
         float biome = static_cast<float>(num8 * 100.0);
-        biome = std::clamp(biome, 0.0f, 200.0f);
-        biomoData[static_cast<std::size_t>(i)] =
-            static_cast<std::uint8_t>(biome);
+        biome = util::mathfClamp(biome, 0.0f, 200.0f);
+        if (context.generateBiomes)
+            biomoData[static_cast<std::size_t>(i)] =
+                util::narrowToUInt8(biome);
     }
 }
 
@@ -713,11 +800,12 @@ void writeTerrain(PlanetAlgorithmContext &context, int index, double height,
                   double biome, double bias) {
     auto &heightData = context.data.heightData();
     auto &biomoData = context.data.biomoData();
-    heightData[static_cast<std::size_t>(index)] = static_cast<std::uint16_t>(
+    heightData[static_cast<std::size_t>(index)] = util::narrowToUInt16(
         (static_cast<double>(context.radius) + height + bias) * 100.0);
+    if (!context.generateBiomes) return;
     auto biomeFloat = static_cast<float>(biome * 100.0);
-    biomoData[static_cast<std::size_t>(index)] = static_cast<std::uint8_t>(
-        std::clamp(biomeFloat, 0.0f, 200.0f));
+    biomoData[static_cast<std::size_t>(index)] = util::narrowToUInt8(
+        util::mathfClamp(biomeFloat, 0.0f, 200.0f));
 }
 
 void generateTerrain7(PlanetAlgorithmContext &context) {
@@ -725,11 +813,11 @@ void generateTerrain7(PlanetAlgorithmContext &context) {
     SimplexNoise first(random.next());
     SimplexNoise second(random.next());
     const auto &vertices = context.data.vertices();
-    for (int i = 0; i < context.data.dataLength(); ++i) {
+    for (int i: terrainIndices(context)) {
         const auto &vertex = vertices[static_cast<std::size_t>(i)];
-        const auto px = static_cast<double>(vertex.x * context.radius);
-        const auto py = static_cast<double>(vertex.y * context.radius);
-        const auto pz = static_cast<double>(vertex.z * context.radius);
+        const auto px = static_cast<double>(vertex.x) * static_cast<double>(context.radius);
+        const auto py = static_cast<double>(vertex.y) * static_cast<double>(context.radius);
+        const auto pz = static_cast<double>(vertex.z) * static_cast<double>(context.radius);
         const auto a = first.Noise3DFBM(px * 0.008, py * 0.01, pz * 0.01, 6) *
                        3.0 - 2.4;
         const auto b = second.Noise3DFBM(px * 0.0025, py * 0.0025,
@@ -738,11 +826,14 @@ void generateTerrain7(PlanetAlgorithmContext &context) {
         const auto s = a + b1;
         const auto t = s > 0.0 ? s * 0.5 : s * 1.6;
         const auto h = t > 0.0 ? levelize3(t, 0.7) : levelize2(t, 0.5);
-        const auto bn = second.Noise3DFBM(px * 0.008 * 2.5,
-                                          py * 0.01 * 8.0,
-                                          pz * 0.01 * 2.5, 2) * 0.6 - 0.3;
-        const auto br = t * 2.5 + bn + 0.3;
-        const auto biome = br < 1.0 ? br : (br - 1.0) * 0.8 + 1.0;
+        auto biome = 0.0;
+        if (context.generateBiomes) {
+            const auto bn = second.Noise3DFBM(px * 0.008 * 2.5,
+                                              py * 0.01 * 8.0,
+                                              pz * 0.01 * 2.5, 2) * 0.6 - 0.3;
+            const auto br = t * 2.5 + bn + 0.3;
+            biome = br < 1.0 ? br : (br - 1.0) * 0.8 + 1.0;
+        }
         writeTerrain(context, i, h, biome, 0.0);
     }
 }
@@ -753,11 +844,11 @@ void generateTerrain9(PlanetAlgorithmContext &context, double modX,
     SimplexNoise first(random.next());
     SimplexNoise second(random.next());
     const auto &vertices = context.data.vertices();
-    for (int i = 0; i < context.data.dataLength(); ++i) {
+    for (int i: terrainIndices(context)) {
         const auto &vertex = vertices[static_cast<std::size_t>(i)];
-        const auto px = static_cast<double>(vertex.x * context.radius);
-        const auto py = static_cast<double>(vertex.y * context.radius);
-        const auto pz = static_cast<double>(vertex.z * context.radius);
+        const auto px = static_cast<double>(vertex.x) * static_cast<double>(context.radius);
+        const auto py = static_cast<double>(vertex.y) * static_cast<double>(context.radius);
+        const auto pz = static_cast<double>(vertex.z) * static_cast<double>(context.radius);
         const auto a = first.Noise3DFBM(px * 0.01 * 0.75,
                                         py * 0.012 * 0.5,
                                         pz * 0.01 * 0.75, 6) * 3.0 - 0.2;
@@ -769,15 +860,16 @@ void generateTerrain9(PlanetAlgorithmContext &context, double modX,
         auto l = t > 0.0 ? levelize3(t, 0.7) : levelize2(t, 0.5);
         l += 0.618;
         l = l > -1.0 ? l * 1.5 : l * 4.0;
-        // These values are intentionally evaluated even though the managed
-        // implementation discards them; they do not consume RNG but preserve
-        // the reference operation trace and exceptional-value behavior.
-        const auto unused = second.Noise3DFBM(px * 0.01 * 2.5,
-                                              py * 0.012 * 8.0,
-                                              pz * 0.01 * 2.5, 2) * 0.6 - 0.3;
-        const auto unusedHeight = t * 2.5 + unused + 0.3;
-        (void)unusedHeight;
-        const auto value = levelize(t + 0.7);
+        if (context.generateBiomes) {
+            // The full terrain oracle keeps the managed implementation's
+            // discarded calculation. Height-only vein sampling can omit it:
+            // it has no state and does not consume RNG.
+            const auto unused = second.Noise3DFBM(px * 0.01 * 2.5,
+                                                  py * 0.012 * 8.0,
+                                                  pz * 0.01 * 2.5, 2) * 0.6 - 0.3;
+            const auto unusedHeight = t * 2.5 + unused + 0.3;
+            (void)unusedHeight;
+        }
         const auto deepBase = first.Noise3DFBM(px * 0.01 * modX,
                                                py * 0.012 * modX,
                                                pz * 0.01 * modX, 6) *
@@ -796,16 +888,20 @@ void generateTerrain9(PlanetAlgorithmContext &context, double modX,
                                           1.0);
         auto height = l * (1.0 - blend) + deep * blend;
         height = height > 0.0 ? height * 0.5 : height;
-        auto detail = second.Noise3DFBM(px * 0.01 * 1.5,
-                                        py * 0.012 * 2.0,
-                                        pz * 0.01 * 1.5, 6) * 3.0 - 0.2;
-        detail = std::max(detail + 1.0, -0.99);
-        detail = detail > 0.0 ? detail * 0.25 : detail;
-        auto biome = std::max(value, 0.0);
-        const auto biomeBoundary = static_cast<double>(std::clamp(
-            static_cast<float>(biome - 1.0), 0.0f, 1.0f));
-        biome = biome > 1.0 ? biomeBoundary * detail * 1.15 + 1.0 : biome;
-        biome = std::min(biome, 2.0);
+        auto biome = 0.0;
+        if (context.generateBiomes) {
+            const auto value = levelize(t + 0.7);
+            auto detail = second.Noise3DFBM(px * 0.01 * 1.5,
+                                            py * 0.012 * 2.0,
+                                            pz * 0.01 * 1.5, 6) * 3.0 - 0.2;
+            detail = std::max(detail + 1.0, -0.99);
+            detail = detail > 0.0 ? detail * 0.25 : detail;
+            biome = std::max(value, 0.0);
+            const auto biomeBoundary = static_cast<double>(util::mathfClamp01(
+                static_cast<float>(biome - 1.0)));
+            biome = biome > 1.0 ? biomeBoundary * detail * 1.15 + 1.0 : biome;
+            biome = std::min(biome, 2.0);
+        }
         writeTerrain(context, i, height, biome, 0.2);
     }
 }
@@ -824,7 +920,7 @@ void generateTerrain10(PlanetAlgorithmContext &context) {
         const auto normal = nextSphericNormal(tableSeed);
         Vector3 vector{static_cast<float>(normal.x), static_cast<float>(normal.y),
                        static_cast<float>(normal.z)};
-        normalizeUnityVector3(vector);
+        normalizeUnityVector4(vector);
         vector = vector * context.radius;
         ellipse.x = vector.x;
         ellipse.y = vector.y;
@@ -840,11 +936,11 @@ void generateTerrain10(PlanetAlgorithmContext &context) {
             remap(0.0, 1.0, 1.0, 2.0, random.nextDouble());
     }
     const auto &vertices = context.data.vertices();
-    for (int i = 0; i < context.data.dataLength(); ++i) {
+    for (int i: terrainIndices(context)) {
         const auto &vertex = vertices[static_cast<std::size_t>(i)];
-        auto px = static_cast<double>(vertex.x * context.radius);
-        auto py = static_cast<double>(vertex.y * context.radius);
-        auto pz = static_cast<double>(vertex.z * context.radius);
+        auto px = static_cast<double>(vertex.x) * static_cast<double>(context.radius);
+        auto py = static_cast<double>(vertex.y) * static_cast<double>(context.radius);
+        auto pz = static_cast<double>(vertex.z) * static_cast<double>(context.radius);
         auto qx = levelize(px * 0.007);
         auto qy = levelize(py * 0.007);
         auto qz = levelize(pz * 0.007);
@@ -871,10 +967,16 @@ void generateTerrain10(PlanetAlgorithmContext &context) {
             const auto dz = static_cast<double>(ellipses[k].z) - pz;
             auto distance = eccentricities[k] * dx * dx + dy * dy + dz * dz;
             distance = remap(-1.0, 1.0, 0.2, 5.0, ellipseNoise) * distance;
-            const auto radiusSquared = static_cast<double>(
-                ellipses[k].w * ellipses[k].w);
+            // (double)(ellipses[k].w * ellipses[k].w): the product of two
+            // float32 fields is evaluated in double and never stored to a
+            // float32 location, so it must not be rounded to float here.
+            const auto radiusSquared = static_cast<double>(ellipses[k].w) *
+                                       static_cast<double>(ellipses[k].w);
             if (!(distance >= radiusSquared)) {
-                const auto edge = static_cast<double>(1.0f - static_cast<float>(
+                // double num28 = 1f - Mathf.Sqrt(...): Mathf.Sqrt returns
+                // float32, but the subtraction is evaluated in double and
+                // assigned to a double, so only the square root is narrowed.
+                const auto edge = 1.0 - static_cast<double>(static_cast<float>(
                     std::sqrt(static_cast<double>(static_cast<float>(
                         distance / radiusSquared)))));
                 const auto inverse = 1.0 - edge;
@@ -904,7 +1006,10 @@ void generateTerrain10(PlanetAlgorithmContext &context) {
         auto detail2 = second.Noise3DFBM(px * 5.0 * 3.0 + shift * 0.3,
                                          py * 5.0 + shift * 0.3,
                                          pz * 5.0 + shift * 0.3, 5) * 0.1;
-        base = static_cast<double>(static_cast<float>(levelize4(base)));
+        // Reference: f = (float)Maths.Levelize(Maths.Levelize4(f));
+        // Both levelize passes are required; dropping the outer one changed the
+        // height of every algorithm 10 planet.
+        base = static_cast<double>(static_cast<float>(levelize(levelize4(base))));
         base = std::min(1.0, base);
         if (!(base > 0.8)) base += (!(base > 0.4) ? detail : detail2);
         auto height = base * 2.5 - base * ellipseHeight;
@@ -913,12 +1018,15 @@ void generateTerrain10(PlanetAlgorithmContext &context) {
         height -= cut * 1.2 * broad * attenuation;
         if (height >= 0.0) height += (ridge * 0.25 + fine * 0.6) * attenuation;
         height -= 0.1;
-        auto biome = std::abs(customMax(height, -1.0));
-        if (base < 0.4)
-            biome += remap(-1.0, 1.0, -0.2, 0.2,
-                           first.Noise3DFBM(px * 2.0 + 100.0,
-                                            py * 2.0 + 100.0,
-                                            pz * 2.0 + 100.0, 5));
+        auto biome = 0.0;
+        if (context.generateBiomes) {
+            biome = std::abs(customMax(height, -1.0));
+            if (base < 0.4)
+                biome += remap(-1.0, 1.0, -0.2, 0.2,
+                               first.Noise3DFBM(px * 2.0 + 100.0,
+                                                py * 2.0 + 100.0,
+                                                pz * 2.0 + 100.0, 5));
+        }
         writeTerrain(context, i, height, biome, 0.1);
     }
 }
@@ -932,11 +1040,11 @@ void generateTerrain11(PlanetAlgorithmContext &context, double modX,
     const auto &vertices = context.data.vertices();
     const auto mx = 0.002 * modX;
     const auto my = 0.002 * modX * 4.0;
-    for (int i = 0; i < context.data.dataLength(); ++i) {
+    for (int i: terrainIndices(context)) {
         const auto &vertex = vertices[static_cast<std::size_t>(i)];
-        const auto px = static_cast<double>(vertex.x * context.radius);
-        const auto py = static_cast<double>(vertex.y * context.radius);
-        const auto pz = static_cast<double>(vertex.z * context.radius);
+        const auto px = static_cast<double>(vertex.x) * static_cast<double>(context.radius);
+        const auto py = static_cast<double>(vertex.y) * static_cast<double>(context.radius);
+        const auto pz = static_cast<double>(vertex.z) * static_cast<double>(context.radius);
         const auto low = second.Noise3DFBM(px * 0.007 * 4.0,
                                            py * 0.007 * 8.0,
                                            pz * 0.007 * 4.0, 3);
@@ -972,7 +1080,7 @@ void generateTerrain12(PlanetAlgorithmContext &context, double modX,
     SimplexNoise second(random.next());
     const auto scale = 1.1 * modX;
     const auto &vertices = context.data.vertices();
-    for (int i = 0; i < context.data.dataLength(); ++i) {
+    for (int i: terrainIndices(context)) {
         const auto &vertex = vertices[static_cast<std::size_t>(i)];
         const auto latitude = std::abs(std::asin(static_cast<double>(vertex.y))) *
                               2.0 / 3.14159265358979323846;
@@ -1007,11 +1115,11 @@ void generateTerrain13(PlanetAlgorithmContext &context, double modX,
     SimplexNoise noise(random.next());
     const auto scale = 0.007 * modX;
     const auto &vertices = context.data.vertices();
-    for (int i = 0; i < context.data.dataLength(); ++i) {
+    for (int i: terrainIndices(context)) {
         const auto &vertex = vertices[static_cast<std::size_t>(i)];
-        const auto px = static_cast<double>(vertex.x * context.radius);
-        const auto py = static_cast<double>(vertex.y * context.radius);
-        const auto pz = static_cast<double>(vertex.z * context.radius);
+        const auto px = static_cast<double>(vertex.x) * static_cast<double>(context.radius);
+        const auto py = static_cast<double>(vertex.y) * static_cast<double>(context.radius);
+        const auto pz = static_cast<double>(vertex.z) * static_cast<double>(context.radius);
         auto value = remap(-1.0, 1.0, 0.0, 1.0,
                            noise.Noise3DFBM(px * scale, py * scale,
                                             pz * scale, 6));
@@ -1044,11 +1152,11 @@ void generateTerrain14(PlanetAlgorithmContext &context) {
     SimplexNoise third(random.next());
     SimplexNoise fourth(random.next());
     const auto &vertices = context.data.vertices();
-    for (int i = 0; i < context.data.dataLength(); ++i) {
+    for (int i: terrainIndices(context)) {
         const auto &vertex = vertices[static_cast<std::size_t>(i)];
-        auto x = static_cast<double>(vertex.x * context.radius);
-        auto y = static_cast<double>(vertex.y * context.radius);
-        auto z = static_cast<double>(vertex.z * context.radius);
+        auto x = static_cast<double>(vertex.x) * static_cast<double>(context.radius);
+        auto y = static_cast<double>(vertex.y) * static_cast<double>(context.radius);
+        auto z = static_cast<double>(vertex.z) * static_cast<double>(context.radius);
         auto levelX = levelize(x * 0.007 / 2.0);
         auto levelY = levelize(y * 0.007 / 2.0);
         auto levelZ = levelize(z * 0.007 / 2.0);
@@ -1065,8 +1173,9 @@ void generateTerrain14(PlanetAlgorithmContext &context) {
                      5.0;
         broad = (!(broad > 0.0)) ? 0.0
                                  : ((broad > 1.0) ? 1.0 : broad);
-        (void)std::abs(fourth.Noise3DFBM(levelX * 1.5, levelY * 1.5,
-                                         levelZ * 1.5, 2));
+        if (context.generateBiomes)
+            (void)std::abs(fourth.Noise3DFBM(levelX * 1.5, levelY * 1.5,
+                                             levelZ * 1.5, 2));
         x += std::sin(y * 0.15) * 3.0;
         y += std::sin(z * 0.15) * 3.0;
         z += std::sin(x * 0.15) * 3.0;
@@ -1090,8 +1199,8 @@ void generateTerrain14(PlanetAlgorithmContext &context) {
         auto rawHeight = base * 2.0 + 0.92;
         const auto detailShape = detail * static_cast<double>(
             std::abs(static_cast<float>(shape) + 0.5f));
-        rawHeight += static_cast<double>(std::clamp(
-            static_cast<float>(detailShape - 0.35) * 1.0f, 0.0f, 1.0f));
+        rawHeight += static_cast<double>(util::mathfClamp01(
+            static_cast<float>(detailShape - 0.35) * 1.0f));
         if (rawHeight < 0.0) rawHeight = 0.0;
         auto levelHeight = rawHeight;
         levelHeight = levelize2(rawHeight);
@@ -1102,7 +1211,7 @@ void generateTerrain14(PlanetAlgorithmContext &context) {
         const auto terrainHeight =
             (!(levelHeight > 0.0))
                 ? static_cast<double>(mathfLerp(
-                      -4.0f, 0.0f, static_cast<float>(levelHeight) + 1.0f))
+                      -4.0f, 0.0f, static_cast<float>(static_cast<double>(static_cast<float>(levelHeight)) + static_cast<double>(1.0f))))
                 : (!(levelHeight > 1.0))
                       ? static_cast<double>(mathfLerp(
                             0.0f, 0.3f, static_cast<float>(levelHeight))) +
@@ -1110,27 +1219,29 @@ void generateTerrain14(PlanetAlgorithmContext &context) {
                       : (levelHeight > 2.0)
                             ? static_cast<double>(mathfLerp(
                                   1.4f, 2.7f,
-                                  static_cast<float>(levelHeight) - 2.0f)) +
+                                  static_cast<float>(static_cast<double>(static_cast<float>(levelHeight)) - static_cast<double>(2.0f)))) +
                                   fine * 0.12
                             : static_cast<double>(mathfLerp(
                                   0.3f, 1.4f,
-                                  static_cast<float>(levelHeight) - 1.0f)) +
+                                  static_cast<float>(static_cast<double>(static_cast<float>(levelHeight)) - static_cast<double>(1.0f)))) +
                                   fine * 0.12;
         if (rawHeight < 0.0) rawHeight *= 2.0;
         if (rawHeight < 1.0) rawHeight = levelize(rawHeight);
         height -= lava * 1.2 * broad;
         if (height >= 0.0) height = terrainHeight;
         height -= 0.1;
-        biome = static_cast<double>(std::abs(static_cast<float>(rawHeight)));
-        auto blend = static_cast<double>(std::clamp(
-            static_cast<float>((0.0 - height + 2.0) / 2.5), 0.0f, 1.0f));
-        blend = std::pow(blend, 10.0);
-        biome = (1.0 - blend) * biome + blend * 2.0;
-        biome = (!(biome > 0.0)) ? 0.0
-                                 : ((biome > 2.0) ? 2.0 : biome);
-        biome += ((biome > 1.8) ? ((0.0 - fine) * 0.8)
-                                : (fine * 0.2)) *
-                 (1.0 - blend);
+        if (context.generateBiomes) {
+            biome = static_cast<double>(std::abs(static_cast<float>(rawHeight)));
+            auto blend = static_cast<double>(util::mathfClamp01(
+                static_cast<float>((0.0 - height + 2.0) / 2.5)));
+            blend = std::pow(blend, 10.0);
+            biome = (1.0 - blend) * biome + blend * 2.0;
+            biome = (!(biome > 0.0)) ? 0.0
+                                     : ((biome > 2.0) ? 2.0 : biome);
+            biome += ((biome > 1.8) ? ((0.0 - fine) * 0.8)
+                                    : (fine * 0.2)) *
+                     (1.0 - blend);
+        }
         auto depression = -0.3 - height;
         if (depression > 0.0) {
             const auto depressionNoise =
@@ -1147,7 +1258,7 @@ void generateTerrain14(PlanetAlgorithmContext &context) {
 
 }
 
-TerrainGenerationResult generateTerrain(int algorithmId,
+TerrainGenerationResult dispatchTerrain(int algorithmId,
                                          PlanetAlgorithmContext &context,
                                          double modX,
                                          double modY) {

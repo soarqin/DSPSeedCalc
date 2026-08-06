@@ -12,7 +12,6 @@ namespace dspugen::terrain {
 
 namespace {
 
-constexpr float Pi = 3.14159274101257324219f;
 constexpr Vector3 Up{0.0f, 1.0f, 0.0f};
 constexpr Vector3 Down{0.0f, -1.0f, 0.0f};
 constexpr Vector3 Forward{0.0f, 0.0f, 1.0f};
@@ -34,7 +33,12 @@ Vector3 inverseRotateLf(const Quaternion &rotation,
     x *= 2.0;
     y *= 2.0;
     z *= 2.0;
-    const auto num = static_cast<double>(rotation.w * rotation.w) - 0.5;
+    // Maths.QInvRotateLF writes (double)(q.w * q.w) - 0.5.  In Mono the product
+    // of two float32 fields is already evaluated in double, and the cast is a
+    // no-op, so this must not round the product to float first.
+    const auto num = static_cast<double>(rotation.w) *
+                         static_cast<double>(rotation.w) -
+                     0.5;
     const auto num2 = static_cast<double>(rotation.x) * x +
                       static_cast<double>(rotation.y) * y +
                       static_cast<double>(rotation.z) * z;
@@ -59,7 +63,7 @@ Vector3 inverseRotateLf(const Quaternion &rotation,
 
 int determineLongitudeSegmentCount(int latitudeIndex, int segment) {
     const auto angle = static_cast<float>(latitudeIndex) /
-                       (static_cast<float>(segment) / 4.0f) * Pi * 0.5f;
+                       (static_cast<float>(segment) / 4.0f) * MathfPi * 0.5f;
     const auto cosine = static_cast<float>(std::cos(static_cast<double>(angle)));
     auto count = static_cast<int>(std::ceil(
         static_cast<double>(std::abs(cosine) * static_cast<float>(segment))));
@@ -104,7 +108,8 @@ PlanetPose predictPose(const Planet &planet, double time) {
         0.0f,
         static_cast<float>(std::sin(orbitRadians)) * planet.orbitRadius,
     };
-    auto position = orbit * local;
+    // PredictPose uses Maths.QRotate, not the Unity operator.
+    auto position = qRotate(orbit, local);
     if (planet.orbitAroundPlanet != nullptr) {
         const auto parentPose = predictPose(*planet.orbitAroundPlanet, time);
         position.x += parentPose.position.x;
@@ -131,7 +136,7 @@ Vector3 predictLocalStarDirection(const Planet &planet, double time) {
 }
 
 BirthPoints generateBirthPoints(const Planet &planet,
-                                const PlanetRawData &rawData) {
+                                PlanetRawData &rawData) {
     util::DotNet35Random seedRandom(planet.seed);
     seedRandom.next();
     seedRandom.next();
@@ -141,7 +146,7 @@ BirthPoints generateBirthPoints(const Planet &planet,
 }
 
 BirthPoints generateBirthPoints(const Planet &planet,
-                                const PlanetRawData &rawData,
+                                PlanetRawData &rawData,
                                 int birthSeed) {
     BirthPoints result{};
     if (planet.type == EPlanetType::Gas) {
@@ -227,16 +232,16 @@ Vector3 rawSnap(Vector3 position, float planetRadius) {
         static_cast<float>(std::asin(static_cast<double>(position.y)));
     auto longitude = static_cast<float>(std::atan2(
         static_cast<double>(position.x), static_cast<double>(0.0f - position.z)));
-    auto latitudeGrid = latitude / (Pi * 2.0f) * static_cast<float>(segment);
+    auto latitudeGrid = latitude / (MathfPi * 2.0f) * static_cast<float>(segment);
     const auto latitudeIndex = static_cast<int>(std::floor(static_cast<double>(
         std::max(0.0f, std::abs(latitudeGrid) - 0.1f))));
     const auto longitudeSegments =
         static_cast<float>(determineLongitudeSegmentCount(latitudeIndex, segment));
-    auto longitudeGrid = longitude / (Pi * 2.0f) * longitudeSegments;
+    auto longitudeGrid = longitude / (MathfPi * 2.0f) * longitudeSegments;
     latitudeGrid = util::mathfRound(latitudeGrid * 5.0f) / 5.0f;
     longitudeGrid = util::mathfRound(longitudeGrid * 5.0f) / 5.0f;
-    latitude = latitudeGrid / static_cast<float>(segment) * (Pi * 2.0f);
-    longitude = longitudeGrid / longitudeSegments * (Pi * 2.0f);
+    latitude = latitudeGrid / static_cast<float>(segment) * (MathfPi * 2.0f);
+    longitude = longitudeGrid / longitudeSegments * (MathfPi * 2.0f);
     const auto y = static_cast<float>(std::sin(static_cast<double>(latitude)));
     const auto latitudeCosine =
         static_cast<float>(std::cos(static_cast<double>(latitude)));

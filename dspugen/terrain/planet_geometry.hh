@@ -22,8 +22,8 @@ struct BirthPoints {
 
 PlanetPose predictPose(const Planet &planet, double time);
 Vector3 predictLocalStarDirection(const Planet &planet, double time);
-BirthPoints generateBirthPoints(const Planet &planet, const PlanetRawData &rawData);
-BirthPoints generateBirthPoints(const Planet &planet, const PlanetRawData &rawData,
+BirthPoints generateBirthPoints(const Planet &planet, PlanetRawData &rawData);
+BirthPoints generateBirthPoints(const Planet &planet, PlanetRawData &rawData,
                                 int birthSeed);
 Vector3 rawSnap(Vector3 position, float planetRadius);
 

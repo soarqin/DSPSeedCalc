@@ -9,6 +9,7 @@
 #pragma once
 
 #include "star.hh"
+#include "vein/vein_amounts.hh"
 #include <cstddef>
 #include <string>
 #include <vector>
@@ -36,7 +37,10 @@ public:
     void reset();
     void ensureAllPlanets();
     void ensureAllGas();
-    void ensureAllVeinAmounts();
+    // Never throws; reachable from the plugin C ABI.  Stops at the first planet
+    // that cannot produce a summary and reports which one it was.
+    VeinAmountBatchResult ensureAllVeinAmounts(
+        bool includeTerrainDigest = false);
     int birthStarId = 0;
     int HabitableCount = 0;
     int seed = 0;

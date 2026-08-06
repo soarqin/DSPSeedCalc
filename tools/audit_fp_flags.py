@@ -23,6 +23,13 @@ REQUIRED_SUFFIXES = (
     "dspugen/planet.cc",
     "dspugen/protoset.cc",
     "dspugen/namegen.cc",
+    "dspugen/vein/vein_amounts.cc",
+    "dspugen/terrain/simplex_noise.cc",
+    "dspugen/terrain/unity_math.cc",
+    "dspugen/terrain/ucrt_trig.cc",
+    "dspugen/terrain/planet_raw_data.cc",
+    "dspugen/terrain/planet_algorithm.cc",
+    "dspugen/terrain/planet_geometry.cc",
     "dspugen/util/dotnet35random.cc",
     "cli/main.cc",
     "cli/filter.cc",
@@ -33,6 +40,7 @@ REQUIRED_SUFFIXES = (
 # plugin build directory may hold any subset of filters/.
 OPTIONAL_FRAGMENTS = (
     "tests/oracle.cc",
+    "tests/vein_amount_oracle.cc",
     "/filters/",
     "benchmarks/plugins/",
 )
