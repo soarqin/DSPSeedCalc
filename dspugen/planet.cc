@@ -65,6 +65,18 @@ void Planet::reset() {
     gasSpeeds.clear();
     std::memset(veinSpot, 0, sizeof(veinSpot));
     themeSeed = 0;
+    veinAmountData.reset();
+    veinAmountReady = false;
+}
+
+const VeinAmountSummary *Planet::veinAmountSummary() const {
+    return veinAmountReady ? veinAmountData.get() : nullptr;
+}
+
+void Planet::ensureVeinAmounts() {
+    if (veinAmountReady) return;
+    veinAmountData = std::make_unique<VeinAmountSummary>();
+    veinAmountReady = true;
 }
 
 Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, int number,
