@@ -224,14 +224,14 @@ git commit -m "feat: add strict terrain math and raw data"
 **Files:**
 
 - Create: `dspugen/terrain/planet_algorithm.hh/.cc`
-- Create: `dspugen/terrain/planet_algorithm_0.cc` through `planet_algorithm_13.cc`
+- Create: `dspugen/terrain/planet_algorithm_0.cc` through `planet_algorithm_14.cc`
 - Modify: `dspugen/protoset.hh/.cc`
 - Modify: `dspugen/CMakeLists.txt`
 - Modify: `tests/vein_amounts_test.cc`
 
 - [ ] **Step 1: Add dispatch and unsupported-algorithm tests.**
 
-Add tests that select each prototype algorithm in `0–13`, generate a precision-200 raw data object, and assert that height data is populated. Add a separate test with algorithm `14` that expects a typed unsupported-algorithm result rather than silently generating empty data.
+Add tests that select each prototype algorithm in `0–13`, generate a precision-200 raw data object, and assert that height data is populated. Add a synthetic algorithm `14` test that expects populated terrain and a separate algorithm `15` test that expects a typed unsupported-algorithm result rather than silently generating empty data.
 
 - [ ] **Step 2: Restore theme fields needed by terrain.**
 
@@ -239,7 +239,7 @@ Keep existing JSON keys and add validation in `loadProtoSets()` for `Algos`, `Mo
 
 - [ ] **Step 3: Implement the base algorithm context.**
 
-Define a context carrying `Planet`, `Star`, `PlanetRawData`, `SimplexNoise`, `modX`, `modY`, and strict math helpers. Expose `generateTerrain(double modX, double modY)` and a dispatch function that returns an explicit `UnsupportedAlgorithm` result for IDs outside `0–13`.
+Define a context carrying `Planet`, `Star`, `PlanetRawData`, `SimplexNoise`, `modX`, `modY`, and strict math helpers. Expose `generateTerrain(double modX, double modY)` and a dispatch function that returns an explicit `UnsupportedAlgorithm` result for IDs outside `0–14`.
 
 - [ ] **Step 4: Port algorithms `0–6` one at a time.**
 
@@ -249,9 +249,9 @@ For each file, copy the method operation order from the corresponding ILSpy outp
 
 Keep the algorithm-specific fields and all `double` to `float` conversions. Add the `PredictPose` dependency as a pure local pose helper; do not call game code or start the game.
 
-- [ ] **Step 6: Port algorithms `11–13` one at a time.**
+- [ ] **Step 6: Port algorithms `11–14` one at a time.**
 
-Preserve the height layering used later by the specialized vein rules. Add focused tests for the thresholds used by algorithms `11`, `12`, and `13`.
+Preserve the height layering used later by the specialized vein rules. Add focused tests for the thresholds used by algorithms `11`, `12`, and `13`. Algorithm `14` only overrides terrain and vegetation in the game, so keep the shared base-vein path.
 
 - [ ] **Step 7: Run the terrain matrix and commit.**
 
@@ -262,7 +262,7 @@ cmake --build cmake-build-vein-tests --target dspugen_vein_tests
 cmake-build-vein-tests\bin\dspugen_vein_tests.exe
 ```
 
-Expected: algorithms `0–13` produce stable non-empty or intentionally flat digests, algorithm `14` reports unsupported, and all prior raw-data tests remain green. Commit the terrain port:
+Expected: algorithms `0–14` produce stable non-empty or intentionally flat digests, algorithm `15` reports unsupported, and all prior raw-data tests remain green. Commit the terrain port:
 
 ```powershell
 git add dspugen/terrain dspugen/protoset.hh dspugen/protoset.cc dspugen/CMakeLists.txt tests/vein_amounts_test.cc

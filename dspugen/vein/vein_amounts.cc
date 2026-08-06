@@ -363,7 +363,7 @@ VeinAmountGenerationResult generateVeinAmountSummary(
     if (theme == nullptr)
         return VeinAmountGenerationResult::MissingTheme;
 
-    if (planet.algoId < 1 || planet.algoId > 13)
+    if (planet.algoId < 1 || planet.algoId > 14)
         return VeinAmountGenerationResult::UnsupportedAlgorithm;
 
     PlanetRawData raw(200);

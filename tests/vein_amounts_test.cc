@@ -8,6 +8,7 @@
 #include "terrain/simplex_noise.hh"
 #include "util/maths.hh"
 
+#include <algorithm>
 #include <cassert>
 #include <cstdint>
 #include <cstring>
@@ -138,7 +139,20 @@ static void testTerrainAlgorithmDispatch() {
         }
         assert(populated);
     }
+    std::fill(raw.heightData().begin(), raw.heightData().end(), 0);
+    std::fill(raw.biomoData().begin(), raw.biomoData().end(), 0);
     result = dispatchTerrain(14, context, 1.0, 0.0);
+    assert(result == TerrainGenerationResult::Generated);
+    bool algorithm14Populated = false;
+    for (auto height : raw.heightData()) {
+        if (height != 0) {
+            algorithm14Populated = true;
+            break;
+        }
+    }
+    assert(algorithm14Populated);
+
+    result = dispatchTerrain(15, context, 1.0, 0.0);
     assert(result == TerrainGenerationResult::UnsupportedAlgorithm);
 }
 
@@ -193,12 +207,21 @@ int main() {
     dspugen::Galaxy::initThread();
     dspugen::Star::initThread();
     dspugen::Planet::initThread();
-    auto *unsupportedGalaxy = dspugen::Galaxy::create(dspugen::DefaultAlgoVersion, 0, 64);
+    auto *algorithm14Galaxy = dspugen::Galaxy::create(
+        dspugen::DefaultAlgoVersion, 0, 64);
+    assert(algorithm14Galaxy != nullptr);
+    auto *algorithm14Planet = algorithm14Galaxy->stars[0]->planets[1];
+    algorithm14Planet->algoId = 14;
+    assert(algorithm14Planet->ensureVeinAmounts() ==
+           dspugen::VeinAmountGenerationResult::Generated);
+    assert(algorithm14Planet->veinAmountSummary() != nullptr);
+    algorithm14Galaxy->release();
+
+    auto *unsupportedGalaxy = dspugen::Galaxy::create(
+        dspugen::DefaultAlgoVersion, 0, 64);
     assert(unsupportedGalaxy != nullptr);
-    auto *unsupportedPlanet = unsupportedGalaxy->stars[0]->planets[0];
-    const auto originalType = unsupportedPlanet->type;
-    unsupportedPlanet->type = dspugen::EPlanetType::Ocean;
-    unsupportedPlanet->algoId = 14;
+    auto *unsupportedPlanet = unsupportedGalaxy->stars[0]->planets[1];
+    unsupportedPlanet->algoId = 15;
     assert(unsupportedPlanet->ensureVeinAmounts() ==
            dspugen::VeinAmountGenerationResult::UnsupportedAlgorithm);
     assert(unsupportedPlanet->veinAmountSummary() == nullptr);
@@ -209,10 +232,9 @@ int main() {
         const std::string message = error.what();
         rejectedUnsupportedGalaxy =
             message.find("seed 0") != std::string::npos &&
-            message.find("algorithm 14") != std::string::npos;
+            message.find("algorithm 15") != std::string::npos;
     }
     assert(rejectedUnsupportedGalaxy);
-    unsupportedPlanet->type = originalType;
     unsupportedGalaxy->release();
 
     auto *galaxy = dspugen::Galaxy::create(dspugen::DefaultAlgoVersion, 0, 64);

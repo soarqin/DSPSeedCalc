@@ -80,6 +80,8 @@ python tools/audit_fp_flags.py cmake-build-clang-release-parity/compile_commands
 
 精确矿量功能使用独立 fixture：`tests/fixtures/vein-amounts-v1.txt`。fixture 覆盖 seed `0`、`1` 的 64 星星系，并按恒星和行星顺序记录 `veinSpot`、实际矿点数和普通资源模式的基础矿量。
 
+地形 dispatch 支持算法 `0–14`。当前 Prototype 快照的 `Algos` 并集仍为 `0–13`，因此固定 seed fixture 不会自然覆盖算法 `14`；测试使用合成行星验证 `PlanetAlgorithm14.GenerateTerrain`，随后复用基类 `PlanetAlgorithm.GenerateVeins`。算法 `15` 继续返回明确的不支持结果。
+
 参考构建为 Dyson Sphere Program `0.10.34.28529`、Steam build `23109513`、Unity `2022.3.62f3c1`、Mono、算法 `20200403`。游戏安装位置通过 Steam 注册表、`libraryfolders.vdf` 和 `appmanifest_1366540.acf` 静态定位；验证过程未启动游戏，也未附加调试器。
 
 检查命令：

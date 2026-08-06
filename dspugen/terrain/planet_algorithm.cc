@@ -1034,6 +1034,117 @@ void generateTerrain13(PlanetAlgorithmContext &context, double modX,
     }
 }
 
+void generateTerrain14(PlanetAlgorithmContext &context) {
+    constexpr double xScale = 0.007;
+    constexpr double yScale = 0.007;
+    constexpr double zScale = 0.007;
+    util::DotNet35Random random(context.seed);
+    SimplexNoise first(random.next());
+    SimplexNoise second(random.next());
+    SimplexNoise third(random.next());
+    SimplexNoise fourth(random.next());
+    const auto &vertices = context.data.vertices();
+    for (int i = 0; i < context.data.dataLength(); ++i) {
+        const auto &vertex = vertices[static_cast<std::size_t>(i)];
+        auto x = static_cast<double>(vertex.x * context.radius);
+        auto y = static_cast<double>(vertex.y * context.radius);
+        auto z = static_cast<double>(vertex.z * context.radius);
+        auto levelX = levelize(x * 0.007 / 2.0);
+        auto levelY = levelize(y * 0.007 / 2.0);
+        auto levelZ = levelize(z * 0.007 / 2.0);
+        levelX += third.Noise(x * 0.05, y * 0.05, z * 0.05) * 0.04;
+        levelY += third.Noise(y * 0.05, z * 0.05, x * 0.05) * 0.04;
+        levelZ += third.Noise(z * 0.05, x * 0.05, y * 0.05) * 0.04;
+        const auto lavaNoise = std::abs(fourth.Noise(levelX, levelY, levelZ));
+        auto lava = (0.12 - lavaNoise) * 10.0;
+        lava = (!(lava > 0.0)) ? 0.0 : ((lava > 1.0) ? 1.0 : lava);
+        lava *= lava;
+        auto broad = (third.Noise3DFBM(y * 0.005, z * 0.005,
+                                       x * 0.005, 4) +
+                      0.22) *
+                     5.0;
+        broad = (!(broad > 0.0)) ? 0.0
+                                 : ((broad > 1.0) ? 1.0 : broad);
+        (void)std::abs(fourth.Noise3DFBM(levelX * 1.5, levelY * 1.5,
+                                         levelZ * 1.5, 2));
+        x += std::sin(y * 0.15) * 3.0;
+        y += std::sin(z * 0.15) * 3.0;
+        z += std::sin(x * 0.15) * 3.0;
+        double height = 0.0;
+        double biome = 0.0;
+        const auto base = first.Noise3DFBM(
+            x * xScale * 1.0, y * yScale * 1.1, z * zScale * 1.0,
+            6, 0.5, 1.8);
+        const auto detail = second.Noise3DFBM(
+            x * xScale * 1.3 + 0.5, y * yScale * 2.8 + 0.2,
+            z * zScale * 1.3 + 0.7, 3) *
+                            2.0;
+        const auto fine = second.Noise3DFBM(
+            x * xScale * 6.0, y * yScale * 12.0,
+            z * zScale * 6.0, 2) *
+                          2.0;
+        const auto shape = second.Noise3DFBM(
+            x * xScale * 0.8, y * yScale * 0.8,
+            z * zScale * 0.8, 2) *
+                           2.0;
+        auto rawHeight = base * 2.0 + 0.92;
+        const auto detailShape = detail * static_cast<double>(
+            std::abs(static_cast<float>(shape) + 0.5f));
+        rawHeight += static_cast<double>(std::clamp(
+            static_cast<float>(detailShape - 0.35) * 1.0f, 0.0f, 1.0f));
+        if (rawHeight < 0.0) rawHeight = 0.0;
+        auto levelHeight = rawHeight;
+        levelHeight = levelize2(rawHeight);
+        if (levelHeight > 0.0) {
+            levelHeight = levelize2(rawHeight);
+            levelHeight = levelize4(levelHeight);
+        }
+        const auto terrainHeight =
+            (!(levelHeight > 0.0))
+                ? static_cast<double>(mathfLerp(
+                      -4.0f, 0.0f, static_cast<float>(levelHeight) + 1.0f))
+                : (!(levelHeight > 1.0))
+                      ? static_cast<double>(mathfLerp(
+                            0.0f, 0.3f, static_cast<float>(levelHeight))) +
+                            fine * 0.1
+                      : (levelHeight > 2.0)
+                            ? static_cast<double>(mathfLerp(
+                                  1.4f, 2.7f,
+                                  static_cast<float>(levelHeight) - 2.0f)) +
+                                  fine * 0.12
+                            : static_cast<double>(mathfLerp(
+                                  0.3f, 1.4f,
+                                  static_cast<float>(levelHeight) - 1.0f)) +
+                                  fine * 0.12;
+        if (rawHeight < 0.0) rawHeight *= 2.0;
+        if (rawHeight < 1.0) rawHeight = levelize(rawHeight);
+        height -= lava * 1.2 * broad;
+        if (height >= 0.0) height = terrainHeight;
+        height -= 0.1;
+        biome = static_cast<double>(std::abs(static_cast<float>(rawHeight)));
+        auto blend = static_cast<double>(std::clamp(
+            static_cast<float>((0.0 - height + 2.0) / 2.5), 0.0f, 1.0f));
+        blend = std::pow(blend, 10.0);
+        biome = (1.0 - blend) * biome + blend * 2.0;
+        biome = (!(biome > 0.0)) ? 0.0
+                                 : ((biome > 2.0) ? 2.0 : biome);
+        biome += ((biome > 1.8) ? ((0.0 - fine) * 0.8)
+                                : (fine * 0.2)) *
+                 (1.0 - blend);
+        auto depression = -0.3 - height;
+        if (depression > 0.0) {
+            const auto depressionNoise =
+                second.Noise(x * 0.16, y * 0.16, z * 0.16) - 1.0;
+            depression = (depression > 1.0) ? 1.0 : depression;
+            depression = (3.0 - depression - depression) * depression *
+                         depression;
+            height = -0.3 - depression * 10.0 + depression * depression *
+                     depression * depression * depressionNoise * 0.5;
+        }
+        writeTerrain(context, i, height, biome, 0.2);
+    }
+}
+
 }
 
 TerrainGenerationResult generateTerrain(int algorithmId,
@@ -1084,7 +1195,8 @@ TerrainGenerationResult generateTerrain(int algorithmId,
         generateTerrain13(context, modX, modY);
         return TerrainGenerationResult::Generated;
     case 14:
-        return TerrainGenerationResult::UnsupportedAlgorithm;
+        generateTerrain14(context);
+        return TerrainGenerationResult::Generated;
     default:
         return TerrainGenerationResult::UnsupportedAlgorithm;
     }
