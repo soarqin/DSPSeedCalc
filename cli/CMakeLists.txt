@@ -24,6 +24,13 @@ add_project(DSPSeedCalc EXECUTABLE
 target_link_libraries(DSPSeedCalc dspugen)
 target_compile_features(DSPSeedCalc PRIVATE cxx_std_17)
 
+add_custom_command(TARGET DSPSeedCalc POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory
+            "$<TARGET_FILE_DIR:DSPSeedCalc>/Prototypes"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_SOURCE_DIR}/tests/fixtures/game/verts-200-game.bin"
+            "$<TARGET_FILE_DIR:DSPSeedCalc>/Prototypes/verts-200-game.bin")
+
 if(WIN32)
     target_link_libraries(DSPSeedCalc wingetopt dl)
 else()

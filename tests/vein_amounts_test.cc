@@ -9,12 +9,13 @@
 #include "util/maths.hh"
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cstdint>
 #include <cstring>
 #include <cmath>
-#include <stdexcept>
 #include <string>
+#include <vector>
 
 static std::uint64_t doubleBits(double value) {
     std::uint64_t bits = 0;
@@ -24,6 +25,13 @@ static std::uint64_t doubleBits(double value) {
 
 static bool nearFloat(float lhs, float rhs, float epsilon = 1.0E-05f) {
     return std::abs(lhs - rhs) <= epsilon;
+}
+
+static bool sameVertices(const std::vector<dspugen::terrain::Vector3> &lhs,
+                         const std::vector<dspugen::terrain::Vector3> &rhs) {
+    return lhs.size() == rhs.size() &&
+           std::memcmp(lhs.data(), rhs.data(),
+                       lhs.size() * sizeof(dspugen::terrain::Vector3)) == 0;
 }
 
 static void testUnitySlerpContract() {
@@ -65,6 +73,17 @@ static void testRawDataContract() {
     assert(nearFloat(raw.queryHeight({0.0f, 1.0f, 0.0f}), 12.34f));
     raw.heightData().resize(1);
     assert(raw.dataLength() == 4 * 201 * 201);
+
+    // calcVerts() is served from a thread-local per-precision cache, so a second
+    // instance must come out bit-identical to a freshly computed one.
+    dspugen::terrain::PlanetRawData cached(200);
+    cached.calcVerts();
+    assert(sameVertices(cached.vertices(), raw.vertices()));
+    for (auto value : cached.heightData()) assert(value == 0);
+    cached.heightData()[7] = 4321;
+    cached.clearTerrain();
+    assert(cached.heightData()[7] == 0);
+    assert(sameVertices(cached.vertices(), raw.vertices()));
 }
 
 static void testSimplexNoiseFixture() {
@@ -97,15 +116,32 @@ static void testTerrainAlgorithmDispatch() {
 
     PlanetRawData raw(200);
     raw.calcVerts();
+    PlanetRawData lazy(200);
+    lazy.calcVerts();
     PlanetAlgorithmContext context{raw, 12345, 200.0f};
+    const std::array<int, 5> sampleIndices{
+        0, 1, 12345, 80000, raw.dataLength() - 1};
+    const auto assertLazyMatches = [&](int algorithm, double modX,
+                                       double modY) {
+        lazy.beginLazyTerrain(algorithm, 12345, 200.0f, modX, modY);
+        for (int index: sampleIndices) {
+            auto direction = raw.vertices()[static_cast<std::size_t>(index)];
+            auto expected = raw.queryHeight(direction);
+            auto actual = lazy.queryHeight(direction);
+            assert(std::memcmp(&actual, &expected, sizeof(float)) == 0);
+        }
+        lazy.endLazyTerrain();
+    };
 
     auto result = dispatchTerrain(0, context, 1.0, 0.0);
     assert(result == TerrainGenerationResult::Generated);
     assert(raw.heightData()[0] == 20000);
     assert(raw.biomoData()[0] == 0);
+    assertLazyMatches(0, 1.0, 0.0);
 
     result = dispatchTerrain(8, context, 1.0, 0.0);
     assert(result == TerrainGenerationResult::Generated);
+    assertLazyMatches(8, 1.0, 0.0);
     bool varied = false;
     for (auto height : raw.heightData()) {
         if (height != 20000) {
@@ -118,6 +154,7 @@ static void testTerrainAlgorithmDispatch() {
     for (int algorithm = 1; algorithm <= 6; ++algorithm) {
         result = dispatchTerrain(algorithm, context, 0.8, -0.2);
         assert(result == TerrainGenerationResult::Generated);
+        assertLazyMatches(algorithm, 0.8, -0.2);
         bool populated = false;
         for (auto height : raw.heightData()) {
             if (height != 0) {
@@ -130,6 +167,7 @@ static void testTerrainAlgorithmDispatch() {
     for (int algorithm = 7; algorithm <= 13; ++algorithm) {
         result = dispatchTerrain(algorithm, context, 1.0, 0.0);
         assert(result == TerrainGenerationResult::Generated);
+        assertLazyMatches(algorithm, 1.0, 0.0);
         bool populated = false;
         for (auto height : raw.heightData()) {
             if (height != 0) {
@@ -143,6 +181,7 @@ static void testTerrainAlgorithmDispatch() {
     std::fill(raw.biomoData().begin(), raw.biomoData().end(), 0);
     result = dispatchTerrain(14, context, 1.0, 0.0);
     assert(result == TerrainGenerationResult::Generated);
+    assertLazyMatches(14, 1.0, 0.0);
     bool algorithm14Populated = false;
     for (auto height : raw.heightData()) {
         if (height != 0) {
@@ -225,17 +264,74 @@ int main() {
     assert(unsupportedPlanet->ensureVeinAmounts() ==
            dspugen::VeinAmountGenerationResult::UnsupportedAlgorithm);
     assert(unsupportedPlanet->veinAmountSummary() == nullptr);
-    bool rejectedUnsupportedGalaxy = false;
-    try {
-        unsupportedGalaxy->ensureAllVeinAmounts();
-    } catch (const std::runtime_error &error) {
-        const std::string message = error.what();
-        rejectedUnsupportedGalaxy =
-            message.find("seed 0") != std::string::npos &&
-            message.find("algorithm 15") != std::string::npos;
-    }
-    assert(rejectedUnsupportedGalaxy);
+    // The galaxy pass reports the first failure instead of throwing: it is
+    // reachable through the plugin C ABI.
+    const auto batch = unsupportedGalaxy->ensureAllVeinAmounts();
+    assert(!batch.ok());
+    assert(batch.result == dspugen::VeinAmountGenerationResult::UnsupportedAlgorithm);
+    assert(batch.planetId == unsupportedPlanet->id);
+    assert(batch.algoId == 15);
+    assert(std::string(dspugen::veinAmountResultName(batch.result)) ==
+           "unsupported algorithm");
     unsupportedGalaxy->release();
+
+    auto *gasGalaxy = dspugen::Galaxy::create(
+        dspugen::DefaultAlgoVersion, 0, 64);
+    assert(gasGalaxy != nullptr);
+    dspugen::Planet *gasPlanet = nullptr;
+    for (auto *star: gasGalaxy->stars) {
+        for (auto *planet: star->planets) {
+            if (planet->type == dspugen::EPlanetType::Gas) {
+                gasPlanet = planet;
+                break;
+            }
+        }
+        if (gasPlanet) break;
+    }
+    assert(gasPlanet != nullptr);
+    assert(gasPlanet->veinAmountGenerationResult() ==
+           dspugen::VeinAmountGenerationResult::NotGenerated);
+    assert(gasPlanet->ensureVeinAmounts() ==
+           dspugen::VeinAmountGenerationResult::Generated);
+    const auto *gasSummary = gasPlanet->veinAmountSummary();
+    assert(gasSummary != nullptr);
+    for (const auto count: gasSummary->nodeCount) assert(count == 0);
+    for (const auto amount: gasSummary->baseAmount) assert(amount == 0);
+    assert(gasPlanet->terrainDigest().height == 0);
+    assert(gasPlanet->terrainDigest().biomo == 0);
+    assert(gasPlanet->ensureVeinAmounts() ==
+           dspugen::VeinAmountGenerationResult::Generated);
+    assert(gasPlanet->veinAmountSummary() == gasSummary);
+    gasGalaxy->release();
+
+    // A per-planet request must leave every rejected planet on the cheap path.
+    // Compare its result with a separate whole-galaxy pass below so the cache
+    // cannot hide an ordering dependency.
+    auto *singlePlanetGalaxy = dspugen::Galaxy::create(
+        dspugen::DefaultAlgoVersion, 0, 64);
+    assert(singlePlanetGalaxy != nullptr);
+    const int requestedPlanetId = singlePlanetGalaxy->birthPlanetId;
+    auto *requestedPlanet = singlePlanetGalaxy->planetById(requestedPlanetId);
+    assert(requestedPlanet != nullptr);
+    for (const auto *star: singlePlanetGalaxy->stars)
+        for (const auto *planet: star->planets)
+            assert(planet->veinAmountSummary() == nullptr);
+    assert(requestedPlanet->ensureVeinAmounts() ==
+           dspugen::VeinAmountGenerationResult::Generated);
+    const auto *requestedSummary = requestedPlanet->veinAmountSummary();
+    assert(requestedSummary != nullptr);
+    const auto expectedRequestedSummary = *requestedSummary;
+    int generatedPlanetCount = 0;
+    for (const auto *star: singlePlanetGalaxy->stars) {
+        for (const auto *planet: star->planets) {
+            if (planet->veinAmountSummary()) ++generatedPlanetCount;
+        }
+    }
+    assert(generatedPlanetCount == 1);
+    assert(requestedPlanet->ensureVeinAmounts() ==
+           dspugen::VeinAmountGenerationResult::Generated);
+    assert(requestedPlanet->veinAmountSummary() == requestedSummary);
+    singlePlanetGalaxy->release();
 
     auto *galaxy = dspugen::Galaxy::create(dspugen::DefaultAlgoVersion, 0, 64);
     assert(galaxy != nullptr);
@@ -286,7 +382,13 @@ int main() {
     assert(nearFloat(snapped.magnitude(), 1.0f));
     assert(nearFloat((snappedAgain - snapped).magnitude(), 0.0f, 1.0E-06f));
     assert(galaxy->stars[0]->planets[0]->veinAmountSummary() == nullptr);
-    galaxy->ensureAllVeinAmounts();
+    assert(galaxy->ensureAllVeinAmounts().ok());
+    const auto *fullRequestedPlanet = galaxy->planetById(requestedPlanetId);
+    assert(fullRequestedPlanet != nullptr);
+    const auto *fullRequestedSummary = fullRequestedPlanet->veinAmountSummary();
+    assert(fullRequestedSummary != nullptr);
+    assert(fullRequestedSummary->nodeCount == expectedRequestedSummary.nodeCount);
+    assert(fullRequestedSummary->baseAmount == expectedRequestedSummary.baseAmount);
     auto *summary = galaxy->stars[0]->planets[0]->veinAmountSummary();
     assert(summary != nullptr);
     assert(summary->nodeCount[0] == 0);
@@ -309,7 +411,7 @@ int main() {
     assert(sawOrdinaryPlanet);
     assert(sawGeneratedNode);
     auto firstSummary = *summary;
-    galaxy->ensureAllVeinAmounts();
+    assert(galaxy->ensureAllVeinAmounts().ok());
     assert(galaxy->stars[0]->planets[0]->veinAmountSummary() == summary);
     assert(galaxy->stars[0]->planets[0]->veinAmountSummary()->nodeCount ==
            firstSummary.nodeCount);
@@ -318,7 +420,7 @@ int main() {
     auto *secondGalaxy = dspugen::Galaxy::create(dspugen::DefaultAlgoVersion, 1, 64);
     assert(secondGalaxy != nullptr);
     assert(secondGalaxy->stars[0]->planets[0]->veinAmountSummary() == nullptr);
-    secondGalaxy->ensureAllVeinAmounts();
+    assert(secondGalaxy->ensureAllVeinAmounts().ok());
     assert(secondGalaxy->stars[0]->planets[0]->veinAmountSummary() != nullptr);
     secondGalaxy->release();
     dspugen::Planet::releaseThread();

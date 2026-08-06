@@ -2,7 +2,6 @@
 
 #include <array>
 #include <cstdint>
-#include <mutex>
 
 namespace dspugen::terrain {
 
@@ -54,8 +53,7 @@ private:
 
     static const std::array<Grad, 12> grad3;
     static const std::array<Grad, 32> grad4;
-    static std::array<std::int16_t, 256> p;
-    static std::mutex pMutex;
+    static const std::array<std::int16_t, 256> p;
 
     std::array<std::int16_t, 512> perm{};
     std::array<std::int16_t, 512> permMod12{};

@@ -25,8 +25,21 @@
 
 namespace dspugen {
 
+// Mono evaluates a managed float expression in double and narrows once, where
+// the reference stores into a float32 location.  dbl() widens an operand,
+// flt() is that single narrowing.
+static constexpr double dbl(float value) { return static_cast<double>(value); }
+static constexpr float flt(double value) { return static_cast<float>(value); }
+
+// StarGen.RandNormal returns float32:
+//   return averageValue + standardDeviation * (float)(Math.Sqrt(..) * Math.Sin(..));
+// so only the inner cast and the return narrow -- the multiply and the add stay
+// in double.  This is the origin of the 1 ULP error in starData.mass.
 static float randNormal(float averageValue, float standardDeviation, double r1, double r2) {
-    return averageValue + standardDeviation * float(std::sqrt(-2.0 * std::log(1.0 - r1)) * std::sin(M_PI * 2.0 * r2));
+    return flt(dbl(averageValue) +
+               dbl(standardDeviation) *
+                   dbl(flt(std::sqrt(-2.0 * std::log(1.0 - r1)) *
+                           std::sin(M_PI * 2.0 * r2))));
 }
 
 static thread_local util::MemPool<Star> *spool;
@@ -147,16 +160,16 @@ Star *Star::createStar(Galaxy *galaxy,
     }
 
     num10 = num10 <= 0.0f ? num10 * 1.0f : num10 * 2.0f;
-    num10 = std::clamp(num10, -2.4f, 4.65f) + float(num5) + 1.0f;
+    num10 = flt(dbl(std::clamp(num10, -2.4f, 4.65f)) + dbl(float(num5)) + 1.0);
     switch (needtype) {
         case EStarType::BlackHole:
-            star->mass = 18.0f + float(num2 * num3) * 30.0f;
+            star->mass = flt(18.0 + dbl(float(num2 * num3)) * 30.0);
             break;
         case EStarType::NeutronStar:
-            star->mass = 7.0f + float(num2) * 11.0f;
+            star->mass = flt(7.0 + dbl(float(num2)) * 11.0);
             break;
         case EStarType::WhiteDwarf:
-            star->mass = 1.0f + float(num3) * 5.0f;
+            star->mass = flt(1.0 + dbl(float(num3)) * 5.0);
             break;
         default:
             star->mass = util::mathfPow(2.0f, num10);
@@ -174,12 +187,12 @@ Star *Star::createStar(Galaxy *galaxy,
     star->lifetime = 10000.0 * std::pow(0.1, std::log10(star->mass * massFactor) / logD + 1.0) * num6;
     switch (needtype) {
         case EStarType::GiantStar:
-            star->age = float(num4) * 0.04f + 0.96f;
+            star->age = flt(dbl(float(num4)) * dbl(0.04f) + dbl(0.96f));
             break;
         case EStarType::WhiteDwarf:
         case EStarType::NeutronStar:
         case EStarType::BlackHole:
-            star->age = float(num4) * 0.4f + 1.0f;
+            star->age = flt(dbl(float(num4)) * dbl(0.4f) + 1.0);
             switch (needtype) {
                 case EStarType::WhiteDwarf:
                     star->lifetime += 10000.0f;
@@ -194,28 +207,30 @@ Star *Star::createStar(Galaxy *galaxy,
             break;
         default:
             if (star->mass < 0.5)
-                star->age = float(num4) * 0.12f + 0.02f;
+                star->age = flt(dbl(float(num4)) * dbl(0.12f) + dbl(0.02f));
             else if (star->mass < 0.8)
-                star->age = float(num4) * 0.4f + 0.1f;
+                star->age = flt(dbl(float(num4)) * dbl(0.4f) + dbl(0.1f));
             else
-                star->age = float(num4) * 0.7f + 0.2f;
+                star->age = flt(dbl(float(num4)) * dbl(0.7f) + dbl(0.2f));
             break;
     }
 
     auto num11 = star->lifetime * star->age;
-    if (num11 > 5000.0f) num11 = (util::mathfLog(num11 / 5000.0f) + 1.0f) * 5000.0f;
+    if (num11 > 5000.0f) num11 = flt((dbl(util::mathfLog(num11 / 5000.0f)) + 1.0) * 5000.0);
     if (num11 > 8000.0f)
-        num11 = (util::mathfLog(util::mathfLog(util::mathfLog(num11 / 8000.0f) + 1.0f) + 1.0f) + 1.0f) * 8000.0f;
+        num11 = flt((dbl(util::mathfLog(flt(dbl(util::mathfLog(flt(dbl(util::mathfLog(num11 / 8000.0f)) + 1.0))) + 1.0))) + 1.0) * 8000.0);
     star->lifetime = num11 / star->age;
-    auto num12 = (1.0f - util::mathfPow(util::clamp01(star->age), 20.0f) * 0.5f) * star->mass;
-    star->temperature = std::pow(double(num12), 0.56 + 0.14 / (std::log10(double(num12 + 4.0f)) / log10_5)) * 4450.0 + 1300.0;
+    auto num12 = flt((1.0 - dbl(util::mathfPow(util::clamp01(star->age), 20.0f)) * 0.5) * dbl(star->mass));
+    star->temperature = flt(std::pow(dbl(num12), 0.56 + 0.14 / (std::log10(dbl(num12) + 4.0) / log10_5)) * 4450.0 + 1300.0);
     auto num13 = std::log10((star->temperature - 1300.0) / 4500.0) / log10_26 - 0.5;
     if (num13 < 0.0) num13 *= 4.0;
     if (num13 > 2.0)
         num13 = 2.0;
     else if (num13 < -4.0) num13 = -4.0;
     star->spectr = (ESpectrType)util::mathfRoundToInt(float(num13) + 4.0f);
-    star->color = util::clamp01((float(num13) + 3.5f) * 0.2f);
+    // 0.2f widens to 0.20000000298023224, not to 0.2.  Spelling it as the
+    // double literal 0.2 mismatches 17% of stars.
+    star->color = util::clamp01(flt((dbl(float(num13)) + 3.5) * dbl(0.2f)));
     star->classFactor = float(num13);
     star->luminosity = util::mathfPow(num12, 0.7f);
     star->radius = std::pow(star->mass, 0.4) * num8;
@@ -224,16 +239,19 @@ Star *Star::createStar(Galaxy *galaxy,
 */
     auto p = float(num13) + 2.0f;
     auto lightBalanceRadius = util::mathfPow(1.7f, p);
-    star->habitableRadius = lightBalanceRadius + 0.25f * std::min(1.0f, star->orbitScaler);
+    star->habitableRadius = flt(dbl(lightBalanceRadius) + 0.25 * dbl(std::min(1.0f, star->orbitScaler)));
     star->lightBalanceRadius = lightBalanceRadius;
     star->orbitScaler = util::mathfPow(1.35f, p);
     if (star->orbitScaler < 1.0f) star->orbitScaler = util::lerp(star->orbitScaler, 1.0f, 0.6f);
     star->setStarAge(rn, rt);
     star->dysonRadius = star->orbitScaler * 0.28f;
-    auto physicsScaled = star->physicsRadius() * 1.5f;
-    auto radMin = float(double(physicsScaled) / 40000.0);
-    if (star->dysonRadius < radMin)
-        star->dysonRadius = radMin;
+    // physicsRadius returns float32, but the * 1.5f product is never stored to a
+    // float32 location, so the IL keeps it in double for both the comparison and
+    // the divide. Narrowing it, or pre-dividing it into a float bound to compare
+    // against, flips 20 stars per 101 seeds.
+    auto physicsScaled = dbl(star->physicsRadius()) * 1.5;
+    if (dbl(star->dysonRadius) * 40000.0 < physicsScaled)
+        star->dysonRadius = flt(physicsScaled / 40000.0);
 /*
     star->uPosition = star->position * 2400000.0;
 */
@@ -275,15 +293,15 @@ Star *Star::createBirthStar(Galaxy *galaxy, int seed) {
     auto num4 = 2.0 + 0.4 * (1.0 - star->mass);
     star->lifetime = 10000.0 * std::pow(0.1, std::log10(star->mass * 0.5) / std::log10(num4) + 1.0) * num2;
     star->age = float(num * 0.4 + 0.3);
-    auto num5 = (1.0f - util::mathfPow(std::clamp(star->age, 0.0f, 1.0f), 20.0f) * 0.5f) * star->mass;
-    star->temperature = std::pow(num5, 0.56 + 0.14 / (std::log10((double)(num5 + 4.0f)) / log10_5)) * 4450.0 + 1300.0;
+    auto num5 = flt((1.0 - dbl(util::mathfPow(util::clamp01(star->age), 20.0f)) * 0.5) * dbl(star->mass));
+    star->temperature = flt(std::pow(dbl(num5), 0.56 + 0.14 / (std::log10(dbl(num5) + 4.0) / log10_5)) * 4450.0 + 1300.0);
     auto num6 = std::log10((star->temperature - 1300.0) / 4500.0) / log10_26 - 0.5;
     if (num6 < 0.0) num6 *= 4.0;
     if (num6 > 2.0)
         num6 = 2.0;
     else if (num6 < -4.0) num6 = -4.0;
     star->spectr = (ESpectrType)util::mathfRoundToInt(float(num6) + 4.0f);
-    star->color = util::clamp01((float(num6) + 3.5f) * 0.2f);
+    star->color = util::clamp01(flt((dbl(float(num6)) + 3.5) * dbl(0.2f)));
     star->classFactor = float(num6);
     star->luminosity = util::mathfPow(num5, 0.7f);
     star->radius = std::pow(star->mass, 0.4) * num3;
@@ -292,15 +310,15 @@ Star *Star::createBirthStar(Galaxy *galaxy, int seed) {
 */
     auto p = float(num6) + 2.0f;
     auto lightBalanceRadius = util::mathfPow(1.7f, p);
-    star->habitableRadius = lightBalanceRadius + 0.2f * std::min(1.0f, star->orbitScaler);
+    star->habitableRadius = flt(dbl(lightBalanceRadius) + dbl(0.2f) * dbl(std::min(1.0f, star->orbitScaler)));
     star->lightBalanceRadius = lightBalanceRadius;
     star->orbitScaler = util::mathfPow(1.35f, p);
     if (star->orbitScaler < 1.0f) star->orbitScaler = util::lerp(star->orbitScaler, 1.0f, 0.6f);
     star->setStarAge(rn, rt);
     star->dysonRadius = star->orbitScaler * 0.28f;
-    auto physicsScaled = star->physicsRadius() * 1.5f;
-    if (double(star->dysonRadius) * 40000.0 < double(physicsScaled))
-        star->dysonRadius = float(double(physicsScaled) / 40000.0);
+    auto physicsScaled = dbl(star->physicsRadius()) * 1.5;
+    if (dbl(star->dysonRadius) * 40000.0 < physicsScaled)
+        star->dysonRadius = flt(physicsScaled / 40000.0);
     if (settings.genName) {
         star->name = NameGen::randomStarName(seed2, star, galaxy);
     }
@@ -315,48 +333,48 @@ void Star::setStarAge(double rn, double rt) {
         if (mass >= 18.0f) {
             type = EStarType::BlackHole;
             spectr = ESpectrType::X;
-            mass *= 2.5f * num2;
+            mass = flt(dbl(mass) * (2.5 * dbl(num2)));
             radius *= 1.0f;
 /*
             acdiskRadius = radius * 5.0f;
 */
             temperature = 0.0f;
-            luminosity *= 0.001f * num;
+            luminosity = flt(dbl(luminosity) * (dbl(0.001f) * dbl(num)));
             habitableRadius = 0.0f;
-            lightBalanceRadius *= 0.4f * num;
+            lightBalanceRadius = flt(dbl(lightBalanceRadius) * (dbl(0.4f) * dbl(num)));
             color = 1.0f;
         } else if (mass >= 7.0f) {
             type = EStarType::NeutronStar;
             spectr = ESpectrType::X;
-            mass *= 0.2f * num;
+            mass = flt(dbl(mass) * (dbl(0.2f) * dbl(num)));
             radius *= 0.15f;
 /*
             acdiskRadius = radius * 9.0f;
 */
             temperature = num3 * 1E+07f;
-            luminosity *= 0.1f * num;
+            luminosity = flt(dbl(luminosity) * (dbl(0.1f) * dbl(num)));
             habitableRadius = 0.0f;
-            lightBalanceRadius *= 3.0f * num;
-            orbitScaler *= 1.5f * num;
+            lightBalanceRadius = flt(dbl(lightBalanceRadius) * (3.0 * dbl(num)));
+            orbitScaler = flt(dbl(orbitScaler) * (1.5 * dbl(num)));
             color = 1.0f;
         } else {
             type = EStarType::WhiteDwarf;
             spectr = ESpectrType::X;
-            mass *= 0.2f * num;
+            mass = flt(dbl(mass) * (dbl(0.2f) * dbl(num)));
             radius *= 0.2f;
 /*
             acdiskRadius = 0.0f;
 */
             temperature = num2 * 150000.0f;
-            luminosity *= 0.04f * num2;
-            habitableRadius *= 0.15f * num2;
-            lightBalanceRadius *= 0.2f * num;
+            luminosity = flt(dbl(luminosity) * (dbl(0.04f) * dbl(num2)));
+            habitableRadius = flt(dbl(habitableRadius) * (dbl(0.15f) * dbl(num2)));
+            lightBalanceRadius = flt(dbl(lightBalanceRadius) * (dbl(0.2f) * dbl(num)));
             color = 0.7f;
         }
     } else if (age >= 0.96f) {
         auto num4 = float(std::pow(5.0, std::abs(std::log10(double(mass)) - 0.7)) * 5.0);
-        if (num4 > 10.0f) num4 = (util::mathfLog(num4 * 0.1f) + 1.0f) * 10.0f;
-        auto num5 = 1.0f - util::mathfPow(age, 30.0f) * 0.5f;
+        if (num4 > 10.0f) num4 = flt((dbl(util::mathfLog(num4 * 0.1f)) + 1.0) * 10.0);
+        auto num5 = flt(1.0 - dbl(util::mathfPow(age, 30.0f)) * 0.5);
         type = EStarType::GiantStar;
         mass = num5 * mass;
         radius = num4 * num2;

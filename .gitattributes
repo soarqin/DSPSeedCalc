@@ -1,0 +1,6 @@
+# tests/fixtures/game/verts-200-game.bin is load-bearing for bit-exact vein
+# parity: Vector3.Slerp lives in engine native code and cannot be rewritten to
+# match, so the captured grid is used as data. Any line-ending conversion would
+# corrupt it silently. Git auto-detects it as binary today; state it anyway so
+# the guarantee does not depend on that.
+*.bin binary

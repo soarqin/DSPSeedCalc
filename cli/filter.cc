@@ -13,6 +13,7 @@
 
 #include <fmt/ostream.h>
 #include <dlfcn.h>
+#include <atomic>
 #include <vector>
 #include <filesystem>
 #include <iostream>
@@ -84,6 +85,9 @@ static std::uint64_t requiredForPrePlanet = 0;
 static std::uint64_t requiredForOutput = 0;
 static bool allowBlockScheduling = true;
 static bool serializeFilters = false;
+static bool veinAmountServiceAvailable = false;
+static std::atomic_bool runtimeFailed{false};
+static std::mutex runtimeFailureMutex;
 static std::mutex legacyFilterMutex;
 struct PluginThreadState {
     std::vector<void *> states;
@@ -91,6 +95,32 @@ struct PluginThreadState {
 static thread_local PluginThreadState pluginThreadState;
 static std::mutex partialMutex;
 static std::vector<std::vector<void *>> partialResults;
+
+static void reportVeinAmountFailure(
+    const dspugen::Planet *planet,
+    dspugen::VeinAmountGenerationResult result) {
+    bool expected = false;
+    if (!runtimeFailed.compare_exchange_strong(
+            expected, true, std::memory_order_acq_rel))
+        return;
+    std::lock_guard lock(runtimeFailureMutex);
+    try {
+        if (planet && planet->galaxy) {
+            fmt::print(std::cerr,
+                       "Error: exact vein amount generation failed for seed {}: "
+                       "planet {}, algorithm {}: {}\n",
+                       planet->galaxy->seed, planet->id, planet->algoId,
+                       dspugen::veinAmountResultName(result));
+        } else {
+            fmt::print(std::cerr,
+                       "Error: exact vein amount generation failed: {}\n",
+                       dspugen::veinAmountResultName(result));
+        }
+    } catch (...) {
+        // The failure flag is authoritative; diagnostics must not let an
+        // exception cross the plugin ABI boundary.
+    }
+}
 
 static void generateAllPlanets(const dspugen::Galaxy *galaxy) {
     const_cast<dspugen::Galaxy*>(galaxy)->ensureAllPlanets();
@@ -100,13 +130,35 @@ static void generatePlanetGas(const dspugen::Planet *planet) {
     const_cast<dspugen::Planet*>(planet)->generateGas();
 }
 
-static void generateAllVeinAmounts(const dspugen::Galaxy *galaxy) {
-    const_cast<dspugen::Galaxy*>(galaxy)->ensureAllVeinAmounts();
+static dspugen::VeinAmountGenerationResult generatePlanetVeinAmounts(
+    const dspugen::Planet *planet) {
+    if (!veinAmountServiceAvailable) {
+        const auto result =
+            dspugen::VeinAmountGenerationResult::ServiceUnavailable;
+        reportVeinAmountFailure(planet, result);
+        return result;
+    }
+    if (!planet) {
+        const auto result = dspugen::VeinAmountGenerationResult::InvalidPlanet;
+        reportVeinAmountFailure(planet, result);
+        return result;
+    }
+    try {
+        const auto result =
+            const_cast<dspugen::Planet*>(planet)->ensureVeinAmounts();
+        if (result != dspugen::VeinAmountGenerationResult::Generated)
+            reportVeinAmountFailure(planet, result);
+        return result;
+    } catch (...) {
+        const auto result = dspugen::VeinAmountGenerationResult::InternalError;
+        reportVeinAmountFailure(planet, result);
+        return result;
+    }
 }
 
 static const dspugen::VeinAmountSummary *getPlanetVeinAmountSummary(
     const dspugen::Planet *planet) {
-    return planet->veinAmountSummary();
+    return planet ? planet->veinAmountSummary() : nullptr;
 }
 
 static PluginAPI api = {
@@ -119,7 +171,7 @@ static PluginAPIV2 apiV2 = {
     2,
     &generateAllPlanets,
     &generatePlanetGas,
-    &generateAllVeinAmounts,
+    &generatePlanetVeinAmounts,
     &getPlanetVeinAmountSummary,
 };
 
@@ -145,6 +197,8 @@ static void buildDispatchLists() {
 }
 
 void loadFilters() {
+    veinAmountServiceAvailable = false;
+    runtimeFailed.store(false, std::memory_order_release);
     filters.clear();
     galaxyFilterList.clear();
     starFilterList.clear();
@@ -176,9 +230,9 @@ void loadFilters() {
             if (auto *lib = dlopen(filename.c_str(), RTLD_LAZY)) {
                 int type = 0;
                 const char *pname = nullptr;
-                const bool isV2 = dlsym(lib, "init3") != nullptr;
-                if (const auto init3func = reinterpret_cast<PluginInit3Func>(
-                        isV2 ? dlsym(lib, "init3") : nullptr)) {
+                const auto init3func = reinterpret_cast<PluginInit3Func>(dlsym(lib, "init3"));
+                const bool isV2 = init3func != nullptr;
+                if (isV2) {
                     pname = init3func(&apiV2, &type);
                 } else if (const auto initfunc = reinterpret_cast<PluginInitFunc>(dlsym(lib, "init"))) {
                     pname = initfunc(&api, &type);
@@ -190,9 +244,9 @@ void loadFilters() {
                         continue;
                     }
                 }
-                if (auto uninitfunc = reinterpret_cast<PluginUninitFunc>(dlsym(lib, "uninit"))) {
-                    uninitFuncs.emplace_back(uninitfunc);
-                }
+                // Held locally until the plugin is known to be accepted, so a
+                // rejected plugin is torn down instead of leaking its init state.
+                auto uninitfunc = reinterpret_cast<PluginUninitFunc>(dlsym(lib, "uninit"));
                 PluginDescriptorV1 descriptor;
                 bool hasDescriptor = false;
                 if (isV2) {
@@ -210,22 +264,28 @@ void loadFilters() {
                         descriptor.capabilities = descriptorV2.capabilities;
                         hasDescriptor = true;
                     }
-                } else {
+                }
+                if (isV2 && !hasDescriptor) {
+                    // A V2 plugin is rejected rather than downgraded: its
+                    // requirement bits are the only way the host learns it needs
+                    // vein amounts, so running it blind would silently produce
+                    // wrong results.  Say so instead of dropping it quietly.
+                    fmt::print(std::cerr,
+                               "Rejected plugin [{}]: exports init3 but no valid "
+                               "ABI 2 describePlugin\n",
+                               filename);
+                    if (uninitfunc) uninitfunc();
+                    dlclose(lib);
+                    continue;
+                }
+                if (!isV2) {
                     auto describe = reinterpret_cast<DescribePluginFunc>(
                         dlsym(lib, "describePlugin"));
                     hasDescriptor = describe && describe(1, &descriptor) &&
                                     descriptor.abiVersion == 1 &&
                                     descriptor.structSize >= sizeof(PluginDescriptorV1);
                 }
-                if (isV2 && !hasDescriptor) {
-                    if (!uninitFuncs.empty() &&
-                        uninitFuncs.back() == reinterpret_cast<PluginUninitFunc>(
-                            dlsym(lib, "uninit"))) {
-                        uninitFuncs.pop_back();
-                    }
-                    dlclose(lib);
-                    continue;
-                }
+                if (uninitfunc) uninitFuncs.emplace_back(uninitfunc);
                 if (!hasDescriptor ||
                     !(descriptor.capabilities & SupportsBlockScheduling) ||
                     !(descriptor.capabilities & OrderIndependent)) {
@@ -292,9 +352,12 @@ void loadFilters() {
                         break;
                     }
                     default:
-                        if (!uninitFuncs.empty() &&
-                            uninitFuncs.back() == reinterpret_cast<PluginUninitFunc>(dlsym(lib, "uninit"))) {
+                        // Unknown plugin type: undo the registration this
+                        // iteration just made rather than matching on the
+                        // function address.
+                        if (uninitfunc) {
                             uninitFuncs.pop_back();
+                            uninitfunc();
                         }
                         dlclose(lib);
                         break;
@@ -397,6 +460,7 @@ bool runOutput(const dspugen::Galaxy *g) {
 }
 
 void unloadFilters() {
+    veinAmountServiceAvailable = false;
     for (const auto &func: uninitFuncs) {
         func();
     }
@@ -456,6 +520,14 @@ bool pluginsHaveOutputCallbacks() {
     for (const auto &output: outputFuncs)
         if (output.output) return true;
     return false;
+}
+
+void setVeinAmountServiceAvailable(bool available) {
+    veinAmountServiceAvailable = available;
+}
+
+bool pluginRuntimeFailed() {
+    return runtimeFailed.load(std::memory_order_acquire);
 }
 
 void initPluginThread(std::uint32_t workerIndex) {

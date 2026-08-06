@@ -20,6 +20,37 @@
 
 namespace dspugen {
 
+namespace {
+
+std::uint64_t fnv1a(const void *data, std::size_t length) {
+    const auto *bytes = static_cast<const unsigned char *>(data);
+    std::uint64_t hash = 14695981039346656037ULL;
+    for (std::size_t i = 0; i < length; ++i) {
+        hash = (hash ^ bytes[i]) * 1099511628211ULL;
+    }
+    return hash;
+}
+
+}
+
+const char *veinAmountResultName(VeinAmountGenerationResult result) {
+    switch (result) {
+    case VeinAmountGenerationResult::Generated: return "generated";
+    case VeinAmountGenerationResult::NotGenerated: return "not generated";
+    case VeinAmountGenerationResult::UnsupportedAlgorithm:
+        return "unsupported algorithm";
+    case VeinAmountGenerationResult::MissingTheme: return "missing theme";
+    case VeinAmountGenerationResult::InvalidPlanet: return "invalid planet";
+    case VeinAmountGenerationResult::InvalidThemeData:
+        return "invalid theme rare vein data";
+    case VeinAmountGenerationResult::ServiceUnavailable:
+        return "exact vein service unavailable";
+    case VeinAmountGenerationResult::InternalError:
+        return "internal error";
+    }
+    return "unknown";
+}
+
 namespace vein_detail {
 
 bool acceptsVeinCenter(int algorithmId, EVeinType type, float height,
@@ -91,7 +122,6 @@ void applyStarVeinBonuses(const Planet &planet,
                           std::array<int, VeinTypeCount> &spot,
                           std::array<float, VeinTypeCount> &count,
                           std::array<float, VeinTypeCount> &opacity) {
-    const auto p = resourceExponent(*planet.star);
     switch (planet.star->type) {
     case EStarType::WhiteDwarf:
         spot[9] += 2;
@@ -111,27 +141,22 @@ void applyStarVeinBonuses(const Planet &planet,
         opacity[12] = 0.3f;
         break;
     case EStarType::NeutronStar:
-    case EStarType::BlackHole: {
+    case EStarType::BlackHole:
+        // The reference keeps these as two separate cases but uses the same
+        // cluster probability in both; only the resource exponent differs
+        // (4.5 versus 5.0), and that is handled by resourceExponent().
         ++spot[14];
-        auto probability = planet.star->type == EStarType::NeutronStar
-                               ? 0.6499999761581421
-                               : 0.6499999761581421;
-        for (int i = 1; i < 12 && random.nextDouble() < probability; ++i)
+        for (int i = 1; i < 12 && random.nextDouble() < 0.6499999761581421; ++i)
             ++spot[14];
         count[14] = 0.7f;
         opacity[14] = 0.3f;
         break;
-    }
     default:
         break;
     }
-
-    // The caller performs the rare-vein rolls because they consume the same
-    // random stream used for candidate placement.  Keep p available there.
-    (void)p;
 }
 
-void addRareVeins(const Planet &planet,
+bool addRareVeins(const Planet &planet,
                   const ThemeProto &theme,
                   float p,
                   util::DotNet35Random &random,
@@ -139,13 +164,15 @@ void addRareVeins(const Planet &planet,
                   std::array<float, VeinTypeCount> &count,
                   std::array<float, VeinTypeCount> &opacity) {
     for (std::size_t i = 0; i < theme.rareVeins.size(); ++i) {
-        auto type = theme.rareVeins[i];
-        if (type <= 0 || type >= static_cast<int>(VeinTypeCount)) continue;
-        auto baseOffset = i * 4;
-        if (baseOffset + 3 >= theme.rareSettings.size()) break;
+        const auto baseOffset = i * 4;
+        // The reference indexes RareSettings unconditionally and throws when it
+        // is short.  Report that instead of dropping rolls: every later random
+        // value in the planet depends on this loop consuming the right amount.
+        if (baseOffset + 3 >= theme.rareSettings.size()) return false;
+        const auto type = theme.rareVeins[i];
         auto probability = theme.rareSettings[baseOffset +
                                                (planet.star->index == 0 ? 0 : 1)];
-        auto clusterProbability = theme.rareSettings[baseOffset + 2];
+        const auto clusterProbability = theme.rareSettings[baseOffset + 2];
         auto opacityValue = theme.rareSettings[baseOffset + 3];
         probability = 1.0f - util::mathfPow(1.0f - probability, p);
         opacityValue = 1.0f - util::mathfPow(1.0f - opacityValue, p);
@@ -153,21 +180,30 @@ void addRareVeins(const Planet &planet,
         // count and amount opacity and performs one gate roll before adding a
         // rare vein family.
         if (random.nextDouble() >= static_cast<double>(probability)) continue;
-        ++spot[static_cast<std::size_t>(type)];
-        count[static_cast<std::size_t>(type)] = opacityValue;
-        opacity[static_cast<std::size_t>(type)] = opacityValue;
+        // The reference sizes its spot/count/opacity arrays by the vein
+        // prototype count rather than by 15, so an id outside 1..14 writes to a
+        // slot the placement loop never reads.  Skip only the writes: the gate
+        // and cluster rolls are consumed either way.
+        const auto tracked = type > 0 && type < static_cast<int>(VeinTypeCount);
+        if (tracked) {
+            const auto index = static_cast<std::size_t>(type);
+            ++spot[index];
+            count[index] = opacityValue;
+            opacity[index] = opacityValue;
+        }
         for (int j = 1; j < 12; ++j) {
             if (random.nextDouble() >= static_cast<double>(clusterProbability))
                 break;
-            ++spot[static_cast<std::size_t>(type)];
+            if (tracked) ++spot[static_cast<std::size_t>(type)];
         }
     }
+    return true;
 }
 
-void generateBaseSummary(const Planet &planet,
-                         const ThemeProto &theme,
-                         PlanetRawData &data,
-                         VeinAmountSummary &summary) {
+VeinAmountGenerationResult generateBaseSummary(const Planet &planet,
+                                               const ThemeProto &theme,
+                                               PlanetRawData &data,
+                                               VeinAmountSummary &summary) {
     std::array<int, VeinTypeCount> spot{};
     std::array<float, VeinTypeCount> veinCount{};
     std::array<float, VeinTypeCount> veinOpacity{};
@@ -188,14 +224,18 @@ void generateBaseSummary(const Planet &planet,
 
     auto p = resourceExponent(*planet.star);
     applyStarVeinBonuses(planet, random, spot, veinCount, veinOpacity);
-    addRareVeins(planet, theme, p, random, spot, veinCount, veinOpacity);
+    if (!addRareVeins(planet, theme, p, random, spot, veinCount, veinOpacity))
+        return VeinAmountGenerationResult::InvalidThemeData;
 
     const auto birth = isBirthPlanet(planet);
     const auto algorithm7 = planet.algoId == 7;
     auto resourceScale = planet.star->updateResourceCoef();
     if (birth) resourceScale *= (2.0f / 3.0f);
     constexpr float amountScale = 1.1f;
-    const auto spacing = 2.1f / planet.radius;
+    // Mono evaluates float32 expressions in double and rounds at the store,
+    // so this is a double divide rounded once, not a float divide.
+    const auto spacing = static_cast<float>(static_cast<double>(2.1f) /
+                                            static_cast<double>(planet.radius));
 
     std::vector<Vector3> veinVectors;
     veinVectors.reserve(512);
@@ -251,10 +291,15 @@ void generateBaseSummary(const Planet &planet,
                         planet.realRadius()))
                     continue;
                 auto minDistance = (type == static_cast<int>(EVeinType::Oil)) ? 100.0f : 196.0f;
-                auto threshold = spacing * spacing * minDistance;
+                // The reference forms this product inline in the comparison, so
+                // it stays in double and the comparison happens in double.
+                const auto threshold = static_cast<double>(spacing) *
+                                       static_cast<double>(spacing) *
+                                       static_cast<double>(minDistance);
                 auto tooClose = false;
                 for (const auto &other: veinVectors) {
-                    if ((other - center).sqrMagnitude() < threshold) {
+                    if (static_cast<double>((other - center).sqrMagnitude()) <
+                        threshold) {
                         tooClose = true;
                         break;
                     }
@@ -313,52 +358,89 @@ void generateBaseSummary(const Planet &planet,
         }
 
         const auto rotation = terrain::fromToRotation(up, normalized);
-        Vector3 basisRight = rotation * right;
-        Vector3 basisForward = rotation * forward;
+        // GenerateVeins uses the Unity operator here, not Maths.QRotate.
+        Vector3 basisRight = terrain::unityRotate(rotation, right);
+        Vector3 basisForward = terrain::unityRotate(rotation, forward);
+        // The reference reads PlanetModelingManager's per-id model tables, which
+        // are zero-filled for any id without a prototype.  Mirror that rather
+        // than failing: DotNet35Random::next() skips its sample when the range
+        // is empty or unit, so a missing prototype must not consume one either.
+        const auto *veinProto = veinProtoSet.select(type);
+        const auto modelIndex = veinProto != nullptr ? veinProto->modelIndex : 0;
+        const auto modelCount = veinProto != nullptr ? veinProto->modelCount : 0;
         auto amountScaleForType = type == static_cast<int>(EVeinType::Oil)
                                       ? util::mathfPow(resourceScale, 0.5f)
                                       : resourceScale;
-        auto amount = util::mathfRoundToInt(opacity * 100000.0f * amountScaleForType);
+        auto amount = util::mathfRoundToInt(static_cast<float>(
+            static_cast<double>(opacity) * 100000.0 *
+            static_cast<double>(amountScaleForType)));
         if (amount < 20) amount = 20;
-        auto spread = amount < 16000 ? static_cast<int>(std::floor(static_cast<float>(amount) * 0.9375f)) : 15000;
+        auto spread = amount < 16000
+                          ? static_cast<int>(std::floor(static_cast<float>(
+                                static_cast<double>(amount) *
+                                static_cast<double>(0.9375f))))
+                          : 15000;
         auto minValue = amount - spread;
         auto maxValue = amount + spread + 1;
         for (const auto &point: points) {
             auto offset = (basisRight * point.x + basisForward * point.y) * spacing;
             auto position = normalized + offset;
-            const auto *veinProto = veinProtoSet.select(type);
-            if (veinProto == nullptr || veinProto->modelCount <= 0) {
-                throw std::runtime_error(
-                    "missing or invalid vein prototype model range");
-            }
-            (void)placementRandom.next(
-                veinProto->modelIndex,
-                veinProto->modelIndex + veinProto->modelCount);
-            auto nodeAmount = util::mathfRoundToInt(
-                static_cast<float>(placementRandom.next(minValue, maxValue)) * amountScale);
+            (void)placementRandom.next(modelIndex, modelIndex + modelCount);
+            auto nodeAmount = util::mathfRoundToInt(static_cast<float>(
+                static_cast<double>(placementRandom.next(minValue, maxValue)) *
+                static_cast<double>(amountScale)));
             if (nodeAmount < 1) nodeAmount = 1;
             if (type == static_cast<int>(EVeinType::Oil))
                 position = terrain::rawSnap(position, planet.radius);
-            const auto height = data.queryHeight(position);
             data.eraseVegetableAtPoint(position);
-            if (!vein_detail::acceptsVeinNode(
-                    planet.algoId, planet.waterItemId, height, planet.radius))
-                continue;
+            if (planet.algoId != 7 && planet.waterItemId != 0) {
+                const auto height = data.queryHeight(position);
+                if (!vein_detail::acceptsVeinNode(
+                        planet.algoId, planet.waterItemId, height,
+                        planet.radius))
+                    continue;
+            }
             ++summary.nodeCount[index];
             summary.baseAmount[index] += nodeAmount;
         }
     }
+    return VeinAmountGenerationResult::Generated;
 }
 
 }
 
 VeinAmountGenerationResult generateVeinAmountSummary(
-    const Planet &planet, VeinAmountSummary &summary) {
+    const Planet &planet, VeinAmountSummary &summary, TerrainDigest &digest,
+    bool includeTerrainDigest) {
     summary = {};
+    digest = {};
     if (planet.star == nullptr)
         return VeinAmountGenerationResult::InvalidPlanet;
-    if (planet.type == EPlanetType::Gas || planet.algoId == 0)
+    if (planet.type == EPlanetType::Gas || planet.algoId == 0) {
+        // The plugin ABI never requests a terrain digest, so a forced exact
+        // request for a gas giant returns a ready all-zero summary before any
+        // PlanetRawData scratch, terrain sampling or vein placement is entered.
+        if (!includeTerrainDigest)
+            return VeinAmountGenerationResult::Generated;
+        // Gas planets carry no veins, but they do get terrain: PlanetGen gives
+        // them precision 64 and PlanetAlgorithm0 fills heightData with
+        // (ushort)(radius * 100.0) and biomoData with 0.  Reproducing that is
+        // ~17k entries against ~162k for a real algorithm, so the digest is
+        // computed instead of leaving a zero sentinel that has to be excluded
+        // from every comparison.
+        constexpr int gasPrecision = 64;
+        constexpr auto gasLength = static_cast<std::size_t>(
+            (gasPrecision + 1) * (gasPrecision + 1) * 4);
+        static thread_local std::vector<std::uint16_t> gasHeight(gasLength);
+        static thread_local const std::vector<std::uint8_t> gasBiomo(gasLength, 0);
+        std::fill(gasHeight.begin(), gasHeight.end(),
+                  util::narrowToUInt16(static_cast<double>(planet.radius) * 100.0));
+        digest = {
+            fnv1a(gasHeight.data(), gasHeight.size() * sizeof(std::uint16_t)),
+            fnv1a(gasBiomo.data(), gasBiomo.size()),
+        };
         return VeinAmountGenerationResult::Generated;
+    }
     const auto *theme = themeProtoSet.select(planet.theme);
     if (theme == nullptr)
         return VeinAmountGenerationResult::MissingTheme;
@@ -366,16 +448,37 @@ VeinAmountGenerationResult generateVeinAmountSummary(
     if (planet.algoId < 1 || planet.algoId > 14)
         return VeinAmountGenerationResult::UnsupportedAlgorithm;
 
-    PlanetRawData raw(200);
-    raw.calcVerts();
-    terrain::PlanetAlgorithmContext terrainContext{raw, planet.seed, planet.radius};
-    auto terrainResult = terrain::dispatchTerrain(planet.algoId, terrainContext,
-                                                  planet.modX, planet.modY);
-    if (terrainResult == terrain::TerrainGenerationResult::UnsupportedAlgorithm) {
-        return VeinAmountGenerationResult::UnsupportedAlgorithm;
+    // PlanetGen gives every non-gas planet precision 200.  One buffer set is
+    // ~2.6 MB and its vertex grid is precision-derived, so the instance is
+    // reused per thread and only the per-planet height and biome data is
+    // cleared between planets.
+    static thread_local PlanetRawData raw = [] {
+        PlanetRawData data(200);
+        data.calcVerts();
+        return data;
+    }();
+    if (includeTerrainDigest) {
+        terrain::PlanetAlgorithmContext terrainContext{
+            raw, planet.seed, planet.radius};
+        auto terrainResult = terrain::dispatchTerrain(
+            planet.algoId, terrainContext, planet.modX, planet.modY);
+        if (terrainResult ==
+            terrain::TerrainGenerationResult::UnsupportedAlgorithm) {
+            return VeinAmountGenerationResult::UnsupportedAlgorithm;
+        }
+        digest = {
+            fnv1a(raw.heightData().data(),
+                  raw.heightData().size() * sizeof(std::uint16_t)),
+            fnv1a(raw.biomoData().data(), raw.biomoData().size()),
+        };
+        return generateBaseSummary(planet, *theme, raw, summary);
     }
-    generateBaseSummary(planet, *theme, raw, summary);
-    return VeinAmountGenerationResult::Generated;
+
+    raw.beginLazyTerrain(planet.algoId, planet.seed, planet.radius,
+                         planet.modX, planet.modY);
+    const auto result = generateBaseSummary(planet, *theme, raw, summary);
+    raw.endLazyTerrain();
+    return result;
 }
 
 }

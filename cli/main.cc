@@ -2,6 +2,7 @@
 #include "protoset.hh"
 #include "filter.hh"
 #include "settings.hh"
+#include "terrain/planet_raw_data.hh"
 #include "util/instrumentation.hh"
 
 #include <fmt/ostream.h>
@@ -12,15 +13,16 @@
 #include <iterator>
 #include <chrono>
 #include <condition_variable>
+#include <cstdlib>
 #include <cstdint>
 #include <deque>
-#include <exception>
 #include <mutex>
 #include <thread>
 #include <fstream>
 #include <iostream>
 #include <map>
 #include <string>
+#include <vector>
 
 static std::mutex mutex1, mutex2;
 static std::map<int, std::vector<std::pair<int, int>>> seedsToCheckMap;
@@ -36,22 +38,61 @@ static std::atomic_size_t nextSeedBlock;
 static bool useBlockScheduling = false;
 
 static bool poseOnly = false;
+// Host-level opt-in for the exact vein path. It is a CLI policy switch, not a
+// generator setting: plugins still choose which individual planets enter the
+// expensive path.
+static bool enableVeinAmounts = false;
 static std::atomic_int found;
-static std::atomic_bool scanFailed{false};
-static std::mutex scanErrorMutex;
-static std::string scanErrorMessage;
 static std::chrono::time_point<std::chrono::steady_clock> *startTime;
 
-static void reportScanFailure(int seed, const std::string &reason) {
-    bool expected = false;
-    if (!scanFailed.compare_exchange_strong(expected, true,
-                                            std::memory_order_acq_rel)) {
-        return;
+static std::uint64_t fnv1a(const void *data, std::size_t length) {
+    const auto *bytes = static_cast<const unsigned char *>(data);
+    std::uint64_t hash = 14695981039346656037ULL;
+    for (std::size_t i = 0; i < length; ++i)
+        hash = (hash ^ bytes[i]) * 1099511628211ULL;
+    return hash;
+}
+
+static bool installExactVeinVertexGrid() {
+    constexpr int precision = 200;
+    constexpr std::uint64_t expectedHash = 0xAB6A48495A09C255ULL;
+    const auto expectedCount = static_cast<std::size_t>(
+        (precision + 1) * (precision + 1) * 4);
+    std::vector<std::string> candidates;
+    if (const auto *configured = std::getenv("DSP_VERTS200_PATH"))
+        candidates.emplace_back(configured);
+    candidates.emplace_back("Prototypes/verts-200-game.bin");
+    candidates.emplace_back("tests/fixtures/game/verts-200-game.bin");
+
+    for (const auto &path: candidates) {
+        std::ifstream file(path, std::ios::binary | std::ios::ate);
+        if (!file) continue;
+        const auto byteCount = static_cast<std::size_t>(file.tellg());
+        if (byteCount != expectedCount * sizeof(dspugen::terrain::Vector3)) {
+            fmt::print(std::cerr,
+                       "exact vein vertex grid has the wrong size: {}\n", path);
+            return false;
+        }
+        file.seekg(0);
+        std::vector<dspugen::terrain::Vector3> vertices(expectedCount);
+        file.read(reinterpret_cast<char *>(vertices.data()),
+                  static_cast<std::streamsize>(byteCount));
+        if (!file || fnv1a(vertices.data(), byteCount) != expectedHash) {
+            fmt::print(std::cerr,
+                       "exact vein vertex grid does not match game build "
+                       "0.10.34.28529: {}\n", path);
+            return false;
+        }
+        if (!dspugen::terrain::PlanetRawData::installVertexGrid(
+                precision, vertices))
+            return false;
+        fmt::print(std::cerr, "Loaded exact vein vertex grid: {}\n", path);
+        return true;
     }
-    std::lock_guard lock(scanErrorMutex);
-    scanErrorMessage = fmt::format(
-        "exact vein amount generation failed for seed {}: {}", seed, reason);
-    fmt::print(std::cerr, "Error: {}\n", scanErrorMessage);
+    fmt::print(std::cerr,
+               "exact vein generation requires verts-200-game.bin; place it "
+               "under Prototypes/ or set DSP_VERTS200_PATH\n");
+    return false;
 }
 
 class OutputWriter {
@@ -134,7 +175,7 @@ private:
 static OutputWriter *outputWriter;
 
 static bool getNextSeed(int &seed, int &blockCurrent, int &blockEnd) {
-    if (scanFailed.load(std::memory_order_acquire)) return false;
+    if (pluginRuntimeFailed()) return false;
     if (useBlockScheduling) {
         if (blockCurrent >= blockEnd) {
             auto index = nextSeedBlock.fetch_add(1, std::memory_order_relaxed);
@@ -224,32 +265,15 @@ static void calc(std::uint32_t workerIndex) {
     // staged generation is hoisted ahead of the lock instead.
     const auto hoistedNeeds = serializeLegacyFilters
                               ? (prePlanetNeeds | filterNeeds | outputNeeds) : prePlanetNeeds;
-    constexpr std::uint64_t planetNeeds =
-        NeedsPlanetTopology | NeedsPlanetTheme | NeedsVeinMetadata | NeedsGas;
+    constexpr std::uint64_t planetNeeds = NeedsPlanetTopology |
+        NeedsPlanetTheme | NeedsVeinMetadata | NeedsGas | NeedsVeinAmounts;
     const auto ensureStagedNeeds = [&](dspugen::Galaxy *galaxy,
                                        std::uint64_t needs) {
-        // Exact vein generation also creates the complete planet topology and
-        // metadata.  Do not immediately repeat ensureAllPlanets() for the same
-        // stage when a plugin asks for both requirement bits.
-        if (needs & NeedsVeinAmounts) {
-            galaxy->ensureAllVeinAmounts();
-        } else if (needs & planetNeeds) {
-            galaxy->ensureAllPlanets();
-        }
+        // NeedsVeinAmounts prepares the ordered planet metadata only.  Exact
+        // terrain and vein placement starts inside the plugin for candidates
+        // that survived its cheap checks.
+        if (needs & planetNeeds) galaxy->ensureAllPlanets();
         if (needs & NeedsGas) galaxy->ensureAllGas();
-    };
-    const auto ensureStagedNeedsSafe = [&](dspugen::Galaxy *galaxy,
-                                           std::uint64_t needs,
-                                           int seed) {
-        try {
-            ensureStagedNeeds(galaxy, needs);
-            return true;
-        } catch (const std::exception &error) {
-            reportScanFailure(seed, error.what());
-        } catch (...) {
-            reportScanFailure(seed, "unknown exception");
-        }
-        return false;
     };
     // Reused across seeds: both were heap-allocated once per seed before.
     FilterInvocation invocation;
@@ -283,49 +307,40 @@ static void calc(std::uint32_t workerIndex) {
         auto galaxy = dspugen::Galaxy::create(dspugen::DefaultAlgoVersion, seed, starCount);
         if (!galaxy) continue;
         GalaxyReleaseGuard galaxyGuard{galaxy};
-        try {
-            if (!ensureStagedNeedsSafe(galaxy, hoistedNeeds, seed)) {
-                break;
-            }
-            std::unique_lock<std::mutex> legacyFilterLock(mutex2, std::defer_lock);
-            if (serializeLegacyFilters) legacyFilterLock.lock();
-            if (!runPrePlanetFilters(galaxy, invocation)) {
-                continue;
-            }
-            if (!serializeLegacyFilters) {
-                if (!ensureStagedNeedsSafe(galaxy, filterNeeds, seed)) {
-                    break;
-                }
-            }
-            if (!runFilters(galaxy, invocation)) {
-                continue;
-            }
-            if (!serializeLegacyFilters) {
-                if (!ensureStagedNeedsSafe(galaxy, outputNeeds, seed)) {
-                    break;
-                }
-            }
-            ownedOutput.clear();
-            formatOutput(galaxy, ownedOutput);
-            if (legacyFilterLock.owns_lock()) legacyFilterLock.unlock();
-            found.fetch_add(1, std::memory_order_relaxed);
-            if (needsOutputLock) {
-                std::unique_lock lk(mutex2);
-                runOutput(galaxy);
-            } else {
-                runOutput(galaxy);
-            }
-            fmt::format_to(std::back_inserter(rowBatch), "{},{}\n", seed, galaxy->starCount);
-            for (auto &record: ownedOutput) batchRecords.emplace_back(std::move(record));
-            ownedOutput.clear();
-            galaxyGuard.release();
-        } catch (const std::exception &error) {
-            reportScanFailure(seed, error.what());
-            break;
-        } catch (...) {
-            reportScanFailure(seed, "unknown exception");
-            break;
+        ensureStagedNeeds(galaxy, hoistedNeeds);
+        std::unique_lock<std::mutex> legacyFilterLock(mutex2, std::defer_lock);
+        if (serializeLegacyFilters) legacyFilterLock.lock();
+        if (!runPrePlanetFilters(galaxy, invocation)) {
+            if (pluginRuntimeFailed()) break;
+            continue;
         }
+        if (!serializeLegacyFilters) {
+            ensureStagedNeeds(galaxy, filterNeeds);
+        }
+        if (!runFilters(galaxy, invocation)) {
+            if (pluginRuntimeFailed()) break;
+            continue;
+        }
+        if (pluginRuntimeFailed()) break;
+        if (!serializeLegacyFilters) {
+            ensureStagedNeeds(galaxy, outputNeeds);
+        }
+        ownedOutput.clear();
+        formatOutput(galaxy, ownedOutput);
+        if (pluginRuntimeFailed()) break;
+        if (legacyFilterLock.owns_lock()) legacyFilterLock.unlock();
+        if (needsOutputLock) {
+            std::unique_lock lk(mutex2);
+            runOutput(galaxy);
+        } else {
+            runOutput(galaxy);
+        }
+        if (pluginRuntimeFailed()) break;
+        found.fetch_add(1, std::memory_order_relaxed);
+        fmt::format_to(std::back_inserter(rowBatch), "{},{}\n", seed, galaxy->starCount);
+        for (auto &record: ownedOutput) batchRecords.emplace_back(std::move(record));
+        ownedOutput.clear();
+        galaxyGuard.release();
     }
     if (!rowBatch.empty() || !batchRecords.empty())
         outputWriter->enqueue(std::move(rowBatch), std::move(batchRecords));
@@ -466,7 +481,7 @@ int main(int argc, char *argv[]) {
             break;
         case 'V':
             dspugen::settings.hasPlanets = true;
-            dspugen::settings.enableVeinAmounts = true;
+            enableVeinAmounts = true;
             break;
         case 'P':
             poseOnly = true;
@@ -494,29 +509,42 @@ int main(int argc, char *argv[]) {
         fmt::print(std::cerr, "      -n  Generate names for stars(which will reduce calculation speed)\n");
         fmt::print(std::cerr, "      -b  Generate only birth star\n");
         fmt::print(std::cerr, "      -p  Generate planet info for plugins use\n");
-        fmt::print(std::cerr, "      -V  Generate exact vein amount summaries (implies -p)\n");
+        fmt::print(std::cerr, "      -V  Enable exact vein amount requests from plugins (implies -p).\n");
+        fmt::print(std::cerr, "          Plugins can cheaply screen planets before requesting the game's\n");
+        fmt::print(std::cerr, "          exact vein placement for individual candidates. Exact requests\n");
+        fmt::print(std::cerr, "          remain much slower than normal planet checks. Requires\n");
+        fmt::print(std::cerr, "          the version-matched verts-200-game.bin vertex grid.\n");
         fmt::print(std::cerr, "      -P  Generate only poses, support only pose() filters\n");
         fmt::print(std::cerr, " Note: You need to supply either [filename] or [ranges...]\n");
         return -1;
     }
-    loadFilters();
-    if (poseOnly && dspugen::settings.enableVeinAmounts) {
+    // Flag conflicts are decided before any plugin runs, so a rejected command
+    // line cannot trigger plugin init side effects.
+    if (poseOnly && enableVeinAmounts) {
         fmt::print(std::cerr, "-V cannot be combined with -P\n");
-        unloadFilters();
         return -1;
     }
-    if (dspugen::settings.noPosition && dspugen::settings.enableVeinAmounts) {
+    if (dspugen::settings.noPosition && enableVeinAmounts) {
+        // -Z leaves every star at the origin, so resourceCoef would collapse to
+        // the birth-star value for the whole galaxy and every amount would be wrong.
         fmt::print(std::cerr, "-V cannot be combined with -Z\n");
-        unloadFilters();
         return -1;
     }
-    if (pluginsRequireVeinAmounts() && !dspugen::settings.enableVeinAmounts) {
+    loadFilters();
+    if (pluginsRequireVeinAmounts() && !enableVeinAmounts) {
         fmt::print(std::cerr, "a plugin requires -V/--vein-amounts\n");
         unloadFilters();
         return -1;
     }
     auto requirements = prePlanetRequirements() | filterRequirements() |
                         outputRequirements();
+    if ((requirements & NeedsVeinAmounts) &&
+        !installExactVeinVertexGrid()) {
+        unloadFilters();
+        return -1;
+    }
+    if (requirements & NeedsVeinAmounts)
+        setVeinAmountServiceAvailable(true);
     if (requirements & NeedsNames) dspugen::settings.genName = true;
     useBlockScheduling = pluginsAllowBlockScheduling();
     for (auto oind = optind; oind < argc; oind++) {
@@ -543,11 +571,6 @@ int main(int argc, char *argv[]) {
         if (threadCount > 1) --threadCount;
     }
     startTime = new std::chrono::time_point<std::chrono::steady_clock>(std::chrono::steady_clock::now());
-    scanFailed.store(false, std::memory_order_release);
-    {
-        std::lock_guard lock(scanErrorMutex);
-        scanErrorMessage.clear();
-    }
     for (auto &p: seedsToCheckMap) {
         auto &seeds = p.second;
         starCount = p.first;
@@ -577,7 +600,7 @@ int main(int argc, char *argv[]) {
             th.join();
         }
         mergePluginThreads();
-        if (scanFailed.load(std::memory_order_acquire)) break;
+        if (pluginRuntimeFailed()) break;
     }
     auto duration = std::chrono::steady_clock::now() - *startTime;
     outputWriter->finish();
@@ -594,5 +617,5 @@ int main(int argc, char *argv[]) {
     fmt::print(std::cerr, "Output file: {}\n", seedFilename);
     fmt::print(std::cerr, "============\n{}ms used, {} found from {} processed seeds.\n", std::chrono::duration_cast<std::chrono::milliseconds>(duration).count(), found.load(std::memory_order_relaxed), count);
     delete startTime;
-    return scanFailed.load(std::memory_order_acquire) ? -1 : 0;
+    return pluginRuntimeFailed() ? -1 : 0;
 }

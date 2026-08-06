@@ -69,7 +69,7 @@ const std::array<SimplexNoise::Grad, 32> SimplexNoise::grad4 = {{
     {-1.0, -1.0, -1.0, 0.0},
 }};
 
-std::array<std::int16_t, 256> SimplexNoise::p = {{
+const std::array<std::int16_t, 256> SimplexNoise::p = {{
     151, 160, 137, 91, 90, 15, 131, 13, 201, 95,
     96, 53, 194, 233, 7, 225, 140, 36, 103, 30,
     69, 142, 8, 99, 37, 240, 21, 10, 23, 190,
@@ -97,8 +97,6 @@ std::array<std::int16_t, 256> SimplexNoise::p = {{
     222, 114, 67, 29, 24, 72, 243, 141, 128, 195,
     78, 66, 215, 61, 156, 180,
 }};
-
-std::mutex SimplexNoise::pMutex;
 
 int SimplexNoise::fastFloor(double value) {
     auto result = static_cast<int>(value);
@@ -135,24 +133,50 @@ void SimplexNoise::initMember() {
 }
 
 void SimplexNoise::initMember(int seed) {
-    std::lock_guard<std::mutex> lock(pMutex);
+    // Lazy terrain sampling enters the same algorithm many times for one
+    // planet.  The shuffled permutation is a pure function of seed, so retain
+    // enough per-thread entries for every simultaneously live noise object and
+    // copy the exact arrays instead of replaying 256 Random calls per query.
+    struct CachedPermutation {
+        bool valid = false;
+        int seed = 0;
+        std::array<std::int16_t, 512> perm{};
+        std::array<std::int16_t, 512> permMod12{};
+    };
+    static thread_local std::array<CachedPermutation, 8> cache{};
+    static thread_local std::size_t nextSlot = 0;
+    for (const auto &entry: cache) {
+        if (!entry.valid || entry.seed != seed) continue;
+        perm = entry.perm;
+        permMod12 = entry.permMod12;
+        return;
+    }
+
+    std::array<std::int16_t, 256> shuffled{};
     for (int i = 0; i < 256; ++i)
-        p[static_cast<std::size_t>(i)] = static_cast<std::int16_t>(i);
+        shuffled[static_cast<std::size_t>(i)] = static_cast<std::int16_t>(i);
 
     util::DotNet35Random random(seed);
     for (int j = 0; j < 256; ++j) {
         int num = random.next(0, 256);
-        auto &current = p[static_cast<std::size_t>(j)];
-        auto &other = p[static_cast<std::size_t>(num)];
+        auto &current = shuffled[static_cast<std::size_t>(j)];
+        auto &other = shuffled[static_cast<std::size_t>(num)];
         auto value = current;
         current = other;
         other = value;
     }
     for (int k = 0; k < 512; ++k) {
-        perm[static_cast<std::size_t>(k)] = p[static_cast<std::size_t>(k & 0xff)];
+        perm[static_cast<std::size_t>(k)] =
+            shuffled[static_cast<std::size_t>(k & 0xff)];
         permMod12[static_cast<std::size_t>(k)] =
             static_cast<std::int16_t>(perm[static_cast<std::size_t>(k)] % 12);
     }
+    auto &entry = cache[nextSlot];
+    entry.valid = true;
+    entry.seed = seed;
+    entry.perm = perm;
+    entry.permMod12 = permMod12;
+    nextSlot = (nextSlot + 1) % cache.size();
 }
 
 double SimplexNoise::Noise(double xin) const {

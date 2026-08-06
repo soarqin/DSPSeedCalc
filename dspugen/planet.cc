@@ -21,6 +21,11 @@
 
 namespace dspugen {
 
+// Mono evaluates a managed float expression in double and narrows once, where
+// the reference stores into a float32 location.
+static constexpr double dbl(float value) { return static_cast<double>(value); }
+static constexpr float flt(double value) { return static_cast<float>(value); }
+
 static thread_local util::MemPool<Planet> *ppool;
 
 static constexpr float OrbitRadiusFactor[17] = {
@@ -77,6 +82,8 @@ void Planet::reset() {
     waterHeight = 0.0f;
     waterItemId = 0;
     veinAmountData.reset();
+    veinTerrainDigest = {};
+    veinTerrainDigestReady = false;
     veinAmountResult = VeinAmountGenerationResult::NotGenerated;
 }
 
@@ -86,11 +93,18 @@ const VeinAmountSummary *Planet::veinAmountSummary() const {
                : nullptr;
 }
 
-VeinAmountGenerationResult Planet::ensureVeinAmounts() {
-    if (veinAmountResult != VeinAmountGenerationResult::NotGenerated)
+VeinAmountGenerationResult Planet::ensureVeinAmounts(
+    bool includeTerrainDigest) {
+    if (veinAmountResult != VeinAmountGenerationResult::NotGenerated &&
+        (!includeTerrainDigest || veinTerrainDigestReady))
         return veinAmountResult;
-    veinAmountData = std::make_unique<VeinAmountSummary>();
-    veinAmountResult = generateVeinAmountSummary(*this, *veinAmountData);
+    if (!veinAmountData)
+        veinAmountData = std::make_unique<VeinAmountSummary>();
+    veinAmountResult =
+        generateVeinAmountSummary(*this, *veinAmountData, veinTerrainDigest,
+                                  includeTerrainDigest);
+    veinTerrainDigestReady = includeTerrainDigest &&
+        veinAmountResult == VeinAmountGenerationResult::Generated;
     if (veinAmountResult != VeinAmountGenerationResult::Generated)
         veinAmountData.reset();
     return veinAmountResult;
@@ -145,11 +159,15 @@ Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, i
     float num16;
     if (orbitAround == 0) {
         num16 = OrbitRadiusFactor[orbitIndex] * star->orbitScaler;
-        auto num17 = (num15 - 1.0f) / std::max(1.0f, num16) + 1.0f;
+        auto num17 = flt((dbl(num15) - 1.0) / dbl(std::max(1.0f, num16)) + 1.0);
         num16 *= num17;
     } else {
-        num16 = ((1600.0f * orbitIndex + 200.0f) * util::mathfPow(star->orbitScaler, 0.3f) *
-                  util::lerp(num15, 1.0f, 0.5f) + planet->orbitAroundPlanet->realRadius()) / 40000.0;
+        // The reference stores this whole chain straight into the float32 local,
+        // so every product and the sum stay in double and round exactly once.
+        num16 = flt(((1600.0 * dbl(float(orbitIndex)) + 200.0) *
+                     dbl(util::mathfPow(star->orbitScaler, 0.3f)) *
+                     dbl(util::lerp(num15, 1.0f, 0.5f)) +
+                     dbl(planet->orbitAroundPlanet->realRadius())) / 40000.0);
     }
 
     planet->orbitRadius = num16;
@@ -187,7 +205,9 @@ Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, i
     }
 
     planet->rotationPeriod = (num9 * num10 * 1000.0 + 400.0) *
-        (orbitAround == 0 ? std::pow(num16, 0.25f) : 1.0f) *
+        // Mathf.Pow, i.e. (float)Math.Pow(double, double). Calling powf instead
+        // double-rounds differently and flips one planet per 62,541.
+        (orbitAround == 0 ? util::mathfPow(num16, 0.25f) : 1.0f) *
         (gasGiant ? 0.2f : 1.0f);
     if (!gasGiant) {
         if (star->type == EStarType::WhiteDwarf)
@@ -252,7 +272,9 @@ Planet *Planet::create(Star *star, int index, int orbitAround, int orbitIndex, i
         a = util::lerp(a, 0.35f, 0.5f);
         a = std::clamp(a, 0.08f, 0.8f);
         planet->habitableBias = num22 * num24;
-        planet->temperatureBias = 1.2f / (num23 + 0.2f) - 1.0f;
+        // Mono widens both float32 constants before the divide; using the true
+        // double literals 1.2 / 0.2 here is wrong and mismatches 81% of planets.
+        planet->temperatureBias = flt(dbl(1.2f) / (dbl(num23) + dbl(0.2f)) - 1.0);
 
         auto f = util::clamp01(planet->habitableBias / a);
         auto p = a * 10.0f;
@@ -315,8 +337,13 @@ void Planet::generateGas() {
     for (auto num5 = 0; num5 < num3; num5++) {
         DSP_INSTRUMENT(++util::instrumentation::local().gasEntriesGenerated);
         auto speed = themeProto4->gasSpeeds[num5];
-        speed *= float(dotNet35Random.nextDouble()) * 0.19090915f + 0.9090909f;
-        gasSpeeds[num5] = speed * resourceScale;
+        // num6 *= (float)rand * 0.19090915f + 0.9090909f: the whole right-hand
+        // side and the multiply stay in double and round once into num6.
+        // The reference's `num6 *= gasCoef` is omitted: gasCoef is 1f, so the
+        // multiply is exact.
+        speed = flt(dbl(speed) *
+                    (dbl(float(dotNet35Random.nextDouble())) * dbl(0.19090915f) + dbl(0.9090909f)));
+        gasSpeeds[num5] = flt(dbl(speed) * dbl(resourceScale));
 /*
         auto *itemProto = itemProtoSet.select(gasItems[num5]);
         gasHeatValues[num5] = itemProto->heatValue;
@@ -403,7 +430,14 @@ void Planet::setPlanetTheme(double rand1, double rand2, double rand3, double ran
 
     if (themeProto4 == nullptr) return;
     type = static_cast<EPlanetType>(themeProto4->planetType);
-    if (themeProto4->distribute == EThemeDistribute::Birth)
+    // UniverseGen scans only the birth star's planets, in index order, and keeps
+    // the first Birth-distribute theme it finds.  Planets are created in index
+    // order, so first-assignment-wins reproduces that.  Both guards matter: the
+    // theme filter currently makes Birth reachable only on star 0, and the
+    // snapshot currently holds exactly one Birth theme, but neither is a
+    // property this code should depend on.
+    if (themeProto4->distribute == EThemeDistribute::Birth &&
+        star->index == 0 && galaxy->birthPlanetId == 0)
         galaxy->birthPlanetId = id;
     waterHeight = themeProto4->waterHeight;
     waterItemId = themeProto4->waterItemId;

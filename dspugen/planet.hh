@@ -142,9 +142,15 @@ public:
     int waterItemId = 0;
 
     [[nodiscard]] const VeinAmountSummary *veinAmountSummary() const;
-    [[nodiscard]] VeinAmountGenerationResult ensureVeinAmounts();
+    [[nodiscard]] VeinAmountGenerationResult ensureVeinAmounts(
+        bool includeTerrainDigest = false);
     [[nodiscard]] VeinAmountGenerationResult veinAmountGenerationResult() const {
         return veinAmountResult;
+    }
+    // Diagnostic only; populated when ensureVeinAmounts(true) requests the
+    // complete terrain buffers for the parity oracle.
+    [[nodiscard]] const TerrainDigest &terrainDigest() const {
+        return veinTerrainDigest;
     }
 
     static Planet *create(Star *star, int index, int orbitAround, int orbitIndex, int number, bool gasGiant, int infoSeed, int genSeed);
@@ -158,6 +164,8 @@ private:
     void generateVeins();
 
     std::unique_ptr<VeinAmountSummary> veinAmountData;
+    TerrainDigest veinTerrainDigest;
+    bool veinTerrainDigestReady = false;
     VeinAmountGenerationResult veinAmountResult =
         VeinAmountGenerationResult::NotGenerated;
 };
