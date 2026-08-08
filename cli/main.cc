@@ -465,7 +465,7 @@ int main(int argc, char *argv[]) {
     while ((opt = getopt_long(argc, argv, ":t:i:o:bpPZnV", longOptions, nullptr)) != -1) {
         switch (opt) {
         case ':':
-            fmt::print(std::cerr, "mssing argument for {}\n", static_cast<char>(optopt));
+            fmt::print(std::cerr, "missing argument for {}\n", static_cast<char>(optopt));
             return -1;
         case '?':
             fmt::print(std::cerr, "bad arument: {}\n", static_cast<char>(optopt));
