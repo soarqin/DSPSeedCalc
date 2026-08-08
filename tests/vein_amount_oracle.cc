@@ -193,6 +193,10 @@ void dumpHeights(int seed, int starCount, const std::vector<int> &planetIds) {
                           "-cpp.bin";
         const auto heightName = "height-" + stem;
         std::FILE *file = std::fopen(heightName.c_str(), "wb");
+        if (!file) {
+            std::perror(heightName.c_str());
+            continue;
+        }
         std::fwrite(raw.heightData().data(), sizeof(std::uint16_t),
                     raw.heightData().size(), file);
         std::fclose(file);
@@ -212,7 +216,17 @@ void dumpGalaxy(int seed, int starCount, bool includeTerrainDigest) {
     dspugen::settings.hasPlanets = true;
     auto *galaxy = dspugen::Galaxy::create(
         dspugen::DefaultAlgoVersion, seed, starCount);
-    galaxy->ensureAllVeinAmounts(includeTerrainDigest);
+    if (!galaxy) {
+        std::cerr << "failed to create galaxy for seed " << seed << '\n';
+        std::exit(1);
+    }
+    const auto batch = galaxy->ensureAllVeinAmounts(includeTerrainDigest);
+    if (!batch.ok()) {
+        std::cerr << "vein generation failed for seed " << seed << ", planet "
+                  << batch.planetId << ", algorithm " << batch.algoId << ": "
+                  << dspugen::veinAmountResultName(batch.result) << '\n';
+        std::exit(1);
+    }
     std::cout << "galaxy seed=" << seed << " stars=" << galaxy->starCount
               << " birthPlanet=" << galaxy->birthPlanetId << '\n';
     for (const auto *star: galaxy->stars) {
