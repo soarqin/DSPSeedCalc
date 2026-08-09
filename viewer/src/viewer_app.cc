@@ -28,11 +28,13 @@
 #include "camera_controller.hh"
 #include "app_resources.hh"
 #include "material_catalog.hh"
+#include "panel_scroll.hh"
 #include "post_process.hh"
 #include "render_resources.hh"
 #include "scene_renderer.hh"
 #include "view_model.hh"
 #include "view_model_builder.hh"
+#include "viewer_selection.hh"
 #include "viewer_ui.hh"
 
 #include <raylib.h>
@@ -57,6 +59,9 @@ namespace viewer {
 constexpr int kScreenWidth = 1920;
 constexpr int kScreenHeight = 1080;
 constexpr float kPanelWidth = 326.0f;
+constexpr int kGalaxyPanelFooterReserved = 112;
+constexpr int kSystemStarPanelFooterReserved = 125;
+constexpr int kSystemPlanetPanelFooterReserved = 170;
 constexpr float kSystemOrbitScale = 10.0f;
 // `UIStarmapPlanet._OnCreate` writes 60 positions at six degree steps and leaves `loop` on.
 constexpr int kOrbitSegments = 60;
@@ -67,6 +72,20 @@ constexpr int kEnterButtonTextWidth = 243;
 constexpr int kBackButtonTextWidth = 80;
 constexpr int kViewerFontSize = 64;
 constexpr std::size_t kInvalidIndex = std::numeric_limits<std::size_t>::max();
+
+#if defined(__EMSCRIPTEN__)
+int WebViewportWidth() {
+    return std::max(1, EM_ASM_INT({
+        return Math.max(1, document.documentElement.clientWidth || window.innerWidth || 1);
+    }));
+}
+
+int WebViewportHeight() {
+    return std::max(1, EM_ASM_INT({
+        return Math.max(1, document.documentElement.clientHeight || window.innerHeight || 1);
+    }));
+}
+#endif
 
 class Viewer {
 public:
@@ -80,7 +99,11 @@ public:
 
     bool Init() {
         SetConfigFlags(FLAG_MSAA_4X_HINT | FLAG_WINDOW_HIGHDPI | FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
+#if defined(__EMSCRIPTEN__)
+        InitWindow(WebViewportWidth(), WebViewportHeight(), "DSPSeedCalc Universe Viewer");
+#else
         InitWindow(kScreenWidth, kScreenHeight, "DSPSeedCalc Universe Viewer");
+#endif
         if (!LoadRenderResources(resources, fontPath)) {
             Shutdown();
             return false;
@@ -114,6 +137,7 @@ public:
         hoveredStar = kInvalidIndex;
         selectedPlanet = kInvalidIndex;
         hoveredPlanet = kInvalidIndex;
+        panelScrollOffset = 0.0f;
         previousClickedStar = kInvalidIndex;
         previousClickedPlanet = kInvalidIndex;
         previousClickTime = -1.0;
@@ -124,6 +148,12 @@ public:
         galaxy = dspugen::Galaxy::create(dspugen::DefaultAlgoVersion, seed, starCount);
         if (galaxy == nullptr) return false;
         galaxy->ensureAllPlanets();
+        const auto veinAmounts = galaxy->ensureAllVeinAmounts();
+        if (!veinAmounts.ok()) {
+            std::fprintf(stderr, "viewer: exact mineral calculation failed for planet %d (algorithm %d): %s\n",
+                         veinAmounts.planetId, veinAmounts.algoId,
+                         dspugen::veinAmountResultName(veinAmounts.result));
+        }
 
         stars.reserve(galaxy->stars.size());
         systems.resize(galaxy->stars.size());
@@ -145,6 +175,7 @@ public:
             view.spotMaterial = StarSpotMaterial(star);
             stars.emplace_back(std::move(view));
         }
+        selectedStar = DefaultSelectedStarIndex(stars.size());
         galaxyLines = CreateGalaxyLines(galaxy, stars);
         for (std::size_t i = 0; i < stars.size(); ++i) BuildSystemCache(i);
         char summary[96];
@@ -206,6 +237,7 @@ private:
     std::size_t inputAnchor[2] = {};
     bool draggingInput = false;
     bool inputConsumed = false;
+    float panelScrollOffset = 0.0f;
 
     static void Loop() {
         if (current == nullptr) return;
@@ -357,6 +389,7 @@ private:
         mode = ViewMode::System;
         selectedPlanet = kInvalidIndex;
         hoveredPlanet = kInvalidIndex;
+        panelScrollOffset = 0.0f;
         float systemRadius = CurrentSystem().radius;
         systemCameraTarget = Vector3 {};
         cameraController.ResetSystem(camera, systemRadius, systemCameraTarget);
@@ -510,6 +543,7 @@ private:
         mode = ViewMode::Galaxy;
         selectedPlanet = kInvalidIndex;
         hoveredPlanet = kInvalidIndex;
+        panelScrollOffset = 0.0f;
         cameraController.ResetGalaxy(camera);
     }
 
@@ -572,11 +606,13 @@ private:
         if (!IsMouseButtonPressed(MOUSE_BUTTON_LEFT) || MouseOnPanel()) return;
         if (hoveredStar == kInvalidIndex) {
             selectedStar = kInvalidIndex;
+            panelScrollOffset = 0.0f;
             return;
         }
         double now = GetTime();
         bool doubleClick = previousClickedStar == hoveredStar && now - previousClickTime < 0.34;
         selectedStar = hoveredStar;
+        panelScrollOffset = 0.0f;
         previousClickedStar = hoveredStar;
         previousClickTime = now;
         if (doubleClick) EnterSystem();
@@ -592,11 +628,13 @@ private:
         if (!IsMouseButtonPressed(MOUSE_BUTTON_LEFT) || MouseOnPanel()) return;
         if (hoveredPlanet == kInvalidIndex) {
             selectedPlanet = kInvalidIndex;
+            panelScrollOffset = 0.0f;
             return;
         }
         double now = GetTime();
         bool doubleClick = previousClickedPlanet == hoveredPlanet && now - previousClickTime < 0.34;
         selectedPlanet = hoveredPlanet;
+        panelScrollOffset = 0.0f;
         previousClickedPlanet = hoveredPlanet;
         previousClickTime = now;
         if (doubleClick) {
@@ -609,6 +647,8 @@ private:
     void Update() {
         if (shutdown) return;
         inputConsumed = false;
+        float wheel = GetMouseWheelMove();
+        bool panelWheelConsumed = UpdatePanelScroll(wheel);
         double now = GetTime();
         if (lastFrameTime < 0.0) lastFrameTime = now;
         simulationTime += std::max(0.0, now - lastFrameTime) * timeScale;
@@ -624,7 +664,7 @@ private:
         }
         bool editingInput = mode == ViewMode::Galaxy && activeInput != 0;
         if (!editingInput)
-            cameraController.Update(camera, mode, systemCameraTarget);
+            cameraController.Update(camera, mode, systemCameraTarget, panelWheelConsumed ? 0.0f : wheel);
         if (mode == ViewMode::Galaxy) HandleGalaxySettingsInput();
         UpdateTimeSlider();
         UpdatePlanetPositions(now);
@@ -647,6 +687,40 @@ private:
         }
     }
 
+    const PanelData *CurrentPanel() const {
+        if (mode == ViewMode::Galaxy) {
+            return selectedStar == kInvalidIndex ? nullptr : &stars[selectedStar].panel;
+        }
+        if (selectedStar == kInvalidIndex) return nullptr;
+        return selectedPlanet == kInvalidIndex ? &stars[selectedStar].panel
+                                                : &CurrentSystem().planets[selectedPlanet].panel;
+    }
+
+    int CurrentPanelFooterReserved() const {
+        if (mode == ViewMode::Galaxy) return kGalaxyPanelFooterReserved;
+        return selectedPlanet == kInvalidIndex ? kSystemStarPanelFooterReserved
+                                                : kSystemPlanetPanelFooterReserved;
+    }
+
+    bool UpdatePanelScroll(float wheel) {
+        const PanelData *panel = CurrentPanel();
+        if (!MouseOnPanel()) {
+            return false;
+        }
+        if (panel == nullptr) return std::abs(wheel) > 0.0f;
+        ViewerPanelLayout layout = GetViewerPanelLayout(resources.font, *panel,
+                                                         CurrentPanelFooterReserved());
+        float maxOffset = std::max(0.0f, layout.mineralContentHeight - layout.mineralBounds.height);
+        if (maxOffset <= 0.0f) {
+            panelScrollOffset = 0.0f;
+            return std::abs(wheel) > 0.0f;
+        }
+        panelScrollOffset = PanelScroll::ApplyWheel(panelScrollOffset, wheel,
+                                                     layout.mineralContentHeight,
+                                                     layout.mineralBounds.height);
+        return std::abs(wheel) > 0.0f;
+    }
+
     void DrawTopBar() {
         DrawRectangle(0, 0, GetScreenWidth() - static_cast<int>(kPanelWidth), 62,
                       Color {5, 12, 23, 218});
@@ -666,7 +740,8 @@ private:
     void DrawGalaxyOverlay() {
         int x = GetScreenWidth() - static_cast<int>(kPanelWidth) + 22;
         if (selectedStar != kInvalidIndex) {
-            DrawViewerPanel(resources.font, stars[selectedStar].panel);
+            DrawViewerPanel(resources.font, stars[selectedStar].panel, panelScrollOffset,
+                            CurrentPanelFooterReserved());
         } else {
             DrawPanelBackground();
             DrawTextLine(resources.font, "SELECT A STAR", x, 94, 20, Color {137, 221, 255, 255});
@@ -683,8 +758,12 @@ private:
     }
 
     void DrawSystemOverlay() {
-        if (selectedPlanet != kInvalidIndex) DrawViewerPanel(resources.font, CurrentSystem().planets[selectedPlanet].panel);
-        else DrawViewerPanel(resources.font, stars[selectedStar].panel);
+        if (selectedPlanet != kInvalidIndex)
+            DrawViewerPanel(resources.font, CurrentSystem().planets[selectedPlanet].panel,
+                            panelScrollOffset, CurrentPanelFooterReserved());
+        else
+            DrawViewerPanel(resources.font, stars[selectedStar].panel, panelScrollOffset,
+                            CurrentPanelFooterReserved());
         int x = GetScreenWidth() - static_cast<int>(kPanelWidth) + 22;
         Rectangle slider = TimeSliderBounds();
         DrawRectangleRounded(slider, 0.5f, 4, Color {25, 43, 61, 255});

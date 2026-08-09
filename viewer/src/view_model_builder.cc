@@ -5,8 +5,11 @@
 #include <raymath.h>
 
 #include <algorithm>
+#include <array>
 #include <cmath>
+#include <cstdint>
 #include <cstdio>
+#include <string>
 
 namespace viewer {
 namespace {
@@ -89,6 +92,17 @@ const char *VeinName(int veinType) {
     return veinType > 0 && veinType < static_cast<int>(sizeof(names) / sizeof(names[0])) ? names[veinType] : "Unknown";
 }
 
+std::string FormatInteger(std::int64_t value) {
+    std::string digits = std::to_string(value);
+    const bool negative = !digits.empty() && digits.front() == '-';
+    const std::size_t firstDigit = negative ? 1 : 0;
+    for (std::size_t position = digits.size(); position > firstDigit + 3;) {
+        position -= 3;
+        digits.insert(position, ",");
+    }
+    return digits;
+}
+
 template<typename... Args>
 std::string FormatString(const char *format, Args... args) {
     int length = std::snprintf(nullptr, 0, format, args...);
@@ -96,6 +110,52 @@ std::string FormatString(const char *format, Args... args) {
     std::string result(static_cast<std::size_t>(length), '\0');
     std::snprintf(result.data(), result.size() + 1, format, args...);
     return result;
+}
+
+struct MineralTotals {
+    std::array<std::uint64_t, dspugen::VeinTypeCount> pileCount{};
+    std::array<std::int64_t, dspugen::VeinTypeCount> exactAmount{};
+    bool complete = true;
+    dspugen::VeinAmountGenerationResult firstFailure =
+        dspugen::VeinAmountGenerationResult::Generated;
+};
+
+void AddPlanetMinerals(const dspugen::Planet *planet, MineralTotals &totals) {
+    const auto result = planet->veinAmountGenerationResult();
+    const auto *summary = planet->veinAmountSummary();
+    if (result != dspugen::VeinAmountGenerationResult::Generated || summary == nullptr) {
+        if (totals.complete) {
+            totals.firstFailure = result == dspugen::VeinAmountGenerationResult::Generated
+                                      ? dspugen::VeinAmountGenerationResult::InternalError
+                                      : result;
+        }
+        totals.complete = false;
+        return;
+    }
+    for (std::size_t i = 1; i < dspugen::VeinTypeCount; ++i) {
+        totals.pileCount[i] += summary->nodeCount[i];
+        totals.exactAmount[i] += summary->baseAmount[i];
+    }
+}
+
+std::vector<MineralPanelRow> CreateMineralRows(const MineralTotals &totals) {
+    std::vector<MineralPanelRow> rows;
+    for (std::size_t i = 1; i < dspugen::VeinTypeCount; ++i) {
+        if (totals.pileCount[i] == 0 && totals.exactAmount[i] == 0) continue;
+        rows.push_back({VeinName(static_cast<int>(i)),
+                        FormatInteger(static_cast<std::int64_t>(totals.pileCount[i])),
+                        FormatInteger(totals.exactAmount[i])});
+    }
+    return rows;
+}
+
+void SetMineralStatus(PanelData &panel, const MineralTotals &totals) {
+    panel.mineralTitle = "MINERALS";
+    if (!totals.complete) {
+        panel.mineralStatus =
+            std::string("Exact calculation unavailable: ") +
+            dspugen::veinAmountResultName(totals.firstFailure);
+    }
 }
 
 }
@@ -135,6 +195,11 @@ PanelData CreateStarPanel(const dspugen::Star *star, int galaxySeed) {
         {"dyson radius", FormatString("%.4f AU", star->dysonRadius)},
         {"planets", std::to_string(star->planets.size())},
     };
+    MineralTotals minerals;
+    for (const auto *planet: star->planets) AddPlanetMinerals(planet, minerals);
+    SetMineralStatus(panel, minerals);
+    panel.mineralTitle = "MINERALS · ALL PLANETS";
+    panel.mineralRows = CreateMineralRows(minerals);
     panel.footerValue = "Original-style sprite lighting";
     return panel;
 }
@@ -152,9 +217,10 @@ PanelData CreatePlanetPanel(const dspugen::Planet *planet, const std::string &na
         {"real radius", FormatString("%.1f km", planet->realRadius())},
         {"luminosity", FormatString("%.2f", planet->luminosity)}, {"theme", ThemeName(planet->theme)},
     };
-    for (int i = 1; i < 15; ++i)
-        if (planet->veinSpot[i] > 0) panel.detailRows.push_back({VeinName(i), std::to_string(planet->veinSpot[i])});
-    if (panel.detailRows.empty()) panel.detailRows.push_back({"None", ""});
+    MineralTotals minerals;
+    AddPlanetMinerals(planet, minerals);
+    SetMineralStatus(panel, minerals);
+    panel.mineralRows = CreateMineralRows(minerals);
     panel.footerKey = "singularities";
     panel.footerValue = SingularityName(planet->singularity);
     return panel;

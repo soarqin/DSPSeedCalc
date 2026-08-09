@@ -124,8 +124,7 @@ void CameraController::FocusSystem(Camera3D &camera, Vector3 target, float radiu
     ApplySystem(camera, target);
 }
 
-void CameraController::Update(Camera3D &camera, ViewMode mode, Vector3 systemTarget) {
-    float wheel = GetMouseWheelMove();
+void CameraController::Update(Camera3D &camera, ViewMode mode, Vector3 systemTarget, float wheel) {
     bool middleDown = IsMouseButtonDown(MOUSE_BUTTON_MIDDLE);
     bool rightDown = IsMouseButtonDown(MOUSE_BUTTON_RIGHT);
     Vector2 delta = GetMouseDelta();

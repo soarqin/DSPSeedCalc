@@ -68,12 +68,20 @@ struct PanelRow {
     std::string value;
 };
 
+struct MineralPanelRow {
+    const char *key = nullptr;
+    std::string pileCount;
+    std::string exactAmount;
+};
+
 struct PanelData {
     std::string title;
     std::string name;
     std::string subtitle;
     std::vector<PanelRow> rows;
-    std::vector<PanelRow> detailRows;
+    std::string mineralTitle;
+    std::vector<MineralPanelRow> mineralRows;
+    std::string mineralStatus;
     std::string footerKey;
     std::string footerValue;
 };

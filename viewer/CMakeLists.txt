@@ -10,12 +10,18 @@ set(DSP_VIEWER_SOURCES
     src/main.cc
     src/viewer_app.cc
     src/viewer_app.hh
+    src/viewer_selection.cc
+    src/viewer_selection.hh
     src/camera_controller.cc
     src/camera_controller.hh
     src/material_catalog.cc
     src/material_catalog.hh
     src/post_process.cc
     src/post_process.hh
+    src/panel_footer.cc
+    src/panel_footer.hh
+    src/panel_scroll.cc
+    src/panel_scroll.hh
     src/render_resources.cc
     src/render_resources.hh
     src/scene_renderer.cc
@@ -138,6 +144,50 @@ target_link_libraries(${PROJECT_NAME} PRIVATE dspugen raylib)
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 if(APPLE)
     target_link_libraries(${PROJECT_NAME} PRIVATE "-framework IOKit" "-framework Cocoa" "-framework OpenGL")
+endif()
+
+if(DSP_BUILD_TESTS)
+    add_executable(viewer_panel_footer_test
+        "${CMAKE_SOURCE_DIR}/tests/viewer_panel_footer_test.cc"
+        src/panel_footer.cc)
+    target_include_directories(viewer_panel_footer_test PRIVATE src)
+    target_compile_features(viewer_panel_footer_test PRIVATE cxx_std_17)
+    target_compile_options(viewer_panel_footer_test PRIVATE
+        $<$<CXX_COMPILER_ID:MSVC>:/UNDEBUG>
+        $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-UNDEBUG>)
+    set_target_properties(viewer_panel_footer_test PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+    add_test(NAME viewer_panel_footer
+             COMMAND viewer_panel_footer_test
+             WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+
+    add_executable(viewer_selection_test
+        "${CMAKE_SOURCE_DIR}/tests/viewer_selection_test.cc"
+        src/viewer_selection.cc)
+    target_include_directories(viewer_selection_test PRIVATE src)
+    target_compile_features(viewer_selection_test PRIVATE cxx_std_17)
+    target_compile_options(viewer_selection_test PRIVATE
+        $<$<CXX_COMPILER_ID:MSVC>:/UNDEBUG>
+        $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-UNDEBUG>)
+    set_target_properties(viewer_selection_test PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+    add_test(NAME viewer_selection
+             COMMAND viewer_selection_test
+             WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+
+    add_executable(viewer_panel_scroll_test
+        "${CMAKE_SOURCE_DIR}/tests/viewer_panel_scroll_test.cc"
+        src/panel_scroll.cc)
+    target_include_directories(viewer_panel_scroll_test PRIVATE src)
+    target_compile_features(viewer_panel_scroll_test PRIVATE cxx_std_17)
+    target_compile_options(viewer_panel_scroll_test PRIVATE
+        $<$<CXX_COMPILER_ID:MSVC>:/UNDEBUG>
+        $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-UNDEBUG>)
+    set_target_properties(viewer_panel_scroll_test PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+    add_test(NAME viewer_panel_scroll
+             COMMAND viewer_panel_scroll_test
+             WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 endif()
 
 if(EMSCRIPTEN)
