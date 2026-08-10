@@ -21,11 +21,12 @@ public:
     [[nodiscard]] int substride() const { return precisionValue + 1; }
 
     // Supplies a vertex grid captured from the running game for one precision.
-    // Vector3.Slerp lives in Unity's engine native code, so calcVerts() cannot
-    // reproduce it bit for bit; when a captured grid is installed it is used
-    // verbatim and only the index map is recomputed from it.  Returns false if
-    // the data length does not match the precision.  Global and immutable once
-    // set: install it before starting worker threads.
+    // It is retained as an optional oracle fixture for parity checks; the
+    // built-in calcVerts() path also reproduces the native Vector3.Slerp grid.
+    // When a captured grid is installed it is used verbatim and only the index
+    // map is recomputed from it. Returns false if the data length does not
+    // match the precision. Global and immutable once set: install it before
+    // starting worker threads.
     static bool installVertexGrid(int precision, const std::vector<Vector3> &vertices);
     [[nodiscard]] static bool hasVertexGrid(int precision);
 

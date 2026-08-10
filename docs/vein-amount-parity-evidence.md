@@ -37,7 +37,7 @@ python tools/verify_vein_parity.py cmake-build-gcc-release-parity/bin/dspugen_ve
 
 ## 当前结果
 
-装入游戏导出的顶点网格后，seed 0 的 **258 颗行星（227 颗生成地形 + 31 颗气态）零例外与游戏逐位完全一致**：`heightData` 摘要、`biomoData` 摘要、矿点数、基础矿量，以及恒星数与出生行星，全部相同。GCC Debug、GCC Release、Clang Release 三套工具链结果一致。
+使用 native `Vector3.Slerp` 复刻生成顶点网格后，seed 0 的 **258 颗行星（227 颗生成地形 + 31 颗气态）零例外与游戏逐位完全一致**：`heightData` 摘要、`biomoData` 摘要、矿点数、基础矿量，以及恒星数与出生行星，全部相同。捕获的游戏网格仅用于独立交叉验证。GCC Debug、GCC Release、Clang Release 三套工具链结果一致。
 
 达成这一结果需要两条独立的根因修正，见后文两节：
 
@@ -98,7 +98,7 @@ double num6 = data.vertices[i].x * planet.radius;   // 两个 float 相乘
 
 `Vector3.Normalize` / `magnitude`、`Vector2.Normalize` / `magnitude`、`Mathf.Clamp`、`Clamp01`、`Lerp`、`Round`、`RoundToInt`、`FloorToInt`、`Pow`、`Abs`、`Sqrt` 的**算法**均已逐条核对无误；它们的**求值精度**按上节规则另行修正（`magnitude` 的平方和留在双精度、`Mathf.Lerp` 只在返回时收窄一次等）。
 
-### 引擎原生代码：无法还原，也无法靠重写对齐
+### 引擎原生代码：历史结论与复核
 
 `Vector3.Slerp`、`Quaternion.FromToRotation`、`Quaternion.AngleAxis` 在托管层只是 `[FreeFunction]` + `MethodImplOptions.InternalCall` 的外部声明，实现位于 `UnityPlayer.dll`。
 
@@ -106,11 +106,25 @@ double num6 = data.vertices[i].x * planet.radius;   // 两个 float 相乘
 
 | 实现 | 不一致的分量 |
 | --- | --- |
-| 仓库现有 `slerp` | 217,846 / 484,812（44.93%） |
+| 仓库旧版 `slerp` | 217,846 / 484,812（44.93%） |
 | Unity 公开的原生 `Vector3::Slerp` 写法（native `Lerp`） | 318,612（65.72%） |
 | 同上，managed `Lerp` | 320,588（66.13%） |
 
-差距集中在 1–2 ULP（分布 1:181778、2:23898，长尾至 8 以上），132,342 / 161,604 个顶点受影响。换用「正确」的代数写法反而更差，说明剩余差异来自 Unity 原生构建所用的 `acos` / `sin` 实现，而不是公式选择。**结论：重写无法逐位对齐 `Vector3.Slerp`。**
+差距集中在 1–2 ULP（分布 1:181778、2:23898，长尾至 8 以上），132,342 / 161,604 个顶点受影响。上述旧测试只比较了公开公式，没有反汇编真实 helper，因此不能据此断言 native 实现不可重写。2026-08-10 使用 IDA Pro 9.4 对同一参考版本的 `UnityPlayer.dll` 完整跟进后，已恢复真实算法；见下方「已解决：复刻 Vector3.Slerp」。
+
+### 已解决：复刻 `Vector3.Slerp`
+
+参考文件：`UnityPlayer.dll` SHA-256 `B07814A510EEA3F8B66A25117AB602237037D74668E6CE1F8DE92F60C0EF28C4`，Unity `2022.3.62f3c1`，IDA 基址 `0x180000000`。运行时 icall 地址仍由 `tests/fixtures/game/icall-addresses.txt` 固定为 `Vector3::Slerp_Injected` RVA `F2C30`。
+
+直接证据：
+
+- `0x1800F2C30..0x1800F2C73` 只做 `t = (0 > t) ? 0 : min(1, t)`，然后调用 `0x180585E50`；相邻 `SlerpUnclamped_Injected` `0x1800F2C80` 不做夹取。
+- `0x180585E50..0x180586263`：长度、点积、叉积、归一化、幅值插值和结果矩阵乘法全部是显式 `mulss/addss/subss/divss/sqrtss`。长度为 `sqrtf((x*x+y*y)+z*z)`；幅值为 `(1-t)*lenA + t*lenB`；点积为 `((bx*ax)+(by*ay)+bz*az)/(lenB*lenA)`，阈值为 `±0.9999899864196777f`。
+- `0x1805857B0..0x180585892`：反平行分支的正交轴，`abs(z) <= 0.7071067690849304f` 时使用 `(-y,x,0)/sqrtf(x*x+y*y)`，否则使用 `(0,-z,y)/sqrtf(z*z+y*y)`。
+- `0x180599E00..0x180599F67`：Rodrigues 矩阵，调用 UnityPlayer 内 `sinf 0x18185F280` 与 `cosf 0x18185ED80`。
+- `0x181855EA0..0x1818560CB`：UnityPlayer 内置 `acosf`，含单精度有理逼近和端点 double 修正；系数与分支已在 `dspugen/terrain/ucrt_trig.cc` 的 `ucrtAcosf` 中逐项复刻。
+
+实现与验证：`dspugen/terrain/unity_math.cc` 现按上述 native 舍入点实现 `slerp`，不再复用托管层的 `Vector3::magnitude/dot/cross` 形状。独立重算 precision 200 的 161,604 个顶点，与 `tests/fixtures/game/verts-200-game.bin` 比较为 `0/484,812` 分量不一致、`0/161,604` 顶点不一致、最大 ULP `0`。该网格仍保留为独立交叉验证夹具，不再是达到 parity 的必要运行时数据。
 
 顶点的 ULP 级偏差经地形公式放大后，会在 `(ushort)((radius + height + bias) * 100.0)` 的截断处偶尔跨过整数边界。实测三颗行星的原始 `heightData`：
 
@@ -134,11 +148,11 @@ double num6 = data.vertices[i].x * planet.radius;   // 两个 float 相乘
 
 ## 顶点网格印证
 
-`Vector3.Slerp` 无法重写对齐，唯一可行的办法是把游戏导出的 precision 200 顶点网格当作数据使用——参考实现本身也是这么做的（`verts200` / `indexMap200` 算一次后复制复用）。`indexMap` 由顶点纯整数推导，无需一并存储。
+参考实现本身会把 precision 200 网格缓存为 `verts200` / `indexMap200`，但现在已经可以在 C++ 中逐位复刻 `Vector3.Slerp`；捕获网格仍作为独立 oracle fixture 保留，用于防止 native 逆向实现回归。`indexMap` 由顶点纯整数推导，无需一并存储。
 
 `PlanetRawData::installVertexGrid(precision, vertices)` 装入捕获的网格后，`calcVerts()` 直接使用它并重算索引映射；`dspugen_vein_amount_oracle --verts <file>` 用于验证。装入后顶点与游戏 161,604 个全部逐位相同。
 
-单独装入网格的效果（seed 0、1，425 颗非气态行星）：算法 `12` 从 38/38 错降到 0/38 全对，算法 `2`、`4`、`11`、`13`、`6` 部分改善，算法 `1`、`3`、`5`、`7`、`8`、`9`、`10` 仍 100% 不一致。也就是说**网格是必要条件，但不是充分条件**——真正的主因是上面那条 Mono 双精度求值规则。
+历史上单独装入网格的效果（seed 0、1，425 颗非气态行星）是：算法 `12` 从 38/38 错降到 0/38 全对，算法 `2`、`4`、`11`、`13`、`6` 部分改善，算法 `1`、`3`、`5`、`7`、`8`、`9`、`10` 仍 100% 不一致。该结果只覆盖旧版 Slerp 实现；2026-08-10 复刻 native helper 后，网格不再是运行时达到 parity 的必要条件，真正的其它主因仍是上面那条 Mono 双精度求值规则。
 
 两者同时修正后，seed 0 的 227 颗非气态行星地形高度、矿点数、基础矿量与游戏逐位一致。
 
@@ -494,13 +508,14 @@ seed 0 上算法 `4` 共 9 颗行星，只有行星 `1403` 的 `biomoData` 摘�
 
 按 `CLAUDE.md`，地形生成本身不在游戏一致性范围内，`biomoData` 在本仓库只作为对照摘要存在，没有其他读者。逐字节定位所需的 `biomo-<seed>-<id>.bin` 导出已在 mod 与 `--dump-height` 两侧就位，留待需要时使用。
 
-## 尚未处理
+## 已完成
 
-- 顶点网格文件本身尚未加入仓库(约 1.9 MB)。不加入则精确矿量无法达到逐位一致——`Vector3.Slerp` 是引擎原生实现,无法重写对齐,见「可选的收尾方案」。这是目前唯一的未决项。
+- `Vector3.Slerp` native helper、反平行正交轴、Rodrigues 矩阵和 UnityPlayer 内置 `acosf` 已按 IDA 9.4 反汇编复刻；precision 200 网格与游戏 fixture 逐位一致。
+- `tests/fixtures/game/verts-200-game.bin` 继续随仓库分发，作为独立交叉验证数据，不再是运行时达到 parity 的必要条件。
 
 ## 顶点网格随仓库分发（已决定）
 
-要让顶点网格逐位正确，只有把游戏导出的 precision 200 网格作为数据随仓库分发一条路——这正是游戏自己的做法（`PlanetRawData.verts200` / `indexMap200` 计算一次后复制复用）。`indexMap` 可由顶点纯整数推导，无需一并存储。代价是约 1.9 MB 的二进制文件（仓库现有 `Prototypes/` 合计 1.8 MB）。
+游戏自己的实现会把 precision 200 网格作为 `PlanetRawData.verts200` / `indexMap200` 缓存；C++ 现已能从 native `Slerp` 复刻结果，也保留捕获网格用于交叉验证。`indexMap` 可由顶点纯整数推导，无需一并存储。代价是约 1.9 MB 的二进制文件（仓库现有 `Prototypes/` 合计 1.8 MB）。
 
 **已决定入库**：`tests/fixtures/game/verts-200-game.bin` 连同几个小参照文件（合计约 2.8 MB）随仓库分发，这样精确矿量的逐位一致可以从干净的 clone 复现。
 

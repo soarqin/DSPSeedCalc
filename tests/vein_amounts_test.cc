@@ -14,6 +14,7 @@
 #include <cstdint>
 #include <cstring>
 #include <cmath>
+#include <fstream>
 #include <string>
 #include <vector>
 
@@ -84,6 +85,25 @@ static void testRawDataContract() {
     cached.clearTerrain();
     assert(cached.heightData()[7] == 0);
     assert(sameVertices(cached.vertices(), raw.vertices()));
+}
+
+static void testCalcVertsMatchesGameGrid() {
+    using dspugen::terrain::PlanetRawData;
+    using dspugen::terrain::Vector3;
+
+    constexpr std::size_t vertexCount = 4u * 201u * 201u;
+    std::ifstream input("tests/fixtures/game/verts-200-game.bin",
+                        std::ios::binary);
+    std::vector<Vector3> expected(vertexCount);
+    input.read(reinterpret_cast<char *>(expected.data()),
+               static_cast<std::streamsize>(expected.size() * sizeof(Vector3)));
+    assert(input.gcount() ==
+           static_cast<std::streamsize>(expected.size() * sizeof(Vector3)));
+    assert(input.peek() == std::ifstream::traits_type::eof());
+
+    PlanetRawData raw(200);
+    raw.calcVerts();
+    assert(sameVertices(raw.vertices(), expected));
 }
 
 static void testSimplexNoiseFixture() {
@@ -237,6 +257,7 @@ static void testVeinPlacementRules() {
 int main() {
     testUnitySlerpContract();
     testRawDataContract();
+    testCalcVertsMatchesGameGrid();
     testSimplexNoiseFixture();
     testTerrainAlgorithmDispatch();
     testVeinPlacementRules();

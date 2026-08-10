@@ -16,5 +16,6 @@ namespace dspugen::terrain {
 // as general-purpose trigonometry.
 float ucrtSinf(float value);
 float ucrtCosf(float value);
+float ucrtAcosf(float value);
 
 }

@@ -2,11 +2,94 @@
 
 #include "ucrt_trig.hh"
 
+#include <cstdint>
+#include <cstring>
+
 namespace dspugen::terrain {
 
 namespace {
 
 constexpr float Epsilon = 1.0E-05f;
+
+float fromBits(std::uint32_t value) {
+    float result;
+    std::memcpy(&result, &value, sizeof result);
+    return result;
+}
+
+float nativeLerpComponent(float a, float b, float t) {
+    const auto inverse = 1.0f - t;
+    const auto bt = b * t;
+    const auto aInverse = a * inverse;
+    return bt + aInverse;
+}
+
+Vector3 nativeLerp(const Vector3 &a, const Vector3 &b, float t) {
+    return {nativeLerpComponent(a.x, b.x, t),
+            nativeLerpComponent(a.y, b.y, t),
+            nativeLerpComponent(a.z, b.z, t)};
+}
+
+Vector3 nativeSlerpOrthonormal(const Vector3 &value) {
+    const auto threshold = fromBits(0x3f3504f3u);
+    const auto absZ = std::abs(value.z);
+    if (absZ <= threshold) {
+        const auto xSquared = value.x * value.x;
+        const auto ySquared = value.y * value.y;
+        const auto lengthSquared = xSquared + ySquared;
+        const auto length = std::sqrt(lengthSquared);
+        const auto inverse = 1.0f / length;
+        return {(-value.y) * inverse, value.x * inverse, 0.0f};
+    }
+    const auto zSquared = value.z * value.z;
+    const auto ySquared = value.y * value.y;
+    const auto lengthSquared = zSquared + ySquared;
+    const auto length = std::sqrt(lengthSquared);
+    const auto inverse = 1.0f / length;
+    return {0.0f, (-value.z) * inverse, value.y * inverse};
+}
+
+Vector3 nativeRotateAroundAxis(const Vector3 &value, const Vector3 &axis,
+                               float angle, float magnitude) {
+    const auto sine = ucrtSinf(angle);
+    const auto cosine = ucrtCosf(angle);
+    const auto oneMinusCosine = 1.0f - cosine;
+
+    const auto x = axis.x;
+    const auto y = axis.y;
+    const auto z = axis.z;
+    const auto xy = y * x;
+    const auto xz = z * x;
+    const auto yz = z * y;
+    const auto xs = x * sine;
+    const auto ys = y * sine;
+    const auto zs = z * sine;
+
+    float m0 = (x * x) * oneMinusCosine;
+    m0 = m0 + cosine;
+    const auto qxy = oneMinusCosine * xy;
+    const auto m3 = qxy - zs;
+    const auto m1 = qxy + zs;
+    const auto m6 = oneMinusCosine * xz + ys;
+    float m4 = (y * y) * oneMinusCosine;
+    m4 = m4 + cosine;
+    float m8 = (z * z) * oneMinusCosine;
+    m8 = m8 + cosine;
+    const auto m2 = oneMinusCosine * xz - ys;
+    const auto m7 = oneMinusCosine * yz - xs;
+    const auto m5 = oneMinusCosine * yz + xs;
+
+    auto rx = m3 * value.y;
+    rx = rx + m0 * value.x;
+    rx = rx + m6 * value.z;
+    auto ry = m4 * value.y;
+    ry = ry + m1 * value.x;
+    ry = ry + m7 * value.z;
+    auto rz = m5 * value.y;
+    rz = rz + m2 * value.x;
+    rz = rz + m8 * value.z;
+    return {rx * magnitude, ry * magnitude, rz * magnitude};
+}
 
 Vector3 lerp(const Vector3 &a, const Vector3 &b, float t) {
     return a + (b - a) * t;
@@ -291,29 +374,61 @@ Quaternion fromToRotation(Vector3 from, Vector3 to) {
 }
 
 Vector3 slerp(const Vector3 &a, const Vector3 &b, float t) {
-    t = std::clamp(t, 0.0f, 1.0f);
+    if (0.0f > t) t = 0.0f;
+    else t = std::min(1.0f, t);
 
-    auto magnitudeA = a.magnitude();
-    auto magnitudeB = b.magnitude();
-    if (!(magnitudeA > Epsilon) || !(magnitudeB > Epsilon))
-        return lerp(a, b, t);
+    const auto axSquared = a.x * a.x;
+    const auto aySquared = a.y * a.y;
+    const auto azSquared = a.z * a.z;
+    const auto lengthSquaredA0 = axSquared + aySquared;
+    const auto lengthSquaredA = lengthSquaredA0 + azSquared;
+    const auto lengthA = std::sqrt(lengthSquaredA);
 
-    auto normalA = a / magnitudeA;
-    auto normalB = b / magnitudeB;
-    auto dotValue = std::clamp(dot(normalA, normalB), -1.0f, 1.0f);
-    auto magnitude = magnitudeA + (magnitudeB - magnitudeA) * t;
+    const auto bxSquared = b.x * b.x;
+    const auto bySquared = b.y * b.y;
+    const auto bzSquared = b.z * b.z;
+    const auto lengthSquaredB0 = bxSquared + bySquared;
+    const auto lengthSquaredB = lengthSquaredB0 + bzSquared;
+    const auto lengthB = std::sqrt(lengthSquaredB);
 
-    if (dotValue > 1.0f - Epsilon)
-        return lerp(a, b, t);
+    const auto inverse = 1.0f - t;
+    if (lengthA < Epsilon || lengthB < Epsilon)
+        return nativeLerp(a, b, t);
 
-    if (dotValue < -1.0f + Epsilon) {
-        auto axis = orthonormalVector(normalA);
-        return rotateAroundAxis(normalA, axis, MathfPi * t) * magnitude;
+    const auto magnitudeA = inverse * lengthA;
+    const auto magnitudeB = lengthB * t;
+    const auto magnitude = magnitudeA + magnitudeB;
+
+    const auto dotX = b.x * a.x;
+    const auto dotY = b.y * a.y;
+    const auto dotXY = dotX + dotY;
+    const auto dotZ = b.z * a.z;
+    const auto numerator = dotXY + dotZ;
+    const auto denominator = lengthB * lengthA;
+    const auto cosine = numerator / denominator;
+    const auto threshold = fromBits(0x3f7fff58u);
+    if (cosine > threshold) return nativeLerp(a, b, t);
+
+    const Vector3 normalA{a.x / lengthA, a.y / lengthA, a.z / lengthA};
+    if (cosine < -threshold) {
+        const auto axis = nativeSlerpOrthonormal(normalA);
+        const auto angle = t * MathfPi;
+        return nativeRotateAroundAxis(normalA, axis, angle, magnitude);
     }
 
-    auto axis = cross(a, b).normalized();
-    auto angle = std::acos(dotValue) * t;
-    return rotateAroundAxis(normalA, axis, angle) * magnitude;
+    const auto crossX = b.z * a.y - b.y * a.z;
+    const auto crossY = b.x * a.z - b.z * a.x;
+    const auto crossZ = b.y * a.x - b.x * a.y;
+    const auto crossYSquared = crossY * crossY;
+    const auto crossXSquared = crossX * crossX;
+    const auto crossLengthSquared0 = crossYSquared + crossXSquared;
+    const auto crossZSquared = crossZ * crossZ;
+    const auto crossLengthSquared = crossLengthSquared0 + crossZSquared;
+    const auto crossLength = std::sqrt(crossLengthSquared);
+    const Vector3 axis{crossX / crossLength, crossY / crossLength,
+                       crossZ / crossLength};
+    const auto angle = ucrtAcosf(cosine) * t;
+    return nativeRotateAroundAxis(normalA, axis, angle, magnitude);
 }
 
 }

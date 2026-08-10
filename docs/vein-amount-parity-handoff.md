@@ -9,7 +9,7 @@
 矿脉路径（真正的交付物）：
 
 - 101 个 seed、24,586 颗行星（21,169 生成地形 + 3,417 气态，**无排除**）与游戏逐位全等：`heightData` 摘要、`biomoData` 摘要、矿点数、基础矿量。
-- 前提是装入游戏导出的 precision 200 顶点网格（`tests/fixtures/game/verts-200-game.bin`）。
+- 内置 `calcVerts()` 已可直接生成与游戏逐位一致的 precision 200 顶点网格；`tests/fixtures/game/verts-200-game.bin` 仅作为独立交叉验证夹具。
 
 恒星/行星字段（`--meta` 比对）：
 
@@ -21,7 +21,7 @@
 
 ## 2. 顶点网格已入库
 
-`Vector3.Slerp` 的实现在 `UnityPlayer.dll` 原生代码里，重写无法逐位对齐（实测三种写法都比现有实现更差，差距来自 Unity 自己构建的 `acos` / `sin`）。唯一可行的办法是把游戏导出的网格当数据分发——参考实现自己也是这么做的（`verts200` 算一次后复制复用）。
+`Vector3.Slerp` 的实现在 `UnityPlayer.dll` 原生代码里。2026-08-10 用 IDA Pro 9.4 完整分析 `0x180585E50` helper、`0x1805857B0` 正交轴、`0x180599E00` Rodrigues 矩阵和 `0x181855EA0` `acosf` 后，已按 native 单精度舍入点逐位复刻；独立重算 precision 200 网格与游戏 fixture 为 0 ULP。捕获网格仍作为交叉验证夹具分发，参考实现的 `verts200` 缓存语义不变。
 
 `tests/fixtures/game/verts-200-game.bin`（1.9 MB）连同几个小参照文件已入库（合计约 2.8 MB），精确矿量的逐位一致可以从干净的 clone 复现。
 

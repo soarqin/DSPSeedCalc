@@ -3,10 +3,17 @@
 #include <cmath>
 #include <cstdint>
 #include <cstring>
+#include <limits>
 
 namespace dspugen::terrain {
 
 namespace {
+
+float fromBits(std::uint32_t value) {
+    float result;
+    std::memcpy(&result, &value, sizeof result);
+    return result;
+}
 
 // Coefficients and thresholds read out of UnityPlayer.dll's FMA3 sinf / cosf.
 // The game runs the FMA3 path (the CRT dispatches on CPU features), so every
@@ -128,6 +135,81 @@ float ucrtCosf(float value) {
     auto result = ((region & 1) != 0) ? sinPoly(reduced) : cosPolyReduced(reduced);
     if (region == 1 || region == 2) result = -result;
     return static_cast<float>(result);
+}
+
+// UnityPlayer.dll's native acosf at 0x181855EA0.  The reference uses the
+// UCRT's scalar float polynomial and then a few explicit double-precision
+// correction operations near the endpoints.  Keep the decompiler-shaped
+// float temporaries: each mul/add/sub/div is a separate native float32 op.
+float ucrtAcosf(float value) {
+    const auto raw = [&] {
+        std::uint32_t bits;
+        std::memcpy(&bits, &value, sizeof bits);
+        return bits;
+    }();
+    const auto exponent = (raw >> 23) & 0xffu;
+    const auto magnitude = fromBits(raw & 0x7fffffffu);
+    if (exponent < 0x65u) return fromBits(0x3fc90fdbu);
+    if (exponent >= 0x7fu) {
+        if (value == 1.0f) return 0.0f;
+        if (value == -1.0f) return fromBits(0x40490fdbu);
+        return std::numeric_limits<float>::quiet_NaN();
+    }
+
+    float z;
+    float root = 0.0f;
+    if (exponent < 0x7eu) {
+        z = magnitude * magnitude;
+    } else {
+        auto oneMinusMagnitude = 1.0f - magnitude;
+        z = oneMinusMagnitude * 0.5f;
+        root = std::sqrt(z);
+    }
+
+    const auto p0 = fromBits(0xbc5b3fe1u);
+    const auto p1 = fromBits(0x3b81ce6bu);
+    const auto p2 = fromBits(0x3d678bddu);
+    const auto p3 = fromBits(0x3e3c94dcu);
+    const auto d0 = fromBits(0x3f8d6fa5u);
+    const auto d1 = fromBits(0x3f561f0du);
+    auto numerator = p0 - z * p1;
+    numerator = numerator * z;
+    numerator = numerator - p2;
+    numerator = numerator * z;
+    numerator = numerator + p3;
+    numerator = numerator * z;
+    const auto denominator = d0 - z * d1;
+    const auto ratio = numerator / denominator;
+
+    constexpr double piOver2Low = 6.123233995736766e-17;
+    constexpr double piOver2 = 1.5707963267948966;
+    constexpr double pi = 3.141592653589793;
+    if (exponent < 0x7eu) {
+        const auto product = ratio * value;
+        return static_cast<float>(piOver2 -
+                                  (static_cast<double>(value) -
+                                   (piOver2Low - static_cast<double>(product))));
+    }
+    if (value >= 0.0f) {
+        const auto high = fromBits([](std::uint32_t bits) {
+            return bits & 0xffff0000u;
+        }([&] {
+            std::uint32_t bits;
+            std::memcpy(&bits, &root, sizeof bits);
+            return bits;
+        }()));
+        auto twiceRoot = root + root;
+        const auto correction = (z - high * high) / (high + root);
+        twiceRoot = twiceRoot * ratio;
+        auto twiceCorrection = correction + correction;
+        auto result = twiceRoot + twiceCorrection;
+        result = result + high * 2.0f;
+        return result;
+    }
+    const auto product = root * ratio;
+    const auto inner = static_cast<double>(root) +
+                       (static_cast<double>(product) - piOver2Low);
+    return static_cast<float>(pi - (inner + inner));
 }
 
 }
