@@ -256,7 +256,7 @@ Star *Star::createStar(Galaxy *galaxy,
     star->uPosition = star->position * 2400000.0;
 */
     if (settings.genName) {
-        star->name = NameGen::randomStarName(seed2, star, galaxy);
+        star->name = NameGen::randomStarName(seed2, settings.starNameLCID, star, galaxy);
     }
     return star;
 }
@@ -320,7 +320,7 @@ Star *Star::createBirthStar(Galaxy *galaxy, int seed) {
     if (dbl(star->dysonRadius) * 40000.0 < physicsScaled)
         star->dysonRadius = flt(physicsScaled / 40000.0);
     if (settings.genName) {
-        star->name = NameGen::randomStarName(seed2, star, galaxy);
+        star->name = NameGen::randomStarName(seed2, settings.starNameLCID, star, galaxy);
     }
     return star;
 }

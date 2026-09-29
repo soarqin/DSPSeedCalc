@@ -97,8 +97,9 @@ void dumpGalaxy(int seed, int starCount, bool names) {
         printFloat("orbitScaler", star->orbitScaler);
         printFloat("dysonRadius", star->dysonRadius);
         printFloat("resourceCoef", star->resourceCoef);
-        std::cout << " name-size=" << star->name.size() << " name=" << std::quoted(star->name)
-                  << " planets=" << star->planets.size() << '\n';
+        std::cout << " name-size=" << star->name.size() << " name=\"";
+        std::fwrite(star->name.data(), 1, star->name.size(), stdout);
+        std::cout << "\" planets=" << star->planets.size() << '\n';
         for (auto *planet: star->planets) {
             planet->generateGas();
             std::cout << "planet id=" << planet->id
@@ -146,7 +147,6 @@ int main() {
         std::cerr << "Unsupported floating-point environment\n";
         return 2;
     }
-
     dspugen::loadProtoSets();
     dspugen::Galaxy::initThread();
     dspugen::Star::initThread();

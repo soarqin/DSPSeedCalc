@@ -456,13 +456,14 @@ int main(int argc, char *argv[]) {
         {"planets", no_argument, nullptr, 'p'},
         {"vein-amounts", no_argument, nullptr, 'V'},
         {"names", no_argument, nullptr, 'n'},
+        {"lcid", required_argument, nullptr, 'l'},
         {nullptr},
     };
     int opt;
     std::string inputFilename;
     std::string seedFilename = "seeds.csv";
     int threadCount = 0;
-    while ((opt = getopt_long(argc, argv, ":t:i:o:bpPZnV", longOptions, nullptr)) != -1) {
+    while ((opt = getopt_long(argc, argv, ":t:i:o:bpPZnVl:", longOptions, nullptr)) != -1) {
         switch (opt) {
         case ':':
             fmt::print(std::cerr, "missing argument for {}\n", static_cast<char>(optopt));
@@ -472,6 +473,9 @@ int main(int argc, char *argv[]) {
             return -1;
         case 'n':
             dspugen::settings.genName = true;
+            break;
+        case 'l':
+            dspugen::settings.starNameLCID = std::stoi(optarg);
             break;
         case 'i':
             inputFilename = fmt::format("{}", optarg);
@@ -503,10 +507,11 @@ int main(int argc, char *argv[]) {
         }
     }
     if (optind >= argc && inputFilename.empty()) {
-        fmt::print(std::cerr, "Usage: DSPSeedCalc [-t threads] [-n] [-i filename] [-b] [-p] [-V] [-P] [-Z] [-o seeds.csv] [ranges...]\n");
+        fmt::print(std::cerr, "Usage: DSPSeedCalc [-t threads] [-n] [-l lcid] [-i filename] [-b] [-p] [-V] [-P] [-Z] [-o seeds.csv] [ranges...]\n");
         fmt::print(std::cerr, "          Ranges format: a-b[,starCount]. starCount is 64 by default, can be range.   e.g. 0-1000 / 333-666,32\n");
         fmt::print(std::cerr, "      -t  Threads to use, 0 for default, which means (logic CPU threads - 1)\n");
         fmt::print(std::cerr, "      -n  Generate names for stars(which will reduce calculation speed)\n");
+        fmt::print(std::cerr, "      -l  Star name LCID (2052 for Chinese, 0 for default/English)\n");
         fmt::print(std::cerr, "      -b  Generate only birth star\n");
         fmt::print(std::cerr, "      -p  Generate planet info for plugins use\n");
         fmt::print(std::cerr, "      -V  Enable exact vein amount requests from plugins (implies -p).\n");

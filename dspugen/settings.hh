@@ -13,6 +13,7 @@ struct Settings {
     bool birthOnly = false;
     bool genName = false;
     bool noPosition = false;
+    int starNameLCID = 0;
 };
 
 extern Settings settings;

@@ -221,37 +221,52 @@ static void testVeinPlacementRules() {
     using dspugen::vein_detail::acceptsVeinNode;
 
     constexpr float radius = 200.0f;
+    // Oil centers: shallow (radius-1, radius+0.5) rejected; at/above
+    // radius+0.5 accepted; deep underwater needs remaining allowance.
     assert(!acceptsVeinCenter(1, EVeinType::Oil, radius + 0.49f, radius,
-                             radius));
+                              radius));
     assert(acceptsVeinCenter(1, EVeinType::Oil, radius + 0.5f, radius,
-                            radius));
+                             radius));
+    // Deep oil (height <= radius - 1) requires underwater allowance.
+    assert(!acceptsVeinCenter(1, EVeinType::Oil, radius - 1.0f, radius,
+                              radius, 0));
+    assert(acceptsVeinCenter(1, EVeinType::Oil, radius - 1.0f, radius,
+                             radius, 1));
+    assert(acceptsVeinCenter(1, EVeinType::Oil, radius - 50.0f, radius,
+                             radius, 1));
     assert(acceptsVeinCenter(11, EVeinType::Iron, radius + 0.7f, radius,
-                            radius));
+                             radius));
     assert(!acceptsVeinCenter(11, EVeinType::Iron, radius + 0.7001f, radius,
-                             radius));
+                              radius));
     assert(!acceptsVeinCenter(11, EVeinType::Silicium, radius + 0.7f, radius,
-                             radius));
+                              radius));
     assert(acceptsVeinCenter(11, EVeinType::Silicium, radius + 0.7001f, radius,
-                            radius));
-    assert(!acceptsVeinCenter(12, EVeinType::Fireice, radius + 1.1999f,
-                             radius, radius));
-    assert(acceptsVeinCenter(12, EVeinType::Fireice, radius + 1.2f,
-                            radius, radius));
-    assert(acceptsVeinCenter(13, EVeinType::Titanium, radius + 0.7f,
-                            radius, radius));
-    assert(!acceptsVeinCenter(13, EVeinType::Titanium, radius + 0.7001f,
-                             radius, radius));
-    assert(acceptsVeinCenter(7, EVeinType::Bamboo, radius - 4.0f, radius,
-                            radius));
-    assert(!acceptsVeinCenter(7, EVeinType::Bamboo, radius - 3.9999f, radius,
                              radius));
+    assert(!acceptsVeinCenter(12, EVeinType::Fireice, radius + 1.1999f,
+                              radius, radius));
+    assert(acceptsVeinCenter(12, EVeinType::Fireice, radius + 1.2f,
+                             radius, radius));
+    assert(acceptsVeinCenter(13, EVeinType::Titanium, radius + 0.7f,
+                             radius, radius));
+    assert(!acceptsVeinCenter(13, EVeinType::Titanium, radius + 0.7001f,
+                              radius, radius));
+    assert(acceptsVeinCenter(7, EVeinType::Bamboo, radius - 4.0f, radius,
+                             radius));
+    assert(!acceptsVeinCenter(7, EVeinType::Bamboo, radius - 3.9999f, radius,
+                              radius));
     assert(acceptsVeinCenter(7, EVeinType::Oil, radius - 50.0f, radius,
-                            radius));
+                             radius));
 
-    assert(acceptsVeinNode(1, 0, radius - 1.0f, radius));
-    assert(!acceptsVeinNode(1, 1000, radius - 1.0f, radius));
-    assert(acceptsVeinNode(1, 1000, radius, radius));
-    assert(acceptsVeinNode(7, 1000, radius - 50.0f, radius));
+    // Oil nodes are always accepted even underwater (post-rework rule).
+    assert(acceptsVeinNode(1, 0, radius - 1.0f, radius, EVeinType::Oil));
+    assert(acceptsVeinNode(1, 1000, radius - 1.0f, radius, EVeinType::Oil));
+    assert(acceptsVeinNode(1, 1000, radius, radius, EVeinType::Oil));
+    assert(acceptsVeinNode(7, 1000, radius - 50.0f, radius, EVeinType::Oil));
+    // Non-oil underwater nodes still rejected.
+    assert(acceptsVeinNode(1, 0, radius - 1.0f, radius, EVeinType::Iron));
+    assert(!acceptsVeinNode(1, 1000, radius - 1.0f, radius, EVeinType::Iron));
+    assert(acceptsVeinNode(1, 1000, radius, radius, EVeinType::Iron));
+    assert(acceptsVeinNode(7, 1000, radius - 50.0f, radius, EVeinType::Iron));
 }
 
 int main() {

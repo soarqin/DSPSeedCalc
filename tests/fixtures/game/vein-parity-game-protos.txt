@@ -1,5 +1,5 @@
 # dsp-vein-parity-protos v1
-# gameVersion=0.10.34.28529
+# gameVersion=0.10.35.29088
 themeCount=25
 theme id=1 distribute=1 planetType=2 waterItemId=1000 waterHeight=0 modX0=0 modX1=0 modY0=0 modY1=0 algos=1 veinSpot=7;5;0;0;8;11;18 veinCount=0.7;0.6;0;0;1;1;1 veinOpacity=0.6;0.5;0;0;0.7;1;1 rareVeins=11 rareSettings=0;1;0.3;0.3
 theme id=2 distribute=0 planetType=5 waterItemId=0 waterHeight=0 modX0=0 modX1=0 modY0=0 modY1=0 algos=0 veinSpot=- veinCount=- veinOpacity=- rareVeins=- rareSettings=-

@@ -53,15 +53,26 @@ const char *veinAmountResultName(VeinAmountGenerationResult result) {
 
 namespace vein_detail {
 
+int underwaterOilAllowance(EVeinType type, int spot) {
+    if (type != EVeinType::Oil) return 0;
+    // kUnderwaterOilPercentage = 15; the reference computes
+    // (int)Math.Ceiling((double)(num11 * 15) / 100.0) in double.
+    return static_cast<int>(
+        std::ceil(static_cast<double>(spot) * 15.0 / 100.0));
+}
+
 bool acceptsVeinCenter(int algorithmId, EVeinType type, float height,
-                       float radius, float realRadius) {
+                       float radius, float realRadius,
+                       int underwaterOilRemaining) {
     if (algorithmId == 7) {
         if (type == EVeinType::Bamboo)
             return !(height > realRadius - 4.0f);
         return true;
     }
-    if (height < radius) return false;
-    if (type == EVeinType::Oil && height < radius + 0.5f) return false;
+    if (height < radius && type != EVeinType::Oil) return false;
+    if (type == EVeinType::Oil && height < radius + 0.5f &&
+        (height > radius - 1.0f || underwaterOilRemaining <= 0))
+        return false;
     if (algorithmId == 11) {
         if (static_cast<int>(type) <= 2 && height > radius + 0.7f)
             return false;
@@ -79,9 +90,11 @@ bool acceptsVeinCenter(int algorithmId, EVeinType type, float height,
 }
 
 bool acceptsVeinNode(int algorithmId, int waterItemId, float height,
-                     float radius) {
+                     float radius, EVeinType type) {
     if (algorithmId == 7) return true;
-    return waterItemId == 0 || !(height < radius);
+    // After the oil rework oil nodes are always added even underwater; the
+    // reference appends `|| eVeinType2 == EVeinType.Oil` to the water check.
+    return waterItemId == 0 || !(height < radius) || type == EVeinType::Oil;
 }
 
 }
@@ -271,6 +284,12 @@ VeinAmountGenerationResult generateBaseSummary(const Planet &planet,
     for (int type = 1; type < 15 && veinVectors.size() < 512; ++type) {
         auto attempts = spot[static_cast<std::size_t>(type)];
         if (attempts > 1) attempts += placementRandom.next(-1, 2);
+        const auto veinType = static_cast<EVeinType>(type);
+        // kUnderwaterOilPercentage: up to 15 % (ceil) of oil clusters may sit
+        // at least 1 m below sea level; each accepted underwater oil cluster
+        // consumes one allowance and adds one extra attempt to replace it.
+        int underwaterOilRemaining =
+            vein_detail::underwaterOilAllowance(veinType, attempts);
         for (int cluster = 0; cluster < attempts && veinVectors.size() < 512; ++cluster) {
             Vector3 center;
             bool accepted = false;
@@ -282,13 +301,12 @@ VeinAmountGenerationResult generateBaseSummary(const Planet &planet,
                     static_cast<float>(placementRandom.nextDouble()) * 2.0f - 1.0f};
                 if (type != static_cast<int>(EVeinType::Oil)) center = center + birthPoint;
                 center.normalize();
-                const auto veinType = static_cast<EVeinType>(type);
                 float height = 0.0f;
                 if (planet.algoId != 7 || veinType == EVeinType::Bamboo)
                     height = data.queryHeight(center);
                 if (!vein_detail::acceptsVeinCenter(
                         planet.algoId, veinType, height, planet.radius,
-                        planet.realRadius()))
+                        planet.realRadius(), underwaterOilRemaining))
                     continue;
                 auto minDistance = (type == static_cast<int>(EVeinType::Oil)) ? 100.0f : 196.0f;
                 // The reference forms this product inline in the comparison, so
@@ -305,6 +323,14 @@ VeinAmountGenerationResult generateBaseSummary(const Planet &planet,
                     }
                 }
                 if (!tooClose) {
+                    // Only the shared base-class path (non-7 algorithms) tracks
+                    // the underwater oil allowance; Algorithm7 overrides
+                    // GenerateVeins without that bookkeeping.
+                    if (planet.algoId != 7 && veinType == EVeinType::Oil &&
+                        height <= planet.radius - 1.0f) {
+                        --underwaterOilRemaining;
+                        ++attempts;
+                    }
                     accepted = true;
                     break;
                 }
@@ -397,7 +423,7 @@ VeinAmountGenerationResult generateBaseSummary(const Planet &planet,
                 const auto height = data.queryHeight(position);
                 if (!vein_detail::acceptsVeinNode(
                         planet.algoId, planet.waterItemId, height,
-                        planet.radius))
+                        planet.radius, static_cast<EVeinType>(type)))
                     continue;
             }
             ++summary.nodeCount[index];

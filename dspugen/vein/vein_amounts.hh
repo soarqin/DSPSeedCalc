@@ -64,10 +64,15 @@ VeinAmountGenerationResult generateVeinAmountSummary(
 
 namespace vein_detail {
 
+// Returns the per-cluster underwater oil allowance used by algorithm versions
+// after the oil rework: ceil(spot * 15 / 100).  Non-oil types always return 0.
+int underwaterOilAllowance(EVeinType type, int spot);
+
 bool acceptsVeinCenter(int algorithmId, EVeinType type, float height,
-                       float radius, float realRadius);
+                       float radius, float realRadius,
+                       int underwaterOilRemaining = 0);
 bool acceptsVeinNode(int algorithmId, int waterItemId, float height,
-                     float radius);
+                     float radius, EVeinType type);
 
 }
 

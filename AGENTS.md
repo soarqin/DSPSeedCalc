@@ -6,16 +6,18 @@ DSPSeedCalc is a C++ port of Dyson Sphere Program's deterministic galaxy generat
 
 The current reference installation is:
 
-- Game: Dyson Sphere Program `0.10.34.28529`
+- Game: Dyson Sphere Program `0.10.34.xxxxx` (Steam build `25599610`)
 - Unity: `2022.3.62f3c1`
 - Script backend: Mono
 - Galaxy algorithm: `20200403`
 - Game path: `D:\Steam\steamapps\common\Dyson Sphere Program`
 - Managed code: `DSPGAME_Data\Managed\Assembly-CSharp.dll`
-- Steam build ID: `23109513`
-- `Assembly-CSharp.dll` SHA-256: `AE0BA95F75BD879A62AA4CE253B2AB78EAA4FB3C7C595F5E1FEE75EBE0E0EF85`
-- `Assembly-CSharp.dll` MVID: `ece4a40e-5e73-43f4-a9f8-4e74970b5942`
+- Steam build ID: `25599610`
+- `Assembly-CSharp.dll` SHA-256: `6C122E5443E6843979B4064050DFCB5E0D75577A0B64F6AE4111290238B33C12`
+- `Assembly-CSharp.dll` MVID: `7c753b2c-7be8-45e8-ae2a-51c600ac1211`
 - Prototype snapshot: AssetStudio exports committed in `Prototypes/`
+- Previous reference (superseded): SHA-256 `AE0BA95F75BD879A62AA4CE253B2AB78EAA4FB3C7C595F5E1FEE75EBE0E0EF85`, MVID `ece4a40e-5e73-43f4-a9f8-4e74970b5942`, Steam build `23109513`
+- Oil generation rework: the current build allows up to `ceil(spot * 15 / 100)` underwater oil clusters (at least 1 m below sea level).  Each accepted underwater oil cluster decrements the allowance and adds one replacement attempt.  Oil nodes are always added even underwater.  `PlanetAlgorithm7` overrides `GenerateVeins` without this bookkeeping, so the underwater-oil allowance only applies to the shared base-class path (algorithms 1–6, 8–14).
 
 Do not assume that behavior from an older Unity, Mono, or game build is still correct. Record a new reference version before changing parity-sensitive code.
 

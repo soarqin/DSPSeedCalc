@@ -1,5 +1,6 @@
 macro(fix_compile_flags)
     add_compile_options($<$<OR:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>:/utf-8>)
+    add_compile_options($<$<OR:$<C_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:GNU>,$<C_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:Clang>>:-finput-charset=UTF-8>)
 endmacro()
 
 include(CMakeParseArguments)
