@@ -10,6 +10,8 @@
 
 #include <fmt/format.h>
 
+#include <cmath>
+
 extern "C" {
 
 __declspec(dllexport) const char *FILTERAPI init(PluginAPI*, int *type) {
@@ -17,22 +19,17 @@ __declspec(dllexport) const char *FILTERAPI init(PluginAPI*, int *type) {
     return "2 Blue Giants with high luminosity";
 }
 
+static const float limit = std::pow(2.7f, 1.f / 0.33000001311302185f);
+
 __declspec(dllexport) bool FILTERAPI galaxyFilter(const dspugen::Galaxy *g) {
-    int cnt = 0, cnt2 = 0;
     float lum = 0;
     for (const auto *star: g->stars) {
         if (star->type == dspugen::EStarType::GiantStar && star->spectr == dspugen::ESpectrType::O) {
-            if (++cnt == 1) {
-                lum = star->luminosity;
-            }
-            if (star->luminosity >= 21.800680734017587301436790397276f) {
-                ++cnt2;
+            if (star->luminosity >= limit) {
+                fmt::print(stdout, "{},{},{:.4f}\n", g->seed, g->starCount, std::pow(star->luminosity, 0.33000001311302185f));
+                return true;
             }
         }
-    }
-    if (cnt == 1 && cnt2 > 0) {
-        fmt::print(stdout, "{},{},{:.4f}\n", g->seed, g->starCount, std::pow(lum, 0.33000001311302185f));
-        return true;
     }
     return false;
 }
