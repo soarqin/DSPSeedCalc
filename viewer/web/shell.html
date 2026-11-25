@@ -4,13 +4,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>DSPSeedCalc Universe Viewer</title>
+    <link rel="icon" href="data:,">
     <style>
         :root { color-scheme: dark; font-family: ui-sans-serif, system-ui, sans-serif; }
         html, body { width: 100%; height: 100%; min-width: 0; min-height: 0; margin: 0;
             background: #040811; overflow: hidden; }
         body { display: grid; place-items: center; }
         #canvas { width: 100%; height: 100%; min-width: 0; min-height: 0; display: block;
-            outline: none; }
+            outline: none; touch-action: none; }
+        #number-editor { position: fixed; box-sizing: border-box; padding: 0 9px; margin: 0;
+            font: 16px system-ui, sans-serif; color: #ecf3f9; background: #131f30;
+            border: 2px solid #58c6ff; border-radius: 5px; outline: none; }
         #loading { position: fixed; inset: 0; display: grid; place-items: center; color: #b1e8ff;
             background: radial-gradient(circle at 50% 35%, #102a43 0, #040811 55%); letter-spacing: .08em; }
         #loading.hidden { display: none; }
@@ -22,6 +26,7 @@
             oncontextmenu="event.preventDefault()"
             onmousedown="if (event.button === 1 || event.button === 2) event.preventDefault()"
             onauxclick="event.preventDefault()"></canvas>
+    <input id="number-editor" type="text" inputmode="numeric" enterkeyhint="done" autocomplete="off" hidden>
     <script>
         var Module = {
             canvas: document.getElementById('canvas'),
@@ -41,6 +46,85 @@
             },
             printErr: function(text) { console.error(text); }
         };
+        {
+            const canvas = Module.canvas;
+            const editor = document.getElementById('number-editor');
+            let submitEdit = 0;
+            let editWidth = 0;
+            Module.openNumberEditor = function(value, seed, x, y, width, height) {
+                const rect = canvas.getBoundingClientRect();
+                editWidth = rect.width;
+                editor.style.left = (rect.left + rect.width * x) + 'px';
+                editor.style.top = (rect.top + rect.height * y) + 'px';
+                editor.style.width = (rect.width * width) + 'px';
+                editor.style.height = (rect.height * height) + 'px';
+                editor.setAttribute('aria-label', seed ? 'Seed' : 'Star count');
+                editor.maxLength = seed ? 8 : 2;
+                editor.value = value;
+                editor.hidden = false;
+                editor.focus();
+                editor.select();
+            };
+            editor.addEventListener('input', () => {
+                if (/[^0-9]/.test(editor.value)) editor.value = editor.value.replace(/[^0-9]/g, '');
+            });
+            window.addEventListener('resize', () => {
+                if (!editor.hidden && canvas.getBoundingClientRect().width !== editWidth) editor.blur();
+            });
+            editor.addEventListener('blur', () => {
+                Module._viewerFinishNumberEdit(submitEdit);
+                editor.hidden = true;
+                submitEdit = 0;
+            });
+            for (const type of ['keydown', 'keypress', 'keyup']) {
+                window.addEventListener(type, event => {
+                    if (event.target !== editor) return;
+                    event.stopImmediatePropagation();
+                    if (type === 'keydown' && (event.key === 'Enter' || event.key === 'Escape')) {
+                        event.preventDefault();
+                        submitEdit = event.key === 'Enter' ? 1 : -1;
+                        editor.blur();
+                        canvas.focus();
+                    }
+                }, true);
+            }
+
+            let primaryId = null;
+            function sendPointer(event, type) {
+                const rect = canvas.getBoundingClientRect();
+                const x = (event.clientX - rect.left) / rect.width;
+                const y = (event.clientY - rect.top) / rect.height;
+                if (type === 0 && event.pointerType === 'touch' && Module._viewerBeginNumberEdit(x, y)) {
+                    event.preventDefault();
+                    return false;
+                }
+                Module._viewerPointerEvent(type, x, y);
+                return true;
+            }
+            canvas.addEventListener('pointerdown', event => {
+                if (!Module._viewerPointerEvent || !event.isPrimary || event.button !== 0) return;
+                if (!editor.hidden) editor.blur();
+                if (sendPointer(event, 0)) {
+                    primaryId = event.pointerId;
+                    canvas.setPointerCapture(primaryId);
+                }
+            });
+            for (const [name, type] of [['pointermove', 1], ['pointerup', 2], ['pointercancel', 3]]) {
+                canvas.addEventListener(name, event => {
+                    if (event.pointerId !== primaryId) return;
+                    sendPointer(event, type);
+                    if (type !== 1) primaryId = null;
+                });
+            }
+            function cancelPointer() {
+                if (primaryId !== null) Module._viewerPointerEvent(3, 0, 0);
+                primaryId = null;
+            }
+            canvas.addEventListener('lostpointercapture', event => {
+                if (event.pointerId === primaryId) cancelPointer();
+            });
+            window.addEventListener('blur', cancelPointer);
+        }
     </script>
     {{{ SCRIPT }}}
 </body>

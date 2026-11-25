@@ -643,18 +643,6 @@ void SceneRenderer::DrawStarmapOrbitDisk(const PlanetViewData &planet, Vector3 c
     rlEnableDepthMask();
 }
 
-// Viewer specific, not a game element: the earlier build outlined the selection with a wireframe
-// box and sphere, which covered the body it was marking. This reuses the Galaxy Select ring asset
-// and shader instead, so the marker stays clear of the surface and never writes depth. The ring
-// pattern sits at 0.957 of the quad's half width, so the quad has to be 2.09 ring radii across. The
-// multiplier is 1 rather than the galaxy marker's 2.5: at 2.5 the ring is far past the bloom
-// threshold, which turns a close up selection into a solid white glare.
-void SceneRenderer::DrawStarmapSelectionRing(Vector3 position, float ringRadius, const Camera3D &camera) {
-    SceneRenderer::DrawGalaxyStarMarker(resources.galaxyStarRingTexture, position, ringRadius * 2.0898f,
-                                        GalaxyGridColor(Vector4 {1.0f, 1.0f, 1.0f, 1.0f}), 1.0f, 1.0f,
-                                        camera);
-}
-
 void SceneRenderer::DrawPlanet(const PlanetViewData &planet, const Camera3D &camera, float time) {
     if (!resources.hasPlanetThumbShader || !resources.hasPlanetThumbModel) {
         DrawSphere(planet.position, planet.radius, planet.color);
@@ -736,8 +724,7 @@ void SceneRenderer::DrawGalaxy(const std::vector<GalaxyLineData> &lines,
     }
 }
 
-void SceneRenderer::DrawSystem(const SystemViewCache &system, const Camera3D &camera,
-                               float time, std::size_t selectedPlanet, std::size_t invalidIndex) {
+void SceneRenderer::DrawSystem(const SystemViewCache &system, const Camera3D &camera, float time) {
     auto orbitCenter = [&system](const PlanetViewData &planet) {
         return planet.parentIndex >= 0
                    ? system.planets[static_cast<std::size_t>(planet.parentIndex)].position
@@ -757,15 +744,6 @@ void SceneRenderer::DrawSystem(const SystemViewCache &system, const Camera3D &ca
     for (const auto &star: system.otherStars) DrawStarMass(star, camera, time);
     for (const auto &planet: system.planets) DrawStarmapOrbitDisk(planet, orbitCenter(planet));
     for (const auto &planet: system.planets) DrawStarmapOrbit(planet, orbitCenter(planet), camera);
-    if (selectedPlanet == invalidIndex) {
-        // The spot quad reaches 3.7 times the mass sphere, so the star's ring has to clear that
-        // instead of the sphere itself.
-        DrawStarmapSelectionRing(system.star.position,
-                                 StarVisualScale(system.star, camera) * 2.2f, camera);
-    } else if (selectedPlanet < system.planets.size()) {
-        const auto &planet = system.planets[selectedPlanet];
-        DrawStarmapSelectionRing(planet.position, planet.radius * 1.6f, camera);
-    }
 }
 
 }

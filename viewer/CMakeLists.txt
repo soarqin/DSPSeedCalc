@@ -10,6 +10,10 @@ set(DSP_VIEWER_SOURCES
     src/main.cc
     src/viewer_app.cc
     src/viewer_app.hh
+    src/viewer_layout.cc
+    src/viewer_layout.hh
+    src/viewer_pointer.cc
+    src/viewer_pointer.hh
     src/viewer_selection.cc
     src/viewer_selection.hh
     src/camera_controller.cc
@@ -147,6 +151,19 @@ if(APPLE)
 endif()
 
 if(DSP_BUILD_TESTS)
+    add_executable(viewer_layout_test
+        "${CMAKE_SOURCE_DIR}/tests/viewer_layout_test.cc"
+        src/viewer_layout.cc)
+    target_include_directories(viewer_layout_test PRIVATE src)
+    target_link_libraries(viewer_layout_test PRIVATE raylib)
+    target_compile_features(viewer_layout_test PRIVATE cxx_std_17)
+    target_compile_options(viewer_layout_test PRIVATE
+        $<$<CXX_COMPILER_ID:MSVC>:/UNDEBUG>
+        $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-UNDEBUG>)
+    set_target_properties(viewer_layout_test PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+    add_test(NAME viewer_layout COMMAND viewer_layout_test)
+
     add_executable(viewer_panel_footer_test
         "${CMAKE_SOURCE_DIR}/tests/viewer_panel_footer_test.cc"
         src/panel_footer.cc)
@@ -202,6 +219,14 @@ if(EMSCRIPTEN)
     if(DSP_VIEWER_FONT)
         target_link_options(${PROJECT_NAME} PRIVATE
             "--preload-file=${DSP_VIEWER_RUNTIME_DIR}/viewer-font.ttf@/viewer-font.ttf")
+    else()
+        # The browser has no system font directory. Raylib ships this OFL font with Greek glyphs.
+        set(viewer_web_font "${raylib_SOURCE_DIR}/examples/text/resources/anonymous_pro_bold.ttf")
+        if(EXISTS "${viewer_web_font}")
+            target_compile_definitions(${PROJECT_NAME} PRIVATE DSP_VIEWER_DEFAULT_FONT="viewer-font.ttf")
+            target_link_options(${PROJECT_NAME} PRIVATE "--preload-file=${viewer_web_font}@/viewer-font.ttf")
+            set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY LINK_DEPENDS "${viewer_web_font}")
+        endif()
     endif()
     set_target_properties(${PROJECT_NAME} PROPERTIES
         OUTPUT_NAME "index"

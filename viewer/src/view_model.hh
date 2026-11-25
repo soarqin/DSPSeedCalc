@@ -86,6 +86,13 @@ struct PanelData {
     std::string footerValue;
 };
 
+struct BodyListEntry {
+    std::string label;
+    std::string detail;
+    Color swatch{};
+    int indent = 0;
+};
+
 struct GalaxyLineData {
     std::size_t start = 0;
     std::size_t end = 0;
@@ -138,6 +145,7 @@ struct SystemViewCache {
     // placed at `(uPosition - viewTargetUPos) * 0.00025`. Their distance puts them past the point
     // where `UIStarmapStarObject` stops drawing the mass sphere, so only the spot quad survives.
     std::vector<StarViewData> otherStars;
+    std::vector<BodyListEntry> listEntries;
     std::string summary;
     float radius = 8.0f;
 };

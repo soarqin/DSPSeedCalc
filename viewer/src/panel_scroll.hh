@@ -3,9 +3,10 @@
 namespace viewer {
 
 struct PanelViewport {
-    float mineralTop = 0.0f;
-    float mineralHeight = 0.0f;
+    float scrollTop = 0.0f;
+    float scrollHeight = 0.0f;
     float footerTop = 0.0f;
+    bool scrollRows = false;
 };
 
 PanelViewport CalculatePanelViewport(int screenHeight, int mineralTop, int footerReserved, int gap);

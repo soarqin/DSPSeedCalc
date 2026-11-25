@@ -17,5 +17,7 @@ Color PlanetColor(dspugen::EPlanetType type);
 std::string PlanetName(const dspugen::Planet *planet);
 PanelData CreateStarPanel(const dspugen::Star *star, int galaxySeed);
 PanelData CreatePlanetPanel(const dspugen::Planet *planet, const std::string &name);
+BodyListEntry CreateStarListEntry(const dspugen::Star *star);
+BodyListEntry CreatePlanetListEntry(const dspugen::Planet *planet, const std::string &name);
 
 }

@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cstring>
 #include <string>
+#include <vector>
 
 namespace viewer {
 
@@ -13,7 +14,34 @@ namespace viewer {
 #define DSP_VIEWER_DEFAULT_FONT ""
 #endif
 
-constexpr int kViewerFontSize = 64;
+constexpr int kViewerFontSize = 48;
+
+/* Fallback UI fonts for desktop builds without `DSP_VIEWER_FONT`; raylib's built-in bitmap font is
+   10 px and blurs badly when scaled to panel text sizes. */
+std::string FindSystemFont() {
+#if defined(__EMSCRIPTEN__)
+    return {};
+#else
+    static const char *candidates[] = {
+#if defined(_WIN32)
+        "C:/Windows/Fonts/bahnschrift.ttf",
+        "C:/Windows/Fonts/segoeui.ttf",
+        "C:/Windows/Fonts/arial.ttf",
+#elif defined(__APPLE__)
+        "/System/Library/Fonts/Supplemental/Arial.ttf",
+        "/Library/Fonts/Arial.ttf",
+#else
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+        "/usr/share/fonts/TTF/DejaVuSans.ttf",
+        "/usr/share/fonts/dejavu/DejaVuSans.ttf",
+        "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
+#endif
+    };
+    for (const char *candidate: candidates)
+        if (FileExists(candidate)) return candidate;
+    return {};
+#endif
+}
 
 // rlTextureParameters() already guards the anisotropic extension and clamps to the device limit on
 // both desktop GL and WebGL, so route through it rather than touching GL_TEXTURE_MAX_ANISOTROPY.
@@ -401,12 +429,22 @@ SetTextureAnisotropy(resources.galaxyGridFrameTexture, 2);
 std::string resolvedFontPath = fontPath;
 if (resolvedFontPath == DSP_VIEWER_DEFAULT_FONT && !resolvedFontPath.empty())
     resolvedFontPath = ViewerRuntimePath(resolvedFontPath.c_str());
+if (resolvedFontPath.empty() || !FileExists(resolvedFontPath.c_str()))
+    resolvedFontPath = FindSystemFont();
 if (!resolvedFontPath.empty() && FileExists(resolvedFontPath.c_str())) {
-    Font loadedFont = LoadFontEx(resolvedFontPath.c_str(), kViewerFontSize, nullptr, 0);
+    /* Generated star names use Greek letters (for example "α Comae Berenices"). */
+    std::vector<int> codepoints;
+    for (int c = 0x20; c <= 0x7e; ++c) codepoints.push_back(c);
+    for (int c = 0xa0; c <= 0xff; ++c) codepoints.push_back(c);
+    for (int c = 0x391; c <= 0x3c9; ++c) codepoints.push_back(c);
+    Font loadedFont = LoadFontEx(resolvedFontPath.c_str(), kViewerFontSize, codepoints.data(),
+                                 static_cast<int>(codepoints.size()));
     if (loadedFont.glyphCount > 0) {
         resources.font = loadedFont;
         resources.hasCustomFont = true;
-        SetTextureFilter(resources.font.texture, TEXTURE_FILTER_BILINEAR);
+        /* UI text is drawn at 12-26 px from a 48 px atlas; mipmaps keep the minified glyphs smooth. */
+        GenTextureMipmaps(&resources.font.texture);
+        SetTextureFilter(resources.font.texture, TEXTURE_FILTER_TRILINEAR);
     }
 }
     return true;

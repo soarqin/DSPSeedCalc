@@ -1612,3 +1612,13 @@ Native Debug、Native Release 与 Emscripten Release 三种构建全部通过，
 - `_HeightSettings` 为 `(-0.1, 0.3, 0.1, 0.1)` 的材质高度项恒为 `0.1`，即使有真实 heightmap 也不起作用。是否为官方有意如此未确认。
 - 行星标签在多颗行星投影重叠时会叠字。官方另有 `EPin`、工厂标记与 focus 目标参与过滤，viewer 没有这些数据源。
 - `starmap-gizmo`、`hive-orbit`（材质 `184`，与轨道线同一个 Shader、`_TileScale = 14`）未实现。
+
+### 2026-11-25 viewer 交互显示更新
+
+横屏沿用 60° 垂直视场角。竖屏以短边为基准，将水平视场角设为 60°，避免窗口变窄时裁掉两侧星体。实现见 `viewer/src/camera_controller.cc` 的 `MapVerticalFov`。
+
+星系内的白色选择环改在后处理之后绘制，宽度固定为 1.5 个逻辑像素。放大行星时，环的半径随天体变化，近距离仍可辨认环旁的卫星。实现见 `viewer/src/viewer_app.cc` 的 `DrawMapMarkers`。
+
+名称仍优先使用上文记录的游戏偏移。位置冲突时，viewer 先安排选中和悬停的天体，再为其余名称尝试左右或上下位置。可见区域没有空间时隐藏该名称，天体列表仍可用于选择。规则见 `viewer/src/viewer_layout.cc` 的 `PlaceSceneLabel`，边界与近距离选择环用例见 `tests/viewer_layout_test.cc`。
+
+可用种子 `0`、64 颗恒星复核近景。进入出生星系 Iota Sagittae，在行星列表选中 Iota Sagittae I，点击 `Follow planet`。该气态行星和卫星 Iota Sagittae II 在投影上靠近时，名称应能分别辨认。

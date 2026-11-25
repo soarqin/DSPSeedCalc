@@ -7,11 +7,14 @@ namespace viewer {
 PanelViewport CalculatePanelViewport(int screenHeight, int mineralTop, int footerReserved, int gap) {
     const int footerTop = std::clamp(screenHeight - footerReserved, 0, screenHeight);
     const int mineralBottom = std::max(0, footerTop - gap);
-    const int visibleMineralTop = std::min(mineralTop, std::max(0, mineralBottom - 1));
+    // When there isn't room for the table header and a row, scroll the metadata with the table.
+    const bool scrollRows = mineralBottom - mineralTop < 72;
+    const int scrollTop = scrollRows ? 0 : mineralTop;
     return PanelViewport {
-        static_cast<float>(visibleMineralTop),
-        static_cast<float>(std::max(1, mineralBottom - visibleMineralTop)),
+        static_cast<float>(scrollTop),
+        static_cast<float>(mineralBottom - scrollTop),
         static_cast<float>(footerTop),
+        scrollRows,
     };
 }
 

@@ -25,8 +25,7 @@ public:
                     const std::vector<StarViewData> &stars,
                     const Camera3D &camera, float time, std::size_t markedStar,
                     std::size_t invalidIndex);
-    void DrawSystem(const SystemViewCache &system, const Camera3D &camera,
-                    float time, std::size_t selectedPlanet, std::size_t invalidIndex);
+    void DrawSystem(const SystemViewCache &system, const Camera3D &camera, float time);
 
 private:
     void DrawGalaxyLineQuad(Vector3 start, Vector3 end, const Camera3D &camera, float width,
@@ -57,7 +56,6 @@ private:
     void DrawStarmapBackgroundStars(const Camera3D &camera, float time);
     void DrawStarmapOrbit(const PlanetViewData &planet, Vector3 center, const Camera3D &camera);
     void DrawStarmapOrbitDisk(const PlanetViewData &planet, Vector3 center);
-    void DrawStarmapSelectionRing(Vector3 position, float ringRadius, const Camera3D &camera);
     void DrawPlanet(const PlanetViewData &planet, const Camera3D &camera, float time);
 
     const RenderResources &resources;

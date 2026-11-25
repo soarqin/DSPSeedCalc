@@ -84,10 +84,10 @@ const char *ThemeName(int theme) {
 
 const char *VeinName(int veinType) {
     static const char *names[] = {
-        "", "Iron veins", "Copper veins", "Silicon veins", "Titanium veins", "Stone veins",
-        "Coal veins", "Crude oil seep", "Fire ice vein", "Kimberlite vein", "Fractal silicon vein",
-        "Organic crystal vein", "Optical grating crystal vein", "Spiniform stalagmite crystal vein",
-        "Unipolar magnet vein",
+        "", "Iron", "Copper", "Silicon", "Titanium", "Stone",
+        "Coal", "Crude oil", "Fire ice", "Kimberlite", "Fractal silicon",
+        "Organic crystal", "Optical grating", "Spiniform crystal",
+        "Unipolar magnet",
     };
     return veinType > 0 && veinType < static_cast<int>(sizeof(names) / sizeof(names[0])) ? names[veinType] : "Unknown";
 }
@@ -149,6 +149,59 @@ std::vector<MineralPanelRow> CreateMineralRows(const MineralTotals &totals) {
     return rows;
 }
 
+std::string StarSubtitle(const dspugen::Star *star) {
+    if (star->type == dspugen::EStarType::MainSeqStar)
+        return std::string(SpectrName(star->spectr)) + "-type main sequence star";
+    return star->typeName();
+}
+
+std::string StarTypeShort(const dspugen::Star *star) {
+    switch (star->type) {
+        case dspugen::EStarType::GiantStar: return std::string("Giant ") + SpectrName(star->spectr);
+        case dspugen::EStarType::WhiteDwarf: return "White dwarf";
+        case dspugen::EStarType::NeutronStar: return "Neutron";
+        case dspugen::EStarType::BlackHole: return "Black hole";
+        default: return SpectrName(star->spectr);
+    }
+}
+
+Color StarSwatchColor(const dspugen::Star *star) {
+    switch (star->type) {
+        case dspugen::EStarType::WhiteDwarf: return Color {226, 236, 255, 255};
+        case dspugen::EStarType::NeutronStar: return Color {120, 230, 255, 255};
+        case dspugen::EStarType::BlackHole: return Color {170, 120, 255, 255};
+        default: break;
+    }
+    switch (star->spectr) {
+        case dspugen::ESpectrType::M: return Color {255, 112, 76, 255};
+        case dspugen::ESpectrType::K: return Color {255, 168, 84, 255};
+        case dspugen::ESpectrType::G: return Color {255, 220, 110, 255};
+        case dspugen::ESpectrType::F: return Color {255, 244, 200, 255};
+        case dspugen::ESpectrType::A: return Color {236, 244, 255, 255};
+        case dspugen::ESpectrType::B: return Color {150, 200, 255, 255};
+        case dspugen::ESpectrType::O: return Color {100, 160, 255, 255};
+        default: return Color {200, 200, 210, 255};
+    }
+}
+
+const char *WaterName(int itemId) {
+    switch (itemId) {
+        case 0: return "none";
+        case 1000: return "Water";
+        case 1116: return "Sulfuric acid";
+        default: return "other";
+    }
+}
+
+const char *GasRowName(int itemId) {
+    switch (itemId) {
+        case 1120: return "hydrogen rate";
+        case 1121: return "deuterium rate";
+        case 1011: return "fire ice rate";
+        default: return "gas rate";
+    }
+}
+
 void SetMineralStatus(PanelData &panel, const MineralTotals &totals) {
     panel.mineralTitle = "MINERALS";
     if (!totals.complete) {
@@ -181,7 +234,7 @@ PanelData CreateStarPanel(const dspugen::Star *star, int galaxySeed) {
     PanelData panel;
     panel.title = "STAR PARAMETERS";
     panel.name = star->name;
-    panel.subtitle = star->typeName();
+    panel.subtitle = StarSubtitle(star);
     panel.rows = {
         {"galaxy seed", std::to_string(galaxySeed)}, {"star ID", std::to_string(star->id)},
         {"generation seed", std::to_string(star->seed)}, {"spectrum", SpectrName(star->spectr)},
@@ -198,9 +251,8 @@ PanelData CreateStarPanel(const dspugen::Star *star, int galaxySeed) {
     MineralTotals minerals;
     for (const auto *planet: star->planets) AddPlanetMinerals(planet, minerals);
     SetMineralStatus(panel, minerals);
-    panel.mineralTitle = "MINERALS · ALL PLANETS";
+    panel.mineralTitle = "MINERALS - ALL PLANETS";
     panel.mineralRows = CreateMineralRows(minerals);
-    panel.footerValue = "Original-style sprite lighting";
     return panel;
 }
 
@@ -211,19 +263,44 @@ PanelData CreatePlanetPanel(const dspugen::Planet *planet, const std::string &na
     panel.subtitle = PlanetTypeName(planet->type);
     panel.rows = {
         {"star", planet->star->name},
-        {"orbit parent", planet->orbitAround == 0 ? "star" : std::to_string(planet->orbitAround)},
+        {"planet ID", std::to_string(planet->id)},
+        {"generation seed", std::to_string(planet->seed)},
+        {"orbit parent", planet->orbitAroundPlanet == nullptr ? "star" : PlanetName(planet->orbitAroundPlanet)},
         {"orbit radius", FormatString("%.4f AU", planet->orbitRadius)},
         {"sun distance", FormatString("%.4f AU", planet->sunDistance)},
         {"real radius", FormatString("%.1f km", planet->realRadius())},
         {"luminosity", FormatString("%.2f", planet->luminosity)}, {"theme", ThemeName(planet->theme)},
     };
+    if (planet->type == dspugen::EPlanetType::Gas) {
+        for (std::size_t i = 0; i < planet->gasItems.size() && i < planet->gasSpeeds.size(); ++i)
+            panel.rows.push_back({GasRowName(planet->gasItems[i]), FormatString("%.4f", planet->gasSpeeds[i])});
+    } else {
+        panel.rows.push_back({"ocean", WaterName(planet->waterItemId)});
+    }
+    panel.rows.push_back({"singularities", SingularityName(planet->singularity)});
     MineralTotals minerals;
     AddPlanetMinerals(planet, minerals);
     SetMineralStatus(panel, minerals);
     panel.mineralRows = CreateMineralRows(minerals);
-    panel.footerKey = "singularities";
-    panel.footerValue = SingularityName(planet->singularity);
     return panel;
+}
+
+BodyListEntry CreateStarListEntry(const dspugen::Star *star) {
+    BodyListEntry entry;
+    entry.label = star->name;
+    entry.detail = StarTypeShort(star) + "  " + std::to_string(star->planets.size()) + "p";
+    if (star->index == 0) entry.detail = "birth  " + entry.detail;
+    entry.swatch = StarSwatchColor(star);
+    return entry;
+}
+
+BodyListEntry CreatePlanetListEntry(const dspugen::Planet *planet, const std::string &name) {
+    BodyListEntry entry;
+    entry.label = name;
+    entry.detail = ThemeName(planet->theme);
+    entry.swatch = PlanetColor(planet->type);
+    entry.indent = planet->orbitAroundPlanet == nullptr ? 0 : 1;
+    return entry;
 }
 
 std::vector<int> ReplayInfoSeeds(const dspugen::Star *star) {
